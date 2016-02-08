@@ -1,4 +1,4 @@
-package co.salutary.mobisaude.db;
+package co.salutary.mobisaude.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

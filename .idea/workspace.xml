@@ -9,7 +9,23 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba20f6b6-b0bc-4624-8d06-dec286c6b190" name="Default" comment="" />
+    <list default="true" id="ba20f6b6-b0bc-4624-8d06-dec286c6b190" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/CidadeDAO.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/ErbDAO.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/UserConnectivityManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/UserConnectivityManager.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/UserDataBase.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/LocalDataBase.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Cidade.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Cidade.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Erb.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Erb.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/GraphValues.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/GraphValues.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Prestadora.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Prestadora.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Problema.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Problema.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/UF.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/UF.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/scipts/DB_SCRIPT.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/scipts/Scripts.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/MarkerTargetListener.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/MarkerTargetListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/UtilJson.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/UtilJson.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="MobiSaude.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,6 +45,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
     <option name="availableProjects">
@@ -1893,7 +1919,6 @@
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Problema.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/UserDataBase.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/config/LocalPreferences.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Erb.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/UtilJson.java" />
@@ -1904,6 +1929,13 @@
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/DB_SCRIPT.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/HttpHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/UserConnectivityManager.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/UserDataBase.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/ErbDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/scipts/CidadeDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/LocalDataBase.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/ErbDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/CidadeDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/scipts/Scripts.java" />
       </list>
     </option>
   </component>
@@ -1923,7 +1955,7 @@
     <option name="width" value="1877" />
     <option name="height" value="1056" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -1946,26 +1978,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MobiSaude" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MobiSaude" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -1980,6 +1992,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Production">
@@ -1991,7 +2004,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -2096,6 +2108,58 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MobiSaude" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MobiSaude" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MobiSaude" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MobiSaude" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mobisaude" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2114,6 +2178,9 @@
       <recent name="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util" />
     </key>
     <key name="android.template.packageName">
+      <recent name="co.salutary.mobisaude" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="co.salutary.mobisaude" />
     </key>
     <key name="android.template.parentActivityClass">
@@ -2301,7 +2368,8 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290461" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298744" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -2322,7 +2390,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290461" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -2331,11 +2398,11 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290461" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24959038" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2353,8 +2420,8 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -2374,7 +2441,7 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Problema.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Problema.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="60" />
@@ -2652,14 +2719,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Prestadora.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Prestadora.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17617449">
           <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/UF.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/UF.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.35234898">
           <caret line="26" column="1" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
@@ -2667,14 +2734,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/GraphValues.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/GraphValues.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.10067114">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Cidade.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Cidade.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.05033557">
           <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
@@ -2686,9 +2753,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.11627907">
           <caret line="7" column="29" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2700,14 +2764,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Erb.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Erb.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#460#461#0" expanded="true" />
-            <element signature="e#476#477#0" expanded="true" />
+            <element signature="e#454#455#0" expanded="true" />
+            <element signature="e#470#471#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2722,26 +2786,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/UserDataBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38255033">
-          <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="73" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/scipts/DB_SCRIPT.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45132744">
-          <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/scipts/ScriptCidade.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2750,17 +2794,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/SQLiteHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/entidade/Problema.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/model/Problema.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5285235">
           <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="60" />
@@ -2780,27 +2814,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/UserConnectivityManager.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/ErbDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6979866">
-          <caret line="33" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="43" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.3488372">
+          <caret line="21" column="64" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/CidadeDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.53156143">
+          <caret line="32" column="63" selection-start-line="32" selection-start-column="63" selection-end-line="32" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/scipts/Scripts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3488372">
+          <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/Graphs.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/LocalDataBase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19463088">
-          <caret line="643" column="59" selection-start-line="643" selection-start-column="59" selection-end-line="643" selection-end-column="59" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/SQLiteHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.18272425">
+          <caret line="15" column="23" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/ManagerToken.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/UserConnectivityManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9496644">
-          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.14950167">
+          <caret line="9" column="84" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="84" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

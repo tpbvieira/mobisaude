@@ -1,4 +1,4 @@
-package co.salutary.mobisaude.db.entidade;
+package co.salutary.mobisaude.model;
 
 import java.util.ArrayList;
 import java.util.List;

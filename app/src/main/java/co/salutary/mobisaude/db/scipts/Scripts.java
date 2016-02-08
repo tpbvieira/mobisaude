@@ -1,8 +1,8 @@
 package co.salutary.mobisaude.db.scipts;
 
-public class DB_SCRIPT {
+public class Scripts {
 
-    private static final String TAG = DB_SCRIPT.class.getSimpleName();
+    private static final String TAG = Scripts.class.getSimpleName();
 
 	// Dados do Banco
 	public static final String NOME_BANCO = "DB_ANATEL.db";
