@@ -1,7 +1,14 @@
 package co.salutary.mobisaude.activities;
 
-import android.support.v4.app.FragmentActivity;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,8 +18,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.Settings;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener  {
 
     private GoogleMap mMap;
 
@@ -45,4 +53,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.menu_home) {
+            startActivity(MainActivity.class);
+        } else if (id == R.id.menu_bookmarks) {
+            startActivity(MainActivity.class);
+        } else if (id == R.id.menu_dashboard) {
+            startActivity(MainActivity.class);
+        } else if (id == R.id.menu_search) {
+            startActivity(MainActivity.class);
+        } else if (id == R.id.menu_maps) {
+            startActivity(MapsActivity.class);
+        } else if (id == R.id.menu_manage) {
+            startActivity(SettingsActivity.class);
+        } else if (id == R.id.menu_profile) {
+            startActivity(SettingsActivity.class);
+        } else if (id == R.id.menu_login) {
+            Settings.IS_LOGGEDIN = true;
+            startActivity(LoginActivity.class);
+        } else if (id == R.id.menu_logout) {
+            Settings.IS_LOGGEDIN = false;
+            startActivity(MainActivity.class);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_nav_drawer);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void startActivity(final Class<? extends Activity> activity) {
+        if (activity != null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(MapsActivity.this, activity));
+                }
+            }, 300);
+        }
+    }
+
 }
