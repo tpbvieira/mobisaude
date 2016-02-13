@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 public class Settings {
 
+    public static final String servicesUrl = "http://gatewaysiec.anatel.gov.br/gatewayarcher/mobile";
+
     public static boolean IS_LOGGEDIN = false;
 
     public static boolean CONEXAO2G;
@@ -23,6 +25,8 @@ public class Settings {
     public static boolean GO_HOME;
     public static boolean REPORT_PROBLEM;
 
+    public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
+    public static final String EMPTY = "";
 	
 	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
 	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#aa000000"
+   	android:id="@+id/help2_over_layout" >
+
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="50dp"
+	    android:layout_gravity="center"
+	    android:orientation="horizontal">
+	
+		<TextView
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:textSize="18sp" />
+	</LinearLayout>
+
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:orientation="vertical"
+	    android:layout_marginBottom="30dp"
+	    android:gravity="bottom|right" >
+		
+		<TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/help_escolha_uf"
+	        android:gravity="center"
+	        android:textColor="@color/white" />
+		
+		<ImageView
+	        android:layout_width="30dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/arrow_botton_right"
+	        android:layout_marginRight="35dp"
+	        android:scaleType="fitStart"
+	        android:adjustViewBounds="true"
+	        android:contentDescription="@string/help_escolha_uf" />
+		
+	</LinearLayout>
+	
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/roundborder"
+		android:gravity="center"
+		android:layout_marginRight="20dp"
+	    android:layout_marginLeft="20dp"
+	    android:layout_marginBottom="30dp"
+	    android:clickable="true"
+		android:orientation="horizontal"
+		android:visibility="invisible" >
+		
+		<EditText
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/noborder"
+			android:hint="@string/estado"
+			android:padding="8dp"
+            android:focusable="false"  
+			android:inputType="none"
+			android:singleLine="true" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/roundborder"
+		android:gravity="center"
+		android:layout_marginRight="20dp"
+	    android:layout_marginLeft="20dp"
+	    android:layout_marginBottom="30dp" 
+	    android:clickable="true"
+		android:orientation="horizontal"
+		android:visibility="invisible" >
+		
+		<EditText
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/noborder"
+			android:hint="@string/cidade"
+			android:padding="8dp"
+            android:focusable="false"  
+			android:inputType="none"
+			android:singleLine="true" />
+	</LinearLayout>
+
+	<Button
+	    android:layout_width="match_parent"
+	    android:layout_height="45dp"
+	    android:textColor="#ffffff"
+		android:textSize="16sp"
+	    android:layout_marginRight="20dp"
+	    android:layout_marginLeft="20dp"
+	    android:visibility="invisible" />
+	
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:orientation="vertical" >
+		
+		<ImageView
+	        android:layout_width="30dp"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/arrow_up_left"
+	        android:layout_marginLeft="35dp"
+	        android:scaleType="fitStart"
+	        android:adjustViewBounds="true"
+	        android:contentDescription="@string/help_pesquise_nunicipio" />
+		
+		<TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/help_pesquise_nunicipio"
+	        android:gravity="center"
+	        android:textColor="@color/white" />
+		
+	</LinearLayout>
+
+
+</LinearLayout>

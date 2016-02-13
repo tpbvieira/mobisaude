@@ -18,7 +18,11 @@ public class ErbDAO {
 
     private static final String TAG = ErbDAO.class.getSimpleName();
 
-    private LocalDataBase localDB = LocalDataBase.getInstance();
+    private LocalDataBase localDB;
+
+    public ErbDAO(LocalDataBase db){
+        localDB = db;
+    }
 
     public long salvarErb(Erb erb) {
         ContentValues values = getContentValuesErb(erb);

@@ -3,6 +3,22 @@
     <string name="title_activity_main">MobiSaúde</string>
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
 
+    <string name="error">Erro</string>
+    <string name="error_no_connection">Conexão de dados indisponível, deseja utilizar os dados anteriormente?</string>
+
+    <string name="not_supported">Este aparelho não é suportado para a operação desejada</string>
+    <string name="invalid_gps_apk">No valid Google Play Services APK found</string>
+    <string name="erro_starts">Erro de inicialização</string>
+    <string name="permission_denied">Permissão negada</string>
+
+    <string name="yes">Sim</string>
+    <string name="no">Nao</string>
+    <string name="estado">Estado</string>
+    <string name="uf">UF</string>
+    <string name="cidade">Cidade</string>
+    <string name="search">Cidade</string>
+    <string name="select">Selecionar</string>
+
     <!-- Nav bar and menu values-->
     <string name="menu_home">Início</string>
     <string name="menu_bookmarks">Favoritos</string>
@@ -15,6 +31,12 @@
     <string name="menu_logout">Sair</string>
     <string name="menu_login">Entrar</string>
     <string name="user_guest"></string>
+
+    <string name="help_escolha_uf">Escolha o estado da cidade desejada</string>
+    <string name="help_pesquise_nunicipio">Pesquise na sua cidade</string>
+    <string name="help_filtre_tecnologias">Filtre por ...</string>
+    <string name="help_visualize_ranking">Veja o... </string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -33,6 +55,13 @@
     <string name="error_field_required">Este campo é obrigatório</string>
     <string name="permission_rationale">"É necessário ter permissão de acesso aos conatos."</string>
     <string name="title_activity_settings">Configurações</string>
+
+    <string name="date_format">dd/MM/yyyy HH:mm</string>
+
+    <string name="gif_loader">file:///android_res/drawable/anim_loader.gif</string>
+    <string name="check_connectivity">Verificando conexão de dados...</string>
+    <string name="check_gps">Verificando GPS...</string>
+
 
     <!-- settings -->
     <string name="pref_header_general">General</string>

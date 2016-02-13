@@ -21,6 +21,10 @@ import co.salutary.mobisaude.config.Settings;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String RECEIVER_MAIN_ACTIVITY = "ReceiverMainActivity";
+    public static final int RECEIVER_ABRIR_ATUALIZAR_PRESTADORES = 1;
+    public static final int RECEIVER_ATUALIZAR_PRESTADORES = 2;
+
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean isInFront;
 
