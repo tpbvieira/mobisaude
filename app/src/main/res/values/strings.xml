@@ -4,7 +4,7 @@
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
 
     <string name="error">Erro</string>
-    <string name="error_no_connectivity">Conexão de dados indisponível, deseja utilizar os dados anteriormente?</string>
+    <string name="error_no_connectivity">Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
     <string name="error_obtaining_locality">Erro ao obter localização</string>
     <string name="error_connecting_server">Erro ao conectar servidor de dados</string>
     <string name="error_invalid_email">Email inválido (precisa ter \"@\" e \".\")</string>
@@ -24,7 +24,7 @@
     <string name="estado">Estado</string>
     <string name="uf">UF</string>
     <string name="cidade">Cidade</string>
-    <string name="search">Cidade</string>
+    <string name="search">Buscar</string>
     <string name="select">Selecionar</string>
 
     <!-- Nav bar and menu values-->
@@ -77,8 +77,8 @@
     <string name="ok">Ok</string>
     <string name="cancel">Cancelar</string>
     <string name="alert">Alerta</string>
-    <string name="unidentified_location">Localização não identificada. Deseja selecionar sua cidade?</string>
-    <string name="gps_not_available">GPS Indisponível. Deseja selecionar sua cidade?</string>
+    <string name="unidentified_location">Não foi possível identificar sua localização. Deseja selecionar sua cidade a partir de uma lista?</string>
+    <string name="gps_not_available">GPS Indisponível. Deseja selecionar sua cidade a partir de uma lista?</string>
 
     <!-- settings -->
     <string name="pref_header_general">General</string>

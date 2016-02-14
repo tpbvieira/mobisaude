@@ -15,8 +15,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.Arrays;
+import java.util.List;
+
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.db.CidadeDAO;
+import co.salutary.mobisaude.db.ErbDAO;
+import co.salutary.mobisaude.db.LocalDataBase;
+import co.salutary.mobisaude.db.UfDAO;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +34,8 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean isInFront;
+
+    private LocalDataBase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,30 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        db = LocalDataBase.getInstance();
+
+        TextView stateView = (TextView)findViewById(R.id.state);
+        UfDAO statesDao = new UfDAO(db);
+        stateView.setText("CurrentState=" + statesDao.getUfById(Settings.ID_UF).getNome());
+
+        TextView citieView = (TextView)findViewById(R.id.city);
+        CidadeDAO citiesDao = new CidadeDAO(db);
+        citieView.setText("CurrentCity=" + citiesDao.getCidadeById(Settings.ID_CIDADE).getNome());
+
+        TextView operadorasView = (TextView)findViewById(R.id.operadoras);
+        Settings settings = new Settings(getApplicationContext());
+        String operadorasString = settings.getPreferenceValues(Settings.FILTER_OPERADORAS);
+        List<String> operadorasList = Arrays.asList(operadorasString.split("\\s*,\\s*"));
+        operadorasView.setText("Operators=" + operadorasList.size());
+
+        TextView erbsView = (TextView)findViewById(R.id.erbs);
+        ErbDAO erbDao = new ErbDAO(db);
+        erbsView.setText("ERBs=" + erbDao.listarErb(Settings.ID_CIDADE,true,true,true,operadorasList).size());
+
+        TextView viewsView = (TextView)findViewById(R.id.views);
+        viewsView.setText("Views=" + db.getAvailableViews().size());
+
     }
 
     @Override

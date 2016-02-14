@@ -45,7 +45,7 @@ public class ReportProblemService extends Service{
 
 	public void uploadProblem(){		
 		try {
-			String jsonArray = pref.getPreferenceValueR(Settings.REPORT_PROBLEMS);
+			String jsonArray = pref.getPreferenceValues(Settings.REPORT_PROBLEMS);
 			JSONArray array;
 			if(!TextUtils.isEmpty(jsonArray)){
 				array = new JSONArray(jsonArray);
@@ -137,12 +137,12 @@ public class ReportProblemService extends Service{
 
 	public void updateArrayAndGo(){
 		try {
-			JSONArray array = new JSONArray(pref.getPreferenceValueR(Settings.REPORT_PROBLEMS));
+			JSONArray array = new JSONArray(pref.getPreferenceValues(Settings.REPORT_PROBLEMS));
 			JSONArray aux = new JSONArray();
 			for (int i = 1; i < array.length(); i++) {
 				aux.put(array.getJSONObject(i));				
 			}			
-			pref.setPreferenceValueR(Settings.REPORT_PROBLEMS, aux.toString());				
+			pref.setPreferenceValues(Settings.REPORT_PROBLEMS, aux.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}		

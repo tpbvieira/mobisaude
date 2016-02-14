@@ -14,11 +14,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -63,7 +61,7 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tela_localidade);
+		setContentView(R.layout.activity_locality);
 
 		userController = UserController.getInstance();
 
@@ -78,27 +76,27 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 		btnUF.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(SelectLocalityActivity.LISTA_UF);
+				onShowListaSelect(SelectListActivity.LISTA_UF);
 			}
 		});
 		edtUF.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(SelectLocalityActivity.LISTA_UF);
+				onShowListaSelect(SelectListActivity.LISTA_UF);
 			}
 		});
 
 		btnCidade.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
+				onShowListaSelect(SelectListActivity.LISTA_CIDADE);
 			}
 		});
 
 		edtCidade.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
+				onShowListaSelect(SelectListActivity.LISTA_CIDADE);
 			}
 		});
 
@@ -165,15 +163,15 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 	}
 
 	public void onShowListaSelect(int tipoLista) {
-		if(tipoLista == SelectLocalityActivity.LISTA_CIDADE){
+		if(tipoLista == SelectListActivity.LISTA_CIDADE){
 			if(UserController.getInstance().getUf() != null){
-				Intent it = new Intent(this, SelectLocalityActivity.class);
+				Intent it = new Intent(this, SelectListActivity.class);
 				it.putExtra("tipoLista", tipoLista);
 				startActivityForResult(it, ACTIVITY_LIST_SELECT);
 			}
 		}
 		else {
-			Intent it = new Intent(this, SelectLocalityActivity.class);
+			Intent it = new Intent(this, SelectListActivity.class);
 			it.putExtra("tipoLista", tipoLista);
 			startActivityForResult(it, ACTIVITY_LIST_SELECT);
 		}
@@ -183,27 +181,15 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == ACTIVITY_LIST_SELECT && resultCode == SelectLocalityActivity.RESULTADO_ITEM_SELECIONADO){
+        if(requestCode == ACTIVITY_LIST_SELECT && resultCode == SelectListActivity.RESULTADO_ITEM_SELECIONADO){
 			atualizarCampos();
 			if(UserController.getInstance().getCidade() != null){
 				final String cidadeName = UserController.getInstance().getCidade().getNome();
-                final Dialog dialog = new Dialog(this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_info);
-                Button closeBtn = (Button) dialog.findViewById(R.id.btn_close);
-                closeBtn.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeByNome(cidadeName);
-                        userController.setCidade(cidade);
-                        UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
-                        userController.setUf(uf);
-                        fecharTela();
-                        dialog.dismiss();
-                    }
-                });
-                ((TextView)dialog.findViewById(R.id.txt_view_info1)).setText(getString(R.string.location_ok));
-                dialog.show();
+                Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeByNome(cidadeName);
+                UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
+                userController.setCidade(cidade);
+                userController.setUf(uf);
+                fecharTela();
 			}
 		}
 	}
@@ -391,10 +377,8 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 	}
 
 	private void showTelaHelp() {
-		// salvar registro de tela exibida
         Settings localPref = new Settings(this);
 		localPref.setPreferenceValue(Settings.SHOW_SCREEN_TELA_2, "true");
-		// mostrar tela
 		final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
 		dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 		dialog.setContentView(R.layout.help_2);

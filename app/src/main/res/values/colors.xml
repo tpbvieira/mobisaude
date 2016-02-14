@@ -15,8 +15,12 @@
     <color name="lightGray">#d3d3d3</color>
     <color name="violetRed">#FF4081</color>
 
-    <color name="splash">#6d84b4</color>
+    <!-- SplashActivity -->
+    <color name="splash">#ffffff</color>
+    <color name="splash_font">#303F9F</color>
+
     <color name="mainBar">#3b5998</color>
 
+    <!-- SplashActivity -->
 
 </resources>

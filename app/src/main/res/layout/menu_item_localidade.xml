@@ -115,7 +115,7 @@
 				android:layout_gravity="center_vertical"
 				android:adjustViewBounds="true"
 				android:contentDescription="@string/app_name"
-				android:src="@drawable/logo_anatel" />
+				android:src="@drawable/logo_mobisaude" />
 		
 		    <View 
 		        android:layout_width="0dp"

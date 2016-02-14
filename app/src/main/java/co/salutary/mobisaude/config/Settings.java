@@ -79,18 +79,19 @@ public class Settings {
         return registrationId;
     }
 	
-	public void setPreferenceValueR(String key, String value) {
+	public void setPreferenceValues(String key, String value) {
         final SharedPreferences prefs = getSharedPreferencesReport(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
         editor.commit();
     }
     
-	public String getPreferenceValueR(String key) {
+	public String getPreferenceValues(String key) {
         final SharedPreferences prefs = getSharedPreferencesReport(context);
         String registrationId = prefs.getString(key, "");
         return registrationId;
     }
+
 	
 	public static void setPreferenceValue(Context ctx, String key, int value) {
         SharedPreferences prefs = getSharedPreferences(ctx);

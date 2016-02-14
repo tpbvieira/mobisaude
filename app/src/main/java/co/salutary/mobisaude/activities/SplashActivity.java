@@ -8,16 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +35,7 @@ import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.ConnectivityManager;
 import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.UtilJson;
 
 public class SplashActivity extends Activity implements Runnable, LocationListener {
 
@@ -49,7 +46,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     private final int PROGRESS_BAR = 1;
 
     private TextView txtLabel;
-    private WebView telaGifLoader;
 
     // thread loop
     private boolean timerTelaBool;
@@ -62,29 +58,15 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     private boolean isShowDialog = true;
 
-    LocalDataBase LocalDataBase;
+    LocalDataBase localDataBase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tela_splash);
+        setContentView(R.layout.activity_splash);
 
         // gui
         txtLabel = (TextView)findViewById(R.id.frm_splash_label);
-        telaGifLoader = (WebView)findViewById(R.id.frm_splash_view_gif);
-
-        // Carregar gif
-        try {
-            telaGifLoader.loadUrl(getString(R.string.gif_loader));
-            BitmapDrawable gif = (BitmapDrawable) this.getResources().getDrawable(R.drawable.anim_loader);
-            ViewGroup.LayoutParams params = telaGifLoader.getLayoutParams();
-            params.height = gif.getBitmap().getHeight();
-            params.width = gif.getBitmap().getWidth();
-            telaGifLoader.setBackgroundResource(R.color.splash);
-            telaGifLoader.setLayoutParams(params);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
 
         Settings.CONEXAO   = false;
         Settings.CONEXAO2G = false;
@@ -96,7 +78,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         DeviceInfo.setUpGCM(this);
         DeviceInfo.isDadosAtivos = false;
 
-        LocalDataBase = LocalDataBase.getInstance();
+        localDataBase = LocalDataBase.getInstance();
 
         Settings.setPreferenceValue(this, Settings.VIEWPAGER_POS_PORTRAIT, 0);
         Settings.setPreferenceValue(this, Settings.VIEWPAGER_POS_LANDSCAPE, 0);
@@ -152,7 +134,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     }
 
     private void onVerificarConectividade() {
-        showGifLoader();
         setTextLabelInfor(getString(R.string.check_connectivity));
         new VerificarConectividade().execute(0);
     }
@@ -170,7 +151,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
             try {
                 // Initiate Database
-                LocalDataBase.getInstance().open(getApplicationContext());
+                localDataBase.open(getApplicationContext());
 
                 // verify connection
                 ConnectivityManager.getInstance(getApplicationContext()).requisitConexaoMobile();
@@ -217,7 +198,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         @Override
         protected Boolean doInBackground(Integer... params) {
             try {
-                Thread.sleep(SLEEP_TIME);
+//                Thread.sleep(SLEEP_TIME);
                 return DeviceInfo.isProviderEnabled();
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
@@ -260,7 +241,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         @Override
         protected Boolean doInBackground(Integer... params) {
             try {
-                Thread.sleep(SLEEP_TIME);
+//                Thread.sleep(SLEEP_TIME);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -304,7 +285,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         protected Boolean doInBackground(Integer... params) {
             try {
                 for (int i = 0; i < params[0]; i++) {
-                    Thread.sleep(SLEEP_TIME);
+//                    Thread.sleep(SLEEP_TIME);
 
                     // Location by Rede
                     if(location == null){
@@ -346,9 +327,9 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             else if(idErro == 0) {
                                 int codMunicipioIbge = jReponder.getInt("codMunicipioIbge");
 
-                                Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeById(codMunicipioIbge);
+                                Cidade cidade = new CidadeDAO(localDataBase).getCidadeById(codMunicipioIbge);
                                 if(cidade != null){
-                                    UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
+                                    UF uf = new UfDAO(localDataBase).getUfById(cidade.getIdUF());
                                     userController.setUf(uf);
                                     userController.setCidade(cidade);
                                     Settings.ID_CIDADE = cidade.getIdCidade();
@@ -437,58 +418,51 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     //lbadias: Query for available views
     private class QueryAvailableViewsTask extends AsyncTask<Integer, Integer, Boolean> {
 
+        private short numAttempts = 2;
+
         @Override
         protected Boolean doInBackground(Integer... params) {
+
+            Settings settings = new Settings(getApplicationContext());
+
             try {
-                // carregar
+
                 if(ConnectivityManager.getInstance(getApplicationContext()).isConnected()){
 
-                    // laco para repeti caso precise gera novo token
-                    for (int i = 0; i <= 1; i++) {
-                        Settings localPref = new Settings(getApplicationContext());
-                        String token = localPref.getPreferenceValue(Settings.TOKEN);
-                        if(token == null || token.isEmpty()) {
-                            ManagerToken.gerarToken(getApplicationContext());
-                            token = localPref.getPreferenceValue(Settings.TOKEN);
-                        }
+                    // obtain domain tables
+                    for (int i = 0; i < numAttempts; i++) {
 
-                        JSONObject jDados = new JSONObject();
-                        jDados.put("token", token);
+                        JSONObject consultaDominiosRequest = UtilJson.createRequest(getApplicationContext(), "consultaDominiosRequest");
+                        String consultaDominiosResponse = ServiceRequester.getInstance(getApplicationContext()).consultaDataToReport(consultaDominiosRequest.toString());
 
-                        JSONObject jRequest = new JSONObject();
-                        jRequest.put("consultaDominiosRequest", jDados);
+//                        Log.d(TAG, consultaDominiosResponse);
+                        if(consultaDominiosResponse != null && !consultaDominiosResponse.startsWith(getString(R.string.erro_starts))){
 
-                        String reponder = ServiceRequester.getInstance(getApplicationContext()).consultaDataToReport(jRequest.toString());
-                        Log.d(TAG, reponder);
-                        if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
+                            // get domain tables
+                            JSONObject domains = (JSONObject) new JSONObject(consultaDominiosResponse).get("consultaDominiosResponse");
+                            int idErro = UtilJson.getErrorCode(domains);
 
-                            // salvar registros
-                            JSONObject jObject = new JSONObject(reponder);
-                            JSONObject jReponder = (JSONObject) jObject.get("consultaDominiosResponse");
-                            String erro = jReponder.getString("erro");
-                            String[] splitResult = erro.split("\\|");
-                            int idErro = Integer.parseInt(splitResult[0]);
                             if(idErro == 6){
-                                // gerar novo token
+                                // renew the token and try one more time, according to numAttempts
                                 if(!ManagerToken.gerarToken(getApplicationContext())){
                                     return false;
                                 }
+                                continue;
                             }
                             else if(idErro == 0) {
-                                JSONArray prestadoras = jReponder.getJSONArray("operadoras");
-                                localPref.setPreferenceValueR(Settings.operadoras, prestadoras.toString());
 
-                                JSONArray ambientes = jReponder.getJSONArray("tiposAmbiente");
-                                localPref.setPreferenceValueR(Settings.tiposAmbiente, ambientes.toString());
+                                // save domains into settings
+                                settings.setPreferenceValues(Settings.operadoras, domains.getJSONArray("operadoras").toString());
+                                settings.setPreferenceValues(Settings.tiposAmbiente, domains.getJSONArray("tiposAmbiente").toString());
+                                settings.setPreferenceValues(Settings.tiposProblema, domains.getJSONArray("tiposProblema").toString());
+                                settings.setPreferenceValues(Settings.tiposServico, domains.getJSONArray("tiposServico").toString());
+                                settings.setPreferenceValues(Settings.tiposSistemaOperacional, domains.getJSONArray("tiposSistemaOperacional").toString());
 
-                                JSONArray problemas = jReponder.getJSONArray("tiposProblema");
-                                localPref.setPreferenceValueR(Settings.tiposProblema, problemas.toString());
+                                // save filters
+                                if(settings.getPreferenceValues(Settings.FILTER_OPERADORAS).length() == 0) {
 
-                                localPref.setPreferenceValueR(Settings.tiposServico, jReponder.getJSONArray("tiposServico").toString());
-                                localPref.setPreferenceValueR(Settings.tiposSistemaOperacional, jReponder.getJSONArray("tiposSistemaOperacional").toString());
-
-                                if(localPref.getPreferenceValueR(Settings.FILTER_OPERADORAS).length() == 0) {
                                     String selectedPrestadoras = "";
+                                    JSONArray prestadoras = new JSONArray(settings.getPreferenceValues(Settings.operadoras));
                                     for (int j = 0; j < prestadoras.length(); j++) {
                                         if(selectedPrestadoras.length() == 0) {
                                             selectedPrestadoras += prestadoras.getJSONObject(j).getInt("id");
@@ -496,8 +470,9 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                             selectedPrestadoras += "," + prestadoras.getJSONObject(j).getInt("id");
                                         }
                                     }
-                                    localPref.setPreferenceValueR(Settings.FILTER_OPERADORAS, selectedPrestadoras);
+                                    settings.setPreferenceValues(Settings.FILTER_OPERADORAS, selectedPrestadoras);
 
+                                    JSONArray ambientes = new JSONArray(settings.getPreferenceValues(Settings.tiposAmbiente));
                                     String selectedAmbientes = "";
                                     for (int j = 0; j < ambientes.length(); j++) {
                                         if(selectedAmbientes.length() == 0) {
@@ -506,8 +481,9 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                             selectedAmbientes += "," + ambientes.getJSONObject(j).getInt("id");
                                         }
                                     }
-                                    localPref.setPreferenceValueR(Settings.FILTER_AMBIENTES, selectedAmbientes);
+                                    settings.setPreferenceValues(Settings.FILTER_AMBIENTES, selectedAmbientes);
 
+                                    JSONArray problemas = new JSONArray(settings.getPreferenceValues(Settings.tiposProblema));
                                     String selectedProblemas = "";
                                     for (int j = 0; j < problemas.length(); j++) {
                                         if(selectedProblemas.length() == 0) {
@@ -516,58 +492,46 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                             selectedProblemas += "," + problemas.getJSONObject(j).getInt("id");
                                         }
                                     }
-                                    localPref.setPreferenceValueR(Settings.FILTER_PROBLEMAS, selectedProblemas);
+                                    settings.setPreferenceValues(Settings.FILTER_PROBLEMAS, selectedProblemas);
                                 }
-                            }
-                            else {
+                            } else {
                                 return false;
                             }
+                            break; //to avoid a new attempt, considering the current as successful
                         }
                         else {
                             return false;
                         }
                     }
 
-                    // laco para repeti caso precise gera novo token
-                    for (int i = 0; i <= 1; i++) {
-                        Settings localPref = new Settings(getApplicationContext());
-                        String token = localPref.getPreferenceValue(Settings.TOKEN);
-                        if(token == null || token.isEmpty()) {
-                            ManagerToken.gerarToken(getApplicationContext());
-                            token = localPref.getPreferenceValue(Settings.TOKEN);
-                        }
-                        JSONObject jDados = new JSONObject();
-                        jDados.put("token",token);
+                    // obtain views
+                    for (int i = 0; i < numAttempts; i++) {
 
-                        JSONObject jRequest = new JSONObject();
-                        jRequest.put("consultaTelasRequest", jDados);
+                        JSONObject consultaTelasRequest = UtilJson.createRequest(getApplicationContext(), "consultaTelasRequest");
+                        String consultaTelasResponse = ServiceRequester.getInstance(getApplicationContext()).queryAvailableViews(consultaTelasRequest.toString());
 
-                        String reponder = ServiceRequester.getInstance(getApplicationContext()).queryAvailableViews(jRequest.toString());
-                        if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
+//                        Log.d(TAG, consultaTelasResponse);
+                        if(consultaTelasResponse != null && !consultaTelasResponse.startsWith(getString(R.string.erro_starts))){
 
-                            // salvar registros
-                            JSONObject jObject = new JSONObject(reponder);
-                            JSONObject jReponder = (JSONObject) jObject.get("consultaTelasResponse");
-                            String erro = jReponder.getString("erro");
-                            String[] splitResult = erro.split("\\|");
-                            int idErro = Integer.parseInt(splitResult[0]);
+                            JSONObject views = (JSONObject) new JSONObject(consultaTelasResponse).get("consultaTelasResponse");
+                            int idErro = UtilJson.getErrorCode(views);
+
                             if(idErro == 6){
-                                // gerar novo token
+                                // renew the token and try one more time, according to numAttempts
                                 if(!ManagerToken.gerarToken(getApplicationContext())){
                                     return false;
                                 }
-                            }
-                            else if(idErro == 0) {
+                            }else if(idErro == 0) {
                                 try {
-                                    Iterator<String> iterator = jReponder.keys();
+                                    Iterator<String> iterator = views.keys();
                                     HashMap<String, Boolean> availableViews = new HashMap<String, Boolean>();
                                     while(iterator.hasNext()) {
                                         String key = iterator.next();
                                         if(!key.equals("erro") && !key.equals("description")) {
-                                            availableViews.put(key, jReponder.getBoolean(key));
+                                            availableViews.put(key, views.getBoolean(key));
                                         }
                                     }
-                                    LocalDataBase.setAvailableViews(availableViews);
+                                    localDataBase.setAvailableViews(availableViews);
                                     return true;
                                 } catch (Exception e) {
                                     Log.e(TAG, e.getMessage());
@@ -577,9 +541,10 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             else {
                                 return false;
                             }
+                            break; //to avoid a new attempt, considering the current as successful
                         }
                         else {
-                            LocalDataBase.setAvailableViews(new HashMap<String, Boolean>());
+                            localDataBase.setAvailableViews(new HashMap<String, Boolean>());
                             return true;
                         }
                     }
@@ -718,10 +683,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     private void setTextLabelInfor(String texto){
         txtLabel.setText(texto);
-    }
-
-    private void showGifLoader(){
-        telaGifLoader.setVisibility(View.VISIBLE);
     }
 
 }

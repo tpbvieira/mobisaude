@@ -42,9 +42,9 @@ import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 
-public class SelectLocalityActivity extends ListActivity {
+public class SelectListActivity extends ListActivity {
 
-    private static final String TAG = SelectLocalityActivity.class.getSimpleName();
+    private static final String TAG = SelectListActivity.class.getSimpleName();
 
 	public static final int LISTA_UF = 1;
 	public static final int LISTA_CIDADE = 2;
@@ -70,15 +70,15 @@ public class SelectLocalityActivity extends ListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tela_localidade_selecionar);
-        btnSearch = (ImageView) findViewById(R.id.tela_localidade_selecionar_btn_search);
+
+        setContentView(R.layout.activiry_select_list);
         TextView lblTitulo = (TextView) findViewById(R.id.tela_localidade_selecionar_lbl_titulo);
+        btnSearch = (ImageView) findViewById(R.id.tela_localidade_selecionar_btn_search);
         edtBusca = (EditText) findViewById(R.id.tela_localidade_selecionar_edt_campo);
 
         userDataBase = LocalDataBase.getInstance();
         userController = UserController.getInstance();
 
- 		// tipoLista
         Intent intent = getIntent();
         if(intent != null){
         	Bundle extras = intent.getExtras();
@@ -117,7 +117,7 @@ public class SelectLocalityActivity extends ListActivity {
  		});
  		
  		mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
- 		lblTitulo.setText(tipoLista==LISTA_UF?R.string.estado:R.string.cidade);
+ 		lblTitulo.setText(tipoLista == LISTA_UF ? R.string.estado : R.string.cidade);
  		
  		carregarLista();
     }
@@ -177,7 +177,7 @@ public class SelectLocalityActivity extends ListActivity {
         Object[] tmpIndexItem = null;
         Pattern numberPattern = Pattern.compile("[0-9]");
 
-		if(tipoLista==LISTA_UF){
+		if(tipoLista == LISTA_UF){
 			List<UF> listUf = new UfDAO(userDataBase).listarUF();
 			Collections.sort(listUf, new Comparator<UF>() {
 				@Override
@@ -214,7 +214,7 @@ public class SelectLocalityActivity extends ListActivity {
                 previousLetter = firstLetter;
 			}
         }
-        else {
+        else if (tipoLista == LISTA_CIDADE){
         	UF uf = UserController.getInstance().getUf();
         	
 			List<Cidade> listCidade = new CidadeDAO(userDataBase).listarCidadesByUF(uf.getIdUf());
@@ -299,15 +299,18 @@ public class SelectLocalityActivity extends ListActivity {
         LinearLayout sideIndex = (LinearLayout) findViewById(R.id.tela_localidade_selecionar_index);
         sideIndex.removeAllViews();
         indexListSize = alphabet.size();
+
         if (indexListSize < 1) {
             return;
         }
 
         int indexMaxSize = (int) Math.floor(sideIndex.getHeight() / 20);
         int tmpIndexListSize = indexListSize;
+
         while (tmpIndexListSize > indexMaxSize) {
             tmpIndexListSize = tmpIndexListSize / 2;
         }
+
         double delta;
         if (tmpIndexListSize > 0) {
             delta = indexListSize / tmpIndexListSize;
