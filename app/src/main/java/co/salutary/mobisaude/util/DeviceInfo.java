@@ -11,15 +11,16 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.net.ConnectivityManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.fragments.MenuItemLocalidade;
 import co.salutary.mobisaude.gcm.RegisterService;
 
 /**
@@ -225,6 +226,24 @@ public class DeviceInfo {
     public static boolean isProviderEnabled(){
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public static boolean thereIsWifiConnection(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (mWifi.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean thereIsConnection(Context context) {
+        ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo i = conMgr.getActiveNetworkInfo();
+        if (i == null || !i.isConnected() || !i.isAvailable()) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -36,7 +36,9 @@ import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.DeviceInfo;
 
 
-public class LocalidadeActivity extends Activity implements Runnable, LocationListener {
+public class LocalityActivity extends Activity implements Runnable, LocationListener {
+
+    private static final String TAG = LocalityActivity.class.getSimpleName();
 
 	private static final int PROGRESS_BAR_VERIFICAR = 1;
 	private static final int PROGRESS_BAR_DETERMINAR = 2;
@@ -46,11 +48,8 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 	private static final int ACTIVITY_LIST_SELECT = 1;
 	private static final long TIME_TEMP = 1000;
 
-	private LinearLayout btnUF;
-	private LinearLayout btnCidade;
 	private EditText edtUF;
 	private EditText edtCidade;
-	private Button btnMeuLocal;
 
 	private UserController userController;
 
@@ -59,7 +58,6 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 	private int timerInatividadeCount;
 	private Handler timerInatividade;
 
-	// gps
 	private Location location;
 
 	@Override
@@ -67,42 +65,40 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tela_localidade);
 
-		// user
 		userController = UserController.getInstance();
 
-        // location
 		location = DeviceInfo.updateLocation(getApplicationContext(),this);
 
-		btnUF = (LinearLayout) findViewById(R.id.tela_localidade_btn_uf);
-		btnCidade = (LinearLayout) findViewById(R.id.tela_localidade_btn_cidade);
+        LinearLayout btnUF = (LinearLayout) findViewById(R.id.tela_localidade_btn_uf);
+        LinearLayout btnCidade = (LinearLayout) findViewById(R.id.tela_localidade_btn_cidade);
 		edtUF = (EditText) findViewById(R.id.tela_localidade_edt_uf);
 		edtCidade = (EditText) findViewById(R.id.tela_localidade_edt_cidade);
-		btnMeuLocal = (Button) findViewById(R.id.tela_localidade_btn_meu_local);
+        Button btnMeuLocal = (Button) findViewById(R.id.tela_localidade_btn_meu_local);
 
-		// acao
 		btnUF.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(LocalidadeSelecionarActivity.LISTA_UF);
+				onShowListaSelect(SelectLocalityActivity.LISTA_UF);
 			}
 		});
 		edtUF.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(LocalidadeSelecionarActivity.LISTA_UF);
+				onShowListaSelect(SelectLocalityActivity.LISTA_UF);
 			}
 		});
 
 		btnCidade.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(LocalidadeSelecionarActivity.LISTA_CIDADE);
+				onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
 			}
 		});
+
 		edtCidade.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onShowListaSelect(LocalidadeSelecionarActivity.LISTA_CIDADE);
+				onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
 			}
 		});
 
@@ -119,7 +115,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 		// verificar tela de help
         Settings localPref = new Settings(this);
 		String value = localPref.getPreferenceValue(Settings.SHOW_SCREEN_TELA_2);
-		if(value == null || value.equals("")){
+		if(value == null || value.equals(getString(R.string.empty))){
 			// Carregar timer
 			timerInatividade = new Handler();
 			timerInatividade.postDelayed(this, TIME_TEMP);
@@ -148,13 +144,13 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 		switch(id) {
 		case PROGRESS_BAR_VERIFICAR:
 			pDialog = new ProgressDialog(this);
-			pDialog.setMessage("Verificando GPS");
+			pDialog.setMessage(getString(R.string.check_gps));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(true);
 			break;
 		case PROGRESS_BAR_DETERMINAR:
 			pDialog = new ProgressDialog(this);
-			pDialog.setMessage("Determinando seu município");
+			pDialog.setMessage(getString(R.string.check_city));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(true);
 			break;
@@ -169,15 +165,15 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 	}
 
 	public void onShowListaSelect(int tipoLista) {
-		if(tipoLista == LocalidadeSelecionarActivity.LISTA_CIDADE){
+		if(tipoLista == SelectLocalityActivity.LISTA_CIDADE){
 			if(UserController.getInstance().getUf() != null){
-				Intent it = new Intent(this, LocalidadeSelecionarActivity.class);
+				Intent it = new Intent(this, SelectLocalityActivity.class);
 				it.putExtra("tipoLista", tipoLista);
 				startActivityForResult(it, ACTIVITY_LIST_SELECT);
 			}
 		}
 		else {
-			Intent it = new Intent(this, LocalidadeSelecionarActivity.class);
+			Intent it = new Intent(this, SelectLocalityActivity.class);
 			it.putExtra("tipoLista", tipoLista);
 			startActivityForResult(it, ACTIVITY_LIST_SELECT);
 		}
@@ -186,11 +182,10 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == ACTIVITY_LIST_SELECT && resultCode == LocalidadeSelecionarActivity.RESULTADO_ITEM_SELECIONADO){
-			// Atualizar campos
+
+        if(requestCode == ACTIVITY_LIST_SELECT && resultCode == SelectLocalityActivity.RESULTADO_ITEM_SELECIONADO){
 			atualizarCampos();
-			// Se cidade selecionado, finalizar tela
-			if(UserController.getInstance().getCidade() != null){				
+			if(UserController.getInstance().getCidade() != null){
 				final String cidadeName = UserController.getInstance().getCidade().getNome();
                 final Dialog dialog = new Dialog(this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -207,7 +202,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
                         dialog.dismiss();
                     }
                 });
-                ((TextView)dialog.findViewById(R.id.txt_view_info1)).setText("????????????");
+                ((TextView)dialog.findViewById(R.id.txt_view_info1)).setText(getString(R.string.location_ok));
                 dialog.show();
 			}
 		}
@@ -217,7 +212,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 		UF uf = UserController.getInstance().getUf();
 		if(uf != null){
 			edtUF.setText(uf.getNome());
-			edtCidade.setText("");
+			edtCidade.setText(getString(R.string.empty));
 			edtCidade.setHint(R.string.cidade);
 		}
 
@@ -246,7 +241,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 			try {
 				Thread.sleep(TIME_TEMP);
 			} catch (Exception e) {
-				Log.e("Anatel", "ShowDialog.doInBackground: "+e);
+				Log.e(TAG, e.getMessage());
 			}
 			return null;
 		}
@@ -256,7 +251,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 			try {
 				dismissDialog(PROGRESS_BAR_VERIFICAR);
 			} catch (Exception e) {
-				Log.e("Anatel", "ShowDialog.dismissDialog: "+e);
+                Log.e(TAG, e.getMessage());
 			}
 			new DeterminarLocal(getApplicationContext()).execute(4);
 		}
@@ -282,7 +277,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 				try {
 					Thread.sleep(TIME_TEMP);
 				} catch (Exception e) {
-					Log.e("Anatel", "DeterminarLocal.dismissDialog: "+e);
+                    Log.e(TAG, e.getMessage());
 				}
 				for (int i = 0; i < params[0]; i++) {
 					Thread.sleep(TIME_TEMP);
@@ -349,7 +344,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 					}
 				}
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.doInBackground: "+e);
+                Log.e(TAG, e.getMessage());
 			}
 			return false;
 		}
@@ -360,17 +355,17 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 				Thread.sleep(TIME_TEMP);
 				dismissDialog(PROGRESS_BAR_DETERMINAR);
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.dismissDialog: "+e);
+                Log.e(TAG, e.getMessage());
 			}
 			try {
 				if(result){
 					fecharTela();
 				}
 				else {
-					Toast.makeText(getApplicationContext(), "Não foi possível determinar a sua localização.", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.unknown_location), Toast.LENGTH_LONG).show();
 				}
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.onPostExecute: "+e);
+                Log.e(TAG, e.getMessage());
 			}
 		}
 	}
@@ -433,7 +428,7 @@ public class LocalidadeActivity extends Activity implements Runnable, LocationLi
 				}
 			}
 		} catch (Exception e) {
-			Log.e("Anatel", getTitle()+".run: "+e);
+            Log.e(TAG, e.getMessage());
 		}
 	}
 }

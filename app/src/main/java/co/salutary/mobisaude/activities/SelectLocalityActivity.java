@@ -42,7 +42,9 @@ import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 
-public class LocalidadeSelecionarActivity extends ListActivity {
+public class SelectLocalityActivity extends ListActivity {
+
+    private static final String TAG = SelectLocalityActivity.class.getSimpleName();
 
 	public static final int LISTA_UF = 1;
 	public static final int LISTA_CIDADE = 2;
@@ -59,9 +61,7 @@ public class LocalidadeSelecionarActivity extends ListActivity {
     
     private ImageView btnSearch;
     private EditText edtBusca;
-    private TextView lblTitulo;
-	
-    // user
+
     private LocalDataBase userDataBase;
     private UserController userController;
     
@@ -71,16 +71,13 @@ public class LocalidadeSelecionarActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tela_localidade_selecionar);
-        
-        // banco
+        btnSearch = (ImageView) findViewById(R.id.tela_localidade_selecionar_btn_search);
+        TextView lblTitulo = (TextView) findViewById(R.id.tela_localidade_selecionar_lbl_titulo);
+        edtBusca = (EditText) findViewById(R.id.tela_localidade_selecionar_edt_campo);
+
         userDataBase = LocalDataBase.getInstance();
         userController = UserController.getInstance();
-        
-        // componentes
-        btnSearch = (ImageView) findViewById(R.id.tela_localidade_selecionar_btn_search);
-        lblTitulo = (TextView) findViewById(R.id.tela_localidade_selecionar_lbl_titulo);
- 		edtBusca = (EditText) findViewById(R.id.tela_localidade_selecionar_edt_campo);
- 		
+
  		// tipoLista
         Intent intent = getIntent();
         if(intent != null){
@@ -90,8 +87,7 @@ public class LocalidadeSelecionarActivity extends ListActivity {
 			}
         }
         
- 		// acao
-        edtBusca.addTextChangedListener(new TextWatcher() {
+ 		edtBusca.addTextChangedListener(new TextWatcher() {
  			@Override
  			public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -112,37 +108,32 @@ public class LocalidadeSelecionarActivity extends ListActivity {
  				}
  			}
         });
- 		btnSearch.setOnClickListener(new OnClickListener() {
+
+        btnSearch.setOnClickListener(new OnClickListener() {
  			@Override
  			public void onClick(View v) {
  				onClickSearch();
  			}
  		});
  		
- 		// detector tela
  		mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
- 		
- 		// alterar titulo
  		lblTitulo.setText(tipoLista==LISTA_UF?R.string.estado:R.string.cidade);
  		
- 		// carregar lista
  		carregarLista();
     }
 
 	
 	@Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mGestureDetector.onTouchEvent(event)) {
-            return true;
-        } else {
-            return false;
-        }
+        return mGestureDetector.onTouchEvent(event);
     }
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		if (adapter.getRows().get(position) instanceof Item) {
+
+        if (adapter.getRows().get(position) instanceof Item) {
+
 			if(tipoLista==LISTA_UF){
 				userController.setCidade(null);
 				
@@ -167,7 +158,7 @@ public class LocalidadeSelecionarActivity extends ListActivity {
 		if (edtBusca.getText().length() != 0) {
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(edtBusca.getWindowToken(), 0);
-			edtBusca.setText("");
+			edtBusca.setText(getString(R.string.empty));
 			btnSearch.setImageResource(android.R.drawable.ic_menu_search);
 			carregarLista();
 		} else {
@@ -300,7 +291,7 @@ public class LocalidadeSelecionarActivity extends ListActivity {
 			}
 			setListAdapter(adapter);
 		} catch (Exception e) {
-			Log.e("Anatel", this.getTitle()+".setSearchResult: "+e);
+			Log.e(TAG, e.getMessage());
 		}
 	}
 	
@@ -347,7 +338,7 @@ public class LocalidadeSelecionarActivity extends ListActivity {
                 sideIndexY = event.getY();
 
                 if (0 != edtBusca.getText().length()) {
-                	edtBusca.setText("");
+                	edtBusca.setText(getString(R.string.empty));
                 	carregarLista();
 				}
                 
@@ -373,7 +364,7 @@ public class LocalidadeSelecionarActivity extends ListActivity {
         }
     }
 	
-	class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
+	private class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             sideIndexX = sideIndexX - distanceX;

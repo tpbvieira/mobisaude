@@ -75,26 +75,26 @@ public class ActivityLocalidade extends Activity implements LocationListener {
         btnUF.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_UF);
+                onShowListaSelect(SelectLocalityActivity.LISTA_UF);
             }
         });
         edtUF.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_UF);
+                onShowListaSelect(SelectLocalityActivity.LISTA_UF);
             }
         });
 
         btnCidade.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_CIDADE);
+                onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
             }
         });
         edtCidade.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_CIDADE);
+                onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
             }
         });
 
@@ -126,15 +126,15 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 	}
 
 	public void onShowListaSelect(int tipoLista) {
-		if(tipoLista == LocalidadeSelecionarActivity.LISTA_CIDADE){
+		if(tipoLista == SelectLocalityActivity.LISTA_CIDADE){
 			if(UserController.getInstance().getUf() != null){
-				Intent it = new Intent(this, LocalidadeSelecionarActivity.class);
+				Intent it = new Intent(this, SelectLocalityActivity.class);
 				it.putExtra("tipoLista", tipoLista);
 				startActivityForResult(it, SHOW_TELA_SELECT);
 			}
 		}
 		else {
-			Intent it = new Intent(this, LocalidadeSelecionarActivity.class);
+			Intent it = new Intent(this, SelectLocalityActivity.class);
 			it.putExtra("tipoLista", tipoLista);
 			startActivityForResult(it, SHOW_TELA_SELECT);
 		}
@@ -143,7 +143,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == SHOW_TELA_SELECT && resultCode == LocalidadeSelecionarActivity.RESULTADO_ITEM_SELECIONADO){
+		if(requestCode == SHOW_TELA_SELECT && resultCode == SelectLocalityActivity.RESULTADO_ITEM_SELECIONADO){
 			// Atualizar campos
 			atualizarCampos();
 			// Se cidade selecionado, finalizar tela

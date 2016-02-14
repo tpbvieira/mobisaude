@@ -21,7 +21,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.activities.LocalidadeSelecionarActivity;
+import co.salutary.mobisaude.activities.SelectLocalityActivity;
 import co.salutary.mobisaude.activities.MainActivity;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ManagerToken;
@@ -62,26 +62,26 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
         btnUF.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_UF);
+                onShowListaSelect(SelectLocalityActivity.LISTA_UF);
             }
         });
         edtUF.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_UF);
+                onShowListaSelect(SelectLocalityActivity.LISTA_UF);
             }
         });
 
         btnCidade.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_CIDADE);
+                onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
             }
         });
         edtCidade.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShowListaSelect(LocalidadeSelecionarActivity.LISTA_CIDADE);
+                onShowListaSelect(SelectLocalityActivity.LISTA_CIDADE);
             }
         });
 
@@ -105,14 +105,14 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
     }
 
     public void onShowListaSelect(int tipoLista) {
-        if (tipoLista == LocalidadeSelecionarActivity.LISTA_CIDADE) {
+        if (tipoLista == SelectLocalityActivity.LISTA_CIDADE) {
             if (UserController.getInstance().getUf() != null) {
-                Intent it = new Intent(getActivity(), LocalidadeSelecionarActivity.class);
+                Intent it = new Intent(getActivity(), SelectLocalityActivity.class);
                 it.putExtra("tipoLista", tipoLista);
                 startActivityForResult(it, SHOW_TELA_SELECT);
             }
         } else {
-            Intent it = new Intent(getActivity(), LocalidadeSelecionarActivity.class);
+            Intent it = new Intent(getActivity(), SelectLocalityActivity.class);
             it.putExtra("tipoLista", tipoLista);
             startActivityForResult(it, SHOW_TELA_SELECT);
         }
@@ -121,7 +121,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SHOW_TELA_SELECT && resultCode == LocalidadeSelecionarActivity.RESULTADO_ITEM_SELECIONADO) {
+        if (requestCode == SHOW_TELA_SELECT && resultCode == SelectLocalityActivity.RESULTADO_ITEM_SELECIONADO) {
 
             // Atualizar campos
             atualizarCampos();

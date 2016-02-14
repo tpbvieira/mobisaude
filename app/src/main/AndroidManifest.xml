@@ -95,8 +95,23 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings">
-        </activity>
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".activities.LocalityActivity"
+            android:label="TelaLocalidade"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/ThemeActivity" />
+        <activity
+            android:name=".activities.SelectLocalityActivity"
+            android:label="TelaLocalidadeSelecionar"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/ThemeActivity" />
+        <!--
+        <activity
+            android:name=".activities.ActivityLocalidade"
+            android:label="TelaLocalidadeSelecionar"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/ThemeActivity" /> -->
 
         <!-- Services -->
         <service android:name="co.salutary.mobisaude.services.ReportProblemService" />

@@ -4,7 +4,15 @@
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
 
     <string name="error">Erro</string>
-    <string name="error_no_connection">Conexão de dados indisponível, deseja utilizar os dados anteriormente?</string>
+    <string name="error_no_connectivity">Conexão de dados indisponível, deseja utilizar os dados anteriormente?</string>
+    <string name="error_obtaining_locality">Erro ao obter localização</string>
+    <string name="error_connecting_server">Erro ao conectar servidor de dados</string>
+    <string name="error_invalid_email">Email inválido (precisa ter \"@\" e \".\")</string>
+    <string name="error_invalid_password">Senha inválida (precisa ter mais que 4 caracteres)</string>
+    <string name="error_incorrect_password">Login ou senha incorreto</string>
+    <string name="error_field_required">Este campo é obrigatório</string>
+    <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde</string>
+    <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
 
     <string name="not_supported">Este aparelho não é suportado para a operação desejada</string>
     <string name="invalid_gps_apk">No valid Google Play Services APK found</string>
@@ -36,6 +44,7 @@
     <string name="help_pesquise_nunicipio">Pesquise na sua cidade</string>
     <string name="help_filtre_tecnologias">Filtre por ...</string>
     <string name="help_visualize_ranking">Veja o... </string>
+    <string name="searching">Buscando... </string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -49,19 +58,27 @@
     <string name="prompt_password">Senha</string>
     <string name="action_sign_in">Entre ou registre-se</string>
     <string name="action_sign_in_short">Entrar</string>
-    <string name="error_invalid_email">Email inválido (precisa ter \"@\" e \".\")</string>
-    <string name="error_invalid_password">Senha inválida (precisa ter mais que 4 caracteres)</string>
-    <string name="error_incorrect_password">Login ou senha incorreto</string>
-    <string name="error_field_required">Este campo é obrigatório</string>
-    <string name="permission_rationale">"É necessário ter permissão de acesso aos conatos."</string>
+
+    <string name="permission_rationale">É necessário ter permissão de acesso aos conatos</string>
     <string name="title_activity_settings">Configurações</string>
 
     <string name="date_format">dd/MM/yyyy HH:mm</string>
+    <string name="empty"></string>
 
     <string name="gif_loader">file:///android_res/drawable/anim_loader.gif</string>
     <string name="check_connectivity">Verificando conexão de dados...</string>
     <string name="check_gps">Verificando GPS...</string>
+    <string name="loading_data">Obtendo dados...</string>
+    <string name="check_city">Identificando sua cidade...</string>
 
+    <string name="unknown_location">Localização não identificada</string>
+    <string name="location_ok">Localizado!</string>
+    <string name="obtaining_location">Obtendo a localização...</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancelar</string>
+    <string name="alert">Alerta</string>
+    <string name="unidentified_location">Localização não identificada. Deseja selecionar sua cidade?</string>
+    <string name="gps_not_available">GPS Indisponível. Deseja selecionar sua cidade?</string>
 
     <!-- settings -->
     <string name="pref_header_general">General</string>

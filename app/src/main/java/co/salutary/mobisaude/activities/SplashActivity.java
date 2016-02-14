@@ -24,10 +24,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
@@ -42,37 +40,29 @@ import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.ConnectivityManager;
 import co.salutary.mobisaude.util.DeviceInfo;
 
-// substituir por fabric.io
-
 public class SplashActivity extends Activity implements Runnable, LocationListener {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
     private static final int ACTIVITY_DENIFIR_LOCALIDADE = 1;
-    private static final long TIME_TEMP = 1000;
+    private static final long SLEEP_TIME = 1000;
+    private final int PROGRESS_BAR = 1;
 
     private TextView txtLabel;
     private WebView telaGifLoader;
 
     // thread loop
     private boolean timerTelaBool;
-    private Handler timerTela;
 
     private UserController userController;
 
-    // gps
     private Location location;
 
     private boolean isSemConexao = false;
 
-    int size = 0;
-
-    private final int PROGRESS_BAR = 1;
     private boolean isShowDialog = true;
 
     LocalDataBase LocalDataBase;
-
-    private SimpleDateFormat df = new SimpleDateFormat(getString(R.string.date_format), Locale.getDefault());
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,8 +107,8 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         location = DeviceInfo.updateLocation(getApplicationContext(), this);
 
         // Carregar timer
-        timerTela = new Handler();
-        timerTela.postDelayed(this, TIME_TEMP);
+        Handler timerTela = new Handler();
+        timerTela.postDelayed(this, SLEEP_TIME);
     }
 
     @Override
@@ -141,10 +131,14 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == ACTIVITY_DENIFIR_LOCALIDADE){
-            if(resultCode == LocalidadeActivity.RESULTADO_LOCAL_SELECIONADO){
-                openMenuGeral();
+            if(resultCode == LocalityActivity.RESULTADO_LOCAL_SELECIONADO){
+                if(!DeviceInfo.isDadosAtivos && ConnectivityManager.getInstance(getApplicationContext()).isConnected()){
+                    isShowDialog = true;
+                    new QueryAvailableViewsTask().execute(0);
+                }
             }
             else {
+                Toast.makeText(getApplicationContext(), getString(R.string.error_obtaining_locality), Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -223,7 +217,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         @Override
         protected Boolean doInBackground(Integer... params) {
             try {
-                Thread.sleep(TIME_TEMP);
+                Thread.sleep(SLEEP_TIME);
                 return DeviceInfo.isProviderEnabled();
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
@@ -246,33 +240,17 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }
     }
 
-    private void onCarredarDados() {
-        setTextLabelInfor("Carregando Dados...");
-        new CarredarDados().execute(0);
-    }
-
-    private void onDeterminarLocal(){
-        if(DeviceInfo.isProviderEnabled() && !isSemConexao){
-            setTextLabelInfor("Determinando seu município.");
-            new DeterminarLocal(getApplicationContext()).execute(15);
-        }
-        else {
-            openTelaLocalidade();
-        }
-    }
-
-    private void openMenuGeral() {
-        if(!DeviceInfo.isDadosAtivos && ConnectivityManager.getInstance(getApplicationContext()).isConnected()){
-            isShowDialog = true;
-        }
+    private void onCarregarDados() {
+        setTextLabelInfor(getString(R.string.loading_data));
+        new CarregarDados().execute(0);
     }
 
     private void openTelaLocalidade() {
-        Intent localidadeIntent= new Intent(this, LocalidadeActivity.class);
+        Intent localidadeIntent= new Intent(this, LocalityActivity.class);
         startActivityForResult(localidadeIntent, ACTIVITY_DENIFIR_LOCALIDADE);
     }
 
-    private class CarredarDados extends AsyncTask<Integer, Integer, Boolean> {
+    private class CarregarDados extends AsyncTask<Integer, Integer, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -282,7 +260,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         @Override
         protected Boolean doInBackground(Integer... params) {
             try {
-                Thread.sleep(TIME_TEMP);
+                Thread.sleep(SLEEP_TIME);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -296,6 +274,16 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
+        }
+    }
+
+    private void onDeterminarLocal(){
+        if(DeviceInfo.isProviderEnabled() && !isSemConexao){
+            setTextLabelInfor(getString(R.string.obtaining_location));
+            new DeterminarLocal(getApplicationContext()).execute(15);
+        }
+        else {
+            openTelaLocalidade();
         }
     }
 
@@ -316,7 +304,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         protected Boolean doInBackground(Integer... params) {
             try {
                 for (int i = 0; i < params[0]; i++) {
-                    Thread.sleep(TIME_TEMP);
+                    Thread.sleep(SLEEP_TIME);
 
                     // Location by Rede
                     if(location == null){
@@ -333,8 +321,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                         }
 
                         JSONObject jDados = new JSONObject();
-                        //jDados.put("latitude", -15.7217621);
-                        //jDados.put("longitude", -47.9373578);
                         jDados.put("latitude", location.getLatitude());
                         jDados.put("longitude", location.getLongitude());
                         Settings.lat = location.getLatitude();
@@ -353,10 +339,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             int idErro = Integer.parseInt(splitResult[0]);
                             if(idErro == 6){
                                 // gerar novo token
-                                if(ManagerToken.gerarToken(getApplicationContext())){
-                                    continue;
-                                }
-                                else {
+                                if(!ManagerToken.gerarToken(getApplicationContext())){
                                     return false;
                                 }
                             }
@@ -396,10 +379,10 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         @Override
         protected void onPostExecute(Boolean result) {
             try {
-                if(result){
-                    openMenuGeral();
+                if(result) {
+                    new QueryAvailableViewsTask().execute(0);
                 }
-                else {
+                else{
                     Settings localPref = new Settings(getApplicationContext());
                     String token = localPref.getPreferenceValue(Settings.TOKEN);
                     if(token == null || token.isEmpty()) {
@@ -441,7 +424,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         switch(id) {
             case PROGRESS_BAR:
                 pDialog = new ProgressDialog(this);
-                pDialog.setMessage("Procurando");
+                pDialog.setMessage(getString(R.string.searching));
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(false);
                 break;
@@ -453,8 +436,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     //lbadias: Query for available views
     private class QueryAvailableViewsTask extends AsyncTask<Integer, Integer, Boolean> {
-
-        private String msgErro = "Verifique sua conexão ou selecione outra rede disponível para acessar os dados.";
 
         @Override
         protected Boolean doInBackground(Integer... params) {
@@ -489,10 +470,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             int idErro = Integer.parseInt(splitResult[0]);
                             if(idErro == 6){
                                 // gerar novo token
-                                if(ManagerToken.gerarToken(getApplicationContext())){
-                                    continue;
-                                }
-                                else {
+                                if(!ManagerToken.gerarToken(getApplicationContext())){
                                     return false;
                                 }
                             }
@@ -509,8 +487,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                 localPref.setPreferenceValueR(Settings.tiposServico, jReponder.getJSONArray("tiposServico").toString());
                                 localPref.setPreferenceValueR(Settings.tiposSistemaOperacional, jReponder.getJSONArray("tiposSistemaOperacional").toString());
 
-                                //Filtros por default, mostrar todo
-
                                 if(localPref.getPreferenceValueR(Settings.FILTER_OPERADORAS).length() == 0) {
                                     String selectedPrestadoras = "";
                                     for (int j = 0; j < prestadoras.length(); j++) {
@@ -520,7 +496,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                             selectedPrestadoras += "," + prestadoras.getJSONObject(j).getInt("id");
                                         }
                                     }
-                                    localPref.setPreferenceValueR(Settings.FILTER_OPERADORAS, selectedPrestadoras.toString());
+                                    localPref.setPreferenceValueR(Settings.FILTER_OPERADORAS, selectedPrestadoras);
 
                                     String selectedAmbientes = "";
                                     for (int j = 0; j < ambientes.length(); j++) {
@@ -530,7 +506,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                             selectedAmbientes += "," + ambientes.getJSONObject(j).getInt("id");
                                         }
                                     }
-                                    localPref.setPreferenceValueR(Settings.FILTER_AMBIENTES, selectedAmbientes.toString());
+                                    localPref.setPreferenceValueR(Settings.FILTER_AMBIENTES, selectedAmbientes);
 
                                     String selectedProblemas = "";
                                     for (int j = 0; j < problemas.length(); j++) {
@@ -539,18 +515,15 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                         } else {
                                             selectedProblemas += "," + problemas.getJSONObject(j).getInt("id");
                                         }
-                                        //selectedProblemas.put(problemas.getJSONObject(i).getInt("id"));
                                     }
-                                    localPref.setPreferenceValueR(Settings.FILTER_PROBLEMAS, selectedProblemas.toString());
+                                    localPref.setPreferenceValueR(Settings.FILTER_PROBLEMAS, selectedProblemas);
                                 }
                             }
                             else {
-                                //msgErro = splitResult[1];
                                 return false;
                             }
                         }
                         else {
-                            //msgErro = "Verifique sua conexão ou selecione outra rede disponível para acessar os dados.";
                             return false;
                         }
                     }
@@ -571,8 +544,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
                         String reponder = ServiceRequester.getInstance(getApplicationContext()).queryAvailableViews(jRequest.toString());
                         if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
-                            // deletar registros antigos
-                            //LocalDataBase.deletarHistoricoByMunicipio(userController.getCidade().getIdCidade(), Historico.TIPO_VOZ);
 
                             // salvar registros
                             JSONObject jObject = new JSONObject(reponder);
@@ -582,10 +553,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             int idErro = Integer.parseInt(splitResult[0]);
                             if(idErro == 6){
                                 // gerar novo token
-                                if(ManagerToken.gerarToken(getApplicationContext())){
-                                    continue;
-                                }
-                                else {
+                                if(!ManagerToken.gerarToken(getApplicationContext())){
                                     return false;
                                 }
                             }
@@ -607,15 +575,12 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                 }
                             }
                             else {
-                                msgErro = splitResult[1];
                                 return false;
                             }
                         }
                         else {
                             LocalDataBase.setAvailableViews(new HashMap<String, Boolean>());
                             return true;
-                            //msgErro = "Verifique sua conexão ou selecione outra rede disponível para acessar os dados.";
-                            //return false;
                         }
                     }
                 }
@@ -643,7 +608,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     finish();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "ConsultaHistoricoVoz " + msgErro, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             } catch (Exception e) {
@@ -657,15 +622,16 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             AlertDialog.Builder alerta = new AlertDialog.Builder(this);
             alerta.setIcon(R.drawable.ic_launcher);
             alerta.setTitle(R.string.error);
-            alerta.setMessage(R.string.error_no_connection);
+            alerta.setMessage(R.string.error_no_connectivity);
             alerta.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     isSemConexao = true;
                     onVerificarGPS();
                 }
             });
-            alerta.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            alerta.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_conectivity_required), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -684,9 +650,9 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     private void erroConexaoServidor() {
         AlertDialog.Builder alerta = new AlertDialog.Builder(this);
         alerta.setIcon(R.drawable.ic_launcher);
-        alerta.setTitle("Alerta");
-        alerta.setMessage("Infelizmente não foi possível acessar o servidor da Anatel.");
-        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alerta.setTitle(getString(R.string.error));
+        alerta.setMessage(getString(R.string.error_connecting_server));
+        alerta.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 erroDeterminarLocal();
             }
@@ -703,15 +669,16 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     private void erroDeterminarLocal() {
         AlertDialog.Builder alerta = new AlertDialog.Builder(this);
         alerta.setIcon(R.drawable.ic_launcher);
-        alerta.setTitle("Alerta");
-        alerta.setMessage("Não foi possível determinar a sua localização, deseja escolher o município manualmente?");
+        alerta.setTitle(getString(R.string.alert));
+        alerta.setMessage(getString(R.string.unidentified_location));
         alerta.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 openTelaLocalidade();
             }
         });
-        alerta.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+        alerta.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), getString(R.string.error_location_required), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -727,15 +694,16 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     private void alertaGpsDesativado() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setIcon(R.drawable.ic_launcher);
-        alert.setTitle("Alerta");
-        alert.setMessage("Seu GPS esta desativado, deseja escolher o município manualmente?");
+        alert.setTitle(getString(R.string.alert));
+        alert.setMessage(getString(R.string.gps_not_available));
         alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                onCarredarDados();
+                onCarregarDados();
             }
         });
-        alert.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), getString(R.string.error_location_required), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
