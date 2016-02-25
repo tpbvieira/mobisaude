@@ -1,0 +1,2 @@
+﻿ALTER TABLE tb_tipo_problema ADD COLUMN ind_excluido character(1) DEFAULT 'N';
+ALTER TABLE tb_tipo_ambiente ADD COLUMN ind_excluido character(1) DEFAULT 'N';

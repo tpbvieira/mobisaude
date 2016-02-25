@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="91e05dad-6b0d-493d-b1dd-d84e43bb6dd5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="39"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="uf" class="java.lang.String"/>
+	<parameter name="cod_municipio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="municipio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="caminho_imagem" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Users\\eduardo\\workspace\\GatewayArcher\\src\\br\\gov\\anatel\\gateway\\report\\logo_anatel.gif"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\eduardo\\workspace\\GatewayArcher\\src\\br\\gov\\anatel\\gateway\\report"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="caminho_subreport" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Users\\eduardo\\workspace\\GatewayArcher\\src\\br\\gov\\anatel\\gateway\\report\\reportHistoricoUfMunicipio_disponbilidade.jasper"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tipos" class="java.util.Collection">
+		<defaultValueExpression><![CDATA[new ArrayList<String>(Arrays.asList("DISPONIBILIDADE;DADOS;DADOS 2G;DADOS 3G;DADOS 4G;VOZ".split(";")))]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * From (
+select
+  sg_uf as sg_uf,
+  no_cod_municipio_ibge as no_cod_municipio_ibge,
+  no_municipio as no_municipio,
+  no_prestadora as no_prestadora,
+  (case
+      when right(in_mes_ano,2) = '01' then 'JAN-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '02' then 'FEV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '03' then 'MAR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '04' then 'ABR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '05' then 'MAI-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '06' then 'JUN-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '07' then 'JUL-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '08' then 'AGO-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '09' then 'SET-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '10' then 'OUT-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '11' then 'NOV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '12' then 'DEZ-'  || left(in_mes_ano,4)
+      else 'OUT-'  || left(in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(in_mes_ano,4) as integer) + cast(right(in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  nu_conexao as nu_conexao,
+  nu_desconexao as nu_desconexao,
+  'VOZ' as tipo,
+  1 as ordem,
+  '95 %' as referencia_conexao,
+  '2 %' as referencia_desconexao
+from
+  tb_historico_voz
+where
+  no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}
+
+union
+select
+  sg_uf as sg_uf,
+  no_cod_municipio_ibge as no_cod_municipio_ibge,
+  no_municipio as no_municipio,
+  no_prestadora as no_prestadora,
+  (case
+      when right(in_mes_ano,2) = '01' then 'JAN-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '02' then 'FEV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '03' then 'MAR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '04' then 'ABR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '05' then 'MAI-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '06' then 'JUN-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '07' then 'JUL-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '08' then 'AGO-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '09' then 'SET-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '10' then 'OUT-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '11' then 'NOV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '12' then 'DEZ-'  || left(in_mes_ano,4)
+      else 'OUT-'  || left(in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(in_mes_ano,4) as integer) + cast(right(in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  nu_conexao as nu_conexao,
+  nu_desconexao as nu_desconexao,
+  'DADOS' as tipo,
+   2 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+  tb_historico_dados
+where
+  no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}
+union
+select
+  sg_uf as sg_uf,
+  no_cod_municipio_ibge as no_cod_municipio_ibge,
+  no_municipio as no_municipio,
+  no_prestadora as no_prestadora,
+  (case
+      when right(in_mes_ano,2) = '01' then 'JAN-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '02' then 'FEV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '03' then 'MAR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '04' then 'ABR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '05' then 'MAI-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '06' then 'JUN-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '07' then 'JUL-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '08' then 'AGO-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '09' then 'SET-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '10' then 'OUT-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '11' then 'NOV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '12' then 'DEZ-'  || left(in_mes_ano,4)
+      else 'OUT-'  || left(in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(in_mes_ano,4) as integer) + cast(right(in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  nu_conexao_2g as nu_conexao,
+  nu_desconexao_2g as nu_desconexao,
+  'DADOS 2G' as tipo,
+   3 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+  tb_historico_dados
+where
+  no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}
+union
+select
+  sg_uf as sg_uf,
+  no_cod_municipio_ibge as no_cod_municipio_ibge,
+  no_municipio as no_municipio,
+  no_prestadora as no_prestadora,
+  (case
+      when right(in_mes_ano,2) = '01' then 'JAN-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '02' then 'FEV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '03' then 'MAR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '04' then 'ABR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '05' then 'MAI-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '06' then 'JUN-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '07' then 'JUL-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '08' then 'AGO-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '09' then 'SET-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '10' then 'OUT-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '11' then 'NOV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '12' then 'DEZ-'  || left(in_mes_ano,4)
+      else 'OUT-'  || left(in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(in_mes_ano,4) as integer) + cast(right(in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  nu_conexao_3g as nu_conexao,
+  nu_desconexao_3g as nu_desconexao,
+  'DADOS 3G' as tipo,
+   4 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+  tb_historico_dados
+where
+  no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}
+union
+select
+  sg_uf as sg_uf,
+  no_cod_municipio_ibge as no_cod_municipio_ibge,
+  no_municipio as no_municipio,
+  no_prestadora as no_prestadora,
+  (case
+      when right(in_mes_ano,2) = '01' then 'JAN-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '02' then 'FEV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '03' then 'MAR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '04' then 'ABR-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '05' then 'MAI-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '06' then 'JUN-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '07' then 'JUL-' || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '08' then 'AGO-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '09' then 'SET-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '10' then 'OUT-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '11' then 'NOV-'  || left(in_mes_ano,4)
+      when right(in_mes_ano,2) = '12' then 'DEZ-'  || left(in_mes_ano,4)
+      else 'OUT-'  || left(in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(in_mes_ano,4) as integer) + cast(right(in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  nu_conexao_4g as nu_conexao,
+  nu_desconexao_4g as
+nu_desconexao,
+  'DADOS 4G' as tipo,
+   5 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+  tb_historico_dados
+where
+  no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}
+union
+select
+  $P{uf} as sg_uf,
+  $P{cod_municipio} as no_cod_municipio_ibge,
+  $P{municipio} as no_municipio,
+  prestadoras.no_prestadora as no_prestadora,
+  (case
+      when right(meses.in_mes_ano,2) = '01' then 'JAN-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '02' then 'FEV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '03' then 'MAR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '04' then 'ABR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '05' then 'MAI-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '06' then 'JUN-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '07' then 'JUL-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '08' then 'AGO-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '09' then 'SET-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '10' then 'OUT-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '11' then 'NOV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '12' then 'DEZ-'  || left(meses.in_mes_ano,4)
+      else 'OUT-'  || left(meses.in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(meses.in_mes_ano,4) as integer) + cast(right(meses.in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  0.0 as nu_conexao,
+  0.0 as nu_desconexao,
+  'VOZ' as tipo,
+  1 as ordem,
+  '95 %' as referencia_conexao,
+  '2 %' as referencia_desconexao
+from
+(select distinct no_prestadora from tb_historico_voz where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as prestadoras,
+(select distinct in_mes_ano from tb_historico_voz where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as meses
+union
+select
+  $P{uf} as sg_uf,
+  $P{cod_municipio} as no_cod_municipio_ibge,
+  $P{municipio} as no_municipio,
+  prestadoras.no_prestadora as no_prestadora,
+  (case
+      when right(meses.in_mes_ano,2) = '01' then 'JAN-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '02' then 'FEV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '03' then 'MAR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '04' then 'ABR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '05' then 'MAI-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '06' then 'JUN-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '07' then 'JUL-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '08' then 'AGO-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '09' then 'SET-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '10' then 'OUT-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '11' then 'NOV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '12' then 'DEZ-'  || left(meses.in_mes_ano,4)
+      else 'OUT-'  || left(meses.in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(meses.in_mes_ano,4) as integer) + cast(right(meses.in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  0.0 as nu_conexao,
+  0.0 as nu_desconexao,
+  'DADOS' as tipo,
+   2 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+(select distinct no_prestadora from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as prestadoras,
+(select distinct in_mes_ano from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as meses
+union
+select
+  $P{uf} as sg_uf,
+  $P{cod_municipio} as no_cod_municipio_ibge,
+  $P{municipio} as no_municipio,
+  prestadoras.no_prestadora as no_prestadora,
+  (case
+      when right(meses.in_mes_ano,2) = '01' then 'JAN-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '02' then 'FEV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '03' then 'MAR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '04' then 'ABR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '05' then 'MAI-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '06' then 'JUN-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '07' then 'JUL-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '08' then 'AGO-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '09' then 'SET-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '10' then 'OUT-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '11' then 'NOV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '12' then 'DEZ-'  || left(meses.in_mes_ano,4)
+      else 'OUT-'  || left(meses.in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(meses.in_mes_ano,4) as integer) + cast(right(meses.in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  0.0 as nu_conexao,
+  0.0 as nu_desconexao,
+  'DADOS 2G' as tipo,
+   3 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+(select distinct no_prestadora from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as prestadoras,
+(select distinct in_mes_ano from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as meses
+union
+select
+  $P{uf} as sg_uf,
+  $P{cod_municipio} as no_cod_municipio_ibge,
+  $P{municipio} as no_municipio,
+  prestadoras.no_prestadora as no_prestadora,
+  (case
+      when right(meses.in_mes_ano,2) = '01' then 'JAN-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '02' then 'FEV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '03' then 'MAR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '04' then 'ABR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '05' then 'MAI-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '06' then 'JUN-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '07' then 'JUL-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '08' then 'AGO-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '09' then 'SET-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '10' then 'OUT-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '11' then 'NOV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '12' then 'DEZ-'  || left(meses.in_mes_ano,4)
+      else 'OUT-'  || left(meses.in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(meses.in_mes_ano,4) as integer) + cast(right(meses.in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  0.0 as nu_conexao,
+  0.0 as nu_desconexao,
+  'DADOS 3G' as tipo,
+   4 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+(select distinct no_prestadora from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as prestadoras,
+(select distinct in_mes_ano from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as meses
+union
+select
+  $P{uf} as sg_uf,
+  $P{cod_municipio} as no_cod_municipio_ibge,
+  $P{municipio} as no_municipio,
+  prestadoras.no_prestadora as no_prestadora,
+  (case
+      when right(meses.in_mes_ano,2) = '01' then 'JAN-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '02' then 'FEV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '03' then 'MAR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '04' then 'ABR-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '05' then 'MAI-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '06' then 'JUN-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '07' then 'JUL-' || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '08' then 'AGO-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '09' then 'SET-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '10' then 'OUT-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '11' then 'NOV-'  || left(meses.in_mes_ano,4)
+      when right(meses.in_mes_ano,2) = '12' then 'DEZ-'  || left(meses.in_mes_ano,4)
+      else 'OUT-'  || left(meses.in_mes_ano,4)
+   end
+  ) as in_mes_ano,
+  100*cast(left(meses.in_mes_ano,4) as integer) + cast(right(meses.in_mes_ano,2) as integer)  as orig_in_mes_ano,
+  0.0 as nu_conexao,
+  0.0 as nu_desconexao,
+  'DADOS 4G' as tipo,
+   5 as ordem,
+  '98 %' as referencia_conexao,
+  '5 %' as referencia_desconexao
+from
+(select distinct no_prestadora from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as prestadoras,
+(select distinct in_mes_ano from tb_historico_dados where no_cod_municipio_ibge = $P{cod_municipio} and
+  sg_uf = $P{uf}) as meses
+) linhas
+where $X{IN;tipo;tipos}
+order by ordem, no_prestadora, orig_in_mes_ano]]>
+	</queryString>
+	<field name="sg_uf" class="java.lang.String"/>
+	<field name="no_cod_municipio_ibge" class="java.lang.String"/>
+	<field name="no_municipio" class="java.lang.String"/>
+	<field name="no_prestadora" class="java.lang.String"/>
+	<field name="in_mes_ano" class="java.lang.String"/>
+	<field name="orig_in_mes_ano" class="java.lang.Integer"/>
+	<field name="nu_conexao" class="java.lang.Double"/>
+	<field name="nu_desconexao" class="java.lang.Double"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="ordem" class="java.lang.Integer"/>
+	<field name="referencia_conexao" class="java.lang.String"/>
+	<field name="referencia_desconexao" class="java.lang.String"/>
+	<group name="group_tipo">
+		<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+		<groupHeader>
+			<band height="34">
+				<textField>
+					<reportElement x="34" y="8" width="494" height="20" uuid="9f4a6729-5cc7-4197-85da-4c1e1af85098"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tipo} + " - Resultados"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="166">
+				<crosstab>
+					<reportElement mode="Transparent" x="-1" y="28" width="555" height="55" forecolor="#000000" backcolor="#FFFFFF" uuid="535ca2e8-5345-42aa-ab02-e689693d47b2"/>
+					<crosstabDataset isDataPreSorted="true">
+						<dataset resetType="Group" resetGroup="group_tipo"/>
+					</crosstabDataset>
+					<crosstabHeaderCell>
+						<cellContents>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="20" uuid="bf84ca7c-9d3b-4a84-a67c-9ca2fce0a2cd"/>
+								<box>
+									<pen lineWidth="1.0"/>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement>
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Prestadora]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabHeaderCell>
+					<rowGroup name="no_prestadora" width="70">
+						<bucket class="java.lang.String">
+							<bucketExpression><![CDATA[$F{no_prestadora}]]></bucketExpression>
+						</bucket>
+						<crosstabRowHeader>
+							<cellContents backcolor="#FFFFFF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+								</box>
+								<textField>
+									<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="20" uuid="9690b210-74dd-4591-933c-fe38840d63e1"/>
+									<box>
+										<pen lineWidth="1.0"/>
+										<topPen lineWidth="1.0"/>
+										<leftPen lineWidth="1.0"/>
+										<bottomPen lineWidth="1.0"/>
+										<rightPen lineWidth="1.0"/>
+									</box>
+									<textElement>
+										<font size="8" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{no_prestadora}]]></textFieldExpression>
+								</textField>
+							</cellContents>
+						</crosstabRowHeader>
+						<crosstabTotalRowHeader>
+							<cellContents/>
+						</crosstabTotalRowHeader>
+					</rowGroup>
+					<columnGroup name="in_mes_ano" height="20">
+						<bucket class="java.lang.String">
+							<bucketExpression><![CDATA[$F{in_mes_ano}]]></bucketExpression>
+						</bucket>
+						<crosstabColumnHeader>
+							<cellContents backcolor="#FFFFFF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+								</box>
+								<textField>
+									<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="35205265-713b-4f42-b7c4-b7fbbd12b71e"/>
+									<box>
+										<pen lineWidth="1.0"/>
+										<topPen lineWidth="1.0"/>
+										<leftPen lineWidth="1.0"/>
+										<bottomPen lineWidth="1.0"/>
+										<rightPen lineWidth="1.0"/>
+									</box>
+									<textElement>
+										<font size="8" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{in_mes_ano}]]></textFieldExpression>
+								</textField>
+							</cellContents>
+						</crosstabColumnHeader>
+						<crosstabTotalColumnHeader>
+							<cellContents/>
+						</crosstabTotalColumnHeader>
+					</columnGroup>
+					<measure name="nu_conexaoMeasure" class="java.lang.Double" calculation="Sum">
+						<measureExpression><![CDATA[$F{nu_conexao}]]></measureExpression>
+					</measure>
+					<crosstabCell width="40" height="20">
+						<cellContents>
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="718069ea-52e4-494f-8d4b-d9300c8ff9d1"/>
+								<box>
+									<pen lineWidth="1.0"/>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement>
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{nu_conexaoMeasure} == 0.0 ? "-" : $V{nu_conexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell height="20" rowTotalGroup="no_prestadora">
+						<cellContents backcolor="#FFBFBF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="4f9394d3-98dd-409b-a6d3-99cd82e17fbf"/>
+								<textFieldExpression><![CDATA[$V{nu_conexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="40" columnTotalGroup="in_mes_ano">
+						<cellContents backcolor="#FFBFBF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="6b5d60d7-1801-428a-a6fa-4eda45d0dae7"/>
+								<textFieldExpression><![CDATA[$V{nu_conexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell rowTotalGroup="no_prestadora" columnTotalGroup="in_mes_ano">
+						<cellContents backcolor="#FFBFBF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="547ba4d8-2ad7-4e95-8e31-45c6637d232e"/>
+								<textFieldExpression><![CDATA[$V{nu_conexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+				</crosstab>
+				<crosstab>
+					<reportElement positionType="Float" x="-1" y="108" width="555" height="55" uuid="063d5498-4640-4dd2-a010-9fbd77154d09"/>
+					<crosstabDataset isDataPreSorted="true">
+						<dataset resetType="Group" resetGroup="group_tipo"/>
+					</crosstabDataset>
+					<crosstabHeaderCell>
+						<cellContents>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="20" uuid="1c8a698d-68b9-4780-bd5d-2e56f5be0c54"/>
+								<box>
+									<pen lineWidth="1.0"/>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement>
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Prestadora]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabHeaderCell>
+					<rowGroup name="no_prestadora" width="70">
+						<bucket class="java.lang.String">
+							<bucketExpression><![CDATA[$F{no_prestadora}]]></bucketExpression>
+						</bucket>
+						<crosstabRowHeader>
+							<cellContents backcolor="#FFFFFF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+								</box>
+								<textField>
+									<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="20" uuid="5b962d59-c6d7-4d63-8088-aaa528d6e1ec"/>
+									<box>
+										<pen lineWidth="1.0"/>
+										<topPen lineWidth="1.0"/>
+										<leftPen lineWidth="1.0"/>
+										<bottomPen lineWidth="1.0"/>
+										<rightPen lineWidth="1.0"/>
+									</box>
+									<textElement>
+										<font size="8" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{no_prestadora}]]></textFieldExpression>
+								</textField>
+							</cellContents>
+						</crosstabRowHeader>
+						<crosstabTotalRowHeader>
+							<cellContents/>
+						</crosstabTotalRowHeader>
+					</rowGroup>
+					<columnGroup name="in_mes_ano" height="20">
+						<bucket class="java.lang.String">
+							<bucketExpression><![CDATA[$F{in_mes_ano}]]></bucketExpression>
+						</bucket>
+						<crosstabColumnHeader>
+							<cellContents backcolor="#FFFFFF" mode="Opaque">
+								<box>
+									<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+								</box>
+								<textField>
+									<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="57ba222c-8f8a-4b63-92d3-34eaad89081f"/>
+									<box>
+										<pen lineWidth="1.0"/>
+										<topPen lineWidth="1.0"/>
+										<leftPen lineWidth="1.0"/>
+										<bottomPen lineWidth="1.0"/>
+										<rightPen lineWidth="1.0"/>
+									</box>
+									<textElement>
+										<font size="8" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{in_mes_ano}]]></textFieldExpression>
+								</textField>
+							</cellContents>
+						</crosstabColumnHeader>
+						<crosstabTotalColumnHeader>
+							<cellContents/>
+						</crosstabTotalColumnHeader>
+					</columnGroup>
+					<measure name="nu_desconexaoMeasure" class="java.lang.Double" calculation="Sum">
+						<measureExpression><![CDATA[$F{nu_desconexao}]]></measureExpression>
+					</measure>
+					<crosstabCell width="40" height="20">
+						<cellContents>
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="9d8f6e89-b002-41f5-b534-6cb7adef8910"/>
+								<box>
+									<pen lineWidth="1.0"/>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement>
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{nu_desconexaoMeasure} == 0.0 ? "-" : $V{nu_desconexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell height="20" rowTotalGroup="no_prestadora">
+						<cellContents backcolor="#FFBFBF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="275659fc-b4ec-4614-bcf0-753a408caac6"/>
+								<textFieldExpression><![CDATA[$V{nu_desconexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="40" columnTotalGroup="in_mes_ano">
+						<cellContents backcolor="#FFBFBF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="371cc835-d13e-42b4-80bb-a43aa082d207"/>
+								<textFieldExpression><![CDATA[$V{nu_desconexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell rowTotalGroup="no_prestadora" columnTotalGroup="in_mes_ano">
+						<cellContents backcolor="#FFBFBF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="40" height="20" uuid="656d9be8-9224-4e3d-829b-a51791e7f6ad"/>
+								<textFieldExpression><![CDATA[$V{nu_desconexaoMeasure}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabCell>
+				</crosstab>
+				<textField>
+					<reportElement positionType="Float" x="104" y="5" width="373" height="20" uuid="bd21a0fa-1f90-4727-9ade-6029d976cb67"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Taxa de conexão de " + $F{tipo} + " (%) - Referência : >= " + $F{referencia_conexao}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement positionType="Float" x="104" y="85" width="373" height="20" uuid="9eb33d05-7396-4e4c-99d9-5db4052e3a57"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Taxa de desconexão de " + $F{tipo} + " (%) - Referência : <= " + $F{referencia_desconexao}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="278" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="3" y="2" width="100" height="20" uuid="cb7d18a1-ffc2-46de-b7f3-c176cb6c78fe"/>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="110" width="555" height="35" uuid="01dbae62-2138-4863-87e0-8e9dfc3effe6"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Relatório de Dados de Fiscalização Consolidados por Município e Estado (UF)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="72" width="555" height="35" uuid="2e8273f1-f148-4df3-bbf9-ce3461becc31"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monitoramento de Redes do Serviço Móvel Pessoal – SMP (Telefonia móvel)]]></text>
+			</staticText>
+			<image>
+				<reportElement x="3" y="26" width="193" height="43" uuid="b87b9564-3fcf-4145-9334-47a95e1d9552"/>
+				<imageExpression><![CDATA[$P{caminho_imagem}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement positionType="Float" x="84" y="149" width="373" height="23" uuid="49c886b6-f159-47da-89a1-e0d63495c604"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["UF : " + $P{uf} + " - Município : " + $P{municipio}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="-1" y="176" width="555" height="100" uuid="95a67e42-305e-4e1f-9dee-c1383f2c5c38"/>
+				<subreportParameter name="cod_municipio">
+					<subreportParameterExpression><![CDATA[$P{cod_municipio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="municipio">
+					<subreportParameterExpression><![CDATA[$P{municipio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="uf">
+					<subreportParameterExpression><![CDATA[$P{uf}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="tipos">
+					<subreportParameterExpression><![CDATA[$P{tipos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{caminho_subreport}]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="24" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="3" y="4" width="100" height="20" uuid="c4e581ea-27c0-4d63-a44b-d81d3dcad0b0"/>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="537" y="3" width="15" height="20" uuid="8af0add2-704f-49c5-9e11-eca0b72d49d4"/>
+				<textFieldExpression><![CDATA[Integer.toString($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Page">
+				<reportElement x="513" y="3" width="15" height="20" uuid="1c2a2950-7712-4aa4-9b22-7e2bde9ae10c"/>
+				<textFieldExpression><![CDATA[Integer.toString($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="528" y="3" width="9" height="20" uuid="00b2dc8c-9496-427e-a93e-1079bc59b12e"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="162">
+			<staticText>
+				<reportElement positionType="Float" x="2" y="3" width="553" height="159" uuid="4788bbb7-5aec-494c-bf7d-1c26a70fbc2c"/>
+				<text><![CDATA[Notas:
+1) O símbolo "-" representa dados inválidos ou ausência de prestação de serviço no município
+2) Os dados são coletados 24h por dia, todos os dias do mês
+Legenda:
+1) Taxa de Conexão de Voz: Total de chamadas completadas dividido pelo total de tentativas
+2) Taxa de Desconexão de Voz: Total de chamadas interrompidas (queda) dividido pelo total de chamadas
+3) Taxa de Conexão de Dados: Total de conexões de dados dividido pelo total de tentativas
+4) Taxa de Desconexão de Dados: Total de conexões de dados interrompidas (queda) dividido pelo total de conexões
+5) Taxa de Disponibilidade: Disponibilidade possível no mês (100%) menos o (somatório das durações de interrupções e quantidade de ERBs afetadas) sobre o (nº de ERBs do município x 720 minutos)]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
