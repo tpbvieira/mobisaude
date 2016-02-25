@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:dither="true">
+
+    <item android:state_checked="true"
+        android:drawable="@drawable/round_border_cinza_reto2" />
+    <item android:state_window_focused="false"
+        android:drawable="@drawable/round_border_cinza_reto2" />
+    <item android:state_pressed="true"
+        android:drawable="@drawable/round_border_cinza_reto_select2" />
+    <item android:state_focused="true"
+        android:drawable="@drawable/round_border_cinza_reto_select2" />
+    <item
+        android:drawable="@drawable/round_border_cinza_reto2" />
+
+</selector>
