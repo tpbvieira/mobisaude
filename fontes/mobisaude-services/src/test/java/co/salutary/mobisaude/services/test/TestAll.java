@@ -15,41 +15,30 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import co.salutary.mobisaude.services.restful.message.mobile.ConsultaDominiosRequest;
-import co.salutary.mobisaude.services.restful.message.mobile.ConsultaDominiosResponse;
-import co.salutary.mobisaude.services.restful.message.mobile.ConsultaErbsRequest;
-import co.salutary.mobisaude.services.restful.message.mobile.ConsultaErbsResponse;
-import co.salutary.mobisaude.services.restful.message.mobile.ConsultaTelasRequest;
-import co.salutary.mobisaude.services.restful.message.mobile.ConsultaTelasResponse;
-import co.salutary.mobisaude.services.restful.message.mobile.GeocodeRequest;
-import co.salutary.mobisaude.services.restful.message.mobile.GeocodeResponse;
-import co.salutary.mobisaude.services.restful.message.mobile.GerarTokenRequest;
-import co.salutary.mobisaude.services.restful.message.mobile.GerarTokenResponse;
-import co.salutary.mobisaude.services.restful.resources.ServicesResource;
-import co.salutary.util.CryptographyUtil;
+import co.salutary.mobisaude.restful.message.mobile.ConsultaDominiosRequest;
+import co.salutary.mobisaude.restful.message.mobile.ConsultaDominiosResponse;
+import co.salutary.mobisaude.restful.message.mobile.ConsultaTelasRequest;
+import co.salutary.mobisaude.restful.message.mobile.ConsultaTelasResponse;
+import co.salutary.mobisaude.restful.message.mobile.GeocodeRequest;
+import co.salutary.mobisaude.restful.message.mobile.GeocodeResponse;
+import co.salutary.mobisaude.restful.message.mobile.GerarTokenRequest;
+import co.salutary.mobisaude.restful.message.mobile.GerarTokenResponse;
+import co.salutary.mobisaude.restful.message.mobile.GetESRequest;
+import co.salutary.mobisaude.restful.message.mobile.GetESResponse;
+import co.salutary.mobisaude.restful.resources.ServiceBroker;
+import co.salutary.mobisaude.util.CryptographyUtil;
 import junit.framework.TestCase;
 
 public class TestAll extends TestCase {
-	/**
-	 * Logger
-	 */
+	
 	private static final Log logger = LogFactory.getLog(TestAll.class);
-	/**
-	 * Arquivo de properties
-	 */
-	private Properties properties = new Properties();
-	/**
-	 * Formatacao de data
-	 */
+	private Properties testProperties = new Properties();
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");	
-	/**
-	 * Array para permutacao na geracao da chave
-	 */
 	private static int[] arrPermutacao = {7,5,3,1,4,6,0,2};
 		
 	@Before
 	public void setUp() throws Exception {
-		properties.load(this.getClass().getResourceAsStream("/testes-junit.properties"));
+		testProperties.load(this.getClass().getResourceAsStream("/test.properties"));
 	}
 
 	@After
@@ -61,55 +50,53 @@ public class TestAll extends TestCase {
 		try {
 			// json object mapper
 			ObjectMapper mapper = new ObjectMapper();
-
-			// gera chave
-			String chave = gerarChave();
-
 			// get Resource
-			ServicesResource resource = new ServicesResource();
+			ServiceBroker broker = new ServiceBroker();
 
-			// test 01 - gerar token
-			String token = gerarTokenTest(mapper, chave, resource);
-			System.out.println("Token=" + token);
-			
-			// test 02 - Consulta Dominios
-			consultaDominioTest(mapper, resource, token);
+			// test 01 - gerar chave
+			String chave = gerarChaveTest();
 
-			// test 03 - Consulta Telas
-			consultaTelasTest(mapper, resource, token);
+			// test 02 - gerar token
+			String token = gerarTokenTest(mapper, broker, chave);
 			
-			// test 04 - get geocode and set global variables 
-			GeocodeResponse geocodeResponse = getGeocodeResponseTest(mapper, resource, token);
-			String codMunicipioIbge = geocodeResponse.getCodMunicipioIbge();
+			// test 03 - Consulta Dominios
+			consultaDominioTest(mapper, broker, token);
+
+			// test 04 - Consulta Telas
+			consultaTelasTest(mapper, broker, token);
+			
+			// test 05 - get geocode and set global variables 
+			GeocodeResponse geocodeResponse = getGeocodeResponseTest(mapper, broker, token);
+			String codMunicipio = geocodeResponse.getCodMunicipioIbge();
 			String uf = geocodeResponse.getUf();
 			
-			// test 05 - Consulta ERBs
-			consultarERBTest(mapper, resource, token, codMunicipioIbge, uf);
+			// test 06 - get estabelecimentos de saúde
+			getESByMunicipioTest(mapper, broker, token, codMunicipio);
 //
 //			// 14 - Texto Ajuda
 //			TextoAjudaRequest textoAjudaRequest = mapper.readValue(
-//					properties.getProperty("textoAjuda"),
+//					testProperties.getProperty("textoAjuda"),
 //					TextoAjudaRequest.class);
-//			TextoAjudaResponse textoAjudaResponse = resource.textoAjuda(textoAjudaRequest);
-//			if (textoAjudaResponse == null || !textoAjudaResponse.getErro().contains("0|")) {
+//			TextoAjudaResponse textoAjudaResponse = broker.textoAjuda(textoAjudaRequest);
+//			if (textoAjudaResponse == null || !textoAjudaResponse.getErro().startsWith("0|")) {
 //				fail("Retorno do serviço Texto Ajuda não OK.");
 //			}
 //
 //			// 15 - Texto Ajuda Servico Movel
 //			TextoAjudaServicoMovelRequest textoAjudaServicoMovelRequest = mapper.readValue(
-//					properties.getProperty("textoAjudaServicoMovel"),
+//					testProperties.getProperty("textoAjudaServicoMovel"),
 //					TextoAjudaServicoMovelRequest.class);
-//			TextoAjudaServicoMovelResponse textoAjudaServicoMovelResponse = resource.textoAjudaServicoMovel(textoAjudaServicoMovelRequest);
-//			if (textoAjudaServicoMovelResponse == null || !textoAjudaServicoMovelResponse.getErro().contains("0|")) {
+//			TextoAjudaServicoMovelResponse textoAjudaServicoMovelResponse = broker.textoAjudaServicoMovel(textoAjudaServicoMovelRequest);
+//			if (textoAjudaServicoMovelResponse == null || !textoAjudaServicoMovelResponse.getErro().startsWith("0|")) {
 //				fail("Retorno do serviço Texto Ajuda Servico Movel não OK.");
 //			}
 //
 //			// 16 - Texto Aviso Relatar Problema
 //			TextoAvisoRelatarProblemaRequest textoAvisoRelatarProblemaRequest = mapper.readValue(
-//					properties.getProperty("textoAvisoRelatarProblema"),
+//					testProperties.getProperty("textoAvisoRelatarProblema"),
 //					TextoAvisoRelatarProblemaRequest.class);
-//			TextoAvisoRelatarProblemaResponse textoAvisoRelatarProblemaResponse = resource.textoAvisoRelatarProblema(textoAvisoRelatarProblemaRequest);
-//			if (textoAvisoRelatarProblemaResponse == null || !textoAvisoRelatarProblemaResponse.getErro().contains("0|")) {
+//			TextoAvisoRelatarProblemaResponse textoAvisoRelatarProblemaResponse = broker.textoAvisoRelatarProblema(textoAvisoRelatarProblemaRequest);
+//			if (textoAvisoRelatarProblemaResponse == null || !textoAvisoRelatarProblemaResponse.getErro().startsWith("0|")) {
 //				fail("Retorno do serviço Texto Aviso Relatar Problema não OK.");
 //			}
 			
@@ -119,24 +106,30 @@ public class TestAll extends TestCase {
 		}
 	}
 
-	private void consultaTelasTest(ObjectMapper mapper, ServicesResource resource, String token)
+	private void consultaTelasTest(ObjectMapper mapper, ServiceBroker broker, String token)
 			throws IOException, JsonParseException, JsonMappingException {
 		ConsultaTelasRequest consultaTelasRequest = mapper.readValue(
-				properties.getProperty("consultaTelas").replaceAll("<token>", token),
+				testProperties.getProperty("consultaTelas").replaceAll("<token>", token),
 				ConsultaTelasRequest.class);
-		ConsultaTelasResponse consultaTelasResponse = resource.consultaTelas(consultaTelasRequest);
-		if (consultaTelasResponse == null || !consultaTelasResponse.getErro().contains("0|")) {
+		ConsultaTelasResponse consultaTelasResponse = broker.consultaTelas(consultaTelasRequest);
+		if (consultaTelasResponse == null || !consultaTelasResponse.getErro().startsWith("0|")) {
 			fail("Retorno do serviço Consulta Telas não OK.");
 		}
 	}
 
-	private void consultaDominioTest(ObjectMapper mapper, ServicesResource resource, String token)
+	private void consultaDominioTest(ObjectMapper mapper, ServiceBroker broker, String token)
 			throws IOException, JsonParseException, JsonMappingException {
-		ConsultaDominiosRequest consultaDominiosRequest = mapper.readValue(
-				properties.getProperty("consultaDominios").replaceAll("<token>", token),
-				ConsultaDominiosRequest.class);
-		ConsultaDominiosResponse consultaDominiosResponse = resource.consultaDominios(consultaDominiosRequest);
-		if (consultaDominiosResponse == null || !consultaDominiosResponse.getErro().contains("0|")) {
+		
+		ConsultaDominiosRequest consultaDominiosRequest = mapper.readValue(testProperties.getProperty("consultaDominios").replaceAll("<token>", token), ConsultaDominiosRequest.class);
+		ConsultaDominiosResponse consultaDominiosResponse = broker.consultaDominios(consultaDominiosRequest);
+		
+		if (consultaDominiosResponse == null) {
+			fail("Retorno inesperado ao consultar tabelas de domínio.");
+		}
+		if (consultaDominiosResponse.getErro() == null) {
+			fail("error message is null.");
+		}
+		if (!consultaDominiosResponse.getErro().startsWith("0|")) {
 			fail("Retorno inesperado ao consultar tabelas de domínio.");
 		}
 		if(consultaDominiosResponse.getOperadoras().length != 7){
@@ -155,12 +148,8 @@ public class TestAll extends TestCase {
 			fail("Número inesperado de regiões.");
 		}
 	}
-	
-	/**
-	 * Metodo que gera uma chave para geracao de token de sessao
-	 * @return chave gerada
-	 */
-	private String gerarChave() {
+
+	private String gerarChaveTest() {
 		StringBuffer sbChaveGerada = new StringBuffer("");
 		String dataStr = dateFormat.format(new Date());
 
@@ -182,49 +171,58 @@ public class TestAll extends TestCase {
 		return sbChaveGerada.toString();
 	}
 	
-	private void consultarERBTest(ObjectMapper mapper, ServicesResource resource, String token,
-			String codMunicipioIbge, String uf) throws IOException, JsonParseException, JsonMappingException {
-		ConsultaErbsRequest consultaErbsRequest = mapper.readValue(
-				properties.getProperty("consultaErbsPorMunicipio").replaceAll("<token>", token).
-				replaceAll("<uf>", uf).
-				replaceAll("<municipio>", codMunicipioIbge).
-				replaceAll("<operadora>", "CLARO"),
-				ConsultaErbsRequest.class);
-		ConsultaErbsResponse consultaErbsResponse = resource.consultaErbsPorMunicipio(consultaErbsRequest);
-		if (consultaErbsResponse == null || !consultaErbsResponse.getErro().contains("0|")) {
-			fail("Retorno do serviço Consulta ERBs por Município não OK.");
-		}
-	}
-
-	private GeocodeResponse getGeocodeResponseTest(ObjectMapper mapper, ServicesResource resource,
-			String token) throws IOException, JsonParseException, JsonMappingException {
-		GeocodeRequest geocodeRequest = mapper.readValue(
-				properties.getProperty("geocode").replaceAll("<token>", token),
-				GeocodeRequest.class);
-
-		GeocodeResponse geocodeResponse = resource.geocode(geocodeRequest); 
-
-
-		if (geocodeResponse == null || !geocodeResponse.getErro().contains("0|")) {
-			fail("Retorno do serviço geocode não OK.");
-		}
-		return geocodeResponse;
-	}
-
-	private String gerarTokenTest(ObjectMapper mapper, String chave, ServicesResource resource)
+	private String gerarTokenTest(ObjectMapper mapper, ServiceBroker broker, String chave)
 			throws IOException, JsonParseException, JsonMappingException {
-		// 1 - Gerar token
+
 		GerarTokenRequest gerarTokenRequest = mapper.readValue(
-				properties.getProperty("gerarToken").replaceAll("<chave>", chave),
+				testProperties.getProperty("gerarToken").replaceAll("<chave>", chave),
 				GerarTokenRequest.class);
 
-		GerarTokenResponse gerarTokenResponse = resource.gerarToken(gerarTokenRequest); 
+		GerarTokenResponse gerarTokenResponse = broker.gerarToken(gerarTokenRequest); 
 
-		if (gerarTokenResponse == null || !gerarTokenResponse.getErro().contains("0|")) {
-			fail("Retorno do serviço gerar token não OK.");
+		if (gerarTokenResponse == null) {
+			fail("gerarTokenResonse is null.");
+		}
+		if(gerarTokenResponse.getErro() == null){
+			fail("gerarTokenResonse error message is null.");
+		}
+		if(!gerarTokenResponse.getErro().contains("0|")){
+			fail("gerarTokenResonse message not successful.");
 		}
 
 		String token = gerarTokenResponse.getToken();
 		return token;
+	}
+	
+	private GeocodeResponse getGeocodeResponseTest(ObjectMapper mapper, ServiceBroker broker,
+			String token) throws IOException, JsonParseException, JsonMappingException {
+		
+		GeocodeRequest geocodeRequest = mapper.readValue(testProperties.getProperty("geocode").replaceAll("<token>", token), GeocodeRequest.class);
+		GeocodeResponse geocodeResponse = broker.geocode(geocodeRequest); 
+
+		if (geocodeResponse == null || !geocodeResponse.getErro().startsWith("0|")) {
+			fail("Retorno do serviço geocode não OK.");
+		}
+		if (!geocodeResponse.getMunicipio().equals("Brasília")) {
+			fail("Cidade inválida." + geocodeResponse.getMunicipio());
+		}
+		
+		return geocodeResponse;
+	}
+	
+	private void getESByMunicipioTest(ObjectMapper mapper, ServiceBroker broker, String token, String codMunicipio) 
+			throws IOException, JsonParseException, JsonMappingException {
+		
+		GetESRequest getESRequest = mapper.readValue(
+				testProperties.getProperty("getESByMunicipio").replaceAll("<token>", token).				
+				replaceAll("<municipio>", codMunicipio),
+				GetESRequest.class);
+		
+		GetESResponse getESResponse = broker.getESByMunicipio(getESRequest);
+		
+		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {
+			fail("Error = getESByMunicipioTest.");
+			logger.error(getESResponse);
+		}
 	}
 }

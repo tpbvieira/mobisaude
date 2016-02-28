@@ -8,7 +8,7 @@
 		</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>co.salutary.mobisaude.services.restful.resources.GatewayApplication
+			<param-value>co.salutary.mobisaude.restful.resources.MobiSaudeApplication
 			</param-value>
 		</init-param>
 		<init-param>
@@ -25,7 +25,7 @@
 
 	<listener>
 		<listener-class>
-			co.salutary.util.GatewayContextListener
+			co.salutary.mobisaude.util.MobiSaudeContextListener
 		</listener-class>
 	</listener>
 
