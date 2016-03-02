@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
         TextView erbsView = (TextView)findViewById(R.id.erbs);
         ErbDAO erbDao = new ErbDAO(db);
-        erbsView.setText("ERBs=" + erbDao.listarErb(Settings.ID_CIDADE,true,true,true,operadorasList).size());
+        erbsView.setText("ES=" + erbDao.listarErb(Settings.ID_CIDADE,true,true,true,operadorasList).size());
 
         TextView viewsView = (TextView)findViewById(R.id.views);
         viewsView.setText("Views=" + db.getAvailableViews().size());

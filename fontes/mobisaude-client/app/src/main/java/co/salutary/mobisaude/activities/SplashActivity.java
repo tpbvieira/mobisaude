@@ -26,7 +26,7 @@ import java.util.Iterator;
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ManagerToken;
-import co.salutary.mobisaude.controller.ServiceRequester;
+import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.CidadeDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
@@ -65,7 +65,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // gui
         txtLabel = (TextView)findViewById(R.id.frm_splash_label);
 
         Settings.CONEXAO   = false;
@@ -73,7 +72,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         Settings.CONEXAO3G = false;
         Settings.CONEXAO4G = false;
         Settings.DEVICE_LOCATED = false;
-        Settings.hashNoERBs = new HashMap<String, Boolean>();
 
         DeviceInfo.setUpGCM(this);
         DeviceInfo.isDadosAtivos = false;
@@ -85,10 +83,8 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
         userController = UserController.getInstance();
 
-        // location
         location = DeviceInfo.updateLocation(getApplicationContext(), this);
 
-        // Carregar timer
         Handler timerTela = new Handler();
         timerTela.postDelayed(this, SLEEP_TIME);
     }
@@ -311,7 +307,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                         JSONObject jRequest = new JSONObject();
                         jRequest.put("geocodeRequest", jDados);
 
-                        String reponder = ServiceRequester.getInstance(getApplicationContext()).geocode(jRequest.toString());
+                        String reponder = ServiceBroker.getInstance(getApplicationContext()).geocode(jRequest.toString());
                         if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
                             JSONObject jObject = new JSONObject(reponder);
                             JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
@@ -433,7 +429,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     for (int i = 0; i < numAttempts; i++) {
 
                         JSONObject consultaDominiosRequest = UtilJson.createRequest(getApplicationContext(), "consultaDominiosRequest");
-                        String consultaDominiosResponse = ServiceRequester.getInstance(getApplicationContext()).consultaDataToReport(consultaDominiosRequest.toString());
+                        String consultaDominiosResponse = ServiceBroker.getInstance(getApplicationContext()).consultaDataToReport(consultaDominiosRequest.toString());
 
 //                        Log.d(TAG, consultaDominiosResponse);
                         if(consultaDominiosResponse != null && !consultaDominiosResponse.startsWith(getString(R.string.erro_starts))){
@@ -508,7 +504,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     for (int i = 0; i < numAttempts; i++) {
 
                         JSONObject consultaTelasRequest = UtilJson.createRequest(getApplicationContext(), "consultaTelasRequest");
-                        String consultaTelasResponse = ServiceRequester.getInstance(getApplicationContext()).queryAvailableViews(consultaTelasRequest.toString());
+                        String consultaTelasResponse = ServiceBroker.getInstance(getApplicationContext()).queryAvailableViews(consultaTelasRequest.toString());
 
 //                        Log.d(TAG, consultaTelasResponse);
                         if(consultaTelasResponse != null && !consultaTelasResponse.startsWith(getString(R.string.erro_starts))){

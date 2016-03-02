@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ManagerToken;
-import co.salutary.mobisaude.controller.ServiceRequester;
+import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.CidadeDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
@@ -299,7 +299,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 						JSONObject jRequest = new JSONObject();
 						jRequest.put("geocodeRequest", jDados);
 
-						String reponder = ServiceRequester.getInstance(ActivityLocalidade.this).geocode(jRequest.toString());
+						String reponder = ServiceBroker.getInstance(ActivityLocalidade.this).geocode(jRequest.toString());
 						if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
 							JSONObject jObject = new JSONObject(reponder);
 							JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");

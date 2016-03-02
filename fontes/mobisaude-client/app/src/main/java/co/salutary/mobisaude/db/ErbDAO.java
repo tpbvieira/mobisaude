@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.salutary.mobisaude.model.Erb;
-import co.salutary.mobisaude.db.scipts.ScriptErb;
+import co.salutary.mobisaude.db.scipts.ScriptES;
 
 /**
  * Created by thiago on 08/02/16.
@@ -26,53 +26,53 @@ public class ErbDAO {
 
     public long salvarErb(Erb erb) {
         ContentValues values = getContentValuesErb(erb);
-        long id = localDB.insert(ScriptErb.NOME_TABELA, values);
+        long id = localDB.insert(ScriptES.NOME_TABELA, values);
         return id;
     }
 
     public int atualizarErb(Erb erb) {
         ContentValues values = getContentValuesErb(erb);
-        values.put(ScriptErb._ID, erb.getId());
+        values.put(ScriptES._ID, erb.getId());
         String _id = String.valueOf(erb.getId());
-        String where = ScriptErb._ID + "=?";
+        String where = ScriptES._ID + "=?";
         String[] whereArgs = new String[]{_id};
-        int count = localDB.update(ScriptErb.NOME_TABELA, values, where, whereArgs);
+        int count = localDB.update(ScriptES.NOME_TABELA, values, where, whereArgs);
         return count;
     }
 
     public ContentValues getContentValuesErb(Erb erb) {
         ContentValues values = new ContentValues();
-        values.put(ScriptErb._ID_CIDADE, erb.getIdCidade());
-        values.put(ScriptErb._LATITUDE_STEL, erb.getLatitudeStel());
-        values.put(ScriptErb._LONGITUDE_STEL, erb.getLongitudeStel());
-        values.put(ScriptErb._NOME_FANTASIA, erb.getNomeFantasia());
-        values.put(ScriptErb._PRESTADORA, erb.getPrestadora());
-        values.put(ScriptErb._TECNOLOGIA_2G, erb.isTecnologia2g());
-        values.put(ScriptErb._TECNOLOGIA_3G, erb.isTecnologia3g());
-        values.put(ScriptErb._TECNOLOGIA_4G, erb.isTecnologia4g());
+        values.put(ScriptES._ID_CIDADE, erb.getIdCidade());
+        values.put(ScriptES._LATITUDE_STEL, erb.getLatitudeStel());
+        values.put(ScriptES._LONGITUDE_STEL, erb.getLongitudeStel());
+        values.put(ScriptES._NOME_FANTASIA, erb.getNomeFantasia());
+        values.put(ScriptES._PRESTADORA, erb.getPrestadora());
+        values.put(ScriptES._TECNOLOGIA_2G, erb.isTecnologia2g());
+        values.put(ScriptES._TECNOLOGIA_3G, erb.isTecnologia3g());
+        values.put(ScriptES._TECNOLOGIA_4G, erb.isTecnologia4g());
         return values;
     }
 
     public int deletarErbByMunicipio(long idCidade, String prestadora) {
-        String where = ScriptErb._ID_CIDADE + "= " + idCidade + "  AND UPPER(" + ScriptErb._PRESTADORA + ") LIKE UPPER('" + prestadora + "') ";
-        int count = localDB.delete(ScriptErb.NOME_TABELA, where, null);
+        String where = ScriptES._ID_CIDADE + "= " + idCidade + "  AND UPPER(" + ScriptES._PRESTADORA + ") LIKE UPPER('" + prestadora + "') ";
+        int count = localDB.delete(ScriptES.NOME_TABELA, where, null);
         return count;
     }
 
     public Erb getErbById(long id) {
         try {
-            Cursor c = localDB.getDb().query(true, ScriptErb.NOME_TABELA, ScriptErb.colunas, ScriptErb._ID + "=" + id, null, null, null, null, null);
+            Cursor c = localDB.getDb().query(true, ScriptES.NOME_TABELA, ScriptES.colunas, ScriptES._ID + "=" + id, null, null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                int idxId = c.getColumnIndex(ScriptErb._ID);
-                int idxIdCidade = c.getColumnIndex(ScriptErb._ID_CIDADE);
-                int idxLatitude = c.getColumnIndex(ScriptErb._LATITUDE_STEL);
-                int idxLongitude = c.getColumnIndex(ScriptErb._LONGITUDE_STEL);
-                int idxNomeFantasia = c.getColumnIndex(ScriptErb._NOME_FANTASIA);
-                int idxPrestadora = c.getColumnIndex(ScriptErb._PRESTADORA);
-                int idxTecnologia2g = c.getColumnIndex(ScriptErb._TECNOLOGIA_2G);
-                int idxTecnologia3g = c.getColumnIndex(ScriptErb._TECNOLOGIA_3G);
-                int idxTecnologia4g = c.getColumnIndex(ScriptErb._TECNOLOGIA_4G);
+                int idxId = c.getColumnIndex(ScriptES._ID);
+                int idxIdCidade = c.getColumnIndex(ScriptES._ID_CIDADE);
+                int idxLatitude = c.getColumnIndex(ScriptES._LATITUDE_STEL);
+                int idxLongitude = c.getColumnIndex(ScriptES._LONGITUDE_STEL);
+                int idxNomeFantasia = c.getColumnIndex(ScriptES._NOME_FANTASIA);
+                int idxPrestadora = c.getColumnIndex(ScriptES._PRESTADORA);
+                int idxTecnologia2g = c.getColumnIndex(ScriptES._TECNOLOGIA_2G);
+                int idxTecnologia3g = c.getColumnIndex(ScriptES._TECNOLOGIA_3G);
+                int idxTecnologia4g = c.getColumnIndex(ScriptES._TECNOLOGIA_4G);
 
                 Erb erb = new Erb();
                 erb.setId(c.getLong(idxId));
@@ -97,38 +97,38 @@ public class ErbDAO {
     public List<Erb> listarErb(int idCidade, boolean isShow2g, boolean isShow3g, boolean isShow4g, List<String> listPrestadoras) {
         List<Erb> erbes = new ArrayList<Erb>();
         try {
-            String where = ScriptErb._ID_CIDADE + " = " + idCidade;
+            String where = ScriptES._ID_CIDADE + " = " + idCidade;
             if (isShow2g) {
-                where += " AND " + ScriptErb._TECNOLOGIA_2G + " = 1 ";
+                where += " AND " + ScriptES._TECNOLOGIA_2G + " = 1 ";
             }
             if (isShow3g) {
-                where += " AND " + ScriptErb._TECNOLOGIA_3G + " = 1 ";
+                where += " AND " + ScriptES._TECNOLOGIA_3G + " = 1 ";
             }
             if (isShow4g) {
-                where += " AND " + ScriptErb._TECNOLOGIA_4G + " = 1 ";
+                where += " AND " + ScriptES._TECNOLOGIA_4G + " = 1 ";
             }
             if (!listPrestadoras.isEmpty()) {
                 where += " AND (";
                 for (int i = 0; i < listPrestadoras.size(); i++) {
                     String prestadora = listPrestadoras.get(i);
-                    where += "UPPER(" + ScriptErb._PRESTADORA + ")" + " LIKE UPPER('" + prestadora + "')";
+                    where += "UPPER(" + ScriptES._PRESTADORA + ")" + " LIKE UPPER('" + prestadora + "')";
                     if ((i + 1) < listPrestadoras.size()) {
                         where += " OR ";
                     }
                 }
                 where += " )";
             }
-            Cursor c = localDB.getDb().query(true, ScriptErb.NOME_TABELA, ScriptErb.colunas, where, null, null, null, null, null);
+            Cursor c = localDB.getDb().query(true, ScriptES.NOME_TABELA, ScriptES.colunas, where, null, null, null, null, null);
             if (c.moveToFirst()) {
-                int idxId = c.getColumnIndex(ScriptErb._ID);
-                int idxIdCidade = c.getColumnIndex(ScriptErb._ID_CIDADE);
-                int idxLatitude = c.getColumnIndex(ScriptErb._LATITUDE_STEL);
-                int idxLongitude = c.getColumnIndex(ScriptErb._LONGITUDE_STEL);
-                int idxNomeFantasia = c.getColumnIndex(ScriptErb._NOME_FANTASIA);
-                int idxPrestadora = c.getColumnIndex(ScriptErb._PRESTADORA);
-                int idxTecnologia2g = c.getColumnIndex(ScriptErb._TECNOLOGIA_2G);
-                int idxTecnologia3g = c.getColumnIndex(ScriptErb._TECNOLOGIA_3G);
-                int idxTecnologia4g = c.getColumnIndex(ScriptErb._TECNOLOGIA_4G);
+                int idxId = c.getColumnIndex(ScriptES._ID);
+                int idxIdCidade = c.getColumnIndex(ScriptES._ID_CIDADE);
+                int idxLatitude = c.getColumnIndex(ScriptES._LATITUDE_STEL);
+                int idxLongitude = c.getColumnIndex(ScriptES._LONGITUDE_STEL);
+                int idxNomeFantasia = c.getColumnIndex(ScriptES._NOME_FANTASIA);
+                int idxPrestadora = c.getColumnIndex(ScriptES._PRESTADORA);
+                int idxTecnologia2g = c.getColumnIndex(ScriptES._TECNOLOGIA_2G);
+                int idxTecnologia3g = c.getColumnIndex(ScriptES._TECNOLOGIA_3G);
+                int idxTecnologia4g = c.getColumnIndex(ScriptES._TECNOLOGIA_4G);
 
                 do {
                     Erb erb = new Erb();

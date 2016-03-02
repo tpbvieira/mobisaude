@@ -48,7 +48,7 @@ public abstract class AbstractServicesResource implements MobiSaudeResource {
 			isr = new InputStreamReader(stream, "UTF-8");
 			properties.load(isr);
 		} catch (IOException ex) {
-			logger.error("Erro carregando gateway.properties." + ex.getMessage());
+			logger.error("Erro carregando properties." + ex.getMessage());
 		} finally {
 			try {
 				isr.close();

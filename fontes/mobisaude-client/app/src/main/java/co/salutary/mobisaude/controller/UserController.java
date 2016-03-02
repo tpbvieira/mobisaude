@@ -9,12 +9,11 @@ import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.DeviceInfo;
 
 public class UserController {
-	
-    private Cidade cidade;
+
     private UF uf;
+    private Cidade cidade;
     private Cidade cidadeLocal;
-    
-    // memoria do Erbs
+
     private Map<String, Boolean> mapErbsControle = null;
     private List<Erb> listErbs;
     private List<Erb> listHistoricos;

@@ -40,10 +40,6 @@ public class TestAll extends TestCase {
 	public void setUp() throws Exception {
 		testProperties.load(this.getClass().getResourceAsStream("/test.properties"));
 	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
 	
 	@Test
 	public void test() {
@@ -71,7 +67,7 @@ public class TestAll extends TestCase {
 			String uf = geocodeResponse.getUf();
 
 			// test 06 - list estabelecimentos de saúde
-//			listESTest(mapper, broker, token);
+			listESTest(mapper, broker, token);
 			
 			// test 07 - get estabelecimentos de saúde by cidade
 			getESByMunicipioTest(mapper, broker, token, idMunicipio);
@@ -118,6 +114,10 @@ public class TestAll extends TestCase {
 		}
 	}
 
+	@After
+	public void tearDown() throws Exception {
+	}
+	
 	private void consultaTelasTest(ObjectMapper mapper, ServiceBroker broker, String token)
 			throws IOException, JsonParseException, JsonMappingException {
 		ConsultaTelasRequest consultaTelasRequest = mapper.readValue(

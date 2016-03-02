@@ -20,7 +20,6 @@ public class Settings {
     public static double lon;
     public static int ID_CIDADE = 0;
     public static int ID_UF = 0;
-    public static HashMap<String, Boolean> hashNoERBs;
     public static boolean disableSensor = false;
     public static boolean GO_HOME;
     public static boolean REPORT_PROBLEM;

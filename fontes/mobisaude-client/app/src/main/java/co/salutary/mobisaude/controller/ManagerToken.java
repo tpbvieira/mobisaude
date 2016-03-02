@@ -22,7 +22,7 @@ public class ManagerToken  {
 			JSONObject jRequest = new JSONObject();
 		    jRequest.put("gerarTokenRequest", jDados);
 			
-		    String reponder = ServiceRequester.getInstance(context).gerarToken(jRequest.toString());
+		    String reponder = ServiceBroker.getInstance(context).gerarToken(jRequest.toString());
 
 		    if(reponder != null && !reponder.startsWith("Error")) {
 		    	JSONObject jObject = new JSONObject(reponder);

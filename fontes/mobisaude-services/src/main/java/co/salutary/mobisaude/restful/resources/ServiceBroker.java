@@ -352,6 +352,7 @@ public class ServiceBroker extends AbstractServicesResource {
 		return response;
 	}
 	
+	
 	@POST
 	@Path("/getESByMunicipioTipoEstabelecimento")
 	@Consumes("application/json;charset=utf-8")
@@ -414,7 +415,9 @@ public class ServiceBroker extends AbstractServicesResource {
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
+			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
 			response.setErro(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));			
