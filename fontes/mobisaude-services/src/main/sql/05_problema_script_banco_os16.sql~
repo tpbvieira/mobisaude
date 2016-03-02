@@ -187,7 +187,7 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO springbatch_user;
 ﻿ALTER TABLE tb_tipo_problema ADD COLUMN ind_excluido character(1) DEFAULT 'N';
 
 -- Insert into Tipo Estabelecimento de Saude
-delete * from tb_tipo_estabelecimento_saude;
+delete from tb_tipo_estabelecimento_saude where 1 = 1;
 insert into tb_tipo_estabelecimento_saude (nu_id_tipo_estabelecimento_saude, tx_nome) values (1, 'CENTRAL DE NOTIFICACAO,CAPTACAO E DISTRIB DE ORGAOS ESTADUAL');
 insert into tb_tipo_estabelecimento_saude (nu_id_tipo_estabelecimento_saude, tx_nome) values (2, 'CENTRAL DE REGULACAO DE SERVICOS DE SAUDE');
 insert into tb_tipo_estabelecimento_saude (nu_id_tipo_estabelecimento_saude, tx_nome) values (3, 'CENTRAL DE REGULACAO DO ACESSO');

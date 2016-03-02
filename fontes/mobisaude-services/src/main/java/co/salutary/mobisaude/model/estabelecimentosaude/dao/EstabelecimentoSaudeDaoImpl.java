@@ -21,16 +21,26 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<EstabelecimentoSaude> list() {
-		StringBuffer queryStr = new StringBuffer();
-		queryStr.append("select es from EstabelecimentoSaude es ");
-		Query query = entityMngr.createQuery(queryStr.toString());	
+		Query query = entityMngr.createQuery("select es from EstabelecimentoSaude es");
 		return query.getResultList();
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<EstabelecimentoSaude> listByMunicipio(String idMunicipio) {
-		Query query = entityMngr.createQuery("from EstabelecimentoSaude es ");		
+		StringBuffer queryStr = new StringBuffer();
+		queryStr.append("from EstabelecimentoSaude es ");
+		queryStr.append("where 1=1 ");
+		
+		if (idMunicipio != null && !idMunicipio.trim().equals("")) {
+			queryStr.append("and es.idMunicipio = :idMunicipio ");
+		}		
+		
+		Query query = entityMngr.createQuery(queryStr.toString());
+		if (idMunicipio != null && !idMunicipio.trim().equals("")) {
+			query.setParameter("idMunicipio", Integer.valueOf(idMunicipio));
+		}
+		
 		return query.getResultList();
 	}
 
@@ -54,7 +64,7 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 		
 		if (tiposEstabelecimento != null && tiposEstabelecimento.length > 0) {
 			int i = 1;
-			queryStr.append("and upper(es.idTipoEstabelecimentoSaude) in (");
+			queryStr.append("and es.idTipoEstabelecimentoSaude in (");
 			for (String operadora:tiposEstabelecimento) {
 				queryStr.append(":tipoEstabelecimentoSaude" + i + ",");
 				i++;
@@ -68,13 +78,13 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 		Query query = entityMngr.createQuery(queryStr.toString());
 		
 		if (idMunicipio != null && !idMunicipio.trim().equals("")) {
-			query.setParameter("idMunicipio", idMunicipio);
+			query.setParameter("idMunicipio", Integer.valueOf(idMunicipio));
 		}
 		
 		int i = 1;
 		if (tiposEstabelecimento != null && tiposEstabelecimento.length > 0) {
 			for (String tipoEstabelecimento:tiposEstabelecimento) {
-				query.setParameter("tipoEstabelecimento"+i, tipoEstabelecimento);
+				query.setParameter("tipoEstabelecimentoSaude"+i, Short.valueOf(tipoEstabelecimento));
 				i++;
 			}
 		}

@@ -249,6 +249,55 @@ public class ServiceBroker extends AbstractServicesResource {
 	}
 	
 	@POST
+	@Path("/listES")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public GetESResponse listES(GetESRequest request) {
+		GetESResponse response = new GetESResponse();
+		
+		try {
+			if (!request.validar()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
+				return response;
+			}
+
+			EstabelecimentoSaudeFacade esFacade = (EstabelecimentoSaudeFacade)Factory.getInstance().get("estabelecimentoSaudeFacade");
+			List<EstabelecimentoSaude> esList = esFacade.list();
+			
+			if (esList != null) {
+				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
+				for (EstabelecimentoSaude es:esList) {
+					ESMsg esMsg = new ESMsg();
+					esMsg.setLatitude(String.valueOf(es.getLatitude()));
+					esMsg.setLongitude(String.valueOf(es.getLongitude()));
+					esMsg.setNomeFantasia(es.getNomeFantasia()); 
+					esMsg.setTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+
+					esMsgList.add(esMsg);
+				}
+				response.setEstabelecimentoSaude(esMsgList.toArray(new ESMsg[0]));
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
+			}
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
+			response.setErro(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
 	@Path("/getESByMunicipio")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
@@ -264,7 +313,61 @@ public class ServiceBroker extends AbstractServicesResource {
 
 			String token = request.getToken();
 			String municipio = request.getMunicipio();
-			String tipoGestao = request.getTipoGestao();
+
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
+				return response;
+			}
+			if (municipio == null || municipio.trim().equals("")) {
+				logger.error(properties.getProperty("co.mobisaude.strings.municipioInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.municipioInvalido"));				
+				return response;
+			}
+
+			EstabelecimentoSaudeFacade esFacade = (EstabelecimentoSaudeFacade)Factory.getInstance().get("estabelecimentoSaudeFacade");
+			List<EstabelecimentoSaude> esList = esFacade.listByMunicipio(municipio);
+			
+			if (esList != null) {
+				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
+				for (EstabelecimentoSaude es:esList) {
+					ESMsg esMsg = new ESMsg();
+					esMsg.setLatitude(String.valueOf(es.getLatitude()));
+					esMsg.setLongitude(String.valueOf(es.getLongitude()));
+					esMsg.setNomeFantasia(es.getNomeFantasia()); 
+					esMsg.setTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+
+					esMsgList.add(esMsg);
+				}
+				response.setEstabelecimentoSaude(esMsgList.toArray(new ESMsg[0]));
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
+			}
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
+			response.setErro(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/getESByMunicipioTipoEstabelecimento")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public GetESResponse getESByMunicipioTipoEstabelecimento(GetESRequest request) {
+		GetESResponse response = new GetESResponse();
+		
+		try {
+			if (!request.validar()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			String municipio = request.getMunicipio();
 			String tipoES = request.getTipoEstabelecimentoSaude();
 			String[] tiposES = request.getTiposEstabelecimentoSaude();
 
@@ -302,8 +405,6 @@ public class ServiceBroker extends AbstractServicesResource {
 					ESMsg esMsg = new ESMsg();
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
-					esMsg.setUf(es.getUf());
-					esMsg.setMunicipio(es.getCidade());
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
 					esMsg.setTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
 
@@ -320,52 +421,6 @@ public class ServiceBroker extends AbstractServicesResource {
 			return response;
 		}
 		return response;
-	}
-
-
-	private Collection listarTiposExibir() {
-		Collection retorno = new ArrayList<String>();
-
-		ConfiguracaoFacade configuracaoFacade = (ConfiguracaoFacade)Factory.getInstance().get("configuracaoFacade");
-
-		Configuracao configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DISPONIBILIDADE);
-		if (configuracao != null) {
-			if (configuracao.getValor().equals("S")) {
-				retorno.add("DISPONIBILIDADE");
-			}
-		}
-		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS);
-		if (configuracao != null) {
-			if (configuracao.getValor().equals("S")) {
-				retorno.add("DADOS");
-			}
-		}
-		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS_2G);
-		if (configuracao != null) {
-			if (configuracao.getValor().equals("S")) {
-				retorno.add("DADOS 2G");
-			}
-		}
-		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS_3G);
-		if (configuracao != null) {
-			if (configuracao.getValor().equals("S")) {
-				retorno.add("DADOS 3G");
-			}
-		}
-		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS_4G);
-		if (configuracao != null) {
-			if (configuracao.getValor().equals("S")) {
-				retorno.add("DADOS 4G");
-			}
-		}
-		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_VOZ);
-		if (configuracao != null) {
-			if (configuracao.getValor().equals("S")) {
-				retorno.add("VOZ");
-			}
-		}
-
-		return retorno;
 	}
 
 	/**
@@ -816,6 +871,51 @@ public class ServiceBroker extends AbstractServicesResource {
 			return response;
 		}
 		return response;
-	}	
+	}
+	
+	private Collection listarTiposExibir() {
+		Collection retorno = new ArrayList<String>();
 
+		ConfiguracaoFacade configuracaoFacade = (ConfiguracaoFacade)Factory.getInstance().get("configuracaoFacade");
+
+		Configuracao configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DISPONIBILIDADE);
+		if (configuracao != null) {
+			if (configuracao.getValor().equals("S")) {
+				retorno.add("DISPONIBILIDADE");
+			}
+		}
+		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS);
+		if (configuracao != null) {
+			if (configuracao.getValor().equals("S")) {
+				retorno.add("DADOS");
+			}
+		}
+		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS_2G);
+		if (configuracao != null) {
+			if (configuracao.getValor().equals("S")) {
+				retorno.add("DADOS 2G");
+			}
+		}
+		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS_3G);
+		if (configuracao != null) {
+			if (configuracao.getValor().equals("S")) {
+				retorno.add("DADOS 3G");
+			}
+		}
+		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_DADOS_4G);
+		if (configuracao != null) {
+			if (configuracao.getValor().equals("S")) {
+				retorno.add("DADOS 4G");
+			}
+		}
+		configuracao = configuracaoFacade.getConfiguracao(EXIBIR_RANKING_VOZ);
+		if (configuracao != null) {
+			if (configuracao.getValor().equals("S")) {
+				retorno.add("VOZ");
+			}
+		}
+
+		return retorno;
+	}
+	
 }

@@ -67,12 +67,24 @@ public class TestAll extends TestCase {
 			
 			// test 05 - get geocode and set global variables 
 			GeocodeResponse geocodeResponse = getGeocodeResponseTest(mapper, broker, token);
-			String codMunicipio = geocodeResponse.getCodMunicipioIbge();
+			String idMunicipio = geocodeResponse.getCodMunicipioIbge();
 			String uf = geocodeResponse.getUf();
+
+			// test 06 - list estabelecimentos de saúde
+//			listESTest(mapper, broker, token);
 			
-			// test 06 - get estabelecimentos de saúde
-			getESByMunicipioTest(mapper, broker, token, codMunicipio);
-//
+			// test 07 - get estabelecimentos de saúde by cidade
+			getESByMunicipioTest(mapper, broker, token, idMunicipio);
+			
+			// test 08 - get estabelecimentos de saúde by cidade and tipo estabelecimento
+			getESByMunicipioTipoEstabelecimentoTest(mapper, broker, token, idMunicipio, "10");// Brasilia (530010) and 10
+			
+			// test 09 - get estabelecimentos de saúde by cidade and tipo estabelecimento
+			String[] tiposES = new String[2];
+			tiposES[0] = "10";
+			tiposES[1] = "11";
+			getESByMunicipioTiposEstabelecimentoTest(mapper, broker, token, idMunicipio, tiposES);// Brasilia (530010) and [10,11]
+			
 //			// 14 - Texto Ajuda
 //			TextoAjudaRequest textoAjudaRequest = mapper.readValue(
 //					testProperties.getProperty("textoAjuda"),
@@ -210,19 +222,90 @@ public class TestAll extends TestCase {
 		return geocodeResponse;
 	}
 	
-	private void getESByMunicipioTest(ObjectMapper mapper, ServiceBroker broker, String token, String codMunicipio) 
+	private void listESTest(ObjectMapper mapper, ServiceBroker broker, String token) 
 			throws IOException, JsonParseException, JsonMappingException {
 		
-		GetESRequest getESRequest = mapper.readValue(
-				testProperties.getProperty("getESByMunicipio").replaceAll("<token>", token).				
-				replaceAll("<municipio>", codMunicipio),
-				GetESRequest.class);
+		GetESRequest getESRequest = mapper.readValue(testProperties.getProperty("getESByMunicipio").replaceAll("<token>", token), GetESRequest.class);
+		GetESResponse getESResponse = broker.listES(getESRequest);
 		
+		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
+			logger.error(getESResponse);
+			fail("Error = getESByMunicipioTest.");			
+		}
+		if (getESResponse.getEstabelecimentoSaude().length != 274800) {//ES's Number
+			logger.error(getESResponse);
+			fail("Quantidade (" + getESResponse.getEstabelecimentoSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
+		}
+		
+	}
+	
+	private void getESByMunicipioTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio) 
+			throws IOException, JsonParseException, JsonMappingException {
+		
+		idMunicipio = idMunicipio.substring(0, idMunicipio.length()-1);
+		
+		GetESRequest getESRequest = mapper.readValue(
+				testProperties.getProperty("getESByMunicipio").replaceAll("<token>", token).replaceAll("<municipio>", 
+						idMunicipio), GetESRequest.class);
 		GetESResponse getESResponse = broker.getESByMunicipio(getESRequest);
 		
-		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {
-			fail("Error = getESByMunicipioTest.");
+		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
 			logger.error(getESResponse);
+			fail("Error = getESByMunicipioTest.");			
 		}
+		if (getESResponse.getEstabelecimentoSaude().length != 2736) {//Brasilia's Number
+			logger.error(getESResponse);
+			fail("Quantidade (" + getESResponse.getEstabelecimentoSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
+		}
+		
 	}
+	
+	private void getESByMunicipioTipoEstabelecimentoTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String idTipoEstabelecimento) 
+			throws IOException, JsonParseException, JsonMappingException {
+		
+		//parsing to make it compatible to ibge data
+		idMunicipio = idMunicipio.substring(0, idMunicipio.length()-1);
+		
+		GetESRequest getESRequest = mapper.readValue(testProperties.
+				getProperty("getESByMunicipioTipoEstabelecimento").
+					replaceAll("<token>", token).
+					replaceAll("<municipio>",idMunicipio).
+					replaceAll("<tipoEstabelecimentoSaude>", idTipoEstabelecimento), GetESRequest.class);
+		GetESResponse getESResponse = broker.getESByMunicipioTipoEstabelecimento(getESRequest);
+		
+		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
+			logger.error(getESResponse);
+			fail("Error = getESByMunicipioTest.");			
+		}
+		if (getESResponse.getEstabelecimentoSaude().length != 799) {//Brasilia and 10
+			logger.error(getESResponse);
+			fail("Quantidade (" + getESResponse.getEstabelecimentoSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
+		}
+		
+	}
+
+	private void getESByMunicipioTiposEstabelecimentoTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String[] idTiposEstabelecimento) 
+			throws IOException, JsonParseException, JsonMappingException {
+		
+		//parsing to make it compatible to ibge data
+		idMunicipio = idMunicipio.substring(0, idMunicipio.length()-1);
+		
+		GetESRequest getESRequest = mapper.readValue(testProperties.
+				getProperty("getESByMunicipioTipoEstabelecimento").
+					replaceAll("<token>", token).
+					replaceAll("<municipio>",idMunicipio), GetESRequest.class);		
+		getESRequest.setTiposEstabelecimentoSaude(idTiposEstabelecimento);
+		GetESResponse getESResponse = broker.getESByMunicipioTipoEstabelecimento(getESRequest);
+		
+		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
+			logger.error(getESResponse);
+			fail("Error = getESByMunicipioTiposEstabelecimentoTest.");			
+		}
+		if (getESResponse.getEstabelecimentoSaude().length != 2547) {//Brasilia and [10,11]
+			logger.error(getESResponse);
+			fail("getESByMunicipioTiposEstabelecimentoTest: Quantidade (" + getESResponse.getEstabelecimentoSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
+		}
+		
+	}
+	
 }

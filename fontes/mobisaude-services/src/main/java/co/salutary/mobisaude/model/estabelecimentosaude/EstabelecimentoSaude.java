@@ -17,7 +17,6 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 	private int idMunicipio;
 	private short idTipoEstabelecimentoSaude;
 	private short idTipoGestao;
-	private short idRegiao;
 	private String cnpjMantenedora;
 	private String razaoSocialMantenedora;
 	private String razaoSocial;
@@ -28,8 +27,6 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 	private String endereco;
 	private String bairro;
 	private String cep;
-	private String uf;
-	private String cidade;
 	private String origemCoordenada;
 	private Double latitude;
 	private Double longitude;
@@ -122,11 +119,11 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 	}
 
 	@Column(name = "\"nu_id_tipo_gestao\"")
-	public Short getTipoGestao() {
+	public Short getIdTipoGestao() {
 		return this.idTipoGestao;
 	}
 
-	public void setTipoGestao(Short idTipoGestao) {
+	public void setIdTipoGestao(Short idTipoGestao) {
 		this.idTipoGestao = idTipoGestao;
 	}
 	
@@ -165,33 +162,6 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 	public void setCep(String cep) {
 		this.cep = cep;
 	}	
-	
-	@Column(name = "\"nu_id_regiao\"")
-	public Short getRegiao() {
-		return this.idRegiao;
-	}
-
-	public void setRegiao(Short idRegiao) {
-		this.idRegiao = idRegiao;
-	}
-		
-	@Column(name = "\"tx_uf\"")
-	public String getUf() {
-		return this.uf;
-	}
-
-	public void setUf(String uf) {
-		this.uf = uf;
-	}
-
-	@Column(name = "\"tx_municipio\"")
-	public String getCidade() {
-		return this.cidade;
-	}
-
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
 	
 	@Column(name = "\"nu_latitude\"")
 	public Double getLatitude() {

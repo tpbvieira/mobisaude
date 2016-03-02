@@ -1,3 +1,105 @@
+-- Tipo Sistema Operacional
+CREATE TABLE public.tb_tipo_sistema_operacional
+(
+   nu_id_tipo_sistema_operacional integer NOT NULL, 
+   tx_descricao character varying, 
+   CONSTRAINT pk_tipo_sistema_operacional PRIMARY KEY (nu_id_tipo_sistema_operacional)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE public.tb_tipo_sistema_operacional
+  OWNER TO mobisaude_pg_user;
+
+
+-- Tipo Estabelecimento de Saude
+DROP TABLE public.tb_tipo_estabelecimento_saude;
+CREATE TABLE public.tb_tipo_estabelecimento_saude
+(
+   nu_id_tipo_estabelecimento_saude smallint NOT NULL, 
+   tx_nome character varying, 
+   CONSTRAINT pk_tipo_estabelecimento_saude PRIMARY KEY (nu_id_tipo_estabelecimento_saude)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE public.tb_tipo_estabelecimento_saude
+  OWNER TO mobisaude_pg_user;
+
+
+-- Tipo Gestao
+DROP TABLE public.tb_tipo_gestao;
+CREATE TABLE public.tb_tipo_gestao
+(
+   nu_id_tipo_gestao smallint NOT NULL, 
+   tx_nome character varying, 
+   CONSTRAINT pk_tipo_gestao PRIMARY KEY (nu_id_tipo_gestao)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE public.tb_tipo_gestao
+  OWNER TO mobisaude_pg_user;
+
+
+-- Região
+CREATE TABLE public.tb_regiao
+(
+   nu_id_regiao smallint NOT NULL, 
+   tx_nome character varying, 
+   CONSTRAINT pk_regiao PRIMARY KEY (nu_id_regiao)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE public.tb_regiao
+  OWNER TO mobisaude_pg_user;
+
+CREATE TABLE public.tb_estabelecimento_saude
+(
+	nu_id_cnes integer NOT NULL, 
+	nu_id_municipio numeric(10,0),
+	tx_id_cnpj_mantenedora varchar(14), 
+	tx_razao_social_mantenedora character varying, 
+	tx_razao_social character varying, 
+	tx_nome_fantasia character varying, 
+	nu_id_tipo_estabelecimento_saude smallint,
+	tx_natureza_organizacao character varying, 
+	tx_esfera_administrativa character varying, 
+	nu_id_tipo_gestao smallint,
+	tx_logradouro character varying, 
+	tx_endereco character varying, 
+	tx_bairro character varying, 
+	tx_id_cep varchar(8),
+	nu_id_regiao smallint,
+	tx_uf varchar(2),
+	tx_municipio character varying, 
+	nu_latitude double precision, 
+	nu_longitude double precision, 
+	tx_origem_coordenada character varying,
+	CONSTRAINT pk_estabelecimento_saude PRIMARY KEY (nu_id_cnes), 
+	CONSTRAINT fk_estabelecimento_tipo_estabelecimento FOREIGN KEY (nu_id_tipo_estabelecimento_saude) REFERENCES tb_tipo_estabelecimento_saude (nu_id_tipo_estabelecimento_saude) ON UPDATE NO ACTION ON DELETE NO ACTION, 
+	CONSTRAINT fk_estabelecimento_tipo_gestao FOREIGN KEY (nu_id_tipo_gestao) REFERENCES tb_tipo_gestao (nu_id_tipo_gestao) ON UPDATE NO ACTION ON DELETE NO ACTION, 
+	CONSTRAINT fk_estabelecimento_regiao FOREIGN KEY (nu_id_regiao) REFERENCES tb_regiao (nu_id_regiao) ON UPDATE NO ACTION ON DELETE NO ACTION
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE public.tb_estabelecimento_saude OWNER TO mobisaude_pg_user;
+CREATE INDEX idx_nu_id_municipio ON tb_estabelecimento_saude USING btree (nu_id_municipio);
+CREATE INDEX idx_nu_id_tipo_estabelecimento_saude ON tb_estabelecimento_saude USING btree (nu_id_tipo_estabelecimento_saude);
+
+
+
+
+
+
+
 --
 -- PostgreSQL database dump
 --

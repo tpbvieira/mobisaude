@@ -14,21 +14,22 @@ import co.salutary.mobisaude.model.estabelecimentosaude.dao.EstabelecimentoSaude
 public class EstabelecimentoSaudeFacadeImpl implements EstabelecimentoSaudeFacade {
 
 	@Autowired
-	private EstabelecimentoSaudeDao estabelecimentoSaudeDao;
+	private EstabelecimentoSaudeDao eSDAO;
 
 	public List<EstabelecimentoSaude> list() {
-		return estabelecimentoSaudeDao.list();
+		return eSDAO.list();
 	}
 
 	public List<EstabelecimentoSaude> listByMunicipio(String idMunicipio) {
-    	return estabelecimentoSaudeDao.listByMunicipio(idMunicipio);
+    	return eSDAO.listByMunicipio(idMunicipio);
     }
 	
     public List<EstabelecimentoSaude> listByMunicipioTipoEstabelecimento(String idMunicipio, String tipoEstabelecimento) {
-    	return estabelecimentoSaudeDao.listByMunicipioTipoEstabelecimento(idMunicipio, tipoEstabelecimento);
+    	return eSDAO.listByMunicipioTipoEstabelecimento(idMunicipio, tipoEstabelecimento);
     }
 
     public List<EstabelecimentoSaude> listByMunicipioTiposEstabelecimento(String idMunicipio, String[] tiposEstabelecimento) {
-    	return estabelecimentoSaudeDao.listByMunicipioTiposEstabelecimento(idMunicipio, tiposEstabelecimento);
+    	return eSDAO.listByMunicipioTiposEstabelecimento(idMunicipio, tiposEstabelecimento);
     }
+    
 }

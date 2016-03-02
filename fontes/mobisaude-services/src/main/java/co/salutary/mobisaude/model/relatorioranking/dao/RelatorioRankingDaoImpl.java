@@ -10,34 +10,20 @@ import org.springframework.stereotype.Repository;
 
 import co.salutary.mobisaude.model.relatorioranking.RelatorioRanking;
 
-/**
- * Implementacao de DAO para RelatorioRanking
- *
- */
 @Repository("relatorioRankingDao")
 public class RelatorioRankingDaoImpl implements RelatorioRankingDao {
-	/**
-	 * EntityManager
-	 */
+
 	@PersistenceContext
 	private EntityManager em;
 	
-	/**
-	 * Listar todos registros
-	 * @return
-	 */
+
 	@SuppressWarnings("unchecked")
 	public List<RelatorioRanking> list() {
 		Query q = em.createQuery("from RelatorioRanking rr ");
 		List<RelatorioRanking> result = q.getResultList();
 		return result;
 	}
-    /**
-     * Listar os registros por uf e codMunicipioIbge
-     * @param uf
-     * @param codMunicipio
-     * @return
-     */
+
 	@SuppressWarnings("unchecked")
 	public List<RelatorioRanking> listByUfMunicipio(String uf, String codMunicipio) {
 		StringBuffer sb = new StringBuffer();
