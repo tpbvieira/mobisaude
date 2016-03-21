@@ -25,3 +25,9 @@ proguard/
 
 # Log Files
 *.log
+
+fontes/mobisaude-services/target/
+fontes/mobisaude-android/app/build/
+fontes/mobisaude-android/build/
+fontes/mobisaude-android/.gradle
+
