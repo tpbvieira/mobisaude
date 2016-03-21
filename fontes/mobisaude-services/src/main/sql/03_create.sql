@@ -59,6 +59,7 @@ WITH (
 ALTER TABLE public.tb_regiao
   OWNER TO mobisaude_pg_user;
 
+-- Estabelecimento de Saúde
 CREATE TABLE public.tb_estabelecimento_saude
 (
 	nu_id_cnes integer NOT NULL, 
@@ -95,7 +96,21 @@ CREATE INDEX idx_nu_id_municipio ON tb_estabelecimento_saude USING btree (nu_id_
 CREATE INDEX idx_nu_id_tipo_estabelecimento_saude ON tb_estabelecimento_saude USING btree (nu_id_tipo_estabelecimento_saude);
 
 
-
+-- user
+CREATE TABLE public.tb_user
+(
+	nu_id_user integer NOT NULL, 
+	tx_email character varying NOT NULL,
+	tx_name character varying,
+	tx_telefone character varying, 
+	CONSTRAINT pk_user PRIMARY KEY (nu_id_user)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+ALTER TABLE public.tb_user
+  OWNER TO mobisaude_pg_user;
 
 
 
