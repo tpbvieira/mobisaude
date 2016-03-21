@@ -2,14 +2,14 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>co.salutary</groupId>
+	<groupId>co.salutary.mobisaude</groupId>
 	<artifactId>mobisaude-services</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mobisaude-services</name>
 
-	<!-- Numeros de versoes -->
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
@@ -19,7 +19,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- Jasper Reports 5.6.0 -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
@@ -30,37 +29,31 @@
 			<artifactId>groovy-all</artifactId>
 			<version>2.0.1</version>
 		</dependency>
-		<!-- Servlet-API 2.5 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 		</dependency>
-		<!-- Commons-codec -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.9</version>
 		</dependency>
-		<!-- Javax.activation -->
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		<!-- Javax.validation -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.1.0.Final</version>
 		</dependency>
-		<!-- Javax.mail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
-		<!-- Hibernate/JPA -->
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
@@ -76,13 +69,11 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.3.0.Final</version>
 		</dependency>
-		<!-- Driver postgresql -->
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>8.2-504.jdbc3</version>
 		</dependency>
-		<!-- Jersey/Jettison -->
 		<dependency>
 			<groupId>org.codehaus.jettison</groupId>
 			<artifactId>jettison</artifactId>
@@ -187,7 +178,6 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-
 		<!-- Spring MVC for Portlet Environments (depende de spring-core, spring-beans, spring-context, spring-web) Defina 
 			se estiver usando Spring MVC com um Portlet Container (org.springframework.web.portlet.*) -->
 		<dependency>
@@ -209,7 +199,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-
 		<!-- Jackson-Databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -229,6 +218,12 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -263,4 +258,16 @@
 			</resource>
 		</resources>
 	</build>
+	<scm>
+		<connection>scm:git:git@github.com:tpbvieira/mobisaude.git</connection>
+		<developerConnection>scm:git:git@github.com:tpbvieira/mobisaude.git</developerConnection>
+		<url>https://github.com/tpbvieira/mobisaude</url>
+		<tag>mos-0.3.4</tag>
+	</scm>
+	<distributionManagement>
+		<repository>
+			<id>maven-repository</id>
+			<url>${github.maven.repository}</url>
+		</repository>
+	</distributionManagement>
 </project>
