@@ -53,11 +53,12 @@
     <string name="action_settings">Configurações</string>
     <string name="title_activity_login">Entrar</string>
 
-    <!-- login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Senha</string>
-    <string name="action_sign_in">Entre ou registre-se</string>
-    <string name="action_sign_in_short">Entrar</string>
+    <string name="prompt_name">Nome</string>
+    <string name="prompt_phone">Telefone</string>
+    <string name="action_sign_up">Cadastrar</string>
+    <string name="action_sign_in">Entrar</string>
 
     <string name="permission_rationale">É necessário ter permissão de acesso aos conatos</string>
     <string name="title_activity_settings">Configurações</string>

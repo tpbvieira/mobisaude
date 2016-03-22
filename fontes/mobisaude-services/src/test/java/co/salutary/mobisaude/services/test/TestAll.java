@@ -67,19 +67,19 @@ public class TestAll extends TestCase {
 			String uf = geocodeResponse.getUf();
 
 			// test 06 - list estabelecimentos de saúde
-			listESTest(mapper, broker, token);
+//			listESTest(mapper, broker, token);
 			
 			// test 07 - get estabelecimentos de saúde by cidade
-			getESByMunicipioTest(mapper, broker, token, idMunicipio);
+//			getESByMunicipioTest(mapper, broker, token, idMunicipio);
 			
 			// test 08 - get estabelecimentos de saúde by cidade and tipo estabelecimento
-			getESByMunicipioTipoEstabelecimentoTest(mapper, broker, token, idMunicipio, "10");// Brasilia (530010) and 10
+//			getESByMunicipioTipoEstabelecimentoTest(mapper, broker, token, idMunicipio, "10");// Brasilia (530010) and 10
 			
 			// test 09 - get estabelecimentos de saúde by cidade and tipo estabelecimento
-			String[] tiposES = new String[2];
-			tiposES[0] = "10";
-			tiposES[1] = "11";
-			getESByMunicipioTiposEstabelecimentoTest(mapper, broker, token, idMunicipio, tiposES);// Brasilia (530010) and [10,11]
+//			String[] tiposES = new String[2];
+//			tiposES[0] = "10";
+//			tiposES[1] = "11";
+//			getESByMunicipioTiposEstabelecimentoTest(mapper, broker, token, idMunicipio, tiposES);// Brasilia (530010) and [10,11]
 			
 //			// 14 - Texto Ajuda
 //			TextoAjudaRequest textoAjudaRequest = mapper.readValue(

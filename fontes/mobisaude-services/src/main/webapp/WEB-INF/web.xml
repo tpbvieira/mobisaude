@@ -25,7 +25,7 @@
 
 	<listener>
 		<listener-class>
-			co.salutary.mobisaude.util.MobiSaudeContextListener
+			co.salutary.mobisaude.restful.MobiSaudeContextListener
 		</listener-class>
 	</listener>
 
