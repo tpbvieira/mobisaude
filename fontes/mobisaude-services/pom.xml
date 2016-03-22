@@ -4,7 +4,7 @@
 	<groupId>co.salutary.mobisaude</groupId>
 	<artifactId>mobisaude-services</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>mobisaude-services</name>
 
 	<properties>
@@ -260,7 +260,7 @@
 		<connection>scm:git:git@github.com:tpbvieira/mobisaude.git</connection>
 		<developerConnection>scm:git:git@github.com:tpbvieira/mobisaude.git</developerConnection>
 		<url>https://github.com/tpbvieira/mobisaude</url>
-		<tag>mobisaude-services-0.0.1</tag>
+		<tag>mobisaude-services-0.0.2</tag>
 	</scm>
 	<distributionManagement>
 		<repository>
