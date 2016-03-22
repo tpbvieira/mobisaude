@@ -44,10 +44,8 @@ public class TestAll extends TestCase {
 	@Test
 	public void test() {
 		try {
-			// json object mapper
-			ObjectMapper mapper = new ObjectMapper();
-			// get Resource
-			ServiceBroker broker = new ServiceBroker();
+			ObjectMapper mapper = new ObjectMapper(); // json object mapper
+			ServiceBroker broker = new ServiceBroker(); // get Resource
 
 			// test 01 - gerar chave
 			String chave = gerarChaveTest();

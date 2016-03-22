@@ -139,7 +139,7 @@ public abstract class AbstractServicesResource implements MobiSaudeResource {
 	 * Metodo que gera uma chave para geracao de token de sessao
 	 * @return chave gerada
 	 */
-	protected String gerarChave() {
+	protected String gerarChaveTest() {
 		StringBuffer sbChaveGerada = new StringBuffer("");
 		String dataStr = dateFormat.format(new Date());
 		
