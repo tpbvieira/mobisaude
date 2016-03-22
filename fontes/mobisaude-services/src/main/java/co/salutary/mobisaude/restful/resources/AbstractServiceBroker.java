@@ -25,9 +25,9 @@ import co.salutary.mobisaude.util.CryptographyUtil;
  *	Classe abstrata de resources dos servicos acessados pelo mobisaude
  *
  */
-public abstract class AbstractServicesResource implements MobiSaudeResource {
+public abstract class AbstractServiceBroker implements MobiSaudeResource {
 
-	private static final Log logger = LogFactory.getLog(AbstractServicesResource.class);
+	private static final Log logger = LogFactory.getLog(AbstractServiceBroker.class);
 	private static int[] arrPermutacao = {7,5,3,1,4,6,0,2};
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");	
 	protected Properties properties;
@@ -39,7 +39,7 @@ public abstract class AbstractServicesResource implements MobiSaudeResource {
 	}
 
 
-	public AbstractServicesResource() {
+	public AbstractServiceBroker() {
 		InputStream stream = null;
 		InputStreamReader isr = null;
 		try {
@@ -139,7 +139,7 @@ public abstract class AbstractServicesResource implements MobiSaudeResource {
 	 * Metodo que gera uma chave para geracao de token de sessao
 	 * @return chave gerada
 	 */
-	protected String gerarChaveTest() {
+	protected String gerarChave() {
 		StringBuffer sbChaveGerada = new StringBuffer("");
 		String dataStr = dateFormat.format(new Date());
 		

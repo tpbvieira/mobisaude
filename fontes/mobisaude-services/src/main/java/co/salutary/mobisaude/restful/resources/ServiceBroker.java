@@ -58,7 +58,7 @@ import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacional;
  */
 @Path("/mobile")
 @Controller
-public class ServiceBroker extends AbstractServicesResource {
+public class ServiceBroker extends AbstractServiceBroker {
 	/**
 	 * Logger
 	 */
@@ -225,11 +225,13 @@ public class ServiceBroker extends AbstractServicesResource {
 	public GerarChaveResponse gerarChave(GerarChaveRequest request) {
 		GerarChaveResponse response = new GerarChaveResponse();
 		try {
+			
 			if (!request.validar()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
 			}
+
 
 			String chave = gerarChave();
 
