@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Settings {
 
-    public static final String servicesUrl = "http://gatewaysiec.anatel.gov.br/gatewayarcher/mobile";
+    public static final String servicesUrl = "http://192.168.1.37:8080/mobisaude-services/mobile";
 
     public static boolean IS_LOGGEDIN = false;
 
