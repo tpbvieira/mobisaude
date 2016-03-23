@@ -28,9 +28,9 @@ proguard/
 fontes/mobisaude-services/debug.txt
 
 # eclipse config
-fontes/mobisaude-services/.classpath
-fontes/mobisaude-services/.project
-fontes/mobisaude-services/.settings/
+#fontes/mobisaude-services/.classpath
+#fontes/mobisaude-services/.project
+#fontes/mobisaude-services/.settings/
 
 # maven temp
 fontes/mobisaude-services/release.properties
