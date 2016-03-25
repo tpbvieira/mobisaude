@@ -9,7 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import co.salutary.mobisaude.db.scipts.Scripts;
+import co.salutary.mobisaude.db.scripts.Scripts;
 
 public class LocalDataBase {
 
@@ -29,17 +29,12 @@ public class LocalDataBase {
     }
 
     public void open(Context ctx) {
-        // Criar utilizando um script SQL
         dbHelper = new SQLiteHelper(ctx, Scripts.NOME_BANCO, Scripts.VERSAO_BANCO,
                 Scripts.SCRIPT_DATABASE_CREATE, Scripts.SCRIPT_DATABASE_DELETE);
-
-        // abre o banco no modo escrita para poder alterar também
         db = dbHelper.getWritableDatabase();
     }
 
-    // Fecha o banco
     public void close() {
-        // fecha o banco de dados
         if (db != null) {
             db.close();
         }
@@ -116,7 +111,6 @@ public class LocalDataBase {
         return db;
     }
 
-    //lbadias: Available views
     private HashMap<String, Boolean> availableViews;
     public void setAvailableViews(HashMap<String, Boolean> views) {
         availableViews = views;

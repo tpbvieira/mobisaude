@@ -32,6 +32,7 @@ import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.JsonUtils;
 
 
 public class LocalityActivity extends Activity implements Runnable, LocationListener {
@@ -206,7 +207,7 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 		if(cidade != null){
 			edtCidade.setText(cidade.getNome());
 			userController.setMapErbsControle(null);
-			userController.setListErbs(null);
+			userController.setListEstabelecimentoSaudes(null);
 		}
 	}
 
@@ -292,11 +293,8 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 						if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
 							JSONObject jObject = new JSONObject(reponder);
 							JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
-							String erro = jReponder.getString("erro");
-							String[] splitResult = erro.split("\\|");
-							int idErro = Integer.parseInt(splitResult[0]);
+                            int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
-								// gerar novo token
 								if(!ManagerToken.gerarToken(getApplicationContext())){
 									return false;
 								}
@@ -316,7 +314,7 @@ public class LocalityActivity extends Activity implements Runnable, LocationList
 
 									// resetar memoria
 									userController.setMapErbsControle(null);
-									userController.setListErbs(null);
+									userController.setListEstabelecimentoSaudes(null);
 									return true;
 								}
 								else {

@@ -6,47 +6,69 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
+
+import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.JsonUtils;
 
 public class ManagerToken  {
 
-	public static boolean gerarToken(Context context) {
-		try {
-			JSONObject jDados = new JSONObject();
-			jDados.put("chave",gerarChave());
-		    
-			JSONObject jRequest = new JSONObject();
-		    jRequest.put("gerarTokenRequest", jDados);
-			
-		    String reponder = ServiceBroker.getInstance(context).gerarToken(jRequest.toString());
+    private static final String TAG = new Object(){}.getClass().getName();
 
-		    if(reponder != null && !reponder.startsWith("Error")) {
-		    	JSONObject jObject = new JSONObject(reponder);
-				JSONObject jReponder = (JSONObject) jObject.get("gerarTokenResponse");
-				String erro = jReponder.getString("erro");
-				String[] splitResult = erro.split("\\|");
-				int idErro = Integer.parseInt(splitResult[0]);
-				if(idErro == 0){
-					String token = jReponder.getString("token");
+	public static boolean gerarToken(Context context) {
+
+		try {
+			JSONObject values = new JSONObject();
+			values.put("chave", gerarChave());
+		    
+			JSONObject gerarTokenRequest = new JSONObject();
+		    gerarTokenRequest.put("gerarTokenRequest", values);
+			
+		    String response = ServiceBroker.getInstance(context).gerarToken(gerarTokenRequest.toString());
+
+		    if(response != null) {
+		    	JSONObject jsonResponse = new JSONObject(response);
+				JSONObject gerarTokenResponse = (JSONObject) jsonResponse.get("gerarTokenResponse");
+                int idErro = JsonUtils.getErrorCode(gerarTokenResponse);
+                if(idErro == 0){// 0 = success
+					String token = gerarTokenResponse.getString("token");
                     Settings localPref = new Settings(context);
 					localPref.setPreferenceValue(Settings.TOKEN, token);
+                    DeviceInfo.isConnected = true;
 					return true;
 				}
 				else {
+                    DeviceInfo.statusMesage = JsonUtils.getErrorMessage(gerarTokenResponse);
+                    DeviceInfo.isConnected = false;
+                    DeviceInfo.hasToken = false;
+                    Settings localPref = new Settings(context);
+                    localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
 					return false;
 				}
 			}
 			else {
-				return false;
+                DeviceInfo.statusMesage = Resources.getSystem().getString(R.string.error);
+                DeviceInfo.isConnected = false;
+                DeviceInfo.hasToken = false;
+                Settings localPref = new Settings(context);
+                localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
+                return false;
 			}
-		} catch (Exception e) {
-			Log.e("Anatel", "ManagerToken.gerarToken: "+e);
+
+		} catch (JSONException e) {
+			Log.e(TAG, e.getMessage());
 			return false;
-		}
+		} catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            return false;
+        }
 	}
 
 	private static String gerarChave() {
@@ -89,4 +111,5 @@ public class ManagerToken  {
         }
         return factors;
     }
+
 }

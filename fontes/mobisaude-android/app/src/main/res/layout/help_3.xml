@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- - - - - - - - - - - - - - - - - - -
-* Projeto Anatel
-* 
-* @author Digitrack
-* 
-* E-mail:  alexlova@gmail.com
-* Data  :  01/05/2011
-- - - - - - - - - - - - - - - - - - - -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"

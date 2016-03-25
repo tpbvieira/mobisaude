@@ -3,7 +3,7 @@
     <string name="title_activity_main">MobiSaúde</string>
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
 
-    <string name="error">Erro</string>
+    <string name="error">Erro Inesperado</string>
     <string name="error_no_connectivity">Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
     <string name="error_obtaining_locality">Erro ao obter localização</string>
     <string name="error_connecting_server">Erro ao conectar servidor de dados</string>
@@ -13,6 +13,7 @@
     <string name="error_field_required">Este campo é obrigatório</string>
     <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde</string>
     <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
+    <string name="error_token_generation">Erro ao gerar token de comunicação</string>
 
     <string name="not_supported">Este aparelho não é suportado para a operação desejada</string>
     <string name="invalid_gps_apk">No valid Google Play Services APK found</string>

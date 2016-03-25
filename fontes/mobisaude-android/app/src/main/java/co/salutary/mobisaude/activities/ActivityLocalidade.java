@@ -33,8 +33,11 @@ import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.ConnectivityManager;
 import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.JsonUtils;
 
 public class ActivityLocalidade extends Activity implements LocationListener {
+
+    private static final String TAG = ActivityLocalidade.class.getSimpleName();
 
     private static final long TIME_TEMP = 1000;
     private static final int SHOW_TELA_SELECT = 1;
@@ -183,16 +186,16 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 		if(cidade != null){
 			edtCidade.setText(cidade.getNome());
 			UserController.getInstance().setMapErbsControle(null);
-			UserController.getInstance().setListErbs(null);
+			UserController.getInstance().setListEstabelecimentoSaudes(null);
 		}
 	}
 
 	private void fecharTela(){
-		if(Settings.ID_CIDADE == UserController.getInstance().getCidade().getIdCidade() && Settings.ID_UF == UserController.getInstance().getUf().getIdUf()){
-            Settings.DEVICE_LOCATED = true;
+		if(DeviceInfo.idCidade == UserController.getInstance().getCidade().getIdCidade() && DeviceInfo.idUF == UserController.getInstance().getUf().getIdUf()){
+            DeviceInfo.isDeviceLocated = true;
 		}
 		else{
-            Settings.DEVICE_LOCATED = false;						
+            DeviceInfo.isDeviceLocated = false;
 		}		
 		if(!DeviceInfo.isDadosAtivos && ConnectivityManager.getInstance(getApplicationContext()).isConnected()){
 			isShowDialog = true;
@@ -223,7 +226,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 			try {
 				Thread.sleep(TIME_TEMP);
 			} catch (Exception e) {
-				Log.e("Anatel", "ShowDialog.dismissDialog: "+e);
+				Log.e(TAG, "ShowDialog.dismissDialog: "+e);
 			}
 			return null;
 		}
@@ -233,7 +236,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 			try {
 				pDialog.dismiss();
 			} catch (Exception e) {
-				Log.e("Anatel", "ShowDialog.dismiss: "+e);
+				Log.e(TAG, "ShowDialog.dismiss: "+e);
 			}
 			new DeterminarLocal(context).execute(4);
 		}
@@ -260,7 +263,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 				pDialog.setCancelable(true);
 				pDialog.show();
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.dismissDialog: "+e);
+				Log.e(TAG, "DeterminarLocal.dismissDialog: "+e);
 			}
 			super.onPreExecute();
 		}
@@ -271,7 +274,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 				try {
 					Thread.sleep(TIME_TEMP*2);
 				} catch (Exception e) {
-					Log.e("Anatel", "DeterminarLocal.dismissDialog: "+e);
+					Log.e(TAG, "DeterminarLocal.dismissDialog: "+e);
 				}
 				for (int i = 0; i < params[0]; i++) {
 					Thread.sleep(TIME_TEMP);
@@ -303,9 +306,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 						if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
 							JSONObject jObject = new JSONObject(reponder);
 							JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
-							String erro = jReponder.getString("erro");
-							String[] splitResult = erro.split("\\|");
-							int idErro = Integer.parseInt(splitResult[0]);
+							int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
 								// gerar novo token
 								if(!ManagerToken.gerarToken(ActivityLocalidade.this)){
@@ -327,7 +328,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 
 									// resetar memoria
 									userController.setMapErbsControle(null);
-									userController.setListErbs(null);
+									userController.setListEstabelecimentoSaudes(null);
 									return true;
 								}
 								else {
@@ -341,7 +342,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 					}
 				}
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.doInBackground: "+e);
+				Log.e(TAG, "DeterminarLocal.doInBackground: "+e);
 			}
 			return false;
 		}
@@ -351,7 +352,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 			try {
 				pDialog.dismiss();
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.dismiss: "+e);
+				Log.e(TAG, "DeterminarLocal.dismiss: "+e);
 			}
 			try {
 				if(result){
@@ -361,7 +362,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 					Toast.makeText(ActivityLocalidade.this, "Não foi possível determinar a sua localização.", Toast.LENGTH_LONG).show();
 				}
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.onPostExecute: "+e);
+				Log.e(TAG, "DeterminarLocal.onPostExecute: "+e);
 			}
 		}
 	}

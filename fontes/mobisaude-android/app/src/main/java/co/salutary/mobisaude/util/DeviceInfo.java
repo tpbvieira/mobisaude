@@ -23,14 +23,24 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.gcm.RegisterService;
 
-/**
- * Created by thiago on 10/02/16.
- */
 public class DeviceInfo {
 
-    public static boolean isDadosAtivos = false;
+    private static final String TAG = new Object(){}.getClass().getName();
 
-    private static final String TAG = DeviceInfo.class.getSimpleName();
+    public static boolean isDadosAtivos = false;
+    public static boolean isLoggedin = false;
+    public static boolean isDeviceLocated = false;
+    public static boolean isConnected = false;
+    public static boolean hasLocation = false;
+    public static boolean hasToken = false;
+
+
+    public static double lastLatitude;
+    public static double lastLongitude;
+    public static int idCidade = 0;
+    public static int idUF = 0;
+
+    public static String statusMesage = "";
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String EXTRA_MESSAGE = "message";
@@ -39,7 +49,7 @@ public class DeviceInfo {
     public static final String PROPERTY_APP_VERSION = "appVersion";
 
     static GoogleCloudMessaging gcm;
-    static Context context;
+    public static Context context;
     static String regid;
 
     //ToDo

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import co.salutary.mobisaude.model.Cidade;
-import co.salutary.mobisaude.model.Erb;
+import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.DeviceInfo;
 
@@ -15,8 +15,8 @@ public class UserController {
     private Cidade cidadeLocal;
 
     private Map<String, Boolean> mapErbsControle = null;
-    private List<Erb> listErbs;
-    private List<Erb> listHistoricos;
+    private List<EstabelecimentoSaude> listEstabelecimentoSaudes;
+    private List<EstabelecimentoSaude> listHistoricos;
 
 	private static UserController instance = null;
 
@@ -63,16 +63,16 @@ public class UserController {
 	public void setCidadeLocal(Cidade cidadeLocal) {
 		this.cidadeLocal = cidadeLocal;
 	}
-	public List<Erb> getListErbs() {
-		return listErbs;
+	public List<EstabelecimentoSaude> getListEstabelecimentoSaudes() {
+		return listEstabelecimentoSaudes;
 	}
-	public void setListErbs(List<Erb> listErbs) {
-		this.listErbs = listErbs;
+	public void setListEstabelecimentoSaudes(List<EstabelecimentoSaude> listEstabelecimentoSaudes) {
+		this.listEstabelecimentoSaudes = listEstabelecimentoSaudes;
 	}
-	public List<Erb> getListHistoricos() {
+	public List<EstabelecimentoSaude> getListHistoricos() {
 		return listHistoricos;
 	}
-	public void setListHistoricos(List<Erb> listHistoricos) {
+	public void setListHistoricos(List<EstabelecimentoSaude> listHistoricos) {
 		this.listHistoricos = listHistoricos;
 	}
 

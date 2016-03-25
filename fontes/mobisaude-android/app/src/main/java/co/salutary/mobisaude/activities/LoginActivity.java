@@ -33,6 +33,7 @@ import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.Validator;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -161,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(null);
         boolean cancel = false;
         View focusView = null;
-        Settings.IS_LOGGEDIN = false;
+        DeviceInfo.isLoggedin = false;
 
         // Update login and password
         String email = mEmailView.getText().toString();
@@ -329,7 +330,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             // TODO: register the new account here.
-            Settings.IS_LOGGEDIN = hasAuth;
+            DeviceInfo.isLoggedin = hasAuth;
             return hasAuth;
         }
 

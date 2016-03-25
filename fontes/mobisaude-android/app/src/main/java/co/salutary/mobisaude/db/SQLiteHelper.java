@@ -3,8 +3,8 @@ package co.salutary.mobisaude.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import co.salutary.mobisaude.db.scipts.ScriptCidade;
-import co.salutary.mobisaude.db.scipts.ScriptUF;
+import co.salutary.mobisaude.db.scripts.ScriptCidade;
+import co.salutary.mobisaude.db.scripts.ScriptUF;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
 

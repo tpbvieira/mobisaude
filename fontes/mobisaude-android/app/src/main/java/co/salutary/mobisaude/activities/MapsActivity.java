@@ -2,9 +2,9 @@ package co.salutary.mobisaude.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
-import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.util.DeviceInfo;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener  {
 
@@ -74,10 +74,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (id == R.id.menu_profile) {
             startActivity(SettingsActivity.class);
         } else if (id == R.id.menu_login) {
-            Settings.IS_LOGGEDIN = true;
+            DeviceInfo.isLoggedin = true;
             startActivity(LoginActivity.class);
         } else if (id == R.id.menu_logout) {
-            Settings.IS_LOGGEDIN = false;
+            DeviceInfo.isLoggedin = false;
             startActivity(MainActivity.class);
         }
 

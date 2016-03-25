@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,7 +19,6 @@ import co.salutary.mobisaude.model.configuracao.facade.ConfiguracaoFacade;
 import co.salutary.mobisaude.model.estabelecimentosaude.EstabelecimentoSaude;
 import co.salutary.mobisaude.model.estabelecimentosaude.facade.EstabelecimentoSaudeFacade;
 import co.salutary.mobisaude.model.municipio.facade.MunicipiosIbgeFacade;
-import co.salutary.mobisaude.model.operadora.facade.OperadoraFacade;
 import co.salutary.mobisaude.model.regiao.Regiao;
 import co.salutary.mobisaude.model.regiao.facade.RegiaoFacade;
 import co.salutary.mobisaude.model.tipoestabelecimentosaude.facade.TipoEstabelecimentoSaudeFacade;
@@ -41,7 +39,6 @@ import co.salutary.mobisaude.restful.message.mobile.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.mobile.GerarTokenResponse;
 import co.salutary.mobisaude.restful.message.mobile.GetESRequest;
 import co.salutary.mobisaude.restful.message.mobile.GetESResponse;
-import co.salutary.mobisaude.restful.message.mobile.Operadora;
 import co.salutary.mobisaude.restful.message.mobile.RegiaoMsg;
 import co.salutary.mobisaude.restful.message.mobile.TextoAjudaRequest;
 import co.salutary.mobisaude.restful.message.mobile.TextoAjudaResponse;
@@ -118,7 +115,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	 * @param request
 	 * @return
 	 */
-	@GET
+	@POST
 	@Path("/gerarToken")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
@@ -670,25 +667,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			OperadoraFacade operadoraFacade = (OperadoraFacade)Factory.getInstance().get("operadoraFacade");
-			List<co.salutary.mobisaude.model.operadora.Operadora> lstOperadora = operadoraFacade.list();
-			if (lstOperadora != null) {
-				List<Operadora> lstRetorno = new ArrayList<Operadora>();
-				for (co.salutary.mobisaude.model.operadora.Operadora operadora:lstOperadora) {
-					Operadora op = new Operadora();
-					op.setId(Integer.toString(operadora.getIdOperadora()));
-					op.setCodigo(operadora.getCodigo());
-					op.setNome(operadora.getNome());
-
-					lstRetorno.add(op);
-				}
-				response.setOperadoras(lstRetorno.toArray(new Operadora[0]));				
-			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioOperadora"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioOperadora"));				
-				return response;
-			}
-
 			TipoSistemaOperacionalFacade tipoSistemaOperacionalFacade = (TipoSistemaOperacionalFacade)Factory.getInstance().get("tipoSistemaOperacionalFacade");
 			List<co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional> lstTipoSistemaOperacional = tipoSistemaOperacionalFacade.list();
 			if (lstTipoSistemaOperacional != null) {
@@ -701,7 +679,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 					lstRetorno.add(tso);
 				}
 				response.setTiposSistemaOperacional((lstRetorno.toArray(new TipoSistemaOperacional[0])));
-
 				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));
@@ -709,7 +686,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}			
 
-			// TipoEstabelecimentoSaudeMsg
 			TipoEstabelecimentoSaudeFacade tipoEstabelecimentoSaudeFacade = (TipoEstabelecimentoSaudeFacade)Factory.getInstance().get("tipoEstabelecimentoSaudeFacade");
 			List<co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude> lstTipoEstabelecimentoSaude = tipoEstabelecimentoSaudeFacade.list();
 			if (lstTipoEstabelecimentoSaude != null) {
@@ -729,7 +705,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 			
-			// TipoGestaoMsg
 			TipoGestaoFacade tipoGestaoFacade = (TipoGestaoFacade)Factory.getInstance().get("tipoGestaoFacade");
 			List<co.salutary.mobisaude.model.tipogestao.TipoGestao> lstTipoGestao = tipoGestaoFacade.list();
 			if (lstTipoGestao != null) {
@@ -738,7 +713,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 					TipoGestaoMsg tg = new TipoGestaoMsg();
 					tg.setId(Integer.toString(tipoGestao.getIdTipoGestao()));
 					tg.setNome(tipoGestao.getNome());
-
 					lstRetorno.add(tg);
 				}
 				response.setTipoGestao((lstRetorno.toArray(new TipoGestaoMsg[0])));
@@ -749,7 +723,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 			
-			// RegiaoMsg
 			RegiaoFacade regiaoFacade = (RegiaoFacade)Factory.getInstance().get("regiaoFacade");
 			List<Regiao> lstRegiao = regiaoFacade.list();
 			if (lstRegiao != null) {
@@ -757,8 +730,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 				for (Regiao regiao:lstRegiao) {
 					RegiaoMsg r = new RegiaoMsg();
 					r.setId(Integer.toString(regiao.getIdRegiao()));
-					r.setNome(regiao.getNome());
-					
+					r.setNome(regiao.getNome());					
 					lstRetorno.add(r);
 				}
 				response.setRegiao((lstRetorno.toArray(new RegiaoMsg[0])));

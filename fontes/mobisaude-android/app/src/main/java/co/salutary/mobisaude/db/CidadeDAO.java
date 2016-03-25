@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.salutary.mobisaude.model.Cidade;
-import co.salutary.mobisaude.model.UF;
-import co.salutary.mobisaude.db.scipts.ScriptCidade;
-import co.salutary.mobisaude.db.scipts.ScriptUF;
+import co.salutary.mobisaude.db.scripts.ScriptCidade;
 
 /**
  * Created by thiago on 08/02/16.

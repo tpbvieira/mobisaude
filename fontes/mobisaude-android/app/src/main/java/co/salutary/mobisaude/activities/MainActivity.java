@@ -21,9 +21,10 @@ import java.util.List;
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.db.CidadeDAO;
-import co.salutary.mobisaude.db.ErbDAO;
+import co.salutary.mobisaude.db.EsDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
+import co.salutary.mobisaude.util.DeviceInfo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,21 +59,21 @@ public class MainActivity extends AppCompatActivity
 
         TextView stateView = (TextView)findViewById(R.id.state);
         UfDAO statesDao = new UfDAO(db);
-        stateView.setText("CurrentState=" + statesDao.getUfById(Settings.ID_UF).getNome());
+        stateView.setText("CurrentState=" + statesDao.getUfById(DeviceInfo.idUF).getNome());
 
         TextView citieView = (TextView)findViewById(R.id.city);
         CidadeDAO citiesDao = new CidadeDAO(db);
-        citieView.setText("CurrentCity=" + citiesDao.getCidadeById(Settings.ID_CIDADE).getNome());
+        citieView.setText("CurrentCity=" + citiesDao.getCidadeById(DeviceInfo.idCidade).getNome());
 
-        TextView operadorasView = (TextView)findViewById(R.id.operadoras);
+        TextView tipoESView = (TextView)findViewById(R.id.operadoras);
         Settings settings = new Settings(getApplicationContext());
-        String operadorasString = settings.getPreferenceValues(Settings.FILTER_OPERADORAS);
-        List<String> operadorasList = Arrays.asList(operadorasString.split("\\s*,\\s*"));
-        operadorasView.setText("Operators=" + operadorasList.size());
+        String tipoESString = settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE);
+        List<String> tipoESList = Arrays.asList(tipoESString.split("\\s*,\\s*"));
+        tipoESView.setText("TiposEstabelecimento=" + tipoESList.size());
 
         TextView erbsView = (TextView)findViewById(R.id.erbs);
-        ErbDAO erbDao = new ErbDAO(db);
-        erbsView.setText("ES=" + erbDao.listarErb(Settings.ID_CIDADE,true,true,true,operadorasList).size());
+        EsDAO esDao = new EsDAO(db);
+        erbsView.setText("ES=" + esDao.listarESByMunicipio(DeviceInfo.idCidade).size());
 
         TextView viewsView = (TextView)findViewById(R.id.views);
         viewsView.setText("Views=" + db.getAvailableViews().size());
@@ -97,17 +98,17 @@ public class MainActivity extends AppCompatActivity
 
         MenuItem menuLogin = (MenuItem) menuNav.findItem(R.id.menu_login);
         if (menuLogin != null) {
-            menuLogin.setVisible(!Settings.IS_LOGGEDIN);
+            menuLogin.setVisible(!DeviceInfo.isLoggedin);
             this.invalidateOptionsMenu();
         }
         MenuItem menuLogout = (MenuItem) menuNav.findItem(R.id.menu_logout);
         if (menuLogout != null) {
-            menuLogout.setVisible(Settings.IS_LOGGEDIN);
+            menuLogout.setVisible(DeviceInfo.isLoggedin);
             this.invalidateOptionsMenu();
         }
         MenuItem menuProfile = (MenuItem) menuNav.findItem(R.id.menu_profile);
         if (menuProfile != null) {
-            menuProfile.setVisible(Settings.IS_LOGGEDIN);
+            menuProfile.setVisible(DeviceInfo.isLoggedin);
             this.invalidateOptionsMenu();
         }
 
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_top_right, menu);
 
-        if (Settings.IS_LOGGEDIN) {
+        if (DeviceInfo.isLoggedin) {
             TextView textUserName = (TextView) findViewById(R.id.text_userName);
             if (textUserName != null) {
                 textUserName.setText("Thiago Vieira");
@@ -199,7 +200,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.menu_login) {
             startActivity(LoginActivity.class);
         } else if (id == R.id.menu_logout) {
-            Settings.IS_LOGGEDIN = false;
+            DeviceInfo.isLoggedin = false;
             startActivity(MainActivity.class);
         }
 

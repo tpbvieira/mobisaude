@@ -21,6 +21,7 @@
 
 	<dependencies>
 
+		<!-- jee -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -28,7 +29,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-
+		<!-- report -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
@@ -39,20 +40,24 @@
 			<artifactId>groovy-all</artifactId>
 			<version>2.0.1</version>
 		</dependency>
+
+		<!-- misc -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+
+		<!-- email -->
+		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -60,7 +65,7 @@
 			<version>1.4.7</version>
 		</dependency>
 
-
+		<!-- persistence -->
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
@@ -76,15 +81,13 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.3.0.Final</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>8.2-504.jdbc3</version>
 		</dependency>
 
-
+		<!-- rest -->
 		<dependency>
 			<groupId>org.codehaus.jettison</groupId>
 			<artifactId>jettison</artifactId>
@@ -106,118 +109,86 @@
 			<version>2.13</version>
 		</dependency>
 
-
-		<!-- Utilitarios core usados por outros modulos. Defina se estiver usando Spring Utility APIs (org.springframework.core.*/org.springframework.util.*) -->
-		<dependency>
+		<!-- spring -->
+		<dependency><!-- Utilitarios core usados por outros modulos. Defina se estiver usando Spring Utility APIs (org.springframework.core.*/org.springframework.util.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Expression Language (depende de spring-core) Defina se estiver usando Spring Expression APIs (org.springframework.expression.*) -->
-		<dependency>
+		<dependency><!-- Expression Language (depende de spring-core) Defina se estiver usando Spring Expression APIs (org.springframework.expression.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-expression</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Bean Factory e JavaBeans utilities (depende de spring-core) Defina se estiver usando Spring Bean APIs (org.springframework.beans.*) -->
-		<dependency>
+		<dependency><!-- Bean Factory e JavaBeans utilities (depende de spring-core) Defina se estiver usando Spring Bean APIs (org.springframework.beans.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Aspect Oriented Programming (AOP) Framework (depende de spring-core, spring-beans) Defina se estiver usando 
-			Spring AOP APIs (org.springframework.aop.*) -->
-		<dependency>
+		<dependency><!-- Aspect Oriented Programming (AOP) Framework (depende de spring-core, spring-beans) Defina se estiver usando Spring AOP APIs (org.springframework.aop.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Application Context (depende de spring-core, spring-expression, spring-aop, spring-beans) Este e o artefato 
-			central para o Spring Dependency Injection Container e geralmente e definido -->
-		<dependency>
+		<dependency><!-- Application Context (depende de spring-core, spring-expression, spring-aop, spring-beans) Este e o artefato central para o Spring Dependency Injection Container e geralmente e definido -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Varios utilitarios Application Context, incluindo EhCache, JavaMail, Quartz, e Freemarker integration Defina 
-			se precisar de alguma dessas integracoes -->
-		<dependency>
+		<dependency><!-- Varios utilitarios Application Context, incluindo EhCache, JavaMail, Quartz, e Freemarker integration Defina se precisar de alguma dessas integracoes -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Transaction Management Abstraction (depends on spring-core, spring-beans, spring-aop, spring-context) Defina 
-			se estiver usando Spring Transactions ou DAO Exception Hierarchy (org.springframework.transaction.*/org.springframework.dao.*) -->
-		<dependency>
+		<dependency><!-- Transaction Management Abstraction (depends on spring-core, spring-beans, spring-aop, spring-context) Defina se estiver usando Spring Transactions ou DAO Exception Hierarchy (org.springframework.transaction.*/org.springframework.dao.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- JDBC Data Access Library (depende de spring-core, spring-beans, spring-context, spring-tx) Defina se estiver 
-			usando Spring JdbcTemplate API (org.springframework.jdbc.*) -->
-		<dependency>
+		<dependency><!-- JDBC Data Access Library (depende de spring-core, spring-beans, spring-context, spring-tx) Defina se estiver usando Spring JdbcTemplate API (org.springframework.jdbc.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Object-to-Relation-Mapping (ORM) integracao com Hibernate, JPA, e iBatis. (depende de spring-core, spring-beans, 
-			spring-context, spring-tx) Defina se precisar de ORM (org.springframework.orm.*) -->
-		<dependency>
+		<dependency><!-- Object-to-Relation-Mapping (ORM) integracao com Hibernate, JPA, e iBatis. (depende de spring-core, spring-beans, spring-context, spring-tx) Defina se precisar de ORM (org.springframework.orm.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Object-to-XML Mapping (OXM) abstracao e integracao com JAXB, JiBX, Castor, XStream, and XML Beans. (depende 
-			de spring-core, spring-beans, spring-context) Defina se precisar de OXM (org.springframework.oxm.*) -->
-		<dependency>
+		<dependency><!-- Object-to-XML Mapping (OXM) abstracao e integracao com JAXB, JiBX, Castor, XStream, and XML Beans. (depende de spring-core, spring-beans, spring-context) Defina se precisar de OXM (org.springframework.oxm.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Utilitarios para desenvolvimento de aplicacoes Web aplica-se a Servlet e Portlet (depende de spring-core, 
-			spring-beans, spring-context) Defina se estiver usando Spring MVC, ou prentende usar Struts, JSF, ou outro framework 
-			web em conjunto com o Spring (org.springframework.web.*) -->
-		<dependency>
+		<dependency><!-- Utilitarios para desenvolvimento de aplicacoes Web aplica-se a Servlet e Portlet (depende de spring-core, spring-beans, spring-context) Defina se estiver usando Spring MVC, ou prentende usar Struts, JSF, ou outro framework web em conjunto com o Spring (org.springframework.web.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Spring MVC for Servlet Environments (depende de spring-core, spring-beans, spring-context, spring-web) Defina 
-			se estiver usando Spring MVC com um Servlet Container como o Apache Tomcat (org.springframework.web.servlet.*) -->
-		<dependency>
+		<dependency><!-- Spring MVC for Servlet Environments (depende de spring-core, spring-beans, spring-context, spring-web) Defina se estiver usando Spring MVC com um Servlet Container como o Apache Tomcat (org.springframework.web.servlet.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Spring MVC for Portlet Environments (depende de spring-core, spring-beans, spring-context, spring-web) Defina 
-			se estiver usando Spring MVC com um Portlet Container (org.springframework.web.portlet.*) -->
-		<dependency>
+		<dependency><!-- Spring MVC for Portlet Environments (depende de spring-core, spring-beans, spring-context, spring-web) Defina se estiver usando Spring MVC com um Portlet Container (org.springframework.web.portlet.*) -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc-portlet</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		<!-- Suporte para teste de aplicacoes Spring com ferramentas como JUnit e TestNG Este artefato geralmente e definido 
-			com um escopo 'test' para a os testes de integracao e stubs de teste unitario -->
-		<dependency>
+		<dependency><!-- Suporte para teste de aplicacoes Spring com ferramentas como JUnit e TestNG Este artefato geralmente e definido com um escopo 'test' para a os testes de integracao e stubs de teste unitario -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${org.springframework.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- JUnit -->
+
+		<!-- testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-		<!-- Jackson-Databind -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.1.4</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>mobisaude-services</finalName>
@@ -242,24 +213,9 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.5</version>
 			</plugin>
-			<!-- 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<format>xml</format>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>cobertura</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			 -->
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.7</version> 
+				<configuration> <format>xml</format> </configuration> <executions> <execution> <phase>package</phase> <goals> <goal>cobertura</goal> 
+				</goals> </execution> </executions> </plugin> -->
 		</plugins>
 		<resources>
 			<resource>
@@ -270,16 +226,19 @@
 			</resource>
 		</resources>
 	</build>
+
 	<scm>
 		<connection>scm:git:git@github.com:tpbvieira/mobisaude.git</connection>
 		<developerConnection>scm:git:git@github.com:tpbvieira/mobisaude.git</developerConnection>
 		<url>https://github.com/tpbvieira/mobisaude</url>
 		<tag>mobisaude-services-0.0.1</tag>
 	</scm>
+
 	<distributionManagement>
 		<repository>
 			<id>maven-repository</id>
 			<url>${github.maven.repository}</url>
 		</repository>
 	</distributionManagement>
+
 </project>

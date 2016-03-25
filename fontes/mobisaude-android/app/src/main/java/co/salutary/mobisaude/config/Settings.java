@@ -7,49 +7,40 @@ import java.util.HashMap;
 
 public class Settings {
 
-    public static final String servicesUrl = "http://192.168.1.37:8080/mobisaude-services/mobile";
+    private static final String TAG = new Object(){}.getClass().getName();
 
-    public static boolean IS_LOGGEDIN = false;
+//    public static final String serverUrl = "http://gatewaysiec.anatel.gov.br/gatewayarcher/mobile";
+    public static final String serverUrl = "http://192.168.1.38:8080/mobisaude-services/mobile";
 
-    public static boolean CONEXAO2G;
-    public static boolean CONEXAO3G;
-    public static boolean CONEXAO4G;
-    public static boolean CONEXAO;
-    public static boolean DEVICE_LOCATED;
-    public static double lat;
-    public static double lon;
-    public static int ID_CIDADE = 0;
-    public static int ID_UF = 0;
+	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
+	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";
+	public static final String TOKEN = "";
+	public static final String SHOW_SCREEN_TELA_2 = "SHOW_SCREEN_TELA_2";
+
+    // domain tables
+    public static final String regiao = "regiao";
+    public static final String tipoGestao = "tipoGestao";
+    public static final String tiposSistemaOperacional = "tiposSistemaOperacional";
+    public static final String tiposEstabelecimentoSaude = "tiposEstabelecimentoSaude";
+
+    public static final String FILTER_REGIAO = "filter_regiao";
+    public static final String FILTER_TIPO_GESTAO = "filter_tipo_gestao";
+    public static final String FILTER_TIPO_ESTABELECIMENTO_SAUDE = "filter_tipo_estabelecimento_saude";
+
+    public static final String REPORT_PROBLEMS = "REPORT_PROBLEMS";
+
+    public static final String onlyWifi = "onlyWifi";
+    public static final String showDisclaimer = "showDisclaimer";
+    public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
+    public static final String EMPTY = "";
+    public static final String SHOW_SCREEN_TELA_3 = "SHOW_SCREEN_TELA_3";
+    public static final String DATA_DADOS = "DATA_DADOS";
+    public static final String SHOW_SCREEN_TELA_1 = "SHOW_SCREEN_TELA_1";
+    public static final String HELP_TEXT = "HELP_TEXT";
     public static boolean disableSensor = false;
     public static boolean GO_HOME;
     public static boolean REPORT_PROBLEM;
 
-    public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
-    public static final String EMPTY = "";
-	
-	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
-	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";
-	public static final String HELP_TEXT = "HELP_TEXT";
-	public static final String TOKEN = "TOKEN";
-	public static final String DATA_DADOS = "DATA_DADOS";
-	public static final String SHOW_SCREEN_TELA_1 = "SHOW_SCREEN_TELA_1";
-    public static final String SHOW_SCREEN_TELA_2 = "SHOW_SCREEN_TELA_2";
-    public static final String SHOW_SCREEN_TELA_3 = "SHOW_SCREEN_TELA_3";
-    public static final String operadoras = "operadoras";
-    public static final String tiposAmbiente = "tiposAmbiente";
-    public static final String tiposProblema = "tiposProblema";
-    public static final String tiposServico = "tiposServico";
-    public static final String tiposSistemaOperacional = "tiposSistemaOperacional";
-    
-    public static final String FILTER_OPERADORAS = "filter_operadoras";
-    public static final String FILTER_AMBIENTES = "filter_ambientes";
-    public static final String FILTER_PROBLEMAS = "filter_problemas";
-    
-    public static final String onlyWifi = "onlyWifi";
-    public static final String showDisclaimer = "showDisclaimer";
-    
-    public static final String REPORT_PROBLEMS = "REPORT_PROBLEMS";
-        
     private Context context;
     
     public Settings(Context context) {

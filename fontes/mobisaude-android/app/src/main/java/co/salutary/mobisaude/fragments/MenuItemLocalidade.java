@@ -33,8 +33,11 @@ import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.JsonUtils;
 
 public class MenuItemLocalidade extends Fragment implements LocationListener {
+
+    private static final String TAG = MenuItemLocalidade.class.getSimpleName();
 
     private static final long TIME_TEMP = 1000;
     private static final int SHOW_TELA_SELECT = 1;
@@ -145,7 +148,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
         if (cidade != null) {
             edtCidade.setText(cidade.getNome());
             UserController.getInstance().setMapErbsControle(null);
-            UserController.getInstance().setListErbs(null);
+            UserController.getInstance().setListEstabelecimentoSaudes(null);
         }
     }
 
@@ -179,7 +182,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
             try {
                 Thread.sleep(TIME_TEMP);
             } catch (Exception e) {
-                Log.e("Anatel", "ShowDialog.dismissDialog: " + e);
+                Log.e(TAG, "ShowDialog.dismissDialog: " + e);
             }
             return null;
         }
@@ -189,7 +192,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
             try {
                 pDialog.dismiss();
             } catch (Exception e) {
-                Log.e("Anatel", "ShowDialog.dismiss: " + e);
+                Log.e(TAG, "ShowDialog.dismiss: " + e);
             }
             new DeterminarLocal(context).execute(4);
         }
@@ -216,7 +219,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
                 pDialog.setCancelable(true);
                 pDialog.show();
             } catch (Exception e) {
-                Log.e("Anatel", "DeterminarLocal.dismissDialog: " + e);
+                Log.e(TAG, "DeterminarLocal.dismissDialog: " + e);
             }
             super.onPreExecute();
         }
@@ -227,7 +230,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
                 try {
                     Thread.sleep(TIME_TEMP * 2);
                 } catch (Exception e) {
-                    Log.e("Anatel", "DeterminarLocal.dismissDialog: " + e);
+                    Log.e(TAG, "DeterminarLocal.dismissDialog: " + e);
                 }
                 for (int i = 0; i < params[0]; i++) {
                     Thread.sleep(TIME_TEMP);
@@ -259,9 +262,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
 					    if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
 					    	JSONObject jObject = new JSONObject(reponder);
 							JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
-							String erro = jReponder.getString("erro");
-							String[] splitResult = erro.split("\\|");
-							int idErro = Integer.parseInt(splitResult[0]);
+                            int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
 								// gerar novo token
 								if(!ManagerToken.gerarToken(getActivity())){
@@ -283,7 +284,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
 									
 									// resetar memoria
 									userController.setMapErbsControle(null);
-									userController.setListErbs(null);
+									userController.setListEstabelecimentoSaudes(null);
 									return true;
 								}
 								else {
@@ -297,7 +298,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
 					}
 				}
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.doInBackground: "+e);
+				Log.e(TAG, "DeterminarLocal.doInBackground: "+e);
 			}
 			return false;
 		}
@@ -307,7 +308,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
 			try {
 				pDialog.dismiss();
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.dismiss: "+e);
+				Log.e(TAG, "DeterminarLocal.dismiss: "+e);
 			}
 			try {
 				if(result){
@@ -317,7 +318,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
 					Toast.makeText(getActivity(), "Não foi possível determinar a sua localização.", Toast.LENGTH_LONG).show();
 				}
 			} catch (Exception e) {
-				Log.e("Anatel", "DeterminarLocal.onPostExecute: "+e);
+				Log.e(TAG, "DeterminarLocal.onPostExecute: "+e);
 			}
 		}
 	}

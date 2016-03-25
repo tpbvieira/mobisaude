@@ -5,14 +5,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import co.salutary.mobisaude.R;
-/**************************************
- * Projeto Anatel
- * 
- * @author Digitrack
- * 
- * @param Email alexlova@gmail.com
- * @param Data 10/06/2014
- **************************************/
+
 public class ItemPrestador {
 
 	private String nomeFantasia;

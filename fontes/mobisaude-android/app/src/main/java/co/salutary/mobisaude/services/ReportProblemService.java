@@ -18,8 +18,11 @@ import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ManagerToken;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.util.ConnectivityManager;
+import co.salutary.mobisaude.util.JsonUtils;
 
 public class ReportProblemService extends Service{
+
+    private static final String TAG = ReportProblemService.class.getSimpleName();
 
 	final String tag = "ReportProblemService";	
 	final IBinder mBinder = new MyBinder();
@@ -100,10 +103,7 @@ public class ReportProblemService extends Service{
 							// salvar registros
 							JSONObject jObject = new JSONObject(reponder);
 							JSONObject jReponder = (JSONObject) jObject.get("relatarProblemaResponse");
-							//Log.d("ActivityReportar", jReponder.toString());
-							String erro = jReponder.getString("erro");
-							String[] splitResult = erro.split("\\|");
-							int idErro = Integer.parseInt(splitResult[0]);
+                            int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
 								// gerar novo token
 								if(!ManagerToken.gerarToken(getApplicationContext())){
@@ -120,7 +120,7 @@ public class ReportProblemService extends Service{
 					}
 				}
 			} catch (Exception e) {
-				Log.e("Anatel", "ConsultaRanking.doInBackground: "+e);
+				Log.e(TAG, "ConsultaRanking.doInBackground: "+e);
 			}
 			return false;
 		}

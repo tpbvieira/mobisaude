@@ -6,18 +6,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android.content.Context;
 import android.util.Log;
-import co.salutary.mobisaude.config.JSONParams;
+
+import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.util.ConnectivityManager;
+import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.JsonUtils;
 
 public class ServiceBroker {
 
-    private static final String TAG = ServiceBroker.class.getSimpleName();
+    private static final String TAG = new Object(){}.getClass().getName();
 
 	private static ServiceBroker instance = null;
 
@@ -36,10 +40,10 @@ public class ServiceBroker {
 	}
 
 	private String requestJson(String service, String json) {
-		String dados = "Error";
+		String dados = null;
 		try {
 			if(connectivityManager.isConnected()) {
-				service = Settings.servicesUrl + service;
+				service = Settings.serverUrl + service;
 
 				URL url = new URL(service);
 				HttpURLConnection servConn = (HttpURLConnection) url.openConnection();
@@ -60,27 +64,32 @@ public class ServiceBroker {
 					dados = response(servConn.getInputStream());
 				}
 			}
-		} catch (Exception e) {
+		} catch (ConnectException e) {
 			Log.e(TAG, e.getMessage());
-		}
+            dados = JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error_connecting_server));
+		} catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            dados = JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error));
+        }
 
 		return dados;
 	}
 	
 	private String response(InputStream in) throws IOException {
 		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-			String line;
-			StringBuilder sb =  new StringBuilder();
-			while ((line = rd.readLine()) != null) {
-				sb.append(line);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            StringBuilder stringBuilder =  new StringBuilder();
+            String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				stringBuilder.append(line);
 			}
-			rd.close();
-			return sb.toString();
+			bufferedReader.close();
+			return stringBuilder.toString();
 		} catch (Exception e) {
 			Log.e(TAG,e.getMessage());
+            JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error));
 		}
-        return "Error";
+        return JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error));
 	}
 	
 	public String gerarToken(String json) {
@@ -102,10 +111,6 @@ public class ServiceBroker {
     public String getESByMunicipioTipoEstabelecimento(String json) {
         return requestJson("/getESByMunicipioTipoEstabelecimento", json);
     }
-
-
-
-
 
 	public String queryAvailableViews(String json) {
         return requestJson("/consultaTelas", json);

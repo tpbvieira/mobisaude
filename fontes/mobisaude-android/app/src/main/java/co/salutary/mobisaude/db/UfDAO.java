@@ -7,7 +7,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.salutary.mobisaude.db.scipts.ScriptUF;
+import co.salutary.mobisaude.db.scripts.ScriptUF;
 import co.salutary.mobisaude.model.UF;
 
 /**
