@@ -4,9 +4,6 @@ import android.util.Log;
 
 import java.util.StringTokenizer;
 
-/**
- * Created by thiago on 09/02/16.
- */
 public class Validator {
 
     private static final String TAG = Validator.class.getSimpleName();
@@ -20,7 +17,6 @@ public class Validator {
                 tokens.nextToken();
                 String domainValue = tokens.nextToken();
                 tokens = new StringTokenizer(domainValue,".");
-                int size = tokens.countTokens();
                 if(tokens.countTokens() > 1) {
                     result = true;
                 }

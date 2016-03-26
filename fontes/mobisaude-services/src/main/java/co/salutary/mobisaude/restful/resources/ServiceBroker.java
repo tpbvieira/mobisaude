@@ -21,6 +21,8 @@ import co.salutary.mobisaude.model.regiao.facade.RegiaoFacade;
 import co.salutary.mobisaude.model.tipoestabelecimentosaude.facade.TipoEstabelecimentoSaudeFacade;
 import co.salutary.mobisaude.model.tipogestao.facade.TipoGestaoFacade;
 import co.salutary.mobisaude.model.tiposistemaoperacional.facade.TipoSistemaOperacionalFacade;
+import co.salutary.mobisaude.model.user.User;
+import co.salutary.mobisaude.model.user.facade.UserFacade;
 import co.salutary.mobisaude.restful.message.mobile.ESMsg;
 import co.salutary.mobisaude.restful.message.mobile.RegiaoMsg;
 import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeMsg;
@@ -31,11 +33,13 @@ import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarChaveRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.request.GetESRequest;
+import co.salutary.mobisaude.restful.message.request.UserRequest;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
 import co.salutary.mobisaude.restful.message.response.GerarChaveResponse;
 import co.salutary.mobisaude.restful.message.response.GerarTokenResponse;
 import co.salutary.mobisaude.restful.message.response.GetESResponse;
+import co.salutary.mobisaude.restful.message.response.UserResponse;
 
 @Path("/mobile")
 @Controller
@@ -447,6 +451,125 @@ public class ServiceBroker extends AbstractServiceBroker {
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
 			response.setErro(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/signup")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public UserResponse signup(UserRequest request) {
+		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		UserResponse response = new UserResponse();
+		try {
+			if (!request.validar()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String email = request.getEmail();
+			String password = request.getPassword();
+			String name = request.getName();
+			String phone = request.getPhone();
+			User newUser = new User(email,password,name,phone);
+
+			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
+			userFacade.save(newUser);
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("co.mobisaude.strings.geocode.erroProcessandoServico"), ex);
+			response.setErro(ex.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/updateUser")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public UserResponse updateUser(UserRequest request) {
+		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		UserResponse response = new UserResponse();
+		try {
+			if (!request.validar()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String email = request.getEmail();
+			String password = request.getPassword();
+			String name = request.getName();
+			String phone = request.getPhone();
+			User newUser = new User(email,password,name,phone);
+
+			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
+			newUser = userFacade.update(newUser);
+			response.setEmail(newUser.getEmail());
+			response.setPassword(newUser.getPassword());
+			response.setName(newUser.getName());
+			response.setPhone(newUser.getPhone());
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("co.mobisaude.strings.geocode.erroProcessandoServico"), ex);
+			response.setErro(ex.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/getUser")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public UserResponse getUser(UserRequest request) {
+		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		UserResponse response = new UserResponse();
+		try {
+			if (!request.validar()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
+			User newUser = userFacade.get(request.getEmail());
+			response.setEmail(newUser.getEmail());
+			response.setPassword(newUser.getPassword());
+			response.setName(newUser.getName());
+			response.setPhone(newUser.getPhone());
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("co.mobisaude.strings.geocode.erroProcessandoServico"), ex);
+			response.setErro(ex.getMessage());			
 			return response;
 		}
 		return response;
