@@ -3,17 +3,17 @@
     <string name="title_activity_main">MobiSaúde</string>
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
 
-    <string name="error">Erro Inesperado</string>
-    <string name="error_no_connectivity">Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
-    <string name="error_obtaining_locality">Erro ao obter localização</string>
-    <string name="error_connecting_server">Erro ao conectar servidor de dados</string>
-    <string name="error_invalid_email">Email inválido (precisa ter \"@\" e \".\")</string>
-    <string name="error_invalid_password">Senha inválida (precisa ter mais que 4 caracteres)</string>
-    <string name="error_incorrect_password">Login ou senha incorreto</string>
-    <string name="error_field_required">Este campo é obrigatório</string>
-    <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde</string>
-    <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
-    <string name="error_token_generation">Erro ao gerar token de comunicação</string>
+    <string name="error">1|Erro Inesperado</string>
+    <string name="error_no_connectivity">2|Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
+    <string name="error_obtaining_locality">3|Erro ao obter localização</string>
+    <string name="error_connecting_server">4|Erro ao conectar servidor de dados</string>
+    <string name="error_invalid_email">5|Email inválido (precisa ter \"@\" e \".\")</string>
+    <string name="error_invalid_password">6|Senha inválida (precisa ter mais que 4 caracteres)</string>
+    <string name="error_incorrect_password">7|Login ou senha incorreto</string>
+    <string name="error_field_required">8|Este campo é obrigatório</string>
+    <string name="error_location_required">9|A localização é necessária para o funcionamento do MobiSaúde</string>
+    <string name="error_conectivity_required">10|Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
+    <string name="error_token_generation">11|Erro ao gerar token de comunicação</string>
 
     <string name="not_supported">Este aparelho não é suportado para a operação desejada</string>
     <string name="invalid_gps_apk">No valid Google Play Services APK found</string>
@@ -75,7 +75,7 @@
 
     <string name="unknown_location">Localização não identificada</string>
     <string name="location_ok">Localizado!</string>
-    <string name="obtaining_location">Obtendo a localização...</string>
+    <string name="obtaining_location_from_gps">Obtendo localização por GPS...</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancelar</string>
     <string name="alert">Alerta</string>

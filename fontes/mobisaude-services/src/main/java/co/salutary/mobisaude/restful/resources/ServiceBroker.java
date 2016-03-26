@@ -119,7 +119,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/gerarToken")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GerarTokenResponse gerarToken(GerarTokenRequest request) {System.out.println("ServiceBroker.gerarToken");
+	public GerarTokenResponse gerarToken(GerarTokenRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
 		GerarTokenResponse response = new GerarTokenResponse();
 		try {
 			if (!request.validar()) {
@@ -145,6 +145,43 @@ public class ServiceBroker extends AbstractServiceBroker {
 		}
 		return response;
 	}
+
+	/**
+	 * Metodo que trata o request de geracao de chave para geracao de token.
+	 * @param request
+	 * @return
+	 */
+	@POST
+	@Path("/gerarChave")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public GerarChaveResponse gerarChave(GerarChaveRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
+		GerarChaveResponse response = new GerarChaveResponse();
+		try {
+			
+			if (!request.validar()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+
+			String chave = gerarChave();
+
+			if (chave != null) {
+				response.setChave(chave);
+				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			} else {
+				response.setErro(properties.getProperty("co.mobisaude.gerarchave.msg.erroGerandoChave"));
+				return response;
+			}
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"), ex);
+			response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"));			
+			return response;
+		}
+		return response;
+	}
 	
 	/**
 	 * Metodo que trata o request de geocode: determinar o municipio dadas as coordenadas.
@@ -155,7 +192,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/geocode")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GeocodeResponse geocode(GeocodeRequest request) {
+	public GeocodeResponse geocode(GeocodeRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
 		GeocodeResponse response = new GeocodeResponse();
 		try {
 			if (!request.validar()) {
@@ -212,37 +249,111 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 
 	/**
-	 * Metodo que trata o request de geracao de chave para geracao de token.
+	 * Retorna todas as tabelas de dominios como um response 
 	 * @param request
 	 * @return
 	 */
 	@POST
-	@Path("/gerarChave")
+	@Path("/consultaDominios")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GerarChaveResponse gerarChave(GerarChaveRequest request) {
-		GerarChaveResponse response = new GerarChaveResponse();
+	public ConsultaDominiosResponse consultaDominios(ConsultaDominiosRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		ConsultaDominiosResponse response = new ConsultaDominiosResponse();
+		
 		try {
-			
+		
 			if (!request.validar()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
 			}
 
-
-			String chave = gerarChave();
-
-			if (chave != null) {
-				response.setChave(chave);
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			} else {
-				response.setErro(properties.getProperty("co.mobisaude.gerarchave.msg.erroGerandoChave"));
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
 				return response;
 			}
+
+			TipoSistemaOperacionalFacade tipoSistemaOperacionalFacade = (TipoSistemaOperacionalFacade)Factory.getInstance().get("tipoSistemaOperacionalFacade");
+			List<co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional> lstTipoSistemaOperacional = tipoSistemaOperacionalFacade.list();
+			if (lstTipoSistemaOperacional != null) {
+				List<TipoSistemaOperacional> lstRetorno = new ArrayList<TipoSistemaOperacional>();
+				for (co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional tipoSistemaOperacional:lstTipoSistemaOperacional) {
+					TipoSistemaOperacional tso = new TipoSistemaOperacional();
+					tso.setId(Integer.toString(tipoSistemaOperacional.getIdTipoSistemaOperacional()));
+					tso.setDescricao(tipoSistemaOperacional.getDescricao());
+
+					lstRetorno.add(tso);
+				}
+				response.setTiposSistemaOperacional((lstRetorno.toArray(new TipoSistemaOperacional[0])));
+				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));				
+				return response;
+			}			
+
+			TipoEstabelecimentoSaudeFacade tipoEstabelecimentoSaudeFacade = (TipoEstabelecimentoSaudeFacade)Factory.getInstance().get("tipoEstabelecimentoSaudeFacade");
+			List<co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude> lstTipoEstabelecimentoSaude = tipoEstabelecimentoSaudeFacade.list();
+			if (lstTipoEstabelecimentoSaude != null) {
+				List<TipoEstabelecimentoSaudeMsg> lstRetorno = new ArrayList<TipoEstabelecimentoSaudeMsg>();
+				for (co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude tipoEstabelecimentoSaude:lstTipoEstabelecimentoSaude) {
+					TipoEstabelecimentoSaudeMsg tes = new TipoEstabelecimentoSaudeMsg();
+					tes.setId(Integer.toString(tipoEstabelecimentoSaude.getIdTipoEstabelecimentoSaude()));
+					tes.setNome(tipoEstabelecimentoSaude.getNome());
+
+					lstRetorno.add(tes);
+				}
+				response.setTiposEstabelecimentoSaude((lstRetorno.toArray(new TipoEstabelecimentoSaudeMsg[0])));
+				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoEstabelecimentoSaude"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoEstabelecimentoSaude"));				
+				return response;
+			}
+			
+			TipoGestaoFacade tipoGestaoFacade = (TipoGestaoFacade)Factory.getInstance().get("tipoGestaoFacade");
+			List<co.salutary.mobisaude.model.tipogestao.TipoGestao> lstTipoGestao = tipoGestaoFacade.list();
+			if (lstTipoGestao != null) {
+				List<TipoGestaoMsg> lstRetorno = new ArrayList<TipoGestaoMsg>();
+				for (co.salutary.mobisaude.model.tipogestao.TipoGestao tipoGestao:lstTipoGestao) {
+					TipoGestaoMsg tg = new TipoGestaoMsg();
+					tg.setId(Integer.toString(tipoGestao.getIdTipoGestao()));
+					tg.setNome(tipoGestao.getNome());
+					lstRetorno.add(tg);
+				}
+				response.setTipoGestao((lstRetorno.toArray(new TipoGestaoMsg[0])));
+				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));				
+				return response;
+			}
+			
+			RegiaoFacade regiaoFacade = (RegiaoFacade)Factory.getInstance().get("regiaoFacade");
+			List<Regiao> lstRegiao = regiaoFacade.list();
+			if (lstRegiao != null) {
+				List<RegiaoMsg> lstRetorno = new ArrayList<RegiaoMsg>();
+				for (Regiao regiao:lstRegiao) {
+					RegiaoMsg r = new RegiaoMsg();
+					r.setId(Integer.toString(regiao.getIdRegiao()));
+					r.setNome(regiao.getNome());					
+					lstRetorno.add(r);
+				}
+				response.setRegiao((lstRetorno.toArray(new RegiaoMsg[0])));
+				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
+				return response;
+			}
+
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"), ex);
-			response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"));			
+			logger.error(properties.getProperty("co.mobisaude.strings.erroProcessandoServico"), ex);
+			response.setErro(properties.getProperty("co.mobisaude.strings.erroProcessandoServico"));			
 			return response;
 		}
 		return response;
@@ -351,8 +462,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		}
 		return response;
 	}
-	
-	
+		
 	@POST
 	@Path("/getESByMunicipioTipoEstabelecimento")
 	@Consumes("application/json;charset=utf-8")
@@ -634,117 +744,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 		} catch (Exception ex) {
 			response.setErro(properties.getProperty("co.mobisaude.consultaPatamar.msg.erroProcessandoServico"));
 			logger.error("Erro no serviço Mobile Consulta Patamar.", ex);
-			return response;
-		}
-		return response;
-	}
-
-	/**
-	 * Retorna todas as tabelas de dominios como um response 
-	 * @param request
-	 * @return
-	 */
-	@POST
-	@Path("/consultaDominios")
-	@Consumes("application/json;charset=utf-8")
-	@Produces("application/json;charset=utf-8")
-	public ConsultaDominiosResponse consultaDominios(ConsultaDominiosRequest request) {
-		
-		ConsultaDominiosResponse response = new ConsultaDominiosResponse();
-		
-		try {
-		
-			if (!request.validar()) {
-				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
-				return response;
-			}
-
-			String token = request.getToken();
-			if (!validarToken(token)) {
-				logger.error(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
-				return response;
-			}
-
-			TipoSistemaOperacionalFacade tipoSistemaOperacionalFacade = (TipoSistemaOperacionalFacade)Factory.getInstance().get("tipoSistemaOperacionalFacade");
-			List<co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional> lstTipoSistemaOperacional = tipoSistemaOperacionalFacade.list();
-			if (lstTipoSistemaOperacional != null) {
-				List<TipoSistemaOperacional> lstRetorno = new ArrayList<TipoSistemaOperacional>();
-				for (co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional tipoSistemaOperacional:lstTipoSistemaOperacional) {
-					TipoSistemaOperacional tso = new TipoSistemaOperacional();
-					tso.setId(Integer.toString(tipoSistemaOperacional.getIdTipoSistemaOperacional()));
-					tso.setDescricao(tipoSistemaOperacional.getDescricao());
-
-					lstRetorno.add(tso);
-				}
-				response.setTiposSistemaOperacional((lstRetorno.toArray(new TipoSistemaOperacional[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));				
-				return response;
-			}			
-
-			TipoEstabelecimentoSaudeFacade tipoEstabelecimentoSaudeFacade = (TipoEstabelecimentoSaudeFacade)Factory.getInstance().get("tipoEstabelecimentoSaudeFacade");
-			List<co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude> lstTipoEstabelecimentoSaude = tipoEstabelecimentoSaudeFacade.list();
-			if (lstTipoEstabelecimentoSaude != null) {
-				List<TipoEstabelecimentoSaudeMsg> lstRetorno = new ArrayList<TipoEstabelecimentoSaudeMsg>();
-				for (co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude tipoEstabelecimentoSaude:lstTipoEstabelecimentoSaude) {
-					TipoEstabelecimentoSaudeMsg tes = new TipoEstabelecimentoSaudeMsg();
-					tes.setId(Integer.toString(tipoEstabelecimentoSaude.getIdTipoEstabelecimentoSaude()));
-					tes.setNome(tipoEstabelecimentoSaude.getNome());
-
-					lstRetorno.add(tes);
-				}
-				response.setTiposEstabelecimentoSaude((lstRetorno.toArray(new TipoEstabelecimentoSaudeMsg[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoEstabelecimentoSaude"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoEstabelecimentoSaude"));				
-				return response;
-			}
-			
-			TipoGestaoFacade tipoGestaoFacade = (TipoGestaoFacade)Factory.getInstance().get("tipoGestaoFacade");
-			List<co.salutary.mobisaude.model.tipogestao.TipoGestao> lstTipoGestao = tipoGestaoFacade.list();
-			if (lstTipoGestao != null) {
-				List<TipoGestaoMsg> lstRetorno = new ArrayList<TipoGestaoMsg>();
-				for (co.salutary.mobisaude.model.tipogestao.TipoGestao tipoGestao:lstTipoGestao) {
-					TipoGestaoMsg tg = new TipoGestaoMsg();
-					tg.setId(Integer.toString(tipoGestao.getIdTipoGestao()));
-					tg.setNome(tipoGestao.getNome());
-					lstRetorno.add(tg);
-				}
-				response.setTipoGestao((lstRetorno.toArray(new TipoGestaoMsg[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));				
-				return response;
-			}
-			
-			RegiaoFacade regiaoFacade = (RegiaoFacade)Factory.getInstance().get("regiaoFacade");
-			List<Regiao> lstRegiao = regiaoFacade.list();
-			if (lstRegiao != null) {
-				List<RegiaoMsg> lstRetorno = new ArrayList<RegiaoMsg>();
-				for (Regiao regiao:lstRegiao) {
-					RegiaoMsg r = new RegiaoMsg();
-					r.setId(Integer.toString(regiao.getIdRegiao()));
-					r.setNome(regiao.getNome());					
-					lstRetorno.add(r);
-				}
-				response.setRegiao((lstRetorno.toArray(new RegiaoMsg[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
-				return response;
-			}
-
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.strings.erroProcessandoServico"), ex);
-			response.setErro(properties.getProperty("co.mobisaude.strings.erroProcessandoServico"));			
 			return response;
 		}
 		return response;

@@ -35,9 +35,9 @@ import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
 
-public class LocalityActivity extends Activity implements Runnable, LocationListener {
+public class LocalityFromListActivity extends Activity implements Runnable, LocationListener {
 
-    private static final String TAG = LocalityActivity.class.getSimpleName();
+    private static final String TAG = LocalityFromListActivity.class.getSimpleName();
 
 	private static final int PROGRESS_BAR_VERIFICAR = 1;
 	private static final int PROGRESS_BAR_DETERMINAR = 2;

@@ -107,7 +107,7 @@ public class TestAll extends TestCase {
 //			}
 			
 		} catch (Exception ex){
-			logger.error("Erro gerando hash.",ex);	
+			logger.error(ex);	
 			fail("Exceção: " + ex.getMessage());
 		}
 	}
@@ -141,9 +141,6 @@ public class TestAll extends TestCase {
 		}
 		if (!consultaDominiosResponse.getErro().startsWith("0|")) {
 			fail("Retorno inesperado ao consultar tabelas de domínio.");
-		}
-		if(consultaDominiosResponse.getOperadoras().length != 7){
-			fail("Número inesperado de operadoras.");
 		}
 		if(consultaDominiosResponse.getTiposSistemaOperacional().length != 3){
 			fail("Número inesperado de tipos de sistema operacional.");

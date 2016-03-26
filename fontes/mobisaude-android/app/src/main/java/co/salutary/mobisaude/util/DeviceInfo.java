@@ -27,13 +27,9 @@ public class DeviceInfo {
 
     private static final String TAG = new Object(){}.getClass().getName();
 
-    public static boolean isDadosAtivos = false;
     public static boolean isLoggedin = false;
-    public static boolean isDeviceLocated = false;
-    public static boolean isConnected = false;
-    public static boolean hasLocation = false;
     public static boolean hasToken = false;
-
+    public static boolean isDeviceLocated = false;
 
     public static double lastLatitude;
     public static double lastLongitude;
@@ -52,8 +48,6 @@ public class DeviceInfo {
     public static Context context;
     static String regid;
 
-    //ToDo
-    @Deprecated
     public static void setUpGCM(Context ctx) {
         context = ctx;
 
@@ -233,7 +227,7 @@ public class DeviceInfo {
         return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     }
 
-    public static boolean isProviderEnabled(){
+    public static boolean hasLocationProvider(){
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
@@ -256,4 +250,7 @@ public class DeviceInfo {
         return true;
     }
 
+    public static boolean hasConnectivity(Context context){
+        return ConnectivityUtils.getInstance(context).hasConnectivity();
+    }
 }

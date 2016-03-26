@@ -17,7 +17,7 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ManagerToken;
 import co.salutary.mobisaude.controller.ServiceBroker;
-import co.salutary.mobisaude.util.ConnectivityManager;
+import co.salutary.mobisaude.util.ConnectivityUtils;
 import co.salutary.mobisaude.util.JsonUtils;
 
 public class ReportProblemService extends Service{
@@ -85,7 +85,7 @@ public class ReportProblemService extends Service{
 		protected Boolean doInBackground(Integer... params) {
 			try {
 				// carregar
-				if(ConnectivityManager.getInstance(getApplicationContext()).isConnected()){
+				if(ConnectivityUtils.getInstance(getApplicationContext()).hasConnectivity()){
 					// laco para repeti caso precise gera novo token
 					for (int i = 0; i <= 1; i++) {
 						Settings localPref = new Settings(getApplicationContext());

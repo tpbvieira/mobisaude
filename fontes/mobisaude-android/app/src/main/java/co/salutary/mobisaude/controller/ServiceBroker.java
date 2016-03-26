@@ -15,7 +15,7 @@ import android.util.Log;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.util.ConnectivityManager;
+import co.salutary.mobisaude.util.ConnectivityUtils;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
@@ -25,7 +25,7 @@ public class ServiceBroker {
 
 	private static ServiceBroker instance = null;
 
-	private ConnectivityManager connectivityManager;
+	private ConnectivityUtils connectivityUtils;
 
 
 	public static ServiceBroker getInstance(Context context) {
@@ -36,13 +36,13 @@ public class ServiceBroker {
 	}
 
 	private ServiceBroker(Context ctx) {
-		connectivityManager = ConnectivityManager.getInstance(ctx);
+		connectivityUtils = ConnectivityUtils.getInstance(ctx);
 	}
 
 	private String requestJson(String service, String json) {
 		String dados = null;
 		try {
-			if(connectivityManager.isConnected()) {
+			if(connectivityUtils.hasConnectivity()) {
 				service = Settings.serverUrl + service;
 
 				URL url = new URL(service);

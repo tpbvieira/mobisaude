@@ -31,7 +31,7 @@ import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
-import co.salutary.mobisaude.util.ConnectivityManager;
+import co.salutary.mobisaude.util.ConnectivityUtils;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
@@ -63,7 +63,6 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 
         LocalDataBase = LocalDataBase.getInstance();
         userController = UserController.getInstance();
-        DeviceInfo.isDadosAtivos = false;
 
         // requisicao gps
         location = DeviceInfo.updateLocation(getApplicationContext(),this);
@@ -197,7 +196,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 		else{
             DeviceInfo.isDeviceLocated = false;
 		}		
-		if(!DeviceInfo.isDadosAtivos && ConnectivityManager.getInstance(getApplicationContext()).isConnected()){
+		if(DeviceInfo.hasConnectivity(getApplicationContext())){
 			isShowDialog = true;
 			size = 0;
 		}		
@@ -263,7 +262,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 				pDialog.setCancelable(true);
 				pDialog.show();
 			} catch (Exception e) {
-				Log.e(TAG, "DeterminarLocal.dismissDialog: "+e);
+				Log.e(TAG, e.getMessage());
 			}
 			super.onPreExecute();
 		}
@@ -274,7 +273,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 				try {
 					Thread.sleep(TIME_TEMP*2);
 				} catch (Exception e) {
-					Log.e(TAG, "DeterminarLocal.dismissDialog: "+e);
+					Log.e(TAG, e.getMessage());
 				}
 				for (int i = 0; i < params[0]; i++) {
 					Thread.sleep(TIME_TEMP);

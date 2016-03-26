@@ -4,23 +4,24 @@ import android.content.Context;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-public class ConnectivityManager {
+public class ConnectivityUtils {
 
-    private static final String TAG = ConnectivityManager.class.getSimpleName();
+    private static final String TAG = ConnectivityUtils.class.getSimpleName();
 
-    private static ConnectivityManager instance = null;
+    private static ConnectivityUtils instance = null;
     private android.net.ConnectivityManager connectivityManager;
 
-    public static ConnectivityManager getInstance(Context context) {
+    public static ConnectivityUtils getInstance(Context context) {
         if (instance == null) {
-            instance = new ConnectivityManager(context);
+            instance = new ConnectivityUtils(context);
         }
         return instance;
     }
 
-    public ConnectivityManager(Context ctx) {
+    private ConnectivityUtils(Context ctx) {
         connectivityManager = (android.net.ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
+
 
     public int requisitConexaoMobile() {
         try {
@@ -31,7 +32,7 @@ public class ConnectivityManager {
         }
     }
 
-    public boolean isConnected() {
+    public boolean hasConnectivity() {
         try {
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             return (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected());

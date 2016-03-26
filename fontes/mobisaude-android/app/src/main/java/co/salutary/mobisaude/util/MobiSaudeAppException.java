@@ -7,4 +7,8 @@ public class MobiSaudeAppException extends Exception{
 
     public static final String TAG = MobiSaudeAppException.class.getSimpleName();
 
+    public MobiSaudeAppException(String message){
+        super(message);
+    }
+
 }

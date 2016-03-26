@@ -29,7 +29,6 @@ public class UserController {
     
     public void atualizarCidadeSelecionado(){
     	this.mapErbsControle = null;
-    	DeviceInfo.isDadosAtivos = false;
     }
     
     public String getNomeLocalizacao() {

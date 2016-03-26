@@ -95,7 +95,7 @@
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".activities.LocalityActivity"
+            android:name=".activities.LocalityFromListActivity"
             android:label="TelaLocalidade"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/ThemeActivity" />

@@ -17,6 +17,7 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
+import co.salutary.mobisaude.util.MobiSaudeAppException;
 
 public class ManagerToken  {
 
@@ -34,39 +35,40 @@ public class ManagerToken  {
 		    String response = ServiceBroker.getInstance(context).gerarToken(gerarTokenRequest.toString());
 
 		    if(response != null) {
+                int idErro;
 		    	JSONObject jsonResponse = new JSONObject(response);
+                if(!jsonResponse.has("gerarTokenResponse")){
+                    throw new MobiSaudeAppException(JsonUtils.getErrorMessage(jsonResponse));
+                }
 				JSONObject gerarTokenResponse = (JSONObject) jsonResponse.get("gerarTokenResponse");
-                int idErro = JsonUtils.getErrorCode(gerarTokenResponse);
+                idErro = JsonUtils.getErrorCode(gerarTokenResponse);
                 if(idErro == 0){// 0 = success
 					String token = gerarTokenResponse.getString("token");
                     Settings localPref = new Settings(context);
 					localPref.setPreferenceValue(Settings.TOKEN, token);
-                    DeviceInfo.isConnected = true;
 					return true;
 				}
 				else {
-                    DeviceInfo.statusMesage = JsonUtils.getErrorMessage(gerarTokenResponse);
-                    DeviceInfo.isConnected = false;
-                    DeviceInfo.hasToken = false;
-                    Settings localPref = new Settings(context);
-                    localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
-					return false;
+                    throw new MobiSaudeAppException(JsonUtils.getErrorMessage(gerarTokenResponse));
 				}
 			}
 			else {
-                DeviceInfo.statusMesage = Resources.getSystem().getString(R.string.error);
-                DeviceInfo.isConnected = false;
-                DeviceInfo.hasToken = false;
-                Settings localPref = new Settings(context);
-                localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
-                return false;
+                throw new MobiSaudeAppException(Resources.getSystem().getString(R.string.error));
 			}
 
-		} catch (JSONException e) {
-			Log.e(TAG, e.getMessage());
-			return false;
-		} catch (Exception e) {
+        } catch (MobiSaudeAppException | JSONException e) {
             Log.e(TAG, e.getMessage());
+            DeviceInfo.statusMesage = e.getMessage();
+            DeviceInfo.hasToken = false;
+            Settings localPref = new Settings(context);
+            localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
+            return false;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            DeviceInfo.statusMesage = e.getMessage();
+            DeviceInfo.hasToken = false;
+            Settings localPref = new Settings(context);
+            localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
             return false;
         }
 	}
@@ -75,7 +77,7 @@ public class ManagerToken  {
 		int[] arrPermutacao = { 7, 5, 3, 1, 4, 6, 0, 2 };
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy", Locale.getDefault());
 		String dataStr = dateFormat.format(new Date());
-		StringBuffer chave = new StringBuffer("");
+		StringBuilder chave = new StringBuilder("");
 
 		// Permutar os digitos da data atual DDMMAAAA
 		for (int i = 0; i < dataStr.length(); i++) {
@@ -99,7 +101,7 @@ public class ManagerToken  {
 
     private static List<Integer> primeFactors(int numbers) {
         int n = numbers;
-        List<Integer> factors = new ArrayList<Integer>();
+        List<Integer> factors = new ArrayList<>();
         for (int i = 2; i <= n / i; i++) {
             while (n % i == 0) {
                 factors.add(i);
