@@ -52,6 +52,7 @@ public class TestAll extends TestCase {
 
 			// test 02 - gerar token
 			String token = gerarTokenTest(mapper, broker, chave);
+			System.out.println(token);
 			
 			// test 03 - Consulta Dominios
 			consultaDominioTest(mapper, broker, token);

@@ -100,7 +100,7 @@ public class ServiceBroker {
 		return requestJson("/geocode", json);
 	}
 	
-	public String consultaDataToReport(String json) {
+	public String consultaDominios(String json) {
 		return requestJson("/consultaDominios", json);
 	}
 

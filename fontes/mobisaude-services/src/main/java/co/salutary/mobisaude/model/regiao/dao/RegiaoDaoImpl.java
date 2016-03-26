@@ -10,32 +10,17 @@ import org.springframework.stereotype.Repository;
 
 import co.salutary.mobisaude.model.regiao.Regiao;
 
-/**
- * Implementacao de DAO para Regiao
- *
- */
 @Repository("regiaoDao")
 public class RegiaoDaoImpl implements RegiaoDao {
-	/**
-	 * EntityManager
-	 */
+
 	@PersistenceContext
-	
 	private EntityManager em;
-	/**
-	 * GetById
-	 * @param idRegiao
-	 * @return
-	 */
+
 	public Regiao getById(int idRegiao) {
 		return em.find(Regiao.class, idRegiao);
 	}
 	
-    /**
-     * Listar Regiao
-     * @return
-     */
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public List<Regiao> list() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select tes from Regiao tes ");
@@ -47,4 +32,5 @@ public class RegiaoDaoImpl implements RegiaoDao {
 			return null;
 		}
 	}
+    
 }

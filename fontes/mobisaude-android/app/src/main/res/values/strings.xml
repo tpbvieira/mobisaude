@@ -22,6 +22,7 @@
     <string name="error_location_required">9|A localização é necessária para o funcionamento do MobiSaúde</string>
     <string name="error_conectivity_required">10|Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
     <string name="error_token_generation">11|Erro ao gerar token de comunicação</string>
+    <string name="error_duplicated_email">12|Email já cadastrado</string>
 
     <string name="not_supported">Este aparelho não é suportado para a operação desejada</string>
     <string name="invalid_gps_apk">No valid Google Play Services APK found</string>
@@ -37,16 +38,15 @@
     <string name="select">Selecionar</string>
 
     <!-- Nav bar and menu values-->
-    <string name="menu_home">Início</string>
     <string name="menu_bookmarks">Favoritos</string>
     <string name="menu_dashboards">Gráficos</string>
     <string name="menu_search">Buscar</string>
     <string name="menu_maps">Mapa</string>
     <string name="menu_settings">Configurações</string>
-    <string name="menu_identification">Identificação</string>
     <string name="menu_profile">Perfil</string>
-    <string name="menu_logout">Sair</string>
-    <string name="menu_login">Entrar</string>
+    <string name="action_sign_up">Cadastrar</string>
+    <string name="action_sign_in">Entrar</string>
+    <string name="action_logout">Sair</string>
     <string name="user_guest"></string>
 
     <string name="help_escolha_uf">Escolha o estado da cidade desejada</string>
@@ -66,8 +66,6 @@
     <string name="prompt_password">Senha</string>
     <string name="prompt_name">Nome</string>
     <string name="prompt_phone">Telefone</string>
-    <string name="action_sign_up">Cadastrar</string>
-    <string name="action_sign_in">Entrar</string>
 
     <string name="permission_rationale">É necessário ter permissão de acesso aos conatos</string>
     <string name="title_activity_settings">Configurações</string>

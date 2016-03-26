@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,6 +22,9 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.util.DeviceInfo;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener  {
+
+    private static final String TAG = new Object() {
+    }.getClass().getName();
 
     private GoogleMap mMap;
 
@@ -57,33 +61,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+//        int id = item.getItemId();
+//
+//        if (id == R.id.menu_bookmarks) {
+//            startActivity(MainActivity.class);
+//        } else if (id == R.id.menu_dashboard) {
+//            startActivity(MainActivity.class);
+//        } else if (id == R.id.menu_search) {
+//            startActivity(MainActivity.class);
+//        } else if (id == R.id.menu_maps) {
+//            startActivity(MapsActivity.class);
+//        } else if (id == R.id.menu_manage) {
+//            startActivity(SettingsActivity.class);
+//        } else if (id == R.id.menu_profile) {
+//            startActivity(SettingsActivity.class);
+//        } else if (id == R.id.menu_signup) {
+//            startActivity(UserActivity.class);
+//        } else if (id == R.id.menu_signin) {
+//            startActivity(LoginActivity.class);
+//        } else if (id == R.id.menu_logout) {
+//            startActivity(MainActivity.class);
+//        }
+//
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_nav_drawer);
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true
+        Log.d(TAG,"????????????");
+        return false;
 
-        if (id == R.id.menu_home) {
-            startActivity(MainActivity.class);
-        } else if (id == R.id.menu_bookmarks) {
-            startActivity(MainActivity.class);
-        } else if (id == R.id.menu_dashboard) {
-            startActivity(MainActivity.class);
-        } else if (id == R.id.menu_search) {
-            startActivity(MainActivity.class);
-        } else if (id == R.id.menu_maps) {
-            startActivity(MapsActivity.class);
-        } else if (id == R.id.menu_manage) {
-            startActivity(SettingsActivity.class);
-        } else if (id == R.id.menu_profile) {
-            startActivity(SettingsActivity.class);
-        } else if (id == R.id.menu_login) {
-            DeviceInfo.isLoggedin = true;
-            startActivity(LoginActivity.class);
-        } else if (id == R.id.menu_logout) {
-            DeviceInfo.isLoggedin = false;
-            startActivity(MainActivity.class);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_nav_drawer);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     public void startActivity(final Class<? extends Activity> activity) {

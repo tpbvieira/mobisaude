@@ -27,17 +27,18 @@ public class JsonUtils {
     public static JSONObject createRequest(Context context, String requestString){
         Settings settings = new Settings(context);
         String token = settings.getPreferenceValue(Settings.TOKEN);
+
         if(token == null || token.isEmpty()) {
             TokenManager.gerarToken(context);
             token = settings.getPreferenceValue(Settings.TOKEN);
         }
 
         try{
-            JSONObject data = new JSONObject();
-            data.put("token", token);
+            JSONObject tokenJson = new JSONObject();
+            tokenJson.put("token", token);
 
             JSONObject request = new JSONObject();
-            request.put(requestString, data);
+            request.put(requestString, tokenJson);
             return request;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());

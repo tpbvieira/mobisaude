@@ -10,29 +10,16 @@ import org.springframework.stereotype.Repository;
 
 import co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional;
 
-/**
- * Implementacao de DAO para TipoSistemaOperacional
- *
- */
 @Repository("tipoSistemaOperacionalDao")
 public class TipoSistemaOperacionalDaoImpl implements TipoSistemaOperacionalDao {
-	/**
-	 * EntityManager
-	 */
+
 	@PersistenceContext
 	private EntityManager em;
-	/**
-	 * GetById
-	 * @param idTipoSistemaOperacional
-	 * @return
-	 */
+
 	public TipoSistemaOperacional getById(int idTipoSistemaOperacional) {
 		return em.find(TipoSistemaOperacional.class, idTipoSistemaOperacional);
 	}
-    /**
-     * Listar os TipoSistemaOperacional
-     * @return
-     */
+
 	@SuppressWarnings("unchecked")
 	public List<TipoSistemaOperacional> list() {
 		StringBuffer sb = new StringBuffer();
@@ -45,4 +32,5 @@ public class TipoSistemaOperacionalDaoImpl implements TipoSistemaOperacionalDao 
 			return null;
 		}
 	}
+
 }

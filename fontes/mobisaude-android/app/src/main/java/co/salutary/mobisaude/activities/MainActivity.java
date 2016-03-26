@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         Menu menuNav = navigationView.getMenu();
 
-        MenuItem menuLogin = (MenuItem) menuNav.findItem(R.id.menu_login);
+        MenuItem menuLogin = (MenuItem) menuNav.findItem(R.id.menu_signin);
         if (menuLogin != null) {
             menuLogin.setVisible(!DeviceInfo.isLoggedin);
             this.invalidateOptionsMenu();
@@ -185,9 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.menu_home) {
-            startActivity(MainActivity.class);
-        } else if (id == R.id.menu_bookmarks) {
+        if (id == R.id.menu_bookmarks) {
             startActivity(MainActivity.class);
         } else if (id == R.id.menu_dashboard) {
             startActivity(MainActivity.class);
@@ -199,7 +197,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(SettingsActivity.class);
         } else if (id == R.id.menu_profile) {
             startActivity(SettingsActivity.class);
-        } else if (id == R.id.menu_login) {
+        } else if (id == R.id.menu_signup) {
+            startActivity(LoginActivity.class);
+        } else if (id == R.id.menu_signin) {
             startActivity(LoginActivity.class);
         } else if (id == R.id.menu_logout) {
             DeviceInfo.isLoggedin = false;

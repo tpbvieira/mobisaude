@@ -10,29 +10,17 @@ import org.springframework.stereotype.Repository;
 
 import co.salutary.mobisaude.model.tokensessao.TokenSessao;
 
-/**
- * Implementacao de DAO para TokenSessao
- *
- */
+
 @Repository("tokenSessaoDao")
 public class TokenSessaoDaoImpl implements TokenSessaoDao {
-	/**
-	 * EntityManager
-	 */
+
 	@PersistenceContext
 	private EntityManager em;
-	/**
-	 * Salvar um objeto
-	 * @param tokenSessao
-	 */
+
 	public void save(TokenSessao tokenSessao)  {
 		em.persist(tokenSessao);			
     }
-    /**
-     * Buscar um tokenSessao no banco
-     * @param tokenSessao
-     * @return
-     */
+
 	@SuppressWarnings("unchecked")
 	public TokenSessao getToken(String tokenSessao) {
 		StringBuffer sb = new StringBuffer();
@@ -49,10 +37,7 @@ public class TokenSessaoDaoImpl implements TokenSessaoDao {
 			return null;
 		}
 	}
-    /**
-     * Remover um tokenSessao do banco
-     * @param token
-     */
+
 	public void removeToken(String token) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("delete from TokenSessao t ");
@@ -63,4 +48,5 @@ public class TokenSessaoDaoImpl implements TokenSessaoDao {
 		}
 		q.executeUpdate();
 	}
+
 }

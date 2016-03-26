@@ -10,12 +10,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * Classe que implementa os padroes <I>Factory</I> e <I>Singleton</I>. 
  * Responsavel pelo instanciamento de fachadas
  */
-
 public class Factory {
 
     private ApplicationContext appContext = null;
     static private Factory factory = null;
-    
 
     static public Factory getInstance() {
         if (factory == null)

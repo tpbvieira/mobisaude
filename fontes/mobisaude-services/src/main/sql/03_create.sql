@@ -5,12 +5,8 @@ CREATE TABLE public.tb_tipo_sistema_operacional
    tx_descricao character varying, 
    CONSTRAINT pk_tipo_sistema_operacional PRIMARY KEY (nu_id_tipo_sistema_operacional)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_tipo_sistema_operacional
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_tipo_sistema_operacional OWNER TO mobisaude_pg_user;
 
 
 -- Tipo Estabelecimento de Saude
@@ -21,12 +17,8 @@ CREATE TABLE public.tb_tipo_estabelecimento_saude
    tx_nome character varying, 
    CONSTRAINT pk_tipo_estabelecimento_saude PRIMARY KEY (nu_id_tipo_estabelecimento_saude)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_tipo_estabelecimento_saude
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_tipo_estabelecimento_saude OWNER TO mobisaude_pg_user;
 
 
 -- Tipo Gestao
@@ -37,12 +29,8 @@ CREATE TABLE public.tb_tipo_gestao
    tx_nome character varying, 
    CONSTRAINT pk_tipo_gestao PRIMARY KEY (nu_id_tipo_gestao)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_tipo_gestao
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_tipo_gestao OWNER TO mobisaude_pg_user;
 
 
 -- Região
@@ -52,12 +40,9 @@ CREATE TABLE public.tb_regiao
    tx_nome character varying, 
    CONSTRAINT pk_regiao PRIMARY KEY (nu_id_regiao)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_regiao
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_regiao OWNER TO mobisaude_pg_user;
+
 
 -- Estabelecimento de Saúde
 CREATE TABLE public.tb_estabelecimento_saude
@@ -87,30 +72,39 @@ CREATE TABLE public.tb_estabelecimento_saude
 	CONSTRAINT fk_estabelecimento_tipo_gestao FOREIGN KEY (nu_id_tipo_gestao) REFERENCES tb_tipo_gestao (nu_id_tipo_gestao) ON UPDATE NO ACTION ON DELETE NO ACTION, 
 	CONSTRAINT fk_estabelecimento_regiao FOREIGN KEY (nu_id_regiao) REFERENCES tb_regiao (nu_id_regiao) ON UPDATE NO ACTION ON DELETE NO ACTION
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
+WITH (OIDS = FALSE);
 ALTER TABLE public.tb_estabelecimento_saude OWNER TO mobisaude_pg_user;
 CREATE INDEX idx_nu_id_municipio ON tb_estabelecimento_saude USING btree (nu_id_municipio);
 CREATE INDEX idx_nu_id_tipo_estabelecimento_saude ON tb_estabelecimento_saude USING btree (nu_id_tipo_estabelecimento_saude);
 
 
 -- user
+DROP TABLE public.tb_user;
 CREATE TABLE public.tb_user
 (
-	nu_id_user integer NOT NULL, 
 	tx_email character varying NOT NULL,
+	tx_password character varying,
 	tx_name character varying,
 	tx_telefone character varying, 
-	CONSTRAINT pk_user PRIMARY KEY (nu_id_user)
+	CONSTRAINT pk_user PRIMARY KEY (tx_email)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_user
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_user OWNER TO mobisaude_pg_user;
+CREATE INDEX idx_tx_email ON tb_user USING btree (tx_email);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

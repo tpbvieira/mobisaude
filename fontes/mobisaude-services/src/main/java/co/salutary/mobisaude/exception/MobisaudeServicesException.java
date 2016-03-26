@@ -4,7 +4,7 @@ package co.salutary.mobisaude.exception;
  * Classe que representa uma excecao relacionado a seguranca.
  *
  */
-public class GenericMobisaudeServicesException extends Exception {
+public class MobisaudeServicesException extends Exception {
 	/**
 	 * serialVersionUID
 	 */
@@ -13,7 +13,7 @@ public class GenericMobisaudeServicesException extends Exception {
 	 * Construtor
 	 * @param mensagem
 	 */
-	public GenericMobisaudeServicesException(String mensagem) {
+	public MobisaudeServicesException(String mensagem) {
 		super(mensagem);
 	}
 	/**
@@ -21,14 +21,14 @@ public class GenericMobisaudeServicesException extends Exception {
 	 * @param mensagem
 	 * @param causa
 	 */
-	public GenericMobisaudeServicesException(String mensagem, Throwable causa) {
+	public MobisaudeServicesException(String mensagem, Throwable causa) {
 		super(mensagem, causa);
 	}
 	/**
 	 * Construtor
 	 * @param causa
 	 */
-	public GenericMobisaudeServicesException(Throwable causa) {
+	public MobisaudeServicesException(Throwable causa) {
 		super(causa);
 	}
 }

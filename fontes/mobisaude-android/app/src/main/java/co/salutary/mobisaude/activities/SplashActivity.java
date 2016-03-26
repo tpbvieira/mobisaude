@@ -457,7 +457,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
                     // obtain domain tables
                     JSONObject consultaDominiosRequest = JsonUtils.createRequest(getApplicationContext(), "consultaDominiosRequest");
-                    String consultaDominiosResponse = ServiceBroker.getInstance(getApplicationContext()).consultaDataToReport(consultaDominiosRequest.toString());
+                    String consultaDominiosResponse = ServiceBroker.getInstance(getApplicationContext()).consultaDominios(consultaDominiosRequest.toString());
 
                     if (consultaDominiosResponse != null && !consultaDominiosResponse.startsWith(getString(R.string.erro_starts))) {
 
