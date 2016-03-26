@@ -18,7 +18,7 @@ public class ConsultaDominiosRequest implements IMobileRequest {
 	}
 
 	@Override
-	public boolean validar() {
+	public boolean validate() {
 		return true;
 	}
 	

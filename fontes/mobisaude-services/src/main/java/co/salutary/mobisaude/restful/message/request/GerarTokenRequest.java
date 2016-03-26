@@ -36,7 +36,7 @@ public class GerarTokenRequest implements IMobileRequest {
 	 * Validar o objeto
 	 */
 	@Override
-	public boolean validar() {
+	public boolean validate() {
 		// Validar campos
 		if (chave == null || chave.trim().equals("")) {
 			return false;

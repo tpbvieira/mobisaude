@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 
+import co.salutary.mobisaude.exception.MobisaudeServicesException;
 import co.salutary.mobisaude.model.Factory;
 import co.salutary.mobisaude.model.estabelecimentosaude.EstabelecimentoSaude;
 import co.salutary.mobisaude.model.estabelecimentosaude.facade.EstabelecimentoSaudeFacade;
@@ -59,7 +60,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	public GerarTokenResponse gerarToken(GerarTokenRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
 		GerarTokenResponse response = new GerarTokenResponse();
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -91,7 +92,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		GerarChaveResponse response = new GerarChaveResponse();
 		try {
 			
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -121,7 +122,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	public GeocodeResponse geocode(GeocodeRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
 		GeocodeResponse response = new GeocodeResponse();
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				return response;
@@ -184,7 +185,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		ConsultaDominiosResponse response = new ConsultaDominiosResponse();
 		
 		try {		
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -288,7 +289,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		GetESResponse response = new GetESResponse();
 		
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -337,7 +338,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		GetESResponse response = new GetESResponse();
 		
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -392,7 +393,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		GetESResponse response = new GetESResponse();
 		
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -465,7 +466,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
 		UserResponse response = new UserResponse();
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -508,7 +509,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
 		UserResponse response = new UserResponse();
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -551,7 +552,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
 		UserResponse response = new UserResponse();
 		try {
-			if (!request.validar()) {
+			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
 				return response;
@@ -571,6 +572,43 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setName(newUser.getName());
 			response.setPhone(newUser.getPhone());
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), ex);
+			response.setErro(ex.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/signin")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public UserResponse signin(UserRequest request) {
+		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		UserResponse response = new UserResponse();
+		try {
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
+			User user = userFacade.get(request.getEmail());
+			if(user.getEmail().equals(request.getEmail()) && user.getPassword().equals(request.getPassword())){
+				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			}else{
+				throw new MobisaudeServicesException("Login ou Senha inválido");
+			}
 
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), ex);

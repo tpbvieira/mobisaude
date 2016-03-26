@@ -84,6 +84,7 @@ public class TestAll extends TestCase {
 			deleteUserTest(mapper, broker, "tpbvieira@gmail.com");
 			signupTest(mapper, broker, token);
 			updateUserTest(mapper, broker, token);
+			signinTest(mapper, broker, token);
 			getUserTest(mapper, broker, token);
 			
 //			// 14 - Texto Ajuda
@@ -386,6 +387,28 @@ public class TestAll extends TestCase {
 		try{
 			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
 			userFacade.remove(email);		}catch(Exception e){
+			logger.error(e);
+			fail(e.getMessage());
+		}
+
+	}
+	
+	private void signinTest(ObjectMapper mapper, ServiceBroker broker, String token){
+		
+		try{
+			User user = new User ("tpbvieira@gmail.com","1234","Thiago","06183133714");
+			UserRequest userRequest = new UserRequest();
+			userRequest.setToken(token);
+			userRequest.setEmail(user.getEmail());
+			userRequest.setPassword(user.getPassword());
+			
+			UserResponse userResponse = broker.signin(userRequest);			
+			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+				logger.error(userResponse);
+				fail("SigninError");
+			}
+			
+		}catch(Exception e){
 			logger.error(e);
 			fail(e.getMessage());
 		}

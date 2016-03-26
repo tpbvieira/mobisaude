@@ -15,7 +15,7 @@ public class GerarChaveRequest implements IMobileRequest {
 	 * Validar o objeto
 	 */
 	@Override
-	public boolean validar() {
+	public boolean validate() {
 		// Validar campos
 			
 		return true;

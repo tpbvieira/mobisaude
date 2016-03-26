@@ -63,7 +63,7 @@ public class UserRequest implements IMobileRequest {
 	}
 
 	@Override
-	public boolean validar() {
+	public boolean validate() {
 		boolean result = false;
 
         try{

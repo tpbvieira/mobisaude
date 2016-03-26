@@ -54,7 +54,7 @@ public class GetESRequest implements IMobileRequest {
 	}
 
 	@Override
-	public boolean validar() {
+	public boolean validate() {
 		if (municipio == null || municipio.trim().equals("")) {
 			return false;
 		} 

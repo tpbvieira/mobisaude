@@ -76,7 +76,7 @@ public class GeocodeRequest implements IMobileRequest {
 	 * Validar o objeto
 	 */
 	@Override
-	public boolean validar() {
+	public boolean validate() {
 		// Validar campos
 		if (latitude == null || latitude.trim().equals("") ||
 				longitude == null || longitude.trim().equals("")) {
