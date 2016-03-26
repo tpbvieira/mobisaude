@@ -24,7 +24,7 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.activities.SelectListActivity;
 import co.salutary.mobisaude.activities.MainActivity;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.ManagerToken;
+import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.CidadeDAO;
@@ -247,7 +247,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
 						Settings localPref = new Settings(getActivity());
 						String token = localPref.getPreferenceValue(Settings.TOKEN);
 				    	if(token == null || token.isEmpty()) {
-				    		ManagerToken.gerarToken(getActivity());
+				    		TokenManager.gerarToken(getActivity());
 				    		token = localPref.getPreferenceValue(Settings.TOKEN);
 					    }
 						JSONObject jDados = new JSONObject();
@@ -265,7 +265,7 @@ public class MenuItemLocalidade extends Fragment implements LocationListener {
                             int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
 								// gerar novo token
-								if(!ManagerToken.gerarToken(getActivity())){
+								if(!TokenManager.gerarToken(getActivity())){
 									return false;
 								}
 							}

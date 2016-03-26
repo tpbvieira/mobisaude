@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/operadoras"
+        android:id="@+id/tipo_es"
         android:layout_below="@+id/city"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -45,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/erbs"
-        android:layout_below="@+id/operadoras"
+        android:id="@+id/tipo_gestao"
+        android:layout_below="@+id/tipo_es"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"/>
@@ -55,19 +55,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/local_types"
-        android:layout_below="@+id/erbs"
+        android:id="@+id/regiao"
+        android:layout_below="@+id/tipo_gestao"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:id="@+id/views"
-        android:layout_below="@+id/local_types"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"/>
 </RelativeLayout>

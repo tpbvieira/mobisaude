@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.ManagerToken;
+import co.salutary.mobisaude.controller.TokenManager;
 
 public class JsonUtils {
 
@@ -28,7 +28,7 @@ public class JsonUtils {
         Settings settings = new Settings(context);
         String token = settings.getPreferenceValue(Settings.TOKEN);
         if(token == null || token.isEmpty()) {
-            ManagerToken.gerarToken(context);
+            TokenManager.gerarToken(context);
             token = settings.getPreferenceValue(Settings.TOKEN);
         }
 

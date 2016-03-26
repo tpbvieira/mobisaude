@@ -26,8 +26,7 @@ import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.util.DeviceInfo;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String RECEIVER_MAIN_ACTIVITY = "ReceiverMainActivity";
     public static final int RECEIVER_ABRIR_ATUALIZAR_PRESTADORES = 1;
@@ -56,27 +55,30 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         db = LocalDataBase.getInstance();
-
-        TextView stateView = (TextView)findViewById(R.id.state);
-        UfDAO statesDao = new UfDAO(db);
-        stateView.setText("CurrentState=" + statesDao.getUfById(DeviceInfo.idUF).getNome());
-
-        TextView citieView = (TextView)findViewById(R.id.city);
-        CidadeDAO citiesDao = new CidadeDAO(db);
-        citieView.setText("CurrentCity=" + citiesDao.getCidadeById(DeviceInfo.idCidade).getNome());
-
-        TextView tipoESView = (TextView)findViewById(R.id.operadoras);
         Settings settings = new Settings(getApplicationContext());
+
+        UfDAO statesDao = new UfDAO(db);
+        TextView stateView = (TextView)findViewById(R.id.state);
+        stateView.setText(getString(R.string.estado) + "=" + statesDao.getUfById(DeviceInfo.idUF).getNome());
+
+        CidadeDAO citiesDao = new CidadeDAO(db);
+        TextView citieView = (TextView)findViewById(R.id.city);
+        citieView.setText(getString(R.string.cidade) + "=" + citiesDao.getCidadeById(DeviceInfo.idCidade).getNome());
+
         String tipoESString = settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE);
         List<String> tipoESList = Arrays.asList(tipoESString.split("\\s*,\\s*"));
-        tipoESView.setText("TiposEstabelecimento=" + tipoESList.size());
+        TextView tipoESView = (TextView)findViewById(R.id.tipo_es);
+        tipoESView.setText(getString(R.string.tipo_estabelecimento_saude) + "=" + tipoESList.size());
 
-        TextView erbsView = (TextView)findViewById(R.id.erbs);
-        EsDAO esDao = new EsDAO(db);
-        erbsView.setText("ES=" + esDao.listarESByMunicipio(DeviceInfo.idCidade).size());
+        String tipoGestaoString = settings.getPreferenceValues(Settings.FILTER_TIPO_GESTAO);
+        List<String> tipoGestaoList = Arrays.asList(tipoGestaoString.split("\\s*,\\s*"));
+        TextView tipoGestaoView = (TextView)findViewById(R.id.tipo_gestao);
+        tipoGestaoView.setText(getString(R.string.tipo_gestao) + "=" + tipoGestaoList.size());
 
-        TextView viewsView = (TextView)findViewById(R.id.views);
-        viewsView.setText("Views=" + db.getAvailableViews().size());
+        String regiaoString = settings.getPreferenceValues(Settings.FILTER_REGIAO);
+        List<String> regiaoList = Arrays.asList(regiaoString.split("\\s*,\\s*"));
+        TextView regiaoView = (TextView)findViewById(R.id.regiao);
+        regiaoView.setText(getString(R.string.regiao) + "=" + regiaoList.size());
 
     }
 

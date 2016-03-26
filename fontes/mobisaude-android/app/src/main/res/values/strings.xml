@@ -3,6 +3,14 @@
     <string name="title_activity_main">MobiSaúde</string>
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
 
+    <!-- domains -->
+    <string name="tipo_gestao">Tipo de Gestão</string>
+    <string name="tipo_estabelecimento_saude">Tipo de Estabelecimento de Saúde</string>
+    <string name="regiao">Região</string>
+    <string name="tipos_gestao">Tipos de Gestão</string>
+    <string name="tipos_estabelecimento_saude">Tipos de Estabelecimento de Saúde</string>
+    <string name="regioes">Regiões</string>
+
     <string name="error">1|Erro Inesperado</string>
     <string name="error_no_connectivity">2|Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
     <string name="error_obtaining_locality">3|Erro ao obter localização</string>

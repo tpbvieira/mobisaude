@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.ManagerToken;
+import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.CidadeDAO;
@@ -31,7 +31,6 @@ import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
-import co.salutary.mobisaude.util.ConnectivityUtils;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
@@ -290,7 +289,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 						Settings localPref = new Settings(ActivityLocalidade.this);
 						String token = localPref.getPreferenceValue(Settings.TOKEN);
 						if(token == null || token.isEmpty()) {
-							ManagerToken.gerarToken(ActivityLocalidade.this);
+							TokenManager.gerarToken(ActivityLocalidade.this);
 							token = localPref.getPreferenceValue(Settings.TOKEN);
 						}
 						JSONObject jDados = new JSONObject();
@@ -308,7 +307,7 @@ public class ActivityLocalidade extends Activity implements LocationListener {
 							int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
 								// gerar novo token
-								if(!ManagerToken.gerarToken(ActivityLocalidade.this)){
+								if(!TokenManager.gerarToken(ActivityLocalidade.this)){
 									return false;
 								}
 							}

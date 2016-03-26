@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.ManagerToken;
+import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.util.ConnectivityUtils;
 import co.salutary.mobisaude.util.JsonUtils;
@@ -91,7 +91,7 @@ public class ReportProblemService extends Service{
 						Settings localPref = new Settings(getApplicationContext());
 						String token = localPref.getPreferenceValue(Settings.TOKEN);
 						if(token == null || token.isEmpty()) {
-							ManagerToken.gerarToken(getApplicationContext());
+							TokenManager.gerarToken(getApplicationContext());
 							token = localPref.getPreferenceValue(Settings.TOKEN);
 						}
 						jDados.put("token", token);
@@ -106,7 +106,7 @@ public class ReportProblemService extends Service{
                             int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
 								// gerar novo token
-								if(!ManagerToken.gerarToken(getApplicationContext())){
+								if(!TokenManager.gerarToken(getApplicationContext())){
 									return false;
 								}
 							}

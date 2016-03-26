@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.ManagerToken;
+import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.CidadeDAO;
@@ -164,7 +164,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
                 // gera token e salva no preferences
                 if (isSuccess) {
-                    isSuccess = ManagerToken.gerarToken(getApplicationContext());
+                    isSuccess = TokenManager.gerarToken(getApplicationContext());
                 }
 
                 return isSuccess;
@@ -330,7 +330,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                         Settings localPref = new Settings(getApplicationContext());
                         String token = localPref.getPreferenceValue(Settings.TOKEN);
                         if (token == null || token.isEmpty()) {
-                            ManagerToken.gerarToken(getApplicationContext());//gera token e salva no preferences
+                            TokenManager.gerarToken(getApplicationContext());//gera token e salva no preferences
                             token = localPref.getPreferenceValue(Settings.TOKEN);
                         }
 
@@ -351,7 +351,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             int idErro = JsonUtils.getErrorCode(jReponder);
                             if (idErro == 6) {
                                 // gerar novo token
-                                if (!ManagerToken.gerarToken(getApplicationContext())) {
+                                if (!TokenManager.gerarToken(getApplicationContext())) {
                                     return false;
                                 }
                             } else if (idErro == 0) {
@@ -466,7 +466,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                         int idErro = JsonUtils.getErrorCode(domains);
                         if (idErro == 6) {
                             // renew the token and try one more time, according to numAttempts
-                            if (!ManagerToken.gerarToken(getApplicationContext())) {
+                            if (!TokenManager.gerarToken(getApplicationContext())) {
                                 return false;
                             }
                         } else if (idErro == 0) {
@@ -535,7 +535,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 //
 //                        if (idErro == 6) {
 //                            // renew the token and try one more time, according to numAttempts
-//                            if (!ManagerToken.gerarToken(getApplicationContext())) {
+//                            if (!TokenManager.gerarToken(getApplicationContext())) {
 //                                return false;
 //                            }
 //                        } else if (idErro == 0) {

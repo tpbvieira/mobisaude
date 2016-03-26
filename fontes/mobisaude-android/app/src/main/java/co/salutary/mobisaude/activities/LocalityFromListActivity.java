@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.ManagerToken;
+import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.CidadeDAO;
@@ -278,7 +278,7 @@ public class LocalityFromListActivity extends Activity implements Runnable, Loca
                         Settings localPref = new Settings(getApplicationContext());
 						String token = localPref.getPreferenceValue(Settings.TOKEN);
 						if(token == null || token.isEmpty()) {
-							ManagerToken.gerarToken(getApplicationContext());
+							TokenManager.gerarToken(getApplicationContext());
 							token = localPref.getPreferenceValue(Settings.TOKEN);
 						}
 						JSONObject jDados = new JSONObject();
@@ -295,7 +295,7 @@ public class LocalityFromListActivity extends Activity implements Runnable, Loca
 							JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
                             int idErro = JsonUtils.getErrorCode(jReponder);
 							if(idErro == 6){
-								if(!ManagerToken.gerarToken(getApplicationContext())){
+								if(!TokenManager.gerarToken(getApplicationContext())){
 									return false;
 								}
 							}
