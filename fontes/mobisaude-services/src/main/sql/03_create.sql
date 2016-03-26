@@ -85,7 +85,7 @@ CREATE TABLE public.tb_user
 	tx_email character varying NOT NULL,
 	tx_password character varying,
 	tx_name character varying,
-	tx_telefone character varying, 
+	tx_phone character varying, 
 	CONSTRAINT pk_user PRIMARY KEY (tx_email)
 ) 
 WITH (OIDS = FALSE);

@@ -5,12 +5,8 @@ CREATE TABLE public.tb_tipo_sistema_operacional
    tx_descricao character varying, 
    CONSTRAINT pk_tipo_sistema_operacional PRIMARY KEY (nu_id_tipo_sistema_operacional)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_tipo_sistema_operacional
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_tipo_sistema_operacional OWNER TO mobisaude_pg_user;
 
 
 -- Tipo Estabelecimento de Saude
@@ -21,12 +17,8 @@ CREATE TABLE public.tb_tipo_estabelecimento_saude
    tx_nome character varying, 
    CONSTRAINT pk_tipo_estabelecimento_saude PRIMARY KEY (nu_id_tipo_estabelecimento_saude)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_tipo_estabelecimento_saude
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_tipo_estabelecimento_saude OWNER TO mobisaude_pg_user;
 
 
 -- Tipo Gestao
@@ -37,12 +29,8 @@ CREATE TABLE public.tb_tipo_gestao
    tx_nome character varying, 
    CONSTRAINT pk_tipo_gestao PRIMARY KEY (nu_id_tipo_gestao)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_tipo_gestao
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_tipo_gestao OWNER TO mobisaude_pg_user;
 
 
 -- Região
@@ -52,12 +40,9 @@ CREATE TABLE public.tb_regiao
    tx_nome character varying, 
    CONSTRAINT pk_regiao PRIMARY KEY (nu_id_regiao)
 ) 
-WITH (
-  OIDS = FALSE
-)
-;
-ALTER TABLE public.tb_regiao
-  OWNER TO mobisaude_pg_user;
+WITH (OIDS = FALSE);
+ALTER TABLE public.tb_regiao OWNER TO mobisaude_pg_user;
+
 
 -- Estabelecimento de Saúde
 CREATE TABLE public.tb_estabelecimento_saude

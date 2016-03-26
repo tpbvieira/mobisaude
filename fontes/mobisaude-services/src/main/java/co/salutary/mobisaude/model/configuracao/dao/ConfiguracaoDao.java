@@ -2,7 +2,7 @@ package co.salutary.mobisaude.model.configuracao.dao;
 
 import co.salutary.mobisaude.model.configuracao.Configuracao;
 /**
- * Interface implementada pelos DAOs de TokenSessao
+ * Interface implementada pelos DAOs de User
  *
  */
 public interface ConfiguracaoDao {
