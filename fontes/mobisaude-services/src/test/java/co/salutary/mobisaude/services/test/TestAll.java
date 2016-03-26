@@ -15,14 +15,19 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import co.salutary.mobisaude.model.Factory;
+import co.salutary.mobisaude.model.user.User;
+import co.salutary.mobisaude.model.user.facade.UserFacade;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.request.GetESRequest;
+import co.salutary.mobisaude.restful.message.request.UserRequest;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
 import co.salutary.mobisaude.restful.message.response.GerarTokenResponse;
 import co.salutary.mobisaude.restful.message.response.GetESResponse;
+import co.salutary.mobisaude.restful.message.response.UserResponse;
 import co.salutary.mobisaude.restful.resources.ServiceBroker;
 import co.salutary.mobisaude.util.CryptographyUtil;
 import junit.framework.TestCase;
@@ -74,6 +79,12 @@ public class TestAll extends TestCase {
 			tiposES[0] = "10";
 			tiposES[1] = "11";
 			getESByMunicipioTiposEstabelecimentoTest(mapper, broker, token, idMunicipio, tiposES);// Brasilia (530010) and [10,11]
+			
+			// test 09 - testing user services
+			deleteUserTest(mapper, broker, "tpbvieira@gmail.com");
+			signupTest(mapper, broker, token);
+			updateUserTest(mapper, broker, token);
+			getUserTest(mapper, broker, token);
 			
 //			// 14 - Texto Ajuda
 //			TextoAjudaRequest textoAjudaRequest = mapper.readValue(
@@ -286,6 +297,99 @@ public class TestAll extends TestCase {
 			fail("getESByMunicipioTiposEstabelecimentoTest: Quantidade (" + getESResponse.getEstabelecimentoSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
 		}
 		
+	}
+	
+	private void signupTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	
+		try{
+			UserRequest userRequest = new UserRequest();
+			userRequest.setToken(token);
+			userRequest.setEmail("tpbvieira@gmail.com");
+			userRequest.setPassword("123");
+			userRequest.setName("Thiago P B Vieira");
+			userRequest.setPhone("6183133714");
+			
+			UserResponse userResponse = broker.signup(userRequest);
+			
+			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+				logger.error(userResponse);
+				fail("SignupError");			
+			}
+			
+		}catch(Exception e){
+			logger.error(e);
+			fail(e.getMessage());
+		}
+
+	}
+	
+	private void updateUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	
+		try{
+			User user = new User ("tpbvieira@gmail.com","1234","Thiago","06183133714");
+			UserRequest userRequest = new UserRequest();
+			userRequest.setToken(token);
+			userRequest.setEmail(user.getEmail());
+			userRequest.setPassword(user.getPassword());
+			userRequest.setName(user.getName());
+			userRequest.setPhone(user.getPhone());
+			
+			UserResponse userResponse = broker.updateUser(userRequest);
+			
+			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+				logger.error(userResponse);
+				fail("UpdateUser");			
+			}
+			
+			User newUser = new User(userResponse.getEmail(),userResponse.getPassword(),userResponse.getName(),userResponse.getPhone());
+			if (!newUser.equals(user)) {
+				logger.error("Erro ao alterar usuário");
+				fail("Erro ao alterar usuário");			
+			}
+			
+		}catch(Exception e){
+			logger.error(e);
+			fail(e.getMessage());
+		}
+
+	}
+	
+	private void getUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	
+		try{
+			User user = new User ("tpbvieira@gmail.com","1234","Thiago","06183133714");
+			UserRequest userRequest = new UserRequest();
+			userRequest.setToken(token);
+			userRequest.setEmail(user.getEmail());
+			
+			UserResponse userResponse = broker.getUser(userRequest);			
+			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+				logger.error(userResponse);
+				fail("SignupError");			
+			}			
+			
+			User newUser = new User(userResponse.getEmail(),userResponse.getPassword(),userResponse.getName(),userResponse.getPhone());
+			if (!newUser.equals(user)) {
+				logger.error("Erro ao recuperar usuário");
+				fail("Erro ao recuperar usuário");			
+			}
+			
+		}catch(Exception e){
+			logger.error(e);
+			fail(e.getMessage());
+		}
+
+	}
+	
+	private void deleteUserTest(ObjectMapper mapper, ServiceBroker broker, String email){
+		
+		try{
+			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
+			userFacade.remove(email);		}catch(Exception e){
+			logger.error(e);
+			fail(e.getMessage());
+		}
+
 	}
 	
 }

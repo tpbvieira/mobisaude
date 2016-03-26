@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 
 import co.salutary.mobisaude.model.Factory;
@@ -487,9 +488,13 @@ public class ServiceBroker extends AbstractServiceBroker {
 			userFacade.save(newUser);
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
-		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.strings.geocode.erroProcessandoServico"), ex);
-			response.setErro(ex.getMessage());			
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
 			return response;
 		}
 		return response;
@@ -531,7 +536,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.strings.geocode.erroProcessandoServico"), ex);
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), ex);
 			response.setErro(ex.getMessage());			
 			return response;
 		}
@@ -568,7 +573,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.strings.geocode.erroProcessandoServico"), ex);
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), ex);
 			response.setErro(ex.getMessage());			
 			return response;
 		}
