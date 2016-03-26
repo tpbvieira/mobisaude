@@ -24,7 +24,7 @@ public class TokenSessaoDaoImpl implements TokenSessaoDao {
 	@SuppressWarnings("unchecked")
 	public TokenSessao getToken(String tokenSessao) {
 		StringBuffer sb = new StringBuffer();
-		sb.append("select t from User t ");
+		sb.append("select t from TokenSessao t ");
 		sb.append("where t.token = :tokenSessao");
 		Query q = em.createQuery(sb.toString());	
 		if (tokenSessao != null && !tokenSessao.trim().equals("")) {
@@ -40,7 +40,7 @@ public class TokenSessaoDaoImpl implements TokenSessaoDao {
 
 	public void removeToken(String token) {
 		StringBuffer sb = new StringBuffer();
-		sb.append("delete from User t ");
+		sb.append("delete from TokenSessao t ");
 		sb.append("where t.token = :tokenSessao");
 		Query q = em.createQuery(sb.toString());
 		if (token != null && !token.trim().equals("")) {
