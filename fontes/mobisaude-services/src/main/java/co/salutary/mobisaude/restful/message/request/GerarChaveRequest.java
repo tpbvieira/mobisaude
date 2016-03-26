@@ -1,16 +1,16 @@
-package co.salutary.mobisaude.restful.message.mobile;
+package co.salutary.mobisaude.restful.message.request;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * 	MobiSaude Services
- *	Entidade para dados do request do servico Texto Ajuda Servico Movel
+ *	Entidade para dados do request do servico Gerar Chave
  *
  */
 @XmlRootElement
-@XmlType(namespace = "mobile", name = "textoAjudaServicoMovelRequest")
-public class TextoAjudaServicoMovelRequest implements MobileRequest {
+@XmlType(namespace = "mobile", name = "gerarChaveRequest")
+public class GerarChaveRequest implements IMobileRequest {
 	/**
 	 * Validar o objeto
 	 */

@@ -1,11 +1,11 @@
-package co.salutary.mobisaude.restful.message.mobile;
+package co.salutary.mobisaude.restful.message.response;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "gerarTokenResponse")
-public class GerarTokenResponse implements MobileResponse {
+public class GerarTokenResponse implements IMobileResponse {
 
 	private String token;
 	private String erro;

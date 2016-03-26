@@ -15,16 +15,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import co.salutary.mobisaude.restful.message.mobile.ConsultaDominiosRequest;
-import co.salutary.mobisaude.restful.message.mobile.ConsultaDominiosResponse;
-import co.salutary.mobisaude.restful.message.mobile.ConsultaTelasRequest;
-import co.salutary.mobisaude.restful.message.mobile.ConsultaTelasResponse;
-import co.salutary.mobisaude.restful.message.mobile.GeocodeRequest;
-import co.salutary.mobisaude.restful.message.mobile.GeocodeResponse;
-import co.salutary.mobisaude.restful.message.mobile.GerarTokenRequest;
-import co.salutary.mobisaude.restful.message.mobile.GerarTokenResponse;
-import co.salutary.mobisaude.restful.message.mobile.GetESRequest;
-import co.salutary.mobisaude.restful.message.mobile.GetESResponse;
+import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
+import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
+import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
+import co.salutary.mobisaude.restful.message.request.GetESRequest;
+import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
+import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
+import co.salutary.mobisaude.restful.message.response.GerarTokenResponse;
+import co.salutary.mobisaude.restful.message.response.GetESResponse;
 import co.salutary.mobisaude.restful.resources.ServiceBroker;
 import co.salutary.mobisaude.util.CryptographyUtil;
 import junit.framework.TestCase;
@@ -57,24 +55,21 @@ public class TestAll extends TestCase {
 			// test 03 - Consulta Dominios
 			consultaDominioTest(mapper, broker, token);
 
-			// test 04 - Consulta Telas
-			consultaTelasTest(mapper, broker, token);
-			
-			// test 05 - get geocode and set global variables 
+			// test 04 - Consulta Telas 
 			GeocodeResponse geocodeResponse = getGeocodeResponseTest(mapper, broker, token);
 			String idMunicipio = geocodeResponse.getCodMunicipioIbge();
 //			String uf = geocodeResponse.getUf();
 
-			// test 06 - list estabelecimentos de saúde
+			// test 05 - list estabelecimentos de saúde
 //			listESTest(mapper, broker, token);
 			
-			// test 07 - get estabelecimentos de saúde by cidade
+			// test 06 - get estabelecimentos de saúde by cidade
 			getESByMunicipioTest(mapper, broker, token, idMunicipio);
 			
-			// test 08 - get estabelecimentos de saúde by cidade and tipo estabelecimento
+			// test 07 - get estabelecimentos de saúde by cidade and tipo estabelecimento
 			getESByMunicipioTipoEstabelecimentoTest(mapper, broker, token, idMunicipio, "10");// Brasilia (530010) and 10
 			
-			// test 09 - get estabelecimentos de saúde by cidade and tipo estabelecimento
+			// test 08 - get estabelecimentos de saúde by cidade and tipo estabelecimento
 			String[] tiposES = new String[2];
 			tiposES[0] = "10";
 			tiposES[1] = "11";
@@ -117,17 +112,6 @@ public class TestAll extends TestCase {
 	public void tearDown() throws Exception {
 	}
 	
-	private void consultaTelasTest(ObjectMapper mapper, ServiceBroker broker, String token)
-			throws IOException, JsonParseException, JsonMappingException {
-		ConsultaTelasRequest consultaTelasRequest = mapper.readValue(
-				testProperties.getProperty("consultaTelas").replaceAll("<token>", token),
-				ConsultaTelasRequest.class);
-		ConsultaTelasResponse consultaTelasResponse = broker.consultaTelas(consultaTelasRequest);
-		if (consultaTelasResponse == null || !consultaTelasResponse.getErro().startsWith("0|")) {
-			fail("Retorno do serviço Consulta Telas não OK.");
-		}
-	}
-
 	private void consultaDominioTest(ObjectMapper mapper, ServiceBroker broker, String token)
 			throws IOException, JsonParseException, JsonMappingException {
 		

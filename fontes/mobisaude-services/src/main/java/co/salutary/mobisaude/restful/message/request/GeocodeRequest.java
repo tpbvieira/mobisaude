@@ -1,4 +1,4 @@
-package co.salutary.mobisaude.restful.message.mobile;
+package co.salutary.mobisaude.restful.message.request;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "geocodeRequest")
-public class GeocodeRequest implements MobileRequest {
+public class GeocodeRequest implements IMobileRequest {
 	/**
 	 * Campo latitude
 	 */

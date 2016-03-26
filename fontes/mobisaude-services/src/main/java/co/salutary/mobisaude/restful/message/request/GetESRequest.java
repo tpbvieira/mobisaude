@@ -1,11 +1,11 @@
-package co.salutary.mobisaude.restful.message.mobile;
+package co.salutary.mobisaude.restful.message.request;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "getESRequest")
-public class GetESRequest implements MobileRequest {
+public class GetESRequest implements IMobileRequest {
 	
 	private String token;
 	private String municipio;

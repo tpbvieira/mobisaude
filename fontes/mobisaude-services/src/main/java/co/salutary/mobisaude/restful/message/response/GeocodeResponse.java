@@ -1,4 +1,4 @@
-package co.salutary.mobisaude.restful.message.mobile;
+package co.salutary.mobisaude.restful.message.response;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "geocodeResponse")
-public class GeocodeResponse implements MobileResponse {
+public class GeocodeResponse implements IMobileResponse {
 	/**
 	 * Campo codMunicipioIbge
 	 */

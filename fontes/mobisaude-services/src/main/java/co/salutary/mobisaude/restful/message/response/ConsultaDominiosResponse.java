@@ -1,11 +1,16 @@
-package co.salutary.mobisaude.restful.message.mobile;
+package co.salutary.mobisaude.restful.message.response;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import co.salutary.mobisaude.restful.message.mobile.RegiaoMsg;
+import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeMsg;
+import co.salutary.mobisaude.restful.message.mobile.TipoGestaoMsg;
+import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacional;
+
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "consultaDominiosResponse")
-public class ConsultaDominiosResponse implements MobileResponse {
+public class ConsultaDominiosResponse implements IMobileResponse {
 	
 	private String erro;
 	private TipoSistemaOperacional[] tipoSistemaOperacional;

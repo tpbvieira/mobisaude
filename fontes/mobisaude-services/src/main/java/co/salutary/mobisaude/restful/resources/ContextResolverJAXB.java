@@ -12,7 +12,7 @@ import org.glassfish.jersey.jettison.JettisonConfig;
 import org.glassfish.jersey.jettison.JettisonJaxbContext;
 
 import co.salutary.mobisaude.restful.message.mobile.ESMsg;
-import co.salutary.mobisaude.restful.message.mobile.GetESResponse;
+import co.salutary.mobisaude.restful.message.response.GetESResponse;
 
 @Provider
 public class ContextResolverJAXB implements ContextResolver<JAXBContext> {
