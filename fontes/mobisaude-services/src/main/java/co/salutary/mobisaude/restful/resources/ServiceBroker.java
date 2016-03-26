@@ -257,12 +257,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/consultaDominios")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public ConsultaDominiosResponse consultaDominios(ConsultaDominiosRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
+	public ConsultaDominiosResponse consultaDominios(ConsultaDominiosRequest request) {
+		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
 		
 		ConsultaDominiosResponse response = new ConsultaDominiosResponse();
 		
-		try {
-		
+		try {		
 			if (!request.validar()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
@@ -314,24 +314,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 			
-			TipoGestaoFacade tipoGestaoFacade = (TipoGestaoFacade)Factory.getInstance().get("tipoGestaoFacade");
-			List<co.salutary.mobisaude.model.tipogestao.TipoGestao> lstTipoGestao = tipoGestaoFacade.list();
-			if (lstTipoGestao != null) {
-				List<TipoGestaoMsg> lstRetorno = new ArrayList<TipoGestaoMsg>();
-				for (co.salutary.mobisaude.model.tipogestao.TipoGestao tipoGestao:lstTipoGestao) {
-					TipoGestaoMsg tg = new TipoGestaoMsg();
-					tg.setId(Integer.toString(tipoGestao.getIdTipoGestao()));
-					tg.setNome(tipoGestao.getNome());
-					lstRetorno.add(tg);
-				}
-				response.setTipoGestao((lstRetorno.toArray(new TipoGestaoMsg[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));				
-				return response;
-			}
-			
 			RegiaoFacade regiaoFacade = (RegiaoFacade)Factory.getInstance().get("regiaoFacade");
 			List<Regiao> lstRegiao = regiaoFacade.list();
 			if (lstRegiao != null) {
@@ -349,7 +331,25 @@ public class ServiceBroker extends AbstractServiceBroker {
 				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
 				return response;
 			}
-
+			
+			TipoGestaoFacade tipoGestaoFacade = (TipoGestaoFacade)Factory.getInstance().get("tipoGestaoFacade");
+			List<co.salutary.mobisaude.model.tipogestao.TipoGestao> lstTipoGestao = tipoGestaoFacade.list();
+			if (lstTipoGestao != null) {
+				List<TipoGestaoMsg> lstRetorno = new ArrayList<TipoGestaoMsg>();
+				for (co.salutary.mobisaude.model.tipogestao.TipoGestao tipoGestao:lstTipoGestao) {
+					TipoGestaoMsg tg = new TipoGestaoMsg();
+					tg.setId(Integer.toString(tipoGestao.getIdTipoGestao()));
+					tg.setNome(tipoGestao.getNome());
+					lstRetorno.add(tg);
+				}
+				response.setTiposGestao((lstRetorno.toArray(new TipoGestaoMsg[0])));
+				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));				
+				return response;
+			}
+			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.erroProcessandoServico"), ex);

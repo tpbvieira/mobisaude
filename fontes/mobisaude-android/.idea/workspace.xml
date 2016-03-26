@@ -6,6 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="E/" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
@@ -43,8 +44,8 @@
       <file leaf-file-name="SplashActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/SplashActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9496644">
-              <caret line="571" column="23" selection-start-line="571" selection-start-column="23" selection-end-line="571" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.5018868">
+              <caret line="491" column="33" selection-start-line="491" selection-start-column="33" selection-end-line="491" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3896#3940#0" expanded="true" />
@@ -55,25 +56,25 @@
                 <element signature="e#12024#12055#0" expanded="true" />
                 <element signature="e#15528#15557#0" expanded="true" />
                 <element signature="e#16732#16763#0" expanded="true" />
-                <element signature="e#24224#24249#0" expanded="true" />
-                <element signature="e#24777#24791#0" expanded="true" />
-                <element signature="e#24824#24854#0" expanded="true" />
-                <element signature="e#24894#24906#0" expanded="true" />
-                <element signature="e#25127#25142#0" expanded="true" />
-                <element signature="e#25317#25363#0" expanded="true" />
-                <element signature="e#26107#26132#0" expanded="true" />
-                <element signature="e#26161#26204#0" expanded="true" />
-                <element signature="e#26240#26262#0" expanded="true" />
-                <element signature="e#26985#27010#0" expanded="true" />
-                <element signature="e#27039#27080#0" expanded="true" />
-                <element signature="e#27116#27128#0" expanded="true" />
-                <element signature="e#27332#27347#0" expanded="true" />
-                <element signature="e#27514#27557#0" expanded="true" />
-                <element signature="e#28167#28192#0" expanded="true" />
-                <element signature="e#28220#28257#0" expanded="true" />
-                <element signature="e#28292#28304#0" expanded="true" />
-                <element signature="e#28511#28526#0" expanded="true" />
-                <element signature="e#28693#28736#0" expanded="true" />
+                <element signature="e#24225#24250#0" expanded="true" />
+                <element signature="e#24778#24792#0" expanded="true" />
+                <element signature="e#24825#24855#0" expanded="true" />
+                <element signature="e#24895#24907#0" expanded="true" />
+                <element signature="e#25128#25143#0" expanded="true" />
+                <element signature="e#25318#25364#0" expanded="true" />
+                <element signature="e#26108#26133#0" expanded="true" />
+                <element signature="e#26162#26205#0" expanded="true" />
+                <element signature="e#26241#26263#0" expanded="true" />
+                <element signature="e#26986#27011#0" expanded="true" />
+                <element signature="e#27040#27081#0" expanded="true" />
+                <element signature="e#27117#27129#0" expanded="true" />
+                <element signature="e#27333#27348#0" expanded="true" />
+                <element signature="e#27515#27558#0" expanded="true" />
+                <element signature="e#28168#28193#0" expanded="true" />
+                <element signature="e#28221#28258#0" expanded="true" />
+                <element signature="e#28293#28305#0" expanded="true" />
+                <element signature="e#28512#28527#0" expanded="true" />
+                <element signature="e#28694#28737#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2454,9 +2455,9 @@
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.49808848" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290461" sideWeight="0.49808848" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.49808848" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298744" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39978564" sideWeight="0.49590388" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39978564" sideWeight="0.49590388" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39978564" sideWeight="0.5019115" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -2942,8 +2943,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/SplashActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9496644">
-          <caret line="571" column="23" selection-start-line="571" selection-start-column="23" selection-end-line="571" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.5018868">
+          <caret line="491" column="33" selection-start-line="491" selection-start-column="33" selection-end-line="491" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3896#3940#0" expanded="true" />
@@ -2954,25 +2955,25 @@
             <element signature="e#12024#12055#0" expanded="true" />
             <element signature="e#15528#15557#0" expanded="true" />
             <element signature="e#16732#16763#0" expanded="true" />
-            <element signature="e#24224#24249#0" expanded="true" />
-            <element signature="e#24777#24791#0" expanded="true" />
-            <element signature="e#24824#24854#0" expanded="true" />
-            <element signature="e#24894#24906#0" expanded="true" />
-            <element signature="e#25127#25142#0" expanded="true" />
-            <element signature="e#25317#25363#0" expanded="true" />
-            <element signature="e#26107#26132#0" expanded="true" />
-            <element signature="e#26161#26204#0" expanded="true" />
-            <element signature="e#26240#26262#0" expanded="true" />
-            <element signature="e#26985#27010#0" expanded="true" />
-            <element signature="e#27039#27080#0" expanded="true" />
-            <element signature="e#27116#27128#0" expanded="true" />
-            <element signature="e#27332#27347#0" expanded="true" />
-            <element signature="e#27514#27557#0" expanded="true" />
-            <element signature="e#28167#28192#0" expanded="true" />
-            <element signature="e#28220#28257#0" expanded="true" />
-            <element signature="e#28292#28304#0" expanded="true" />
-            <element signature="e#28511#28526#0" expanded="true" />
-            <element signature="e#28693#28736#0" expanded="true" />
+            <element signature="e#24225#24250#0" expanded="true" />
+            <element signature="e#24778#24792#0" expanded="true" />
+            <element signature="e#24825#24855#0" expanded="true" />
+            <element signature="e#24895#24907#0" expanded="true" />
+            <element signature="e#25128#25143#0" expanded="true" />
+            <element signature="e#25318#25364#0" expanded="true" />
+            <element signature="e#26108#26133#0" expanded="true" />
+            <element signature="e#26162#26205#0" expanded="true" />
+            <element signature="e#26241#26263#0" expanded="true" />
+            <element signature="e#26986#27011#0" expanded="true" />
+            <element signature="e#27040#27081#0" expanded="true" />
+            <element signature="e#27117#27129#0" expanded="true" />
+            <element signature="e#27333#27348#0" expanded="true" />
+            <element signature="e#27515#27558#0" expanded="true" />
+            <element signature="e#28168#28193#0" expanded="true" />
+            <element signature="e#28221#28258#0" expanded="true" />
+            <element signature="e#28293#28305#0" expanded="true" />
+            <element signature="e#28512#28527#0" expanded="true" />
+            <element signature="e#28694#28737#0" expanded="true" />
           </folding>
         </state>
       </provider>

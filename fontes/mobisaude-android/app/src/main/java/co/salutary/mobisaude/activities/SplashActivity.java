@@ -475,7 +475,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             settings.setPreferenceValues(Settings.regiao, domains.getJSONArray("regiao").toString());
                             settings.setPreferenceValues(Settings.tiposSistemaOperacional, domains.getJSONArray("tiposSistemaOperacional").toString());
                             settings.setPreferenceValues(Settings.tiposEstabelecimentoSaude, domains.getJSONArray("tiposEstabelecimentoSaude").toString());
-                            settings.setPreferenceValues(Settings.tipoGestao, domains.getJSONArray("tipoGestao").toString());
+                            settings.setPreferenceValues(Settings.tipoGestao, domains.getJSONArray("tiposGestao").toString());
 
                             // save filters into a list of elements
                             if (settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE).length() == 0) {

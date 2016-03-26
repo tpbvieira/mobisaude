@@ -10,8 +10,7 @@ import co.salutary.mobisaude.model.Factory;
 
 public class MobiSaudeContextListener implements ServletContextListener {
 
-	private static final Log logger = LogFactory.getLog(
-			MobiSaudeContextListener.class);
+	private static final Log logger = LogFactory.getLog(MobiSaudeContextListener.class);
 	
 	public void contextInitialized(ServletContextEvent event) {		
 		logger.info("Configurando ServletContext para as fachadas que utilizam o Spring.");

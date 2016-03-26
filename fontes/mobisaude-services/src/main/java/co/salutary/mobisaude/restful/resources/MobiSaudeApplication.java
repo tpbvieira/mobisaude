@@ -22,7 +22,7 @@ public class MobiSaudeApplication extends Application {
 	private static final Log logger = LogFactory.getLog(MobiSaudeApplication.class);
 
 	@Override
-	public Set<Object> getSingletons() {System.out.println("MobiSaudeApplication.getSingletons");
+	public Set<Object> getSingletons() {
 		final Set<Object> instances = new HashSet<Object>();
 		instances.add(new JettisonFeature());
 		try { 
@@ -33,9 +33,8 @@ public class MobiSaudeApplication extends Application {
 		return instances;
 	}
 
-
 	@Override
-	public Set<Class<?>> getClasses() {System.out.println("MobiSaudeApplication.getClasses");
+	public Set<Class<?>> getClasses() {
 		final Set<Class<?>> classes = new HashSet<Class<?>>();
 		
 		// register root resource
@@ -44,4 +43,5 @@ public class MobiSaudeApplication extends Application {
 
 		return classes;
 	}
+	
 }

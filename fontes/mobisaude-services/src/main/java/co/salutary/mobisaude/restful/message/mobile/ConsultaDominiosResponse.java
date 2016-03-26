@@ -41,7 +41,7 @@ public class ConsultaDominiosResponse implements MobileResponse {
 		return tipoGestaoMsg;
 	}
 
-	public void setTipoGestao(TipoGestaoMsg[] tipoGestao) {
+	public void setTiposGestao(TipoGestaoMsg[] tipoGestao) {
 		this.tipoGestaoMsg = tipoGestao.clone();
 	}
 
@@ -52,4 +52,5 @@ public class ConsultaDominiosResponse implements MobileResponse {
 	public void setRegiao(RegiaoMsg[] regiao) {
 		this.regiaoMsg = regiao.clone();
 	}
+	
 }
