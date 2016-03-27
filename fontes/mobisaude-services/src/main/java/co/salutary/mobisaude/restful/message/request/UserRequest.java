@@ -21,6 +21,7 @@ public class UserRequest implements IMobileRequest {
 	private String password;
 	private String name;
 	private String phone;
+	private boolean contactable;
 	
 	public String getToken() {
 		return token;
@@ -60,6 +61,16 @@ public class UserRequest implements IMobileRequest {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	
+
+	public boolean isContactable() {
+		return contactable;
+	}
+
+	public void setContactable(boolean contactable) {
+		this.contactable = contactable;
 	}
 
 	@Override

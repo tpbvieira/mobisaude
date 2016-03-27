@@ -306,9 +306,10 @@ public class TestAll extends TestCase {
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail("tpbvieira@gmail.com");
-			userRequest.setPassword("123");
+			userRequest.setPassword("111111");
 			userRequest.setName("Thiago P B Vieira");
 			userRequest.setPhone("6183133714");
+			userRequest.setContactable(false);
 			
 			UserResponse userResponse = broker.signup(userRequest);
 			
@@ -327,7 +328,7 @@ public class TestAll extends TestCase {
 	private void updateUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
 	
 		try{
-			User user = new User ("tpbvieira@gmail.com","123456","Thiago","06183133714");
+			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",true);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());
@@ -342,7 +343,11 @@ public class TestAll extends TestCase {
 				fail("UpdateUser");			
 			}
 			
-			User newUser = new User(userResponse.getEmail(),userResponse.getPassword(),userResponse.getName(),userResponse.getPhone());
+			User newUser = new User(userResponse.getEmail(),
+					userResponse.getPassword(),
+					userResponse.getName(),
+					userResponse.getPhone(),
+					userResponse.isContactable());
 			if (!newUser.equals(user)) {
 				logger.error("Erro ao alterar usuário");
 				fail("Erro ao alterar usuário");			
@@ -358,7 +363,7 @@ public class TestAll extends TestCase {
 	private void getUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
 	
 		try{
-			User user = new User ("tpbvieira@gmail.com","1234","Thiago","06183133714");
+			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",true);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());
@@ -369,7 +374,11 @@ public class TestAll extends TestCase {
 				fail("SignupError");			
 			}			
 			
-			User newUser = new User(userResponse.getEmail(),userResponse.getPassword(),userResponse.getName(),userResponse.getPhone());
+			User newUser = new User(userResponse.getEmail(),
+					userResponse.getPassword(),
+					userResponse.getName(),
+					userResponse.getPhone(),
+					userResponse.isContactable());
 			if (!newUser.equals(user)) {
 				logger.error("Erro ao recuperar usuário");
 				fail("Erro ao recuperar usuário");			
@@ -396,7 +405,7 @@ public class TestAll extends TestCase {
 	private void signinTest(ObjectMapper mapper, ServiceBroker broker, String token){
 		
 		try{
-			User user = new User ("tpbvieira@gmail.com","1234","Thiago","06183133714");
+			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",true);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());

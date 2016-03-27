@@ -12,6 +12,7 @@ public class UserResponse implements IMobileResponse {
 	private String password;
 	private String name;
 	private String phone;
+	private boolean contactable;
 
 	public String getErro() {
 		return erro;
@@ -51,6 +52,14 @@ public class UserResponse implements IMobileResponse {
 	
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public boolean isContactable() {
+		return contactable;
+	}
+
+	public void setContactable(boolean contactable) {
+		this.contactable = contactable;
 	}
 	
 }

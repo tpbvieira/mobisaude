@@ -1,4 +1,5 @@
 package co.salutary.mobisaude.model.user;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,21 +14,30 @@ public class User implements java.io.Serializable {
 	private String password;
 	private String name;
 	private String phone;
+	private boolean contactable;
 
 	public User(){
-		
+		this.email = "";
+		this.password = "";
+		this.name = "";
+		this.phone = "";
+		this.contactable = true;
 	}
 	
-	public User(String email, String password, String name, String phone) {
+	public User(String email, String password, String name, String phone, boolean contactable) {
 		this.email = email;
 		this.password = password;		
 		this.name = name;
 		this.phone = phone;
+		this.contactable = contactable;
 	}
 
 	public User(String email, String password) {
 		this.email = email;
 		this.password = password;
+		this.name = "";
+		this.phone = "";
+		this.contactable = true;
 	}
 
 	@Id
@@ -67,12 +77,22 @@ public class User implements java.io.Serializable {
 		this.phone = phone;
 	}
 
+	@Column(name = "\"bo_contactable\"")
+	public boolean isContactable() {
+		return contactable;
+	}
+
+	public void setContactable(boolean contactable) {
+		this.contactable = contactable;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (contactable ? 1231 : 1237);
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		return result;
@@ -97,6 +117,8 @@ public class User implements java.io.Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (contactable != other.contactable)
+			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
@@ -109,7 +131,5 @@ public class User implements java.io.Serializable {
 			return false;
 		return true;
 	}
-	
-	
 	
 }

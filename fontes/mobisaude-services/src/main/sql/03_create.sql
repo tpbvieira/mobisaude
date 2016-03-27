@@ -79,18 +79,21 @@ CREATE INDEX idx_nu_id_tipo_estabelecimento_saude ON tb_estabelecimento_saude US
 
 
 -- user
+-- user
 DROP TABLE public.tb_user;
 CREATE TABLE public.tb_user
 (
 	tx_email character varying NOT NULL,
 	tx_password character varying,
 	tx_name character varying,
-	tx_phone character varying, 
+	tx_phone character varying,
+	bo_contactable boolean,
 	CONSTRAINT pk_user PRIMARY KEY (tx_email)
 ) 
 WITH (OIDS = FALSE);
 ALTER TABLE public.tb_user OWNER TO mobisaude_pg_user;
 CREATE INDEX idx_tx_email ON tb_user USING btree (tx_email);
+
 
 
 
