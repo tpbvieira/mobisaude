@@ -327,7 +327,7 @@ public class TestAll extends TestCase {
 	private void updateUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
 	
 		try{
-			User user = new User ("tpbvieira@gmail.com","1234","Thiago","06183133714");
+			User user = new User ("tpbvieira@gmail.com","123456","Thiago","06183133714");
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());

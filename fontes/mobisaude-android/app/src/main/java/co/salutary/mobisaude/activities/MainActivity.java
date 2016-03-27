@@ -21,7 +21,6 @@ import java.util.List;
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.db.CidadeDAO;
-import co.salutary.mobisaude.db.EsDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.util.DeviceInfo;
@@ -58,26 +57,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Settings settings = new Settings(getApplicationContext());
 
         UfDAO statesDao = new UfDAO(db);
-        TextView stateView = (TextView)findViewById(R.id.state);
+        TextView stateView = (TextView) findViewById(R.id.state);
         stateView.setText(getString(R.string.estado) + "=" + statesDao.getUfById(DeviceInfo.idUF).getNome());
 
         CidadeDAO citiesDao = new CidadeDAO(db);
-        TextView citieView = (TextView)findViewById(R.id.city);
+        TextView citieView = (TextView) findViewById(R.id.city);
         citieView.setText(getString(R.string.cidade) + "=" + citiesDao.getCidadeById(DeviceInfo.idCidade).getNome());
 
         String tipoESString = settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE);
         List<String> tipoESList = Arrays.asList(tipoESString.split("\\s*,\\s*"));
-        TextView tipoESView = (TextView)findViewById(R.id.tipo_es);
+        TextView tipoESView = (TextView) findViewById(R.id.tipo_es);
         tipoESView.setText(getString(R.string.tipo_estabelecimento_saude) + "=" + tipoESList.size());
 
         String tipoGestaoString = settings.getPreferenceValues(Settings.FILTER_TIPO_GESTAO);
         List<String> tipoGestaoList = Arrays.asList(tipoGestaoString.split("\\s*,\\s*"));
-        TextView tipoGestaoView = (TextView)findViewById(R.id.tipo_gestao);
+        TextView tipoGestaoView = (TextView) findViewById(R.id.tipo_gestao);
         tipoGestaoView.setText(getString(R.string.tipo_gestao) + "=" + tipoGestaoList.size());
 
         String regiaoString = settings.getPreferenceValues(Settings.FILTER_REGIAO);
         List<String> regiaoList = Arrays.asList(regiaoString.split("\\s*,\\s*"));
-        TextView regiaoView = (TextView)findViewById(R.id.regiao);
+        TextView regiaoView = (TextView) findViewById(R.id.regiao);
         regiaoView.setText(getString(R.string.regiao) + "=" + regiaoList.size());
 
     }
@@ -157,7 +156,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (DeviceInfo.isLoggedin) {
             TextView textUserName = (TextView) findViewById(R.id.text_userName);
             if (textUserName != null) {
-                textUserName.setText("Thiago Vieira");
+                Settings settings = new Settings(getApplicationContext());
+                String userName = settings.getPreferenceValue(Settings.USER_NAME);
+                textUserName.setText(userName);
             }
         }
 
@@ -187,23 +188,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.menu_bookmarks) {
             startActivity(MainActivity.class);
-        } else if (id == R.id.menu_dashboard) {
-            startActivity(MainActivity.class);
         } else if (id == R.id.menu_search) {
             startActivity(MainActivity.class);
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
-        } else if (id == R.id.menu_manage) {
+        } else if (id == R.id.menu_dashboard) {
+            startActivity(MainActivity.class);
+        } else if (id == R.id.menu_settings) {
             startActivity(SettingsActivity.class);
         } else if (id == R.id.menu_profile) {
             startActivity(SettingsActivity.class);
         } else if (id == R.id.menu_signup) {
-            startActivity(LoginActivity.class);
+            startActivity(SignupActivity.class);
         } else if (id == R.id.menu_signin) {
             startActivity(LoginActivity.class);
         } else if (id == R.id.menu_logout) {
             DeviceInfo.isLoggedin = false;
-            startActivity(MainActivity.class);
+            Settings settings = new Settings(getApplicationContext());
+            settings.setPreferenceValue(Settings.USER_EMAIL, null);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_nav_drawer);

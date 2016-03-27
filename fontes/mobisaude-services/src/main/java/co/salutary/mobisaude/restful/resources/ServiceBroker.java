@@ -57,7 +57,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/gerarToken")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GerarTokenResponse gerarToken(GerarTokenRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+	public GerarTokenResponse gerarToken(GerarTokenRequest request) {logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
 		GerarTokenResponse response = new GerarTokenResponse();
 		try {
 			if (!request.validate()) {
@@ -88,7 +88,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/gerarChave")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GerarChaveResponse gerarChave(GerarChaveRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
+	public GerarChaveResponse gerarChave(GerarChaveRequest request) {logger.info(new Object() {}.getClass().getEnclosingMethod().getName());
 		GerarChaveResponse response = new GerarChaveResponse();
 		try {
 			
@@ -119,7 +119,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/geocode")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GeocodeResponse geocode(GeocodeRequest request) {logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
+	public GeocodeResponse geocode(GeocodeRequest request) {logger.info(new Object() {}.getClass().getEnclosingMethod().getName());
 		GeocodeResponse response = new GeocodeResponse();
 		try {
 			if (!request.validate()) {
@@ -180,7 +180,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
 	public ConsultaDominiosResponse consultaDominios(ConsultaDominiosRequest request) {
-		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());
 		
 		ConsultaDominiosResponse response = new ConsultaDominiosResponse();
 		
@@ -463,7 +463,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
 	public UserResponse signup(UserRequest request) {
-		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
 		UserResponse response = new UserResponse();
 		try {
 			if (!request.validate()) {
@@ -506,7 +506,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
 	public UserResponse updateUser(UserRequest request) {
-		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
 		UserResponse response = new UserResponse();
 		try {
 			if (!request.validate()) {
@@ -549,7 +549,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
 	public UserResponse getUser(UserRequest request) {
-		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
 		UserResponse response = new UserResponse();
 		try {
 			if (!request.validate()) {
@@ -586,7 +586,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
 	public UserResponse signin(UserRequest request) {
-		logger.debug(new Object() {}.getClass().getEnclosingMethod().getName());	
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
 		UserResponse response = new UserResponse();
 		try {
 			if (!request.validate()) {

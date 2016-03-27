@@ -14,7 +14,6 @@ public class Settings {
 
 	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
 	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";
-	public static final String TOKEN = "";
 	public static final String SHOW_SCREEN_TELA_2 = "SHOW_SCREEN_TELA_2";
 
     // domain tables
@@ -23,23 +22,21 @@ public class Settings {
     public static final String tiposSistemaOperacional = "tiposSistemaOperacional";
     public static final String tiposEstabelecimentoSaude = "tiposEstabelecimentoSaude";
 
+    // filters
     public static final String FILTER_REGIAO = "filter_regiao";
     public static final String FILTER_TIPO_GESTAO = "filter_tipo_gestao";
     public static final String FILTER_TIPO_ESTABELECIMENTO_SAUDE = "filter_tipo_estabelecimento_saude";
 
-    public static final String REPORT_PROBLEMS = "REPORT_PROBLEMS";
-
-    public static final String onlyWifi = "onlyWifi";
-    public static final String showDisclaimer = "showDisclaimer";
     public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
     public static final String EMPTY = "";
-    public static final String SHOW_SCREEN_TELA_3 = "SHOW_SCREEN_TELA_3";
-    public static final String DATA_DADOS = "DATA_DADOS";
-    public static final String SHOW_SCREEN_TELA_1 = "SHOW_SCREEN_TELA_1";
-    public static final String HELP_TEXT = "HELP_TEXT";
-    public static boolean disableSensor = false;
-    public static boolean GO_HOME;
-    public static boolean REPORT_PROBLEM;
+
+    // session
+    public static final String TOKEN = "token";
+    public static final String USER_EMAIL = "userEmail";
+    public static final String USER_NAME = "userName";
+
+    // ??
+    public static final String REPORT_PROBLEMS = "REPORT_PROBLEMS";
 
     private Context context;
     

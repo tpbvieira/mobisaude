@@ -76,7 +76,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        } else if (id == R.id.menu_profile) {
 //            startActivity(SettingsActivity.class);
 //        } else if (id == R.id.menu_signup) {
-//            startActivity(UserActivity.class);
+//            startActivity(SignupActivity.class);
 //        } else if (id == R.id.menu_signin) {
 //            startActivity(LoginActivity.class);
 //        } else if (id == R.id.menu_logout) {

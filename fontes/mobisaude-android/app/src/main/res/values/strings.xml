@@ -10,6 +10,9 @@
     <string name="tipos_gestao">Tipos de Gestão</string>
     <string name="tipos_estabelecimento_saude">Tipos de Estabelecimento de Saúde</string>
     <string name="regioes">Regiões</string>
+    <string name="user">Usuário</string>
+    <string name="signedup">Usuário Cadastrado</string>
+    <string name="signedin">Usuário Autenticado</string>
 
     <string name="error">1|Erro Inesperado</string>
     <string name="error_no_connectivity">2|Conexão de dados indisponível, deseja utilizar os dados salvos?</string>

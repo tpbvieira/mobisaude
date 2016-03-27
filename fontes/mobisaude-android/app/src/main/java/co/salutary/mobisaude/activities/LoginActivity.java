@@ -27,13 +27,24 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.controller.ServiceBroker;
+import co.salutary.mobisaude.controller.TokenManager;
+import co.salutary.mobisaude.db.CidadeDAO;
+import co.salutary.mobisaude.db.UfDAO;
+import co.salutary.mobisaude.model.Cidade;
+import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.JsonUtils;
+import co.salutary.mobisaude.util.MobiSaudeAppException;
 import co.salutary.mobisaude.util.Validator;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -47,14 +58,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "tpbvieira@gmail.com:hello", "tpbvieira@gmail.com:hi"
-    };
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -163,6 +166,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         boolean cancel = false;
         View focusView = null;
         DeviceInfo.isLoggedin = false;
+        Settings settings = new Settings(getApplicationContext());
+        settings.setPreferenceValue(Settings.USER_EMAIL, null);
 
         // Update login and password
         String email = mEmailView.getText().toString();
@@ -305,32 +310,47 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             boolean hasAuth = false;
+            Settings settings = new Settings(getApplicationContext());
+
+            String token = settings.getPreferenceValue(Settings.TOKEN);
+            if (token == null || token.isEmpty()) {
+                TokenManager.gerarToken(getApplicationContext());//renew token and saves into preferences
+                token = settings.getPreferenceValue(Settings.TOKEN);
+            }
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                Log.e(TAG, e.getMessage());
-                return false;
-            }
+                JSONObject data = new JSONObject();
+                data.put("token", token);
+                data.put("email", mEmail);
+                data.put("password", mPassword);
 
-            // TODO: authentication
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    hasAuth = pieces[1].equals(mPassword);
-                    if (hasAuth) {
-                        break;
+                JSONObject request = new JSONObject();
+                request.put("userRequest", data);
+
+                String responseStr = ServiceBroker.getInstance(getApplicationContext()).signin(request.toString());
+                if (responseStr != null) {
+                    JSONObject json = new JSONObject(responseStr);
+                    JSONObject signinResponse = (JSONObject) json.get("userResponse");
+                    int idErro = JsonUtils.getErrorCode(signinResponse);
+                    if (idErro == 0) {
+                        DeviceInfo.isLoggedin = hasAuth = true;
+                        settings.setPreferenceValue(Settings.USER_EMAIL, mEmail);
+                        responseStr = ServiceBroker.getInstance(getApplicationContext()).getUser(request.toString());
+                        json = new JSONObject(responseStr);
+                        JSONObject userResponse = (JSONObject) json.get("userResponse");
+                        settings.setPreferenceValue(Settings.USER_NAME, userResponse.get("name").toString());
+                    } else {
+                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(signinResponse));
                     }
                 }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                DeviceInfo.isLoggedin = hasAuth = false;
+                settings.setPreferenceValue(Settings.USER_EMAIL, null);
             }
 
-            // TODO: register the new account here.
-            DeviceInfo.isLoggedin = hasAuth;
             return hasAuth;
         }
 
@@ -340,11 +360,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                Toast.makeText(getApplicationContext(), getString(R.string.signedin), Toast.LENGTH_SHORT).show();
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+
         }
 
         @Override

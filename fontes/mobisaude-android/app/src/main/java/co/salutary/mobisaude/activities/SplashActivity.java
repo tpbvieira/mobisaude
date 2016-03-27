@@ -113,7 +113,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     new QueryAvailableViewsTask().execute(0);
                 }
             } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_obtaining_locality), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_obtaining_locality), Toast.LENGTH_LONG).show();
                 finish();
             }
         }
@@ -592,7 +592,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     startActivity(it);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_LONG).show();
                     finish();
                 }
             } catch (Exception e) {
@@ -617,7 +617,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             });
             alerta.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.error_conectivity_required), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_conectivity_required), Toast.LENGTH_LONG).show();
                     finish();
                 }
             });
@@ -670,7 +670,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         });
         alerta.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_location_required), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_location_required), Toast.LENGTH_LONG).show();
                 finish();
             }
         });

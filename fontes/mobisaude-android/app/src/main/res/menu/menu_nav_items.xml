@@ -17,17 +17,17 @@
         android:icon="@drawable/ic_dashboard"
         android:title="@string/menu_dashboards" />
     <item
-        android:id="@+id/menu_manage"
+        android:id="@+id/menu_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/menu_settings" />
-    <item
-        android:id="@+id/menu_profile"
-        android:icon="@drawable/ic_info_outline"
-        android:title="@string/menu_profile" />
     <item
         android:id="@+id/menu_signup"
         android:icon="@drawable/ic_person_add_24dp"
         android:title="@string/action_sign_up" />
+    <item
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/ic_info_outline"
+        android:title="@string/menu_profile" />
     <item
         android:id="@+id/menu_signin"
         android:icon="@drawable/ic_account_circle"
