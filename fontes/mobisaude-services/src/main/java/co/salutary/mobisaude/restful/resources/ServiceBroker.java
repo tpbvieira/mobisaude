@@ -483,7 +483,8 @@ public class ServiceBroker extends AbstractServiceBroker {
 			String password = request.getPassword();
 			String name = request.getName();
 			String phone = request.getPhone();
-			User newUser = new User(email,password,name,phone);
+			boolean isContactable = request.isContactable();
+			User newUser = new User(email,password,name,phone, isContactable);
 
 			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
 			userFacade.save(newUser);
@@ -526,7 +527,8 @@ public class ServiceBroker extends AbstractServiceBroker {
 			String password = request.getPassword();
 			String name = request.getName();
 			String phone = request.getPhone();
-			User newUser = new User(email,password,name,phone);
+			boolean isContactable = request.isContactable();
+			User newUser = new User(email,password,name,phone, isContactable);
 
 			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
 			newUser = userFacade.update(newUser);
@@ -534,6 +536,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setPassword(newUser.getPassword());
 			response.setName(newUser.getName());
 			response.setPhone(newUser.getPhone());
+			response.setContactable(newUser.isContactable());
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (Exception ex) {
@@ -571,6 +574,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setPassword(newUser.getPassword());
 			response.setName(newUser.getName());
 			response.setPhone(newUser.getPhone());
+			response.setContactable(newUser.isContactable());
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (Exception ex) {

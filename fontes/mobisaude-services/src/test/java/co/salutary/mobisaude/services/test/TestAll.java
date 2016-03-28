@@ -309,7 +309,7 @@ public class TestAll extends TestCase {
 			userRequest.setPassword("111111");
 			userRequest.setName("Thiago P B Vieira");
 			userRequest.setPhone("6183133714");
-			userRequest.setContactable(false);
+			userRequest.setContactable(true);
 			
 			UserResponse userResponse = broker.signup(userRequest);
 			
@@ -328,14 +328,14 @@ public class TestAll extends TestCase {
 	private void updateUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
 	
 		try{
-			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",true);
+			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());
 			userRequest.setPassword(user.getPassword());
 			userRequest.setName(user.getName());
 			userRequest.setPhone(user.getPhone());
-			
+			userRequest.setContactable(user.isContactable());
 			UserResponse userResponse = broker.updateUser(userRequest);
 			
 			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
@@ -343,7 +343,8 @@ public class TestAll extends TestCase {
 				fail("UpdateUser");			
 			}
 			
-			User newUser = new User(userResponse.getEmail(),
+			User newUser = new User(
+					userResponse.getEmail(),
 					userResponse.getPassword(),
 					userResponse.getName(),
 					userResponse.getPhone(),
@@ -363,7 +364,7 @@ public class TestAll extends TestCase {
 	private void getUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
 	
 		try{
-			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",true);
+			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());
@@ -405,7 +406,7 @@ public class TestAll extends TestCase {
 	private void signinTest(ObjectMapper mapper, ServiceBroker broker, String token){
 		
 		try{
-			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",true);
+			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());

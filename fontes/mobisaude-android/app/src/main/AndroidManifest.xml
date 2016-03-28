@@ -57,7 +57,6 @@
             android:value="@string/google_maps_key" />
 
         <!-- Activities-->
-
         <activity
             android:name=".activities.SplashActivity"
             android:label="@string/app_name"
@@ -95,8 +94,12 @@
             android:name=".activities.SignupActivity"
             android:label="@string/user" />
         <activity
+            android:name=".activities.ProfileActivity"
+            android:label="@string/action_update" />
+        <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.LocalityFromListActivity"
             android:label="TelaLocalidade"

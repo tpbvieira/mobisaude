@@ -187,17 +187,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.menu_bookmarks) {
-            startActivity(MainActivity.class);
+
         } else if (id == R.id.menu_search) {
-            startActivity(MainActivity.class);
+
         } else if (id == R.id.menu_maps) {
-            startActivity(MapsActivity.class);
+
         } else if (id == R.id.menu_dashboard) {
-            startActivity(MainActivity.class);
+
         } else if (id == R.id.menu_settings) {
-            startActivity(SettingsActivity.class);
+
         } else if (id == R.id.menu_profile) {
-            startActivity(SettingsActivity.class);
+            startActivity(ProfileActivity.class);
         } else if (id == R.id.menu_signup) {
             startActivity(SignupActivity.class);
         } else if (id == R.id.menu_signin) {
