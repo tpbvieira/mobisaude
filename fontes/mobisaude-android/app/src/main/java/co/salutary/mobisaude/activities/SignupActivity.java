@@ -160,46 +160,59 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         }
 
         // Reset variables
+        mNameView.setError(null);
         mEmailView.setError(null);
         mPasswordView.setError(null);
-        mNameView.setError(null);
-        boolean cancel = false;
         View focusView = null;
+        boolean isValid = true;
 
         // Update login and password
+        String name = mNameView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        String name = mNameView.getText().toString();
         String phone = "";
+
+        // Check for a valid name
+        if (TextUtils.isEmpty(name)) {
+            mNameView.setError(getString(R.string.error_field_required));
+            focusView = mNameView;
+            isValid = isValid && false;
+        }
+        if (!Validator.isValidName(name)) {
+            mNameView.setError(getString(R.string.error_invalid_name));
+            focusView = mNameView;
+            isValid = isValid && false;
+        }
 
         // Check for a valid email address
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
-            cancel = true;
-        } else if (!Validator.isEmailValid(email)) {
+            isValid = isValid && false;
+        }
+        if (!Validator.isValidEmail(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
-            cancel = true;
+            isValid = isValid && false;
         }
 
         // Check for a valid password
-        if (!TextUtils.isEmpty(password) && !Validator.isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !Validator.isValidPassword(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
+            isValid = isValid && false;
         }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
+        if (isValid) {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new SignupTask(email, password, name, phone);
             mAuthTask.execute((Void) null);
+        } else {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
         }
     }
 

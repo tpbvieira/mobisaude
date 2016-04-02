@@ -615,7 +615,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     onVerifyGPS();
                 }
             });
-            alerta.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            alerta.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Toast.makeText(getApplicationContext(), getString(R.string.error_conectivity_required), Toast.LENGTH_LONG).show();
                     finish();
@@ -668,7 +668,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 locateFromList();
             }
         });
-        alerta.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        alerta.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_location_required), Toast.LENGTH_LONG).show();
                 finish();
@@ -696,7 +696,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 onLocationFromData();
             }
         });
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_location_required), Toast.LENGTH_SHORT).show();
                 finish();

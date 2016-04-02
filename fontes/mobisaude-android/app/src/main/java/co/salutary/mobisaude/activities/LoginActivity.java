@@ -38,10 +38,6 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.db.CidadeDAO;
-import co.salutary.mobisaude.db.UfDAO;
-import co.salutary.mobisaude.model.Cidade;
-import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
@@ -157,6 +153,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+
         if (mAuthTask != null) {
             return;
         }
@@ -164,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Reset variables
         mEmailView.setError(null);
         mPasswordView.setError(null);
-        boolean cancel = false;
+        boolean isValid = true;
         View focusView = null;
         DeviceInfo.isLoggedin = false;
         Settings settings = new Settings(getApplicationContext());
@@ -174,35 +171,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        // Check for a valid password
-        if (!TextUtils.isEmpty(password) && !Validator.isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
         // Check for a valid email address
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
-            cancel = true;
-        } else if (!Validator.isEmailValid(email)) {
+            isValid = isValid && false;
+        }
+        if (!Validator.isValidEmail(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
-            cancel = true;
+            isValid = isValid && false;
         }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
+        // Check for a valid password
+        if (TextUtils.isEmpty(password) || !Validator.isValidPassword(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            isValid = isValid && false;
+        }
+
+        if (isValid) {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+        } else {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
         }
+
     }
 
     /**

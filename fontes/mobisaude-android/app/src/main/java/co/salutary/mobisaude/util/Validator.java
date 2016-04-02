@@ -8,7 +8,7 @@ public class Validator {
 
     private static final String TAG = Validator.class.getSimpleName();
 
-    public static boolean isEmailValid(String email) {
+    public static boolean isValidEmail(String email) {
         boolean result = false;
 
         try{
@@ -28,7 +28,19 @@ public class Validator {
         return result;
     }
 
-    public static boolean isPasswordValid(String password) {
+    public static boolean isValidName(String name) {
+        boolean result = false;
+
+        try{
+            result = (name.length() > 1);
+        }catch(Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+
+        return result;
+    }
+
+    public static boolean isValidPassword(String password) {
         return password.length() > 4;
     }
 
