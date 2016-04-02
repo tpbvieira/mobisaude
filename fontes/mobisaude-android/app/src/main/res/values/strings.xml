@@ -54,7 +54,7 @@
     <string name="action_logout">Sair</string>
     <string name="action_update">Alterar</string>
     <string name="updated">Alterado</string>
-    <string name="user_guest"></string>
+    <string name="user_guest">Usuário Desconhecido</string>
 
     <string name="help_escolha_uf">Escolha o estado da cidade desejada</string>
     <string name="help_pesquise_nunicipio">Pesquise na sua cidade</string>

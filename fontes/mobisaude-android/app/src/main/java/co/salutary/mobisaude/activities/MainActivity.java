@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_top_right, menu);
+        inflater.inflate(R.menu.menu_main_top_right, menu);
 
         if (DeviceInfo.isLoggedin) {
             TextView textUserName = (TextView) findViewById(R.id.text_userName);
@@ -187,15 +187,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.menu_bookmarks) {
-
+            startActivity(LocalitySelectionActivity.class);
         } else if (id == R.id.menu_search) {
 
         } else if (id == R.id.menu_maps) {
-
+            startActivity(MapsActivity.class);
         } else if (id == R.id.menu_dashboard) {
-
+            startActivity(PlaceSelectionListActivity.class);
         } else if (id == R.id.menu_settings) {
-
+            startActivity(AppCompatPreferenceActivity.class);
         } else if (id == R.id.menu_profile) {
             startActivity(ProfileActivity.class);
         } else if (id == R.id.menu_signup) {

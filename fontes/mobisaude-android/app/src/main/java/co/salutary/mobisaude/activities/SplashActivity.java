@@ -107,7 +107,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ACTIVITY_DENIFIR_LOCALIDADE) {
-            if (resultCode == LocalityFromListActivity.RESULTADO_LOCAL_SELECIONADO) {
+            if (resultCode == LocalitySelectionActivity.RESULTADO_LOCAL_SELECIONADO) {
                 if (DeviceInfo.hasConnectivity(getApplicationContext())) {
                     isShowDialog = true;
                     new QueryAvailableViewsTask().execute(0);
@@ -255,7 +255,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
-        Intent localidadeIntent = new Intent(this, LocalityFromListActivity.class);
+        Intent localidadeIntent = new Intent(this, LocalitySelectionActivity.class);
         startActivityForResult(localidadeIntent, ACTIVITY_DENIFIR_LOCALIDADE);
     }
 
@@ -607,7 +607,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getEnclosingMethod().getName());
         try {
             AlertDialog.Builder alerta = new AlertDialog.Builder(this);
-            alerta.setIcon(R.drawable.ic_launcher);
+            alerta.setIcon(R.mipmap.ic_launcher);
             alerta.setTitle(R.string.error);
             alerta.setMessage(R.string.error_no_connectivity);
             alerta.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -638,7 +638,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
         AlertDialog.Builder alerta = new AlertDialog.Builder(this);
-        alerta.setIcon(R.drawable.ic_launcher);
+        alerta.setIcon(R.mipmap.ic_launcher);
         alerta.setTitle(getString(R.string.error));
         alerta.setMessage(getString(R.string.error_connecting_server));
         alerta.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -660,7 +660,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
         AlertDialog.Builder alerta = new AlertDialog.Builder(this);
-        alerta.setIcon(R.drawable.ic_launcher);
+        alerta.setIcon(R.mipmap.ic_launcher);
         alerta.setTitle(getString(R.string.alert));
         alerta.setMessage(getString(R.string.unidentified_location));
         alerta.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -688,7 +688,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setIcon(R.drawable.ic_launcher);
+        alert.setIcon(R.mipmap.ic_launcher);
         alert.setTitle(getString(R.string.alert));
         alert.setMessage(getString(R.string.gps_not_available));
         alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

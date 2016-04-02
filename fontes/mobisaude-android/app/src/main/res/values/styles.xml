@@ -3,7 +3,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/freeSpeechBlue</item>
         <item name="colorPrimaryDark">@color/toryBlue</item>
-        <item name="colorAccent">@color/violetRed</item>
+        <item name="colorAccent">@color/spindleBlue</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -18,9 +18,9 @@
     <style name="spinners_drop_down"></style>
 
     <style name="WindowTitleBackground">
-        <item name="android:background">@color/splash</item>
-        <item name="android:colorForeground">@color/splash</item>
-        <item name="android:colorBackground">@color/splash</item>
+        <item name="android:background">@color/splash_background</item>
+        <item name="android:colorForeground">@color/splash_background</item>
+        <item name="android:colorBackground">@color/splash_background</item>
     </style>
 
     <!-- <style name="AppTheme" parent="android:Theme.Light.NoTitleBar" /> -->
