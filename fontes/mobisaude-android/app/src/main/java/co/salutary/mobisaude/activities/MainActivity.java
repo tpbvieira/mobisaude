@@ -20,9 +20,8 @@ import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.db.CidadeDAO;
+import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.LocalDataBase;
-import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.util.DeviceInfo;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isInFront;
 
     private LocalDataBase db;
+    private UserController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +53,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        userController = userController = UserController.getInstance();
         db = LocalDataBase.getInstance();
         Settings settings = new Settings(getApplicationContext());
 
-        UfDAO statesDao = new UfDAO(db);
         TextView stateView = (TextView) findViewById(R.id.state);
-        stateView.setText(getString(R.string.estado) + "=" + statesDao.getUfById(DeviceInfo.idUF).getNome());
+        stateView.setText(getString(R.string.estado) + "=" + userController.getUf().getNome());
 
-        CidadeDAO citiesDao = new CidadeDAO(db);
         TextView citieView = (TextView) findViewById(R.id.city);
-        citieView.setText(getString(R.string.cidade) + "=" + citiesDao.getCidadeById(DeviceInfo.idCidade).getNome());
+        citieView.setText(getString(R.string.cidade) + "=" + userController.getCidade().getNome());
 
         String tipoESString = settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE);
         List<String> tipoESList = Arrays.asList(tipoESString.split("\\s*,\\s*"));
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
         } else if (id == R.id.menu_dashboard) {
-            startActivity(PlaceSelectionListActivity.class);
+            startActivity(LocalitySelectionListActivity.class);
         } else if (id == R.id.menu_settings) {
             startActivity(AppCompatPreferenceActivity.class);
         } else if (id == R.id.menu_profile) {

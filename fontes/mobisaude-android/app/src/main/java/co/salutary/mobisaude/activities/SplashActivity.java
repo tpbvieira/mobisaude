@@ -40,12 +40,11 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     }.getClass().getName();
 
     private static final int ACTIVITY_DENIFIR_LOCALIDADE = 1;
+    private static final int NUM_GPS_ATTEMPTS = 15;
     private static final long SLEEP_TIME = 1000;
     private final int PROGRESS_BAR = 1;
 
     private TextView txtLabel;
-
-    private boolean timerTelaBool;
 
     private UserController userController;
 
@@ -53,7 +52,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     private boolean isShowDialog = true;
 
-    LocalDataBase localDataBase;
+    private LocalDataBase localDataBase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,14 +65,15 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         txtLabel = (TextView) findViewById(R.id.frm_splash_label);
 
         DeviceInfo.setUpGCM(this);
-
         localDataBase = LocalDataBase.getInstance();
         userController = UserController.getInstance();
         location = DeviceInfo.updateLocation(getApplicationContext(), this);
 
         Settings.setPreferenceValue(this, Settings.VIEWPAGER_POS_PORTRAIT, 0);
         Settings.setPreferenceValue(this, Settings.VIEWPAGER_POS_LANDSCAPE, 0);
+
         Handler timerTela = new Handler();
+
         timerTela.postDelayed(this, SLEEP_TIME);
     }
 
@@ -83,7 +83,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
         super.onStart();
-        timerTelaBool = true;
     }
 
     public void run() {
@@ -91,9 +90,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
         try {
-            if (timerTelaBool) {
-                onVerifyConectivity();
-            }
+            onVerifyConectivity();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -108,10 +105,8 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
         if (requestCode == ACTIVITY_DENIFIR_LOCALIDADE) {
             if (resultCode == LocalitySelectionActivity.RESULTADO_LOCAL_SELECIONADO) {
-                if (DeviceInfo.hasConnectivity(getApplicationContext())) {
-                    isShowDialog = true;
-                    new QueryAvailableViewsTask().execute(0);
-                }
+                isShowDialog = true;
+                new QueryAvailableViewsTask().execute(0);
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_obtaining_locality), Toast.LENGTH_LONG).show();
                 finish();
@@ -124,7 +119,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
-        timerTelaBool = false;
         DeviceInfo.removeUpdates(getApplicationContext(), this);
         super.onDestroy();
     }
@@ -183,10 +177,11 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 if (result) {
                     onVerifyGPS();
                 } else {
-                    if (DeviceInfo.hasConnectivity(getApplicationContext()))
-                        showServerConnectionError();
-                    else
-                        showConnectivityError();
+                    if (DeviceInfo.hasConnectivity(getApplicationContext())) {
+                        serverConnectionError();
+                    }else {
+                        connectivityError();
+                    }
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
@@ -235,7 +230,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 if (result) {
                     onDefineLocalFromGPS();
                 } else {
-                    disabledGPSAlert();
+                    unavailableGPSAlert();
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
@@ -243,12 +238,50 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }
     }
 
-    private void onLocationFromData() {
+    private void onLocationFromSavedData() {
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
         setTextLabelInfor(getString(R.string.loading_data));
-        new LocationFromData().execute(0);
+        new LocationFromSavedData().execute(0);
+    }
+
+    private class LocationFromSavedData extends AsyncTask<Integer, Integer, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            Log.d(new Object() {
+            }.getClass().getName(), new Object() {
+            }.getClass().getEnclosingMethod().getName());
+
+            try {
+                if(userController.getUf() != null && userController.getCidade() != null){
+                    return true;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                return false;
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            try {
+                if(result){
+                    new QueryAvailableViewsTask().execute(0);
+                }else{
+                    unsavedLocationAlert();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
     }
 
     private void locateFromList() {
@@ -259,43 +292,13 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         startActivityForResult(localidadeIntent, ACTIVITY_DENIFIR_LOCALIDADE);
     }
 
-    private class LocationFromData extends AsyncTask<Integer, Integer, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            try {
-                Thread.sleep(SLEEP_TIME);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            try {
-                onDefineLocalFromGPS();
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
-    }
-
     private void onDefineLocalFromGPS() {
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
-        if (DeviceInfo.hasLocationProvider() && DeviceInfo.hasConnectivity(getApplicationContext())) {
-            setTextLabelInfor(getString(R.string.obtaining_location_from_gps));
-            new DefineLocalFromGPS(getApplicationContext()).execute(15);
-        } else {
-            locateFromList();
-        }
+
+        setTextLabelInfor(getString(R.string.obtaining_location_from_gps));
+        new DefineLocalFromGPS(getApplicationContext()).execute(NUM_GPS_ATTEMPTS);
     }
 
     private class DefineLocalFromGPS extends AsyncTask<Integer, Integer, Boolean> {
@@ -316,8 +319,10 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             Log.d(new Object() {
             }.getClass().getName(), new Object() {
             }.getClass().getEnclosingMethod().getName());
+
+            int numAttempts = params[0];
             try {
-                for (int i = 0; i < params[0]; i++) {
+                for (int i = 0; i < numAttempts; i++) {
                     Thread.sleep(SLEEP_TIME);
 
                     // Location by Rede
@@ -362,8 +367,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                     UF uf = new UfDAO(localDataBase).getUfById(cidade.getIdUF());
                                     userController.setUf(uf);
                                     userController.setCidade(cidade);
-                                    DeviceInfo.idCidade = cidade.getIdCidade();
-                                    DeviceInfo.idUF = uf.getIdUf();
                                     userController.atualizarCidadeSelecionado();
 
                                     // para a cidade local
@@ -396,9 +399,9 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     Settings localPref = new Settings(getApplicationContext());
                     String token = localPref.getPreferenceValue(Settings.TOKEN);
                     if (token == null || token.isEmpty()) {
-                        showServerConnectionError();
+                        serverConnectionError();
                     } else {
-                        erroDeterminarLocal();
+                        unavailableGPSAlert();
                     }
                 }
             } catch (Exception e) {
@@ -440,7 +443,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         return pDialog;
     }
 
-    //lbadias: Query for available views
+    //Query for available views
     private class QueryAvailableViewsTask extends AsyncTask<Integer, Integer, Boolean> {
 
         @Override
@@ -477,33 +480,8 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             settings.setPreferenceValues(Settings.tiposEstabelecimentoSaude, domains.getJSONArray("tiposEstabelecimentoSaude").toString());
                             settings.setPreferenceValues(Settings.tipoGestao, domains.getJSONArray("tiposGestao").toString());
 
-                            // save filters into a list of elements
+                            //place types
                             if (settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE).length() == 0) {
-
-                                // região
-                                String regioesListStr = "";
-                                JSONArray regioesJson = new JSONArray(settings.getPreferenceValues(Settings.regiao));
-                                for (int j = 0; j < regioesJson.length(); j++) {
-                                    if (regioesListStr.length() == 0) {
-                                        regioesListStr += regioesJson.getJSONObject(j).getInt("id");
-                                    } else {
-                                        regioesListStr += "," + regioesJson.getJSONObject(j).getInt("id");
-                                    }
-                                }
-                                settings.setPreferenceValues(Settings.FILTER_REGIAO, regioesListStr);
-
-                                // tipo de gestão
-                                String tiposGestaoListStr = "";
-                                JSONArray tiposGestao = new JSONArray(settings.getPreferenceValues(Settings.tipoGestao));
-                                for (int j = 0; j < tiposGestao.length(); j++) {
-                                    if (tiposGestaoListStr.length() == 0) {
-                                        tiposGestaoListStr += tiposGestao.getJSONObject(j).getInt("id");
-                                    } else {
-                                        tiposGestaoListStr += "," + tiposGestao.getJSONObject(j).getInt("id");
-                                    }
-                                }
-                                settings.setPreferenceValues(Settings.FILTER_TIPO_GESTAO, tiposGestaoListStr);
-
                                 // tipo de estabelecimento de saúde
                                 String tiposESStr = "";
                                 JSONArray tiposEs = new JSONArray(settings.getPreferenceValues(Settings.tiposEstabelecimentoSaude));
@@ -515,6 +493,34 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                     }
                                 }
                                 settings.setPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE, tiposESStr);
+                            }
+
+                            // regions
+                            if (settings.getPreferenceValues(Settings.FILTER_REGIAO).length() == 0) {
+                                String regioesListStr = "";
+                                JSONArray regioesJson = new JSONArray(settings.getPreferenceValues(Settings.regiao));
+                                for (int j = 0; j < regioesJson.length(); j++) {
+                                    if (regioesListStr.length() == 0) {
+                                        regioesListStr += regioesJson.getJSONObject(j).getInt("id");
+                                    } else {
+                                        regioesListStr += "," + regioesJson.getJSONObject(j).getInt("id");
+                                    }
+                                }
+                                settings.setPreferenceValues(Settings.FILTER_REGIAO, regioesListStr);
+                            }
+
+                            // management types
+                            if (settings.getPreferenceValues(Settings.FILTER_REGIAO).length() == 0) {
+                                String tiposGestaoListStr = "";
+                                JSONArray tiposGestao = new JSONArray(settings.getPreferenceValues(Settings.tipoGestao));
+                                for (int j = 0; j < tiposGestao.length(); j++) {
+                                    if (tiposGestaoListStr.length() == 0) {
+                                        tiposGestaoListStr += tiposGestao.getJSONObject(j).getInt("id");
+                                    } else {
+                                        tiposGestaoListStr += "," + tiposGestao.getJSONObject(j).getInt("id");
+                                    }
+                                }
+                                settings.setPreferenceValues(Settings.FILTER_TIPO_GESTAO, tiposGestaoListStr);
                             }
 
                         } else {
@@ -601,7 +607,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }
     }
 
-    private void showConnectivityError() {
+    private void connectivityError() {
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -612,7 +618,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             alerta.setMessage(R.string.error_no_connectivity);
             alerta.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    onVerifyGPS();
+                    onLocationFromSavedData();
                 }
             });
             alerta.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
@@ -633,7 +639,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }
     }
 
-    private void showServerConnectionError() {
+    private void serverConnectionError() {
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -643,19 +649,20 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         alerta.setMessage(getString(R.string.error_connecting_server));
         alerta.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                erroDeterminarLocal();
+                onLocationFromSavedData();
             }
         });
         alerta.setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                erroDeterminarLocal();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_conectivity_required), Toast.LENGTH_LONG).show();
+                finish();
             }
         });
         alerta.show();
     }
 
-    private void erroDeterminarLocal() {
+    private void unsavedLocationAlert() {
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -683,7 +690,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         alerta.show();
     }
 
-    private void disabledGPSAlert() {
+    private void unavailableGPSAlert() {
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -693,7 +700,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         alert.setMessage(getString(R.string.gps_not_available));
         alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                onLocationFromData();
+                onLocationFromSavedData();
             }
         });
         alert.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {

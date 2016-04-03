@@ -40,213 +40,213 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
     private static final String TAG = new Object() {
     }.getClass().getName();
 
-	private static final int PROGRESS_BAR_VERIFICAR = 1;
-	private static final int PROGRESS_BAR_DETERMINAR = 2;
+    private static final int PROGRESS_BAR_VERIFICAR = 1;
+    private static final int PROGRESS_BAR_DETERMINAR = 2;
 
-	public static final int RESULTADO_LOCAL_SELECIONADO = 1;
+    public static final int RESULTADO_LOCAL_SELECIONADO = 1;
 
-	private static final int ACTIVITY_LIST_SELECT = 1;
-	private static final long TIME_TEMP = 1000;
+    private static final int ACTIVITY_LIST_SELECT = 1;
+    private static final long TIME_TEMP = 1000;
 
-	private EditText edtUF;
-	private EditText edtCidade;
+    private EditText edtUF;
+    private EditText edtCidade;
 
-	private UserController userController;
+    private UserController userController;
 
-	// thread loop
-	private boolean timerInatividadeBool;
-	private int timerInatividadeCount;
-	private Handler timerInatividade;
+    // thread loop
+    private boolean timerInatividadeBool;
+    private int timerInatividadeCount;
+    private Handler timerInatividade;
 
-	private Location location;
+    private Location location;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_locality_selection);
+        setContentView(R.layout.activity_locality_selection);
 
-		userController = UserController.getInstance();
+        userController = UserController.getInstance();
 
-		location = DeviceInfo.updateLocation(getApplicationContext(),this);
+        location = DeviceInfo.updateLocation(getApplicationContext(),this);
 
         LinearLayout btnUF = (LinearLayout) findViewById(R.id.tela_localidade_btn_uf);
         LinearLayout btnCidade = (LinearLayout) findViewById(R.id.tela_localidade_btn_cidade);
-		edtUF = (EditText) findViewById(R.id.tela_localidade_edt_uf);
-		edtCidade = (EditText) findViewById(R.id.tela_localidade_edt_cidade);
+        edtUF = (EditText) findViewById(R.id.tela_localidade_edt_uf);
+        edtCidade = (EditText) findViewById(R.id.tela_localidade_edt_cidade);
         Button btnMeuLocal = (Button) findViewById(R.id.tela_localidade_btn_meu_local);
 
-		btnUF.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onShowListaSelect(PlaceSelectionListActivity.LISTA_UF);
-			}
-		});
-		edtUF.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onShowListaSelect(PlaceSelectionListActivity.LISTA_UF);
-			}
-		});
+        btnUF.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShowListaSelect(LocalitySelectionListActivity.LISTA_UF);
+            }
+        });
+        edtUF.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShowListaSelect(LocalitySelectionListActivity.LISTA_UF);
+            }
+        });
 
-		btnCidade.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onShowListaSelect(PlaceSelectionListActivity.LISTA_CIDADE);
-			}
-		});
+        btnCidade.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShowListaSelect(LocalitySelectionListActivity.LISTA_CIDADE);
+            }
+        });
 
-		edtCidade.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onShowListaSelect(PlaceSelectionListActivity.LISTA_CIDADE);
-			}
-		});
+        edtCidade.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShowListaSelect(LocalitySelectionListActivity.LISTA_CIDADE);
+            }
+        });
 
-		btnMeuLocal.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onMinhaLocalidade();
-			}
-		});
-	}
+        btnMeuLocal.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMinhaLocalidade();
+            }
+        });
+    }
 
-	@Override
-	protected void onResume() {
-		// verificar tela de help
+    @Override
+    protected void onResume() {
+        // verificar tela de help
         Settings localPref = new Settings(this);
-		String value = localPref.getPreferenceValue(Settings.SHOW_SCREEN_TELA_2);
-		if(value == null || value.equals(getString(R.string.empty))){
-			// Carregar timer
-			timerInatividade = new Handler();
-			timerInatividade.postDelayed(this, TIME_TEMP);
-			timerInatividadeCount = 1;
-			timerInatividadeBool = true;
-		}
-		super.onResume();
-	}
+        String value = localPref.getPreferenceValue(Settings.SHOW_SCREEN_TELA_2);
+        if(value == null || value.equals(getString(R.string.empty))){
+            // Carregar timer
+            timerInatividade = new Handler();
+            timerInatividade.postDelayed(this, TIME_TEMP);
+            timerInatividadeCount = 1;
+            timerInatividadeBool = true;
+        }
+        super.onResume();
+    }
 
-	@Override
-	protected void onPause() {
-		// desativar thread de contagem de inatividade
-		timerInatividadeBool = false;
-		super.onPause();
-	}
+    @Override
+    protected void onPause() {
+        // desativar thread de contagem de inatividade
+        timerInatividadeBool = false;
+        super.onPause();
+    }
 
-	@Override
-	protected void onDestroy() {
-		timerInatividadeBool = false;
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        timerInatividadeBool = false;
+        super.onDestroy();
+    }
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		ProgressDialog pDialog;
-		switch(id) {
-		case PROGRESS_BAR_VERIFICAR:
-			pDialog = new ProgressDialog(this);
-			pDialog.setMessage(getString(R.string.check_gps));
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
-			break;
-		case PROGRESS_BAR_DETERMINAR:
-			pDialog = new ProgressDialog(this);
-			pDialog.setMessage(getString(R.string.check_city));
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
-			break;
-		default:
-			pDialog = null;
-		}
-		return pDialog;
-	}
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        ProgressDialog pDialog;
+        switch(id) {
+            case PROGRESS_BAR_VERIFICAR:
+                pDialog = new ProgressDialog(this);
+                pDialog.setMessage(getString(R.string.check_gps));
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(true);
+                break;
+            case PROGRESS_BAR_DETERMINAR:
+                pDialog = new ProgressDialog(this);
+                pDialog.setMessage(getString(R.string.check_city));
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(true);
+                break;
+            default:
+                pDialog = null;
+        }
+        return pDialog;
+    }
 
-	public void onMinhaLocalidade() {
-		new ShowDialog().execute();
-	}
+    public void onMinhaLocalidade() {
+        new ShowDialog().execute();
+    }
 
-	public void onShowListaSelect(int tipoLista) {
-		if(tipoLista == PlaceSelectionListActivity.LISTA_CIDADE){
-			if(UserController.getInstance().getUf() != null){
-				Intent it = new Intent(this, PlaceSelectionListActivity.class);
-				it.putExtra("tipoLista", tipoLista);
-				startActivityForResult(it, ACTIVITY_LIST_SELECT);
-			}
-		}
-		else {
-			Intent it = new Intent(this, PlaceSelectionListActivity.class);
-			it.putExtra("tipoLista", tipoLista);
-			startActivityForResult(it, ACTIVITY_LIST_SELECT);
-		}
-	}
+    public void onShowListaSelect(int tipoLista) {
+        if(tipoLista == LocalitySelectionListActivity.LISTA_CIDADE){
+            if(UserController.getInstance().getUf() != null){
+                Intent it = new Intent(this, LocalitySelectionListActivity.class);
+                it.putExtra("tipoLista", tipoLista);
+                startActivityForResult(it, ACTIVITY_LIST_SELECT);
+            }
+        }
+        else {
+            Intent it = new Intent(this, LocalitySelectionListActivity.class);
+            it.putExtra("tipoLista", tipoLista);
+            startActivityForResult(it, ACTIVITY_LIST_SELECT);
+        }
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == ACTIVITY_LIST_SELECT && resultCode == PlaceSelectionListActivity.RESULTADO_ITEM_SELECIONADO){
-			atualizarCampos();
-			if(UserController.getInstance().getCidade() != null){
-				final String cidadeName = UserController.getInstance().getCidade().getNome();
+        if(requestCode == ACTIVITY_LIST_SELECT && resultCode == LocalitySelectionListActivity.RESULTADO_ITEM_SELECIONADO){
+            atualizarCampos();
+            if(UserController.getInstance().getCidade() != null){
+                final String cidadeName = UserController.getInstance().getCidade().getNome();
                 Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeByNome(cidadeName);
                 UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
                 userController.setCidade(cidade);
                 userController.setUf(uf);
                 fecharTela();
-			}
-		}
-	}
+            }
+        }
+    }
 
-	private void atualizarCampos(){
-		UF uf = UserController.getInstance().getUf();
-		if(uf != null){
-			edtUF.setText(uf.getNome());
-			edtCidade.setText(getString(R.string.empty));
-			edtCidade.setHint(R.string.cidade);
-		}
+    private void atualizarCampos(){
+        UF uf = UserController.getInstance().getUf();
+        if(uf != null){
+            edtUF.setText(uf.getNome());
+            edtCidade.setText(getString(R.string.empty));
+            edtCidade.setHint(R.string.cidade);
+        }
 
-		Cidade cidade = UserController.getInstance().getCidade();
-		if(cidade != null){
-			edtCidade.setText(cidade.getNome());
-			userController.setMapErbsControle(null);
-			userController.setListEstabelecimentoSaudes(null);
-		}
-	}
+        Cidade cidade = UserController.getInstance().getCidade();
+        if(cidade != null){
+            edtCidade.setText(cidade.getNome());
+            userController.setMapErbsControle(null);
+            userController.setListEstabelecimentoSaudes(null);
+        }
+    }
 
-	private void fecharTela() {
-		setResult(RESULTADO_LOCAL_SELECIONADO);
-		finish();
-	}
+    private void fecharTela() {
+        setResult(RESULTADO_LOCAL_SELECIONADO);
+        finish();
+    }
 
-	private class ShowDialog extends AsyncTask<Integer, Integer, Boolean> {
+    private class ShowDialog extends AsyncTask<Integer, Integer, Boolean> {
 
-		@Override
-		protected void onPreExecute() {
-			showDialog(PROGRESS_BAR_VERIFICAR);
-			super.onPreExecute();
-		}
+        @Override
+        protected void onPreExecute() {
+            showDialog(PROGRESS_BAR_VERIFICAR);
+            super.onPreExecute();
+        }
 
-		protected Boolean doInBackground(Integer... params) {
-			try {
-				Thread.sleep(TIME_TEMP);
-			} catch (Exception e) {
-				Log.e(TAG, e.getMessage());
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			try {
-				dismissDialog(PROGRESS_BAR_VERIFICAR);
-			} catch (Exception e) {
+        protected Boolean doInBackground(Integer... params) {
+            try {
+                Thread.sleep(TIME_TEMP);
+            } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
-			}
-			new DeterminarLocal(getApplicationContext()).execute(4);
-		}
-	}
+            }
+            return null;
+        }
 
-	private class DeterminarLocal extends AsyncTask<Integer, Integer, Boolean> {
+        @Override
+        protected void onPostExecute(Boolean result) {
+            try {
+                dismissDialog(PROGRESS_BAR_VERIFICAR);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+            new DeterminarLocal(getApplicationContext()).execute(4);
+        }
+    }
+
+    private class DeterminarLocal extends AsyncTask<Integer, Integer, Boolean> {
 
         private Context context;
 
@@ -254,148 +254,148 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
             this.context = ctx;
         }
 
-		@Override
-		protected void onPreExecute() {
-			showDialog(PROGRESS_BAR_DETERMINAR);
-			super.onPreExecute();
-		}
+        @Override
+        protected void onPreExecute() {
+            showDialog(PROGRESS_BAR_DETERMINAR);
+            super.onPreExecute();
+        }
 
-		@Override
-		protected Boolean doInBackground(Integer... params) {
-			try {
-				try {
-					Thread.sleep(TIME_TEMP);
-				} catch (Exception e) {
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            try {
+                try {
+                    Thread.sleep(TIME_TEMP);
+                } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
-				}
-				for (int i = 0; i < params[0]; i++) {
-					Thread.sleep(TIME_TEMP);
-					Location local = location;
-					if(local == null){
+                }
+                for (int i = 0; i < params[0]; i++) {
+                    Thread.sleep(TIME_TEMP);
+                    Location local = location;
+                    if(local == null){
                         local = DeviceInfo.getLastKnownLocation(context);
-					}
+                    }
 
-					// verificar
-					if(local != null){
+                    // verificar
+                    if(local != null){
                         Settings localPref = new Settings(getApplicationContext());
-						String token = localPref.getPreferenceValue(Settings.TOKEN);
-						if(token == null || token.isEmpty()) {
-							TokenManager.gerarToken(getApplicationContext());
-							token = localPref.getPreferenceValue(Settings.TOKEN);
-						}
-						JSONObject jDados = new JSONObject();
-						jDados.put("latitude",local.getLatitude());
-						jDados.put("longitude",local.getLongitude());
-						jDados.put("token",token);
+                        String token = localPref.getPreferenceValue(Settings.TOKEN);
+                        if(token == null || token.isEmpty()) {
+                            TokenManager.gerarToken(getApplicationContext());
+                            token = localPref.getPreferenceValue(Settings.TOKEN);
+                        }
+                        JSONObject jDados = new JSONObject();
+                        jDados.put("latitude",local.getLatitude());
+                        jDados.put("longitude",local.getLongitude());
+                        jDados.put("token",token);
 
-						JSONObject jRequest = new JSONObject();
-						jRequest.put("geocodeRequest", jDados);
+                        JSONObject jRequest = new JSONObject();
+                        jRequest.put("geocodeRequest", jDados);
 
-						String reponder = ServiceBroker.getInstance(getApplicationContext()).geocode(jRequest.toString());
-						if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
-							JSONObject jObject = new JSONObject(reponder);
-							JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
+                        String reponder = ServiceBroker.getInstance(getApplicationContext()).geocode(jRequest.toString());
+                        if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
+                            JSONObject jObject = new JSONObject(reponder);
+                            JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
                             int idErro = JsonUtils.getErrorCode(jReponder);
-							if(idErro == 6){
-								if(!TokenManager.gerarToken(getApplicationContext())){
-									return false;
-								}
-							}
-							else if(idErro == 0) {
-								int codMunicipioIbge = jReponder.getInt("codMunicipioIbge");
+                            if(idErro == 6){
+                                if(!TokenManager.gerarToken(getApplicationContext())){
+                                    return false;
+                                }
+                            }
+                            else if(idErro == 0) {
+                                int codMunicipioIbge = jReponder.getInt("codMunicipioIbge");
 
-								Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeById(codMunicipioIbge);
-								if(cidade != null){
-									UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
-									userController.setUf(uf);
-									userController.setCidade(cidade);
-									userController.atualizarCidadeSelecionado();
+                                Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeById(codMunicipioIbge);
+                                if(cidade != null){
+                                    UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
+                                    userController.setUf(uf);
+                                    userController.setCidade(cidade);
+                                    userController.atualizarCidadeSelecionado();
 
-									// para a cidade local
-									userController.setCidadeLocal(cidade);
+                                    // para a cidade local
+                                    userController.setCidadeLocal(cidade);
 
-									// resetar memoria
-									userController.setMapErbsControle(null);
-									userController.setListEstabelecimentoSaudes(null);
-									return true;
-								}
-								else {
-									return false;
-								}
-							}
-							else {
-								return false;
-							}
-						}
-					}
-				}
-			} catch (Exception e) {
+                                    // resetar memoria
+                                    userController.setMapErbsControle(null);
+                                    userController.setListEstabelecimentoSaudes(null);
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+                            }
+                            else {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
-			}
-			return false;
-		}
+            }
+            return false;
+        }
 
-		@Override
-		protected void onPostExecute(Boolean result) {
-			try {
-				Thread.sleep(TIME_TEMP);
-				dismissDialog(PROGRESS_BAR_DETERMINAR);
-			} catch (Exception e) {
+        @Override
+        protected void onPostExecute(Boolean result) {
+            try {
+                Thread.sleep(TIME_TEMP);
+                dismissDialog(PROGRESS_BAR_DETERMINAR);
+            } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
-			}
-			try {
-				if(result){
-					fecharTela();
-				}
-				else {
-					Toast.makeText(getApplicationContext(), getString(R.string.unknown_location), Toast.LENGTH_LONG).show();
-				}
-			} catch (Exception e) {
+            }
+            try {
+                if(result){
+                    fecharTela();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.unknown_location), Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
-			}
-		}
-	}
+            }
+        }
+    }
 
-	@Override
-	public void onLocationChanged(Location location) {
-		this.location = location;
-	}
+    @Override
+    public void onLocationChanged(Location location) {
+        this.location = location;
+    }
 
-	@Override
-	public void onProviderDisabled(String provider) {
+    @Override
+    public void onProviderDisabled(String provider) {
 
-	}
+    }
 
-	@Override
-	public void onProviderEnabled(String provider) {
+    @Override
+    public void onProviderEnabled(String provider) {
 
-	}
+    }
 
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
 
-	}
+    }
 
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		timerInatividadeCount = 0;
-		return super.dispatchTouchEvent(ev);
-	}
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        timerInatividadeCount = 0;
+        return super.dispatchTouchEvent(ev);
+    }
 
-	@Override
-	public void run() {
-		try {
-			if(timerInatividadeBool){
-				if(timerInatividadeCount >= 15){
-					timerInatividadeBool = false;
-				}
-				else {
-					timerInatividadeCount++;
-					timerInatividade.postDelayed(this, TIME_TEMP);
-				}
-			}
-		} catch (Exception e) {
+    @Override
+    public void run() {
+        try {
+            if(timerInatividadeBool){
+                if(timerInatividadeCount >= 15){
+                    timerInatividadeBool = false;
+                }
+                else {
+                    timerInatividadeCount++;
+                    timerInatividade.postDelayed(this, TIME_TEMP);
+                }
+            }
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-		}
-	}
+        }
+    }
 }

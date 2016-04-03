@@ -13,13 +13,15 @@
     <string name="user">Usuário</string>
     <string name="signedup">Usuário Cadastrado</string>
     <string name="signedin">Usuário Autenticado</string>
+    <string name="estabelecimento_saude">Estabelecimento de Saúde</string>
+    <string name="estabelecimentos_saude">Estabelecimentos de Saúde</string>
 
     <string name="profile_contactable">Receber Emails</string>
 
     <string name="error">1|Erro Inesperado</string>
     <string name="error_no_connectivity">2|Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
     <string name="error_obtaining_locality">3|Erro ao obter localização</string>
-    <string name="error_connecting_server">4|Erro ao conectar servidor de dados</string>
+    <string name="error_connecting_server">4|Erro ao conectar servidor de dados, deseja utilizar os dados salvos?</string>
     <string name="error_invalid_email">5|Email inválido (precisa ter \"@\" e \".\")</string>
     <string name="error_invalid_name">5|O nome precisa ser um pouco maior...</string>
     <string name="error_invalid_password">6|Senha inválida (precisa ter mais que 4 caracteres)</string>
@@ -94,7 +96,7 @@
     <string name="cancel">Cancelar</string>
     <string name="alert">Alerta</string>
     <string name="unidentified_location">Não foi possível identificar sua localização. Deseja selecionar sua cidade a partir de uma lista?</string>
-    <string name="gps_not_available">GPS Indisponível. Deseja selecionar sua cidade a partir de uma lista?</string>
+    <string name="gps_not_available">GPS Indisponível. Deseja utilizar os dados salvos?</string>
 
     <!-- settings -->
     <string name="pref_header_general">General</string>

@@ -20,5 +20,6 @@
 
     <color name="mainBar">#3b5998</color>
     <color name="font">#303F9F</color>
+    <color name="background">#d8dfea</color>
 
 </resources>

@@ -93,7 +93,7 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/ThemeActivity" />
         <activity
-            android:name=".activities.PlaceSelectionListActivity"
+            android:name=".activities.LocalitySelectionListActivity"
             android:label="TelaLocalidadeSelecionar"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/ThemeActivity" />

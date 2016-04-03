@@ -33,8 +33,6 @@ public class DeviceInfo {
 
     public static double lastLatitude;
     public static double lastLongitude;
-    public static int idCidade = 0;
-    public static int idUF = 0;
 
     public static String statusMesage = "";
 
