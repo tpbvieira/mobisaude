@@ -51,12 +51,12 @@ public class ServiceBroker {
 		return requestJson("/consultaDominios", json);
 	}
 
-	public String getESByMunicipio(String json) {
-		return requestJson("/getESByMunicipio", json);
+	public String getESByIdMunicipio(String json) {
+		return requestJson("/getESByIdMunicipio", json);
 	}
 
-    public String getESByMunicipioTipoEstabelecimento(String json) {
-        return requestJson("/getESByMunicipioTipoEstabelecimento", json);
+    public String getESByIdMunicipioIdTipoEstabelecimento(String json) {
+        return requestJson("/getESByIdMunicipioIdTipoEstabelecimento", json);
     }
 
 	public String report(String json) {

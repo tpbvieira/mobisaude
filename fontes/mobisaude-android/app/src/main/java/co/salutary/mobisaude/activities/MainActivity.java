@@ -2,6 +2,7 @@ package co.salutary.mobisaude.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -10,19 +11,36 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.controller.ESResponse;
+import co.salutary.mobisaude.controller.ServiceBroker;
+import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.UserController;
 import co.salutary.mobisaude.db.LocalDataBase;
+import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.util.JsonUtils;
+import co.salutary.mobisaude.util.MobiSaudeAppException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -35,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private LocalDataBase db;
     private UserController userController;
+
+    TextView mESView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,26 +77,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = LocalDataBase.getInstance();
         Settings settings = new Settings(getApplicationContext());
 
-        TextView stateView = (TextView) findViewById(R.id.state);
+        TextView stateView = (TextView) findViewById(R.id.main_content_state);
         stateView.setText(getString(R.string.estado) + "=" + userController.getUf().getNome());
 
-        TextView citieView = (TextView) findViewById(R.id.city);
+        TextView citieView = (TextView) findViewById(R.id.main_content_city);
         citieView.setText(getString(R.string.cidade) + "=" + userController.getCidade().getNome());
+
+        mESView = (TextView) findViewById(R.id.main_content_es);
 
         String tipoESString = settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE);
         List<String> tipoESList = Arrays.asList(tipoESString.split("\\s*,\\s*"));
-        TextView tipoESView = (TextView) findViewById(R.id.tipo_es);
+        TextView tipoESView = (TextView) findViewById(R.id.main_content_tipo_es);
         tipoESView.setText(getString(R.string.tipo_estabelecimento_saude) + "=" + tipoESList.size());
 
         String tipoGestaoString = settings.getPreferenceValues(Settings.FILTER_TIPO_GESTAO);
         List<String> tipoGestaoList = Arrays.asList(tipoGestaoString.split("\\s*,\\s*"));
-        TextView tipoGestaoView = (TextView) findViewById(R.id.tipo_gestao);
+        TextView tipoGestaoView = (TextView) findViewById(R.id.main_content_tipo_gestao);
         tipoGestaoView.setText(getString(R.string.tipo_gestao) + "=" + tipoGestaoList.size());
 
         String regiaoString = settings.getPreferenceValues(Settings.FILTER_REGIAO);
         List<String> regiaoList = Arrays.asList(regiaoString.split("\\s*,\\s*"));
-        TextView regiaoView = (TextView) findViewById(R.id.regiao);
+        TextView regiaoView = (TextView) findViewById(R.id.main_content_regiao);
         regiaoView.setText(getString(R.string.regiao) + "=" + regiaoList.size());
+
+        new UpdateFieldsTask(String.valueOf(userController.getCidade().getIdCidade())).execute();
 
     }
 
@@ -221,6 +245,103 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(MainActivity.this, activity));
                 }
             }, 300);
+        }
+    }
+
+
+    public class UpdateFieldsTask extends AsyncTask<Void, Void, Boolean> {
+
+        String mNumES, mCity, mErrorMsg;
+
+        UpdateFieldsTask(String city) {
+            mCity = city;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            boolean ok = true;
+
+            List<EstabelecimentoSaude> esList = userController.getListEstabelecimentoSaudes();
+            if(esList == null || esList.size() == 0){
+
+                userController.setListEstabelecimentoSaudes(new ArrayList<EstabelecimentoSaude>());
+
+                Settings settings = new Settings(getApplicationContext());
+
+                String token = settings.getPreferenceValue(Settings.TOKEN);
+                if (token == null || token.isEmpty()) {
+                    TokenManager.gerarToken(getApplicationContext());//renew token and saves into preferences
+                    token = settings.getPreferenceValue(Settings.TOKEN);
+                }
+
+                try {
+                    JSONObject data = new JSONObject();
+                    data.put("token", token);
+                    data.put("idMunicipio", mCity.substring(0, mCity.length()-1));
+
+                    JSONObject request = new JSONObject();
+                    request.put("esRequest", data);
+
+                    String responseStr = ServiceBroker.getInstance(getApplicationContext()).getESByIdMunicipio(request.toString());
+                    if (responseStr != null) {
+                        JSONObject json = new JSONObject(responseStr);
+                        JSONObject esResponse = (JSONObject) json.get("esResponse");
+                        int idErro = JsonUtils.getErrorCode(esResponse);
+                        if (idErro == 0) {
+                            JSONArray ess = esResponse.getJSONArray("estabelecimentoSaude");
+                            mNumES = String.valueOf(ess.length());
+                            for (int i = 0; i < ess.length(); ++i) {
+                                JSONObject rec = ess.getJSONObject(i);
+                                EstabelecimentoSaude es = jsonObjectToES(rec);
+                                if(es != null){
+                                    userController.getListEstabelecimentoSaudes().add(es);
+                                }
+                            }
+                        } else {
+                            throw new MobiSaudeAppException(JsonUtils.getErrorMessage(esResponse));
+                        }
+                    }
+                } catch (Exception e) {
+                    mErrorMsg = e.getMessage();
+                    Log.e(TAG, e.getMessage());
+                    ok = false;
+                }
+
+            }
+
+            return ok;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+            if (success) {
+                mESView.setEnabled(false);
+                mESView.setText(getString(R.string.estabelecimento_saude) + "=" + mNumES);
+                mESView.setEnabled(true);
+                mESView.setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected void onCancelled() { }
+
+    }
+
+    public static EstabelecimentoSaude jsonObjectToES(JSONObject rec){
+        try {
+            EstabelecimentoSaude es = new EstabelecimentoSaude();
+            es.setLatitude(rec.getDouble("latitude"));
+            es.setLongitude(rec.getDouble("longitude"));
+            es.setNomeFantasia(rec.getString("nomeFantasia"));
+            es.setIdTipoEstabelecimentoSaude((short)rec.getInt("idTipoEstabelecimentoSaude"));
+            return es;
+        } catch (Exception e) {
+            //Log.e("Anatel", "UtilJson.jsonObjectToErb: "+e);
+            return null;
         }
     }
 

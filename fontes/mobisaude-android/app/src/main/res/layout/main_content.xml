@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/state"
+        android:id="@+id/main_content_state"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
@@ -25,8 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/city"
-        android:layout_below="@+id/state"
+        android:id="@+id/main_content_city"
+        android:layout_below="@+id/main_content_state"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"/>
@@ -35,8 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/tipo_es"
-        android:layout_below="@+id/city"
+        android:id="@+id/main_content_es"
+        android:layout_below="@+id/main_content_city"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"/>
@@ -45,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/tipo_gestao"
-        android:layout_below="@+id/tipo_es"
+        android:id="@+id/main_content_tipo_es"
+        android:layout_below="@+id/main_content_es"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"/>
@@ -55,8 +55,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:id="@+id/regiao"
-        android:layout_below="@+id/tipo_gestao"
+        android:id="@+id/main_content_tipo_gestao"
+        android:layout_below="@+id/main_content_tipo_es"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty"
+        android:id="@+id/main_content_regiao"
+        android:layout_below="@+id/main_content_tipo_gestao"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"/>

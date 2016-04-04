@@ -4,8 +4,14 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
@@ -44,6 +50,14 @@ public class JsonUtils {
             Log.e(TAG, e.getMessage());
             return null;
         }
+    }
+
+    public static String toJsonString(Object jsonObject) {
+        return new Gson().toJson(jsonObject);
+    }
+
+    public static Object fromJsonString(String jsonString, Type type) {
+        return new Gson().fromJson(jsonString, type);
     }
 
     public static int getErrorCode(String json, String jsonObject){

@@ -5,10 +5,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import co.salutary.mobisaude.restful.message.mobile.ESMsg;
 
-
 @XmlRootElement
-@XmlType(namespace = "mobile", name = "getESResponse")
-public class GetESResponse implements IMobileResponse {
+@XmlType(namespace = "mobile", name = "esResponse")
+public class ESResponse implements IMobileResponse {
 
 	private ESMsg[] esMsg;
 	private String erro;

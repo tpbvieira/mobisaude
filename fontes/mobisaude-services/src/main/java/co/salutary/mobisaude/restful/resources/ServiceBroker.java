@@ -34,13 +34,13 @@ import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarChaveRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
-import co.salutary.mobisaude.restful.message.request.GetESRequest;
+import co.salutary.mobisaude.restful.message.request.ESRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
 import co.salutary.mobisaude.restful.message.response.GerarChaveResponse;
 import co.salutary.mobisaude.restful.message.response.GerarTokenResponse;
-import co.salutary.mobisaude.restful.message.response.GetESResponse;
+import co.salutary.mobisaude.restful.message.response.ESResponse;
 import co.salutary.mobisaude.restful.message.response.UserResponse;
 
 @Path("/mobile")
@@ -285,8 +285,8 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/listES")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GetESResponse listES(GetESRequest request) {
-		GetESResponse response = new GetESResponse();
+	public ESResponse listES(ESRequest request) {
+		ESResponse response = new ESResponse();
 		
 		try {
 			if (!request.validate()) {
@@ -313,7 +313,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
-					esMsg.setTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+					esMsg.setIdTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
 
 					esMsgList.add(esMsg);
 				}
@@ -331,11 +331,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 	
 	@POST
-	@Path("/getESByMunicipio")
+	@Path("/getESByIdMunicipio")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GetESResponse getESByMunicipio(GetESRequest request) {
-		GetESResponse response = new GetESResponse();
+	public ESResponse getESByIdMunicipio(ESRequest request) {
+		ESResponse response = new ESResponse();
 		
 		try {
 			if (!request.validate()) {
@@ -345,21 +345,21 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			String token = request.getToken();
-			String municipio = request.getMunicipio();
+			String idMunicipio = request.getIdMunicipio();
 
 			if (!validarToken(token)) {
 				logger.error(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
 				return response;
 			}
-			if (municipio == null || municipio.trim().equals("")) {
+			if (idMunicipio == null || idMunicipio.trim().equals("")) {
 				logger.error(properties.getProperty("co.mobisaude.strings.municipioInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.municipioInvalido"));				
 				return response;
 			}
 
 			EstabelecimentoSaudeFacade esFacade = (EstabelecimentoSaudeFacade)Factory.getInstance().get("estabelecimentoSaudeFacade");
-			List<EstabelecimentoSaude> esList = esFacade.listByMunicipio(municipio);
+			List<EstabelecimentoSaude> esList = esFacade.listByIdMunicipio(idMunicipio);
 			
 			if (esList != null) {
 				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
@@ -368,7 +368,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
-					esMsg.setTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+					esMsg.setIdTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
 
 					esMsgList.add(esMsg);
 				}
@@ -386,11 +386,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 		
 	@POST
-	@Path("/getESByMunicipioTipoEstabelecimento")
+	@Path("/getESByIdMunicipioIdTipoEstabelecimento")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public GetESResponse getESByMunicipioTipoEstabelecimento(GetESRequest request) {
-		GetESResponse response = new GetESResponse();
+	public ESResponse getESByIdMunicipioIdTipoEstabelecimento(ESRequest request) {
+		ESResponse response = new ESResponse();
 		
 		try {
 			if (!request.validate()) {
@@ -400,16 +400,16 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			String token = request.getToken();
-			String municipio = request.getMunicipio();
-			String tipoES = request.getTipoEstabelecimentoSaude();
-			String[] tiposES = request.getTiposEstabelecimentoSaude();
+			String idMunicipio = request.getIdMunicipio();
+			String idTipoES = request.getIdTipoEstabelecimentoSaude();
+			String[] idTiposES = request.getIdTiposEstabelecimentoSaude();
 
 			if (!validarToken(token)) {
 				logger.error(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
 				return response;
 			}
-			if (municipio == null || municipio.trim().equals("")) {
+			if (idMunicipio == null || idMunicipio.trim().equals("")) {
 				logger.error(properties.getProperty("co.mobisaude.strings.municipioInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.municipioInvalido"));				
 				return response;
@@ -418,15 +418,15 @@ public class ServiceBroker extends AbstractServiceBroker {
 			EstabelecimentoSaudeFacade esFacade = (EstabelecimentoSaudeFacade)Factory.getInstance().get("estabelecimentoSaudeFacade");
 			List<EstabelecimentoSaude> esList = null;
 			
-			if (tiposES != null) {
-				if (tiposES.length > 0) {
-					esList = esFacade.listByMunicipioTiposEstabelecimento(municipio, tiposES);
+			if (idTiposES != null) {
+				if (idTiposES.length > 0) {
+					esList = esFacade.listByIdMunicipioIdTiposEstabelecimento(idMunicipio, idTiposES);
 				} else {
 					esList = new ArrayList<EstabelecimentoSaude>();
 				}
 			} else {
-				if (tipoES != null) {
-					esList = esFacade.listByMunicipioTipoEstabelecimento(municipio, tipoES);
+				if (idTipoES != null) {
+					esList = esFacade.listByIdMunicipioIdTipoEstabelecimento(idMunicipio, idTipoES);
 				} else {
 					esList = new ArrayList<EstabelecimentoSaude>();
 				}
@@ -439,7 +439,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
-					esMsg.setTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+					esMsg.setIdTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
 
 					esMsgList.add(esMsg);
 				}

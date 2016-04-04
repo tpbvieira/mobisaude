@@ -7,8 +7,8 @@ import co.salutary.mobisaude.model.estabelecimentosaude.EstabelecimentoSaude;
 public interface EstabelecimentoSaudeFacade {
 
 	public List<EstabelecimentoSaude> list();
-	public List<EstabelecimentoSaude> listByMunicipio(String idMunicipio);
-    public List<EstabelecimentoSaude> listByMunicipioTipoEstabelecimento(String idMunicipio, String tipoEstabelecimento);
-    public List<EstabelecimentoSaude> listByMunicipioTiposEstabelecimento( String idMunicipio, String[] tiposEstabelecimento);
+	public List<EstabelecimentoSaude> listByIdMunicipio(String idMunicipio);
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTipoEstabelecimento(String idMunicipio, String idTipoEstabelecimento);
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTiposEstabelecimento(String idMunicipio, String[] idTiposEstabelecimento);
     
 }

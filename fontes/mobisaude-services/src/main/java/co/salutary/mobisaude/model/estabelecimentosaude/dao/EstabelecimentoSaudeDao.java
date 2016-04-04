@@ -7,7 +7,7 @@ import co.salutary.mobisaude.model.estabelecimentosaude.EstabelecimentoSaude;
 public interface EstabelecimentoSaudeDao {
 
     public List<EstabelecimentoSaude> list();
-    public List<EstabelecimentoSaude> listByMunicipio(String codMunicipio);
-    public List<EstabelecimentoSaude> listByMunicipioTipoEstabelecimento(String codMunicipio, String tipoEstabelecimento);
-    public List<EstabelecimentoSaude> listByMunicipioTiposEstabelecimento(String codMunicipio, String[] tiposEstabelecimento);
+    public List<EstabelecimentoSaude> listByIdMunicipio(String idMunicipio);
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTipoEstabelecimento(String idMunicipio, String idTipoEstabelecimento);
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTiposEstabelecimento(String idMunicipio, String[] idTiposEstabelecimento);
 }

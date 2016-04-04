@@ -26,9 +26,7 @@ public class EstabelecimentoSaude {
     private Double latitude;
     private Double longitude;
 
-    public static String getTAG() {
-        return TAG;
-    }
+    public EstabelecimentoSaude(){}
 
     public int getIdCnes() {
         return idCnes;

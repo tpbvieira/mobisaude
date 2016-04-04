@@ -20,16 +20,16 @@ public class EstabelecimentoSaudeFacadeImpl implements EstabelecimentoSaudeFacad
 		return eSDAO.list();
 	}
 
-	public List<EstabelecimentoSaude> listByMunicipio(String idMunicipio) {
-    	return eSDAO.listByMunicipio(idMunicipio);
+	public List<EstabelecimentoSaude> listByIdMunicipio(String idMunicipio) {
+    	return eSDAO.listByIdMunicipio(idMunicipio);
     }
 	
-    public List<EstabelecimentoSaude> listByMunicipioTipoEstabelecimento(String idMunicipio, String tipoEstabelecimento) {
-    	return eSDAO.listByMunicipioTipoEstabelecimento(idMunicipio, tipoEstabelecimento);
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTipoEstabelecimento(String idMunicipio, String idTipoEstabelecimento) {
+    	return eSDAO.listByIdMunicipioIdTipoEstabelecimento(idMunicipio, idTipoEstabelecimento);
     }
 
-    public List<EstabelecimentoSaude> listByMunicipioTiposEstabelecimento(String idMunicipio, String[] tiposEstabelecimento) {
-    	return eSDAO.listByMunicipioTiposEstabelecimento(idMunicipio, tiposEstabelecimento);
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTiposEstabelecimento(String idMunicipio, String[] idTiposEstabelecimento) {
+    	return eSDAO.listByIdMunicipioIdTiposEstabelecimento(idMunicipio, idTiposEstabelecimento);
     }
     
 }
