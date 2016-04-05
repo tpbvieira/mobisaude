@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(namespace = "mobile", name = "estabelecimentosaude")
 public class ESMsg implements Cloneable {
 
+	private String idCnes;
 	private String idMunicipio;
 	private String idTipoEstabelecimentoSaude;
 	private String idTipoGestao;
@@ -26,6 +27,14 @@ public class ESMsg implements Cloneable {
 	private String latitude;
 	private String longitude;
 	
+	public String getIdCnes() {
+		return idCnes;
+	}
+
+	public void setIdCnes(String idCnes) {
+		this.idCnes = idCnes;
+	}
+
 	public String getIdMunicipio() {
 		return idMunicipio;
 	}

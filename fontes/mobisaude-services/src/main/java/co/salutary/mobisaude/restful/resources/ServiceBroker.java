@@ -310,6 +310,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
 				for (EstabelecimentoSaude es:esList) {
 					ESMsg esMsg = new ESMsg();
+					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
@@ -365,6 +366,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
 				for (EstabelecimentoSaude es:esList) {
 					ESMsg esMsg = new ESMsg();
+					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
@@ -436,6 +438,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
 				for (EstabelecimentoSaude es:esList) {
 					ESMsg esMsg = new ESMsg();
+					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 

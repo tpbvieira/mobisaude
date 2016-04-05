@@ -13,10 +13,10 @@ public class UserController {
     private UF uf;
     private Cidade cidade;
     private Cidade cidadeLocal;
+    private EstabelecimentoSaude estabelecimentoSaude;
 
     private Map<String, Boolean> mapErbsControle = null;
     private List<EstabelecimentoSaude> listEstabelecimentoSaudes;
-    private List<EstabelecimentoSaude> listHistoricos;
 
 	private static UserController instance = null;
 
@@ -37,7 +37,13 @@ public class UserController {
 		}
 		return "";		
 	}
-	
+
+    public EstabelecimentoSaude getEstabelecimentoSaude() {
+        return estabelecimentoSaude;
+    }
+    public void setEstabelecimentoSaude(EstabelecimentoSaude estabelecimentoSaude) {
+        this.estabelecimentoSaude = estabelecimentoSaude;
+    }
 	public Cidade getCidade() {
 		return cidade;
 	}
@@ -67,12 +73,6 @@ public class UserController {
 	}
 	public void setListEstabelecimentoSaudes(List<EstabelecimentoSaude> listEstabelecimentoSaudes) {
 		this.listEstabelecimentoSaudes = listEstabelecimentoSaudes;
-	}
-	public List<EstabelecimentoSaude> getListHistoricos() {
-		return listHistoricos;
-	}
-	public void setListHistoricos(List<EstabelecimentoSaude> listHistoricos) {
-		this.listHistoricos = listHistoricos;
 	}
 
 }

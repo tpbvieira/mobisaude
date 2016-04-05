@@ -140,4 +140,5 @@ public class EsDAO {
         estabelecimentoSaude.setLongitude(cursor.getDouble(cursor.getColumnIndex(ScriptES._LONGITUDE)));
         return estabelecimentoSaude;
     }
+
 }

@@ -1,8 +1,5 @@
 package co.salutary.mobisaude.adapters;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import co.salutary.mobisaude.R;
 
 
@@ -34,7 +35,7 @@ public class ListAdapterModel extends BaseAdapter {
             this.id = id;
         }
     }
-    
+
     private List<Row> rows = new ArrayList<Row>();
     
     public void setRows(List<Row> rows) {

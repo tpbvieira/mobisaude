@@ -75,6 +75,9 @@
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
+            android:name=".activities.HealthPlaceSelectionListActivity"
+            android:label="@string/search" />
+        <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity

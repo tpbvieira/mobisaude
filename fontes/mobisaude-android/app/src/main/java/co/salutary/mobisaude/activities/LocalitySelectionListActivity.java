@@ -72,9 +72,9 @@ public class LocalitySelectionListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_select_list);
-        TextView title = (TextView) findViewById(R.id.locality_select_list_title);
-        mSearchText = (EditText) findViewById(R.id.locality_select_list_search_text);
-        mSearchButton = (ImageView) findViewById(R.id.locality_select_list_search_button);
+        TextView title = (TextView) findViewById(R.id.select_list_title);
+        mSearchText = (EditText) findViewById(R.id.select_list_search_text);
+        mSearchButton = (ImageView) findViewById(R.id.select_list_search_button);
 
         userDataBase = LocalDataBase.getInstance();
         userController = UserController.getInstance();
@@ -296,7 +296,7 @@ public class LocalitySelectionListActivity extends ListActivity {
     }
 
     private void updateList() {
-        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.locality_select_list_index);
+        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.select_list_index);
         sideIndex.removeAllViews();
         indexListSize = alphabet.size();
 
@@ -353,7 +353,7 @@ public class LocalitySelectionListActivity extends ListActivity {
     }
 
     private void displayListItem() {
-        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.locality_select_list_index);
+        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.select_list_index);
         sideIndexHeight = sideIndex.getHeight();
         double pixelPerIndexItem = (double) sideIndexHeight / indexListSize;
 

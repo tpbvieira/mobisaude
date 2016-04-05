@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.menu_bookmarks) {
             startActivity(LocalitySelectionActivity.class);
         } else if (id == R.id.menu_search) {
-
+            startActivity(HealthPlaceSelectionListActivity.class);
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
         } else if (id == R.id.menu_dashboard) {
@@ -334,10 +334,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static EstabelecimentoSaude jsonObjectToES(JSONObject rec){
         try {
             EstabelecimentoSaude es = new EstabelecimentoSaude();
+            es.setIdCnes(rec.getInt("idCnes"));
+            es.setIdTipoEstabelecimentoSaude((short) rec.getInt("idTipoEstabelecimentoSaude"));
             es.setLatitude(rec.getDouble("latitude"));
             es.setLongitude(rec.getDouble("longitude"));
             es.setNomeFantasia(rec.getString("nomeFantasia"));
-            es.setIdTipoEstabelecimentoSaude((short)rec.getInt("idTipoEstabelecimentoSaude"));
             return es;
         } catch (Exception e) {
             //Log.e("Anatel", "UtilJson.jsonObjectToErb: "+e);
