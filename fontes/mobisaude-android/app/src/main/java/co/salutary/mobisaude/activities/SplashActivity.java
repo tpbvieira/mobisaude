@@ -93,6 +93,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             onVerifyConectivity();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -164,6 +165,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 return isSuccess;
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
             return isSuccess;
         }
@@ -185,6 +187,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -217,6 +220,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 return DeviceInfo.hasLocationProvider();
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
             return false;
         }
@@ -234,6 +238,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -265,6 +270,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
                 return false;
             }
             return false;
@@ -280,6 +286,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -383,6 +390,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
             return false;
         }
@@ -406,6 +414,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -475,53 +484,10 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                         } else if (idErro == 0) {
 
                             // save domains into settings
-                            settings.setPreferenceValues(Settings.regiao, domains.getJSONArray("regiao").toString());
-                            settings.setPreferenceValues(Settings.tiposSistemaOperacional, domains.getJSONArray("tiposSistemaOperacional").toString());
-                            settings.setPreferenceValues(Settings.tiposEstabelecimentoSaude, domains.getJSONArray("tiposEstabelecimentoSaude").toString());
-                            settings.setPreferenceValues(Settings.tipoGestao, domains.getJSONArray("tiposGestao").toString());
-
-                            //place types
-                            if (settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE).length() == 0) {
-                                // tipo de estabelecimento de saúde
-                                String tiposESStr = "";
-                                JSONArray tiposEs = new JSONArray(settings.getPreferenceValues(Settings.tiposEstabelecimentoSaude));
-                                for (int j = 0; j < tiposEs.length(); j++) {
-                                    if (tiposESStr.length() == 0) {
-                                        tiposESStr += tiposEs.getJSONObject(j).getInt("id");
-                                    } else {
-                                        tiposESStr += "," + tiposEs.getJSONObject(j).getInt("id");
-                                    }
-                                }
-                                settings.setPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE, tiposESStr);
-                            }
-
-                            // regions
-                            if (settings.getPreferenceValues(Settings.FILTER_REGIAO).length() == 0) {
-                                String regioesListStr = "";
-                                JSONArray regioesJson = new JSONArray(settings.getPreferenceValues(Settings.regiao));
-                                for (int j = 0; j < regioesJson.length(); j++) {
-                                    if (regioesListStr.length() == 0) {
-                                        regioesListStr += regioesJson.getJSONObject(j).getInt("id");
-                                    } else {
-                                        regioesListStr += "," + regioesJson.getJSONObject(j).getInt("id");
-                                    }
-                                }
-                                settings.setPreferenceValues(Settings.FILTER_REGIAO, regioesListStr);
-                            }
-
-                            // management types
-                            if (settings.getPreferenceValues(Settings.FILTER_REGIAO).length() == 0) {
-                                String tiposGestaoListStr = "";
-                                JSONArray tiposGestao = new JSONArray(settings.getPreferenceValues(Settings.tipoGestao));
-                                for (int j = 0; j < tiposGestao.length(); j++) {
-                                    if (tiposGestaoListStr.length() == 0) {
-                                        tiposGestaoListStr += tiposGestao.getJSONObject(j).getInt("id");
-                                    } else {
-                                        tiposGestaoListStr += "," + tiposGestao.getJSONObject(j).getInt("id");
-                                    }
-                                }
-                                settings.setPreferenceValues(Settings.FILTER_TIPO_GESTAO, tiposGestaoListStr);
-                            }
+                            settings.setPreferenceValues(Settings.REGIAO, domains.getJSONArray("regiao").toString());
+                            settings.setPreferenceValues(Settings.TIPOS_SISTEMA_OPERACIONAL, domains.getJSONArray("tiposSistemaOperacional").toString());
+                            settings.setPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE, domains.getJSONArray("tiposEstabelecimentoSaude").toString());
+                            settings.setPreferenceValues(Settings.TIPO_GESTAO, domains.getJSONArray("tiposGestao").toString());
 
                         } else {
                             return false;
@@ -530,50 +496,13 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                         return false;
                     }
 
-//                    obtain views
-//                    JSONObject consultaTelasRequest = JsonUtils.createRequest(getApplicationContext(), "consultaTelasRequest");
-//                    String consultaTelasResponse = ServiceBroker.getInstance(getApplicationContext()).queryAvailableViews(consultaTelasRequest.toString());
-//
-//                    if (consultaTelasResponse != null && !consultaTelasResponse.startsWith(getString(R.string.erro_starts))) {
-//
-//                        JSONObject views = (JSONObject) new JSONObject(consultaTelasResponse).get("consultaTelasResponse");
-//                        int idErro = JsonUtils.getErrorCode(views);
-//
-//                        if (idErro == 6) {
-//                            // renew the token and try one more time, according to numAttempts
-//                            if (!TokenManager.gerarToken(getApplicationContext())) {
-//                                return false;
-//                            }
-//                        } else if (idErro == 0) {
-//                            try {
-//                                Iterator<String> iterator = views.keys();
-//                                HashMap<String, Boolean> availableViews = new HashMap<String, Boolean>();
-//                                while (iterator.hasNext()) {
-//                                    String key = iterator.next();
-//                                    if (!key.equals("erro") && !key.equals("description")) {
-//                                        availableViews.put(key, views.getBoolean(key));
-//                                    }
-//                                }
-//                                localDataBase.setAvailableViews(availableViews);
-//                                return true;
-//                            } catch (Exception e) {
-//                                Log.e(TAG, e.getMessage());
-//                                return false;
-//                            }
-//                        } else {
-//                            return false;
-//                        }
-//                    } else {
-//                        localDataBase.setAvailableViews(new HashMap<String, Boolean>());
-//                        return true;
-//                    }
                 } else {
-                    // no connectivity or server connection, but still works offline
                     return true;
                 }
 
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
             return true;
         }
@@ -590,6 +519,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 isShowDialog = true;
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
             try {
                 if (result) {
@@ -603,6 +533,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -636,6 +567,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             alerta.show();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
         }
     }
 

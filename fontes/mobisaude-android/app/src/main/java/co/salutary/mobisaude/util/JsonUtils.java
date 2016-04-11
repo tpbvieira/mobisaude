@@ -7,11 +7,14 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
@@ -22,12 +25,13 @@ public class JsonUtils {
     private static final String TAG = new Object(){}.getClass().getName();
 
     public static Double parceJsonToDouble(JSONObject json, String key){
-    	try {
-			return json.getDouble(key);
-		} catch (Exception e) {
+        try {
+            return json.getDouble(key);
+        } catch (Exception e) {
             Log.d(TAG, Resources.getSystem().getString(R.string.error), e);
-		}
-    	return 0d;
+            e.printStackTrace();
+        }
+        return 0d;
     }
 
     public static JSONObject createRequest(Context context, String requestString){
@@ -48,6 +52,7 @@ public class JsonUtils {
             return request;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -67,6 +72,7 @@ public class JsonUtils {
             return getErrorCode(jReponder);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
             return -1;
         }
     }
@@ -78,6 +84,7 @@ public class JsonUtils {
             return Integer.parseInt(splitResult[0]);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
             return -1;
         }
     }
@@ -89,6 +96,7 @@ public class JsonUtils {
             return splitResult[1];
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
             return Resources.getSystem().getString(R.string.error);
         }
     }
@@ -99,6 +107,7 @@ public class JsonUtils {
             jsonErrorMessage.put("erro", errorMessage);
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
         }
         return jsonErrorMessage;
     }
@@ -109,8 +118,25 @@ public class JsonUtils {
             jsonErrorMessage.put("erro", errorMessage);
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
         }
         return jsonErrorMessage.toString();
+    }
+
+    public static HashMap<String, String> fromJsonArraytoDomainHashMap(JSONArray jsonArray){
+        HashMap<String, String> pairs = new HashMap<String, String>();
+
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.optJSONObject(i);
+                pairs.put(jsonObject.getString("id"), jsonObject.getString("nome"));
+            }
+        } catch (JSONException e) {
+            Log.d(TAG, Resources.getSystem().getString(R.string.error), e);
+            e.printStackTrace();
+        }
+
+        return pairs;
     }
 
 }

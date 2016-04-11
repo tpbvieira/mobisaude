@@ -17,15 +17,10 @@ public class Settings {
 	public static final String SHOW_SCREEN_TELA_2 = "SHOW_SCREEN_TELA_2";
 
     // domain tables
-    public static final String regiao = "regiao";
-    public static final String tipoGestao = "tipoGestao";
-    public static final String tiposSistemaOperacional = "tiposSistemaOperacional";
-    public static final String tiposEstabelecimentoSaude = "tiposEstabelecimentoSaude";
-
-    // filters
-    public static final String FILTER_REGIAO = "filter_regiao";
-    public static final String FILTER_TIPO_GESTAO = "filter_tipo_gestao";
-    public static final String FILTER_TIPO_ESTABELECIMENTO_SAUDE = "filter_tipo_estabelecimento_saude";
+    public static final String REGIAO = "REGIAO";
+    public static final String TIPO_GESTAO = "TIPO_GESTAO";
+    public static final String TIPOS_SISTEMA_OPERACIONAL = "TIPOS_SISTEMA_OPERACIONAL";
+    public static final String TIPOS_ESTABELECIMENTO_SAUDE = "TIPOS_ESTABELECIMENTO_SAUDE";
 
     public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
     public static final String EMPTY = "";

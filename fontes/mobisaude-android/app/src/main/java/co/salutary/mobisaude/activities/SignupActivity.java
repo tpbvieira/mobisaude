@@ -49,14 +49,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
 
     private static final String TAG = SignupActivity.class.getSimpleName();
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private SignupTask mAuthTask = null;
 
     // UI references.
@@ -216,9 +209,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow

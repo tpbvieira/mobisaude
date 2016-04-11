@@ -84,7 +84,7 @@ public class ListAdapterModel extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         
-        if (getItemViewType(position) == 0) { // Item
+        if (getItemViewType(position) == 0) {
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = (LinearLayout) inflater.inflate(R.layout.row_item, parent, false);  

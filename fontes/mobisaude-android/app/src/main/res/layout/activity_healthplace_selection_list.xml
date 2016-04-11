@@ -1,0 +1,114 @@
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:focusable="true" 
+    android:focusableInTouchMode="true" >
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:id="@+id/hp_select_list_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
+
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="40dp"
+	    android:layout_gravity="center"
+	    android:orientation="horizontal"
+	    android:background="@color/background" >
+
+		<TextView
+		    android:id="@+id/hp_select_list_title"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:gravity="center"
+		    android:textColor="@color/font"
+		    android:textSize="18sp"
+		    android:text="@string/empty" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:background="@color/background">
+
+        <Spinner
+            android:id="@+id/hp_type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:dropDownSelector="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
+    </LinearLayout>
+	
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:background="@color/grey" >
+	
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/round_border_cinza"
+			android:gravity="center"
+		    android:clickable="true"
+		    android:layout_margin="5dp"
+			android:orientation="horizontal" >
+			
+			<EditText
+			    android:id="@+id/hp_select_list_search_text"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:background="@drawable/noborder"
+				android:hint="@string/search"
+				android:padding="8dp"
+				android:textSize="16sp"
+				android:singleLine="true" />
+			
+			<ImageView
+			    android:id="@+id/hp_select_list_search_button"
+				android:layout_width="35dp"
+				android:layout_height="35dp"
+				android:padding="5dp"
+				android:contentDescription="@string/search"
+				android:src="@android:drawable/ic_menu_search" />
+
+		</LinearLayout>
+	</LinearLayout>
+
+	<LinearLayout
+	    android:baselineAligned="false"
+		android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="horizontal" >
+        
+	     <ListView
+	        android:id="@android:id/list"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:fastScrollEnabled="true" />
+	
+	    <LinearLayout
+	        android:id="@+id/hp_select_list_index"
+	        android:layout_width="30dip"
+	        android:layout_height="fill_parent"
+	        android:background="@color/background"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical" >
+	    </LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>

@@ -19,20 +19,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.ESResponse;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.UserController;
@@ -85,20 +82,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mESView = (TextView) findViewById(R.id.main_content_es);
 
-        String tipoESString = settings.getPreferenceValues(Settings.FILTER_TIPO_ESTABELECIMENTO_SAUDE);
-        List<String> tipoESList = Arrays.asList(tipoESString.split("\\s*,\\s*"));
-        TextView tipoESView = (TextView) findViewById(R.id.main_content_tipo_es);
-        tipoESView.setText(getString(R.string.tipo_estabelecimento_saude) + "=" + tipoESList.size());
+        try {
+            String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
+            HashMap<String,String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
+            TextView tipoESView = (TextView) findViewById(R.id.main_content_tipo_es);
+            tipoESView.setText(getString(R.string.tipo_estabelecimento_saude) + "=" + tiposES.values().size());
 
-        String tipoGestaoString = settings.getPreferenceValues(Settings.FILTER_TIPO_GESTAO);
-        List<String> tipoGestaoList = Arrays.asList(tipoGestaoString.split("\\s*,\\s*"));
-        TextView tipoGestaoView = (TextView) findViewById(R.id.main_content_tipo_gestao);
-        tipoGestaoView.setText(getString(R.string.tipo_gestao) + "=" + tipoGestaoList.size());
+            String tipoGestaoString = settings.getPreferenceValues(Settings.TIPO_GESTAO);
+            HashMap<String,String> tiposGestao = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoGestaoString));
+            TextView tipoGestaoView = (TextView) findViewById(R.id.main_content_tipo_gestao);
+            tipoGestaoView.setText(getString(R.string.tipo_gestao) + "=" + tiposGestao.size());
 
-        String regiaoString = settings.getPreferenceValues(Settings.FILTER_REGIAO);
-        List<String> regiaoList = Arrays.asList(regiaoString.split("\\s*,\\s*"));
-        TextView regiaoView = (TextView) findViewById(R.id.main_content_regiao);
-        regiaoView.setText(getString(R.string.regiao) + "=" + regiaoList.size());
+            String regiaoString = settings.getPreferenceValues(Settings.REGIAO);
+            HashMap<String,String> regioes = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(regiaoString));
+            TextView regiaoView = (TextView) findViewById(R.id.main_content_regiao);
+            regiaoView.setText(getString(R.string.regiao) + "=" + regioes.size());
+        } catch (JSONException e) {
+            Log.e(TAG,e.getMessage());
+            e.printStackTrace();
+        }
 
         new UpdateFieldsTask(String.valueOf(userController.getCidade().getIdCidade())).execute();
 
@@ -304,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } catch (Exception e) {
                     mErrorMsg = e.getMessage();
                     Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
                     ok = false;
                 }
 
@@ -341,7 +344,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             es.setNomeFantasia(rec.getString("nomeFantasia"));
             return es;
         } catch (Exception e) {
-            //Log.e("Anatel", "UtilJson.jsonObjectToErb: "+e);
+            Log.e(TAG, e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }

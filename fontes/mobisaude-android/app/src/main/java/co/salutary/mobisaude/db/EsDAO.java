@@ -47,8 +47,7 @@ public class EsDAO {
 
     public EstabelecimentoSaude getESByIdCnes(long idCnes) {
         try {
-            Cursor cursor = localDB.getDb().query(true, ScriptES.NOME_TABELA, ScriptES.colunas,
-                    ScriptES._ID_CNES + "=" + idCnes, null, null, null, null, null);
+            Cursor cursor = localDB.getDb().query(true, ScriptES.NOME_TABELA, ScriptES.colunas, ScriptES._ID_CNES + "=" + idCnes, null, null, null, null, null);
 
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
@@ -62,7 +61,7 @@ public class EsDAO {
         return null;
     }
 
-    public List<EstabelecimentoSaude> listarESByMunicipio(int idMunicipio) {
+    public List<EstabelecimentoSaude> listESByIdMunicipio(int idMunicipio) {
         List<EstabelecimentoSaude> estabelecimentos = new ArrayList<EstabelecimentoSaude>();
 
         try {
@@ -85,7 +84,7 @@ public class EsDAO {
         }
     }
 
-    public List<EstabelecimentoSaude> listarESByMynicipioTiposEstabelecimento(int idMuicipio, List<String> listTiposES) {
+    public List<EstabelecimentoSaude> listESByIdMynicipioIdTiposEstabelecimento(int idMuicipio, List<String> listTiposES) {
         List<EstabelecimentoSaude> estabelecimentos = new ArrayList<EstabelecimentoSaude>();
         try {
             String where = ScriptES._ID_MUNICIPIO + " = " + idMuicipio;
