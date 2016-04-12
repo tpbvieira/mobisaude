@@ -12,19 +12,19 @@ import co.salutary.mobisaude.model.sugestao.dao.SugestaoDao;
 public class SugestaoFacadeImpl implements SugestaoFacade {
 
 	@Autowired
-	private SugestaoDao tokenSessaoDao;
+	private SugestaoDao sugestaoDao;
 
 	@Transactional(readOnly = false)
 	public void save(Sugestao sugestao) {
-		tokenSessaoDao.save(sugestao);
+		sugestaoDao.save(sugestao);
 	}
 
 	public Sugestao getSugestao(Integer idEstabelecimentoSaude, String email) {
-		return tokenSessaoDao.getSugestao(idEstabelecimentoSaude, email);
+		return sugestaoDao.getSugestao(idEstabelecimentoSaude, email);
 	}
 
 	public void removeSugestao(Integer idEstabelecimentoSaude, String email) {
-		tokenSessaoDao.removeSugestao(idEstabelecimentoSaude, email);
+		sugestaoDao.removeSugestao(idEstabelecimentoSaude, email);
 	}
 	
 }

@@ -159,7 +159,7 @@ CREATE TABLE tb_avaliacao (
    	tx_email character varying NOT NULL,
     tx_titulo character varying NOT NULL,
     tx_avaliacao character varying NOT NULL,
-	nu_avaliacao smallint NOT NULL, 
+	nu_rating float NOT NULL, 
 	dh_date timestamp without time zone NOT NULL,
 	CONSTRAINT pk_avaliacao PRIMARY KEY (nu_id_avaliacao),
 	CONSTRAINT fk_avaliacao_estabelecimento_saude FOREIGN KEY (nu_id_cnes) REFERENCES tb_estabelecimento_saude (nu_id_cnes) ON UPDATE NO ACTION ON DELETE NO ACTION, 

@@ -16,15 +16,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.salutary.mobisaude.model.Factory;
-import co.salutary.mobisaude.model.sugestao.Sugestao;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
+import co.salutary.mobisaude.restful.message.request.AvaliacaoRequest;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.ESRequest;
 import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.request.SugestaoRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
+import co.salutary.mobisaude.restful.message.response.AvaliacaoResponse;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.ESResponse;
 import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
@@ -93,6 +94,10 @@ public class TestAll extends TestCase {
 			// test 10 - testing sugestão
 			sugerirTest(mapper, broker, token);
 			getSugestaoTest(mapper, broker, token);
+			
+			// test 11 - testing sugestão
+			avaliarTest(mapper, broker, token);
+			getAvaliacaoTest(mapper, broker, token);
 
 			//			// 14 - Texto Ajuda
 			//			TextoAjudaRequest textoAjudaRequest = mapper.readValue(
@@ -490,6 +495,69 @@ public class TestAll extends TestCase {
 			}
 			
 			
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+
+	}
+	
+	private void avaliarTest(ObjectMapper mapper, ServiceBroker broker, String token){
+		try{
+			AvaliacaoRequest avalicaoRequest = new AvaliacaoRequest();
+			avalicaoRequest.setToken(token);
+			avalicaoRequest.setIdEstabelecimentoSaude("6684181");
+			avalicaoRequest.setEmail("tpbvieira@gmail.com");
+			avalicaoRequest.setTitulo("Título");
+			avalicaoRequest.setAvaliacao("Avaliacao de teste");
+			avalicaoRequest.setRating("5");
+			
+			AvaliacaoResponse avaliacaoResponse = broker.avaliar(avalicaoRequest);
+
+			if (avaliacaoResponse == null || !avaliacaoResponse.getErro().startsWith("0|")) {//Success
+				logger.error(avaliacaoResponse);
+				fail("avaliarTestError");			
+			}
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+		
+	}
+
+	
+	private void getAvaliacaoTest(ObjectMapper mapper, ServiceBroker broker, String token){
+
+		try{			
+			AvaliacaoRequest avaliacaoRequest = new AvaliacaoRequest();
+			avaliacaoRequest.setToken(token);
+			avaliacaoRequest.setIdEstabelecimentoSaude("6684181");
+			avaliacaoRequest.setEmail("tpbvieira@gmail.com");
+
+			AvaliacaoResponse avaliacaoResponse = broker.getAvaliacao(avaliacaoRequest);			
+			if (avaliacaoResponse == null || !avaliacaoResponse.getErro().startsWith("0|")) {//Success
+				logger.error(avaliacaoResponse);
+				fail("getAvaliacaoTestError");			
+			}			
+
+			if (!avaliacaoResponse.getEmail().equals("tpbvieira@gmail.com")) {
+				logger.error("Email errado");
+				fail("Email errado");			
+			}
+			
+			if (!avaliacaoResponse.getIdEstabelecimentoSaude().equals("6684181")) {
+				logger.error("Estabelecimento Errado");
+				fail("Estabelecimento Errado");			
+			}
+			
+			if (!avaliacaoResponse.getAvaliacao().equals("Avaliacao de teste")) {
+				logger.error("Avaliacao erradao");
+				fail("Avaliacao erradao");
+			}
 
 		}catch(Exception e){
 			logger.error(e);

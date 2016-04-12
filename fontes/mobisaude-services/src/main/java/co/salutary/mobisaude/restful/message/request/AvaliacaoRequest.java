@@ -6,13 +6,15 @@ import javax.xml.bind.annotation.XmlType;
 import co.salutary.mobisaude.util.Validator;
 
 @XmlRootElement
-@XmlType(namespace = "mobile", name = "sugestaoRequest")
-public class SugestaoRequest implements IMobileRequest {
+@XmlType(namespace = "mobile", name = "avaliacaoRequest")
+public class AvaliacaoRequest implements IMobileRequest {
 
 	private String token;
 	private String idEstabelecimentoSaude;
 	private String email;
-	private String sugestao;
+	private String titulo;
+	private String avaliacao;
+	private String rating;
 	
 	public String getToken() {
 		return token;
@@ -21,7 +23,7 @@ public class SugestaoRequest implements IMobileRequest {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
+
 	public String getIdEstabelecimentoSaude() {
 		return idEstabelecimentoSaude;
 	}
@@ -38,12 +40,28 @@ public class SugestaoRequest implements IMobileRequest {
 		this.email = email;
 	}
 
-	public String getSugestao() {
-		return sugestao;
+	public String getTitulo() {
+		return titulo;
 	}
 
-	public void setSugestao(String sugestao) {
-		this.sugestao = sugestao;
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public String getAvaliacao() {
+		return avaliacao;
+	}
+
+	public void setAvaliacao(String avaliacao) {
+		this.avaliacao = avaliacao;
+	}
+
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
 	}
 
 	@Override

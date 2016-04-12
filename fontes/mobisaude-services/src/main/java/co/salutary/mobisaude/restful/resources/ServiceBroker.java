@@ -17,6 +17,8 @@ import org.springframework.stereotype.Controller;
 
 import co.salutary.mobisaude.exception.MobisaudeServicesException;
 import co.salutary.mobisaude.model.Factory;
+import co.salutary.mobisaude.model.avaliacao.Avaliacao;
+import co.salutary.mobisaude.model.avaliacao.facade.AvaliacaoFacade;
 import co.salutary.mobisaude.model.estabelecimentosaude.EstabelecimentoSaude;
 import co.salutary.mobisaude.model.estabelecimentosaude.facade.EstabelecimentoSaudeFacade;
 import co.salutary.mobisaude.model.municipio.facade.MunicipiosIbgeFacade;
@@ -34,6 +36,7 @@ import co.salutary.mobisaude.restful.message.mobile.RegiaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoGestaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacionalDTO;
+import co.salutary.mobisaude.restful.message.request.AvaliacaoRequest;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.ESRequest;
 import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
@@ -41,6 +44,7 @@ import co.salutary.mobisaude.restful.message.request.GerarChaveRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.request.SugestaoRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
+import co.salutary.mobisaude.restful.message.response.AvaliacaoResponse;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.ESResponse;
 import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
@@ -707,6 +711,99 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setEmail(sugestao.getEmail());
 			response.setSugestao(sugestao.getSugestao());
 			response.setDate(sdf.format(sugestao.getDate()));
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/avaliar")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoResponse avaliar(AvaliacaoRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoResponse response = new AvaliacaoResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String email = request.getEmail();
+			String avaliacaoStr = request.getAvaliacao();
+			String titulo = request.getTitulo();
+			String rating = request.getRating();
+			
+			Avaliacao avaliacao = new Avaliacao(Integer.valueOf(idEstabelecimentoSaude), email, titulo, avaliacaoStr, Float.valueOf(rating));
+
+			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
+			avaliacaoFacade.save(avaliacao);
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/getAvalicao")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoResponse getAvaliacao(AvaliacaoRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoResponse response = new AvaliacaoResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String email = request.getEmail();			
+			
+			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
+			Avaliacao avalicacao = avaliacaoFacade.getAvaliacao(Integer.valueOf(idEstabelecimentoSaude), email);
+			response.setIdEstabelecimentoSaude(avalicacao.getIdEstabelecimentoSaude().toString());
+			response.setEmail(avalicacao.getEmail());
+			response.setTitulo(avalicacao.getTitulo());
+			response.setAvaliacao(avalicacao.getAvaliacao());
+			response.setRating(Float.toString(avalicacao.getRating()));
+			response.setDate(sdf.format(avalicacao.getDate()));
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
