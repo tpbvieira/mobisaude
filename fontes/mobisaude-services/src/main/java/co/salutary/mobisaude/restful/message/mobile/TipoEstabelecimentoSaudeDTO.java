@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "tipoEstabelecimentoSaude")
-public class TipoEstabelecimentoSaudeMsg implements Cloneable {
+public class TipoEstabelecimentoSaudeDTO implements Cloneable {
 	/** 
 	 * Campo id
 	 */
@@ -53,7 +53,7 @@ public class TipoEstabelecimentoSaudeMsg implements Cloneable {
 	 */
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-	    TipoEstabelecimentoSaudeMsg cloned = (TipoEstabelecimentoSaudeMsg)super.clone();
+	    TipoEstabelecimentoSaudeDTO cloned = (TipoEstabelecimentoSaudeDTO)super.clone();
 	    
 	    return cloned;
 	}

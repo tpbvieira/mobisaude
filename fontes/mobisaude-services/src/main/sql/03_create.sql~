@@ -1,3 +1,27 @@
+-- Name: tb_token_sessao; Type: TABLE; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
+CREATE TABLE tb_token_sessao (
+    nu_id_token_sessao integer NOT NULL,
+    tx_token character varying,
+    dh_validade timestamp without time zone,
+	CONSTRAINT pk_tb_token_sessao PRIMARY KEY (nu_id_token_sessao)
+);
+ALTER TABLE public.tb_token_sessao OWNER TO mobisaude_pg_user;
+
+
+-- Name: seq_token_sessao; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
+CREATE SEQUENCE seq_token_sessao
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER TABLE public.seq_token_sessao OWNER TO mobisaude_pg_user;
+
+
+-- Name: seq_token_sessao; Type: SEQUENCE SET; Schema: public; Owner: mobisaude_pg_user
+SELECT pg_catalog.setval('seq_token_sessao', 635, true);
+
+
 -- Tipo Sistema Operacional
 CREATE TABLE public.tb_tipo_sistema_operacional
 (
@@ -83,15 +107,114 @@ DROP TABLE public.tb_user;
 CREATE TABLE public.tb_user
 (
 	tx_email character varying NOT NULL,
-	tx_password character varying,
-	tx_name character varying,
+	tx_password character varying NOT NULL,
+	tx_name character varying NOT NULL,
 	tx_phone character varying,
-	bo_notify boolean,
+	bo_contactable boolean,
 	CONSTRAINT pk_user PRIMARY KEY (tx_email)
 ) 
 WITH (OIDS = FALSE);
 ALTER TABLE public.tb_user OWNER TO mobisaude_pg_user;
 CREATE INDEX idx_tx_email ON tb_user USING btree (tx_email);
+
+
+-- sugestao
+-- Name: tb_sugestao; Type: TABLE; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
+DROP TABLE tb_sugestao;
+CREATE TABLE tb_sugestao (
+    nu_id_sugestao integer NOT NULL,
+	nu_id_cnes integer NOT NULL, 
+   	tx_email character varying NOT NULL,
+    tx_sugestao character varying NOT NULL,
+	dh_date timestamp without time zone NOT NULL,
+	CONSTRAINT pk_sugestao PRIMARY KEY (nu_id_sugestao),
+	CONSTRAINT fk_sugestao_estabelecimento_saude FOREIGN KEY (nu_id_cnes) REFERENCES tb_estabelecimento_saude (nu_id_cnes) ON UPDATE NO ACTION ON DELETE NO ACTION, 
+	CONSTRAINT fk_sugestao_user FOREIGN KEY (tx_email) REFERENCES tb_user (tx_email) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+ALTER TABLE public.tb_sugestao OWNER TO mobisaude_pg_user;
+CREATE INDEX idx_sugestao ON tb_sugestao USING btree (nu_id_cnes,tx_email);
+
+
+-- Name: seq_sugestao; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
+DROP SEQUENCE seq_sugestao;
+CREATE SEQUENCE seq_sugestao
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER TABLE public.seq_sugestao OWNER TO mobisaude_pg_user;
+
+
+-- Name: seq_sugestao; Type: SEQUENCE SET; Schema: public; Owner: mobisaude_pg_user
+SELECT pg_catalog.setval('seq_sugestao', 4635, true);
+
+
+-- avaliacao
+-- Name: tb_avaliacao; Type: TABLE; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
+DROP TABLE tb_avaliacao;
+CREATE TABLE tb_avaliacao (
+    nu_id_avaliacao integer NOT NULL,
+	nu_id_cnes integer NOT NULL, 
+   	tx_email character varying NOT NULL,
+    tx_titulo character varying NOT NULL,
+    tx_avaliacao character varying NOT NULL,
+	nu_avaliacao smallint NOT NULL, 
+	dh_date timestamp without time zone NOT NULL,
+	CONSTRAINT pk_avaliacao PRIMARY KEY (nu_id_avaliacao),
+	CONSTRAINT fk_avaliacao_estabelecimento_saude FOREIGN KEY (nu_id_cnes) REFERENCES tb_estabelecimento_saude (nu_id_cnes) ON UPDATE NO ACTION ON DELETE NO ACTION, 
+	CONSTRAINT fk_avaliacao_user FOREIGN KEY (tx_email) REFERENCES tb_user (tx_email) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+ALTER TABLE public.tb_avaliacao OWNER TO mobisaude_pg_user;
+CREATE INDEX idx_avaliacao ON tb_avaliacao USING btree (nu_id_cnes,tx_email);
+
+
+-- Name: seq_avaliacao; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
+DROP SEQUENCE seq_avaliacao;
+CREATE SEQUENCE seq_avaliacao
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER TABLE public.seq_avaliacao OWNER TO mobisaude_pg_user;
+
+
+-- Name: seq_avaliacao; Type: SEQUENCE SET; Schema: public; Owner: mobisaude_pg_user
+SELECT pg_catalog.setval('seq_avaliacao', 9635, true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -163,16 +286,12 @@ SET search_path = public, pg_catalog;
 --
 -- TOC entry 187 (class 1259 OID 121222)
 -- Name: seq_historico; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
---
-
 CREATE SEQUENCE seq_historico
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
 ALTER TABLE public.seq_historico OWNER TO mobisaude_pg_user;
 
 --
@@ -205,20 +324,7 @@ CREATE SEQUENCE seq_relatorio_erbs
 
 ALTER TABLE public.seq_relatorio_erbs OWNER TO mobisaude_pg_user;
 
---
--- TOC entry 190 (class 1259 OID 121228)
--- Name: seq_token_sessao; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
---
 
-CREATE SEQUENCE seq_token_sessao
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.seq_token_sessao OWNER TO mobisaude_pg_user;
 
 SET default_tablespace = '';
 
@@ -302,19 +408,7 @@ CREATE TABLE tb_relatorio_ranking (
 
 ALTER TABLE public.tb_relatorio_ranking OWNER TO mobisaude_pg_user;
 
---
--- TOC entry 191 (class 1259 OID 121230)
--- Name: tb_token_sessao; Type: TABLE; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
---
 
-CREATE TABLE tb_token_sessao (
-    nu_id_token_sessao integer NOT NULL,
-    tx_token character varying,
-    dh_validade timestamp without time zone
-);
-
-
-ALTER TABLE public.tb_token_sessao OWNER TO mobisaude_pg_user;
 
 --
 -- TOC entry 3224 (class 0 OID 0)
@@ -342,61 +436,6 @@ SELECT pg_catalog.setval('seq_log', 10, true);
 
 SELECT pg_catalog.setval('seq_relatorio_erbs', 242207, true);
 
-
---
--- TOC entry 3227 (class 0 OID 0)
--- Dependencies: 190
--- Name: seq_token_sessao; Type: SEQUENCE SET; Schema: public; Owner: mobisaude_pg_user
---
-
-SELECT pg_catalog.setval('seq_token_sessao', 635, true);
-
-
---
--- TOC entry 3192 (class 0 OID 119636)
--- Dependencies: 171
--- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: mobisaude_pg_user
---
-
-
-
---
--- TOC entry 3206 (class 0 OID 121198)
--- Dependencies: 183
--- Data for Name: tb_historico; Type: TABLE DATA; Schema: public; Owner: mobisaude_pg_user
---
-
-
-
---
--- TOC entry 3207 (class 0 OID 121204)
--- Dependencies: 184
--- Data for Name: tb_log; Type: TABLE DATA; Schema: public; Owner: mobisaude_pg_user
---
-
-
-
---
--- TOC entry 3208 (class 0 OID 121210)
--- Dependencies: 185
--- Data for Name: tb_relatorio_erbs; Type: TABLE DATA; Schema: public; Owner: mobisaude_pg_user
---
-
-
-
---
--- TOC entry 3209 (class 0 OID 121216)
--- Dependencies: 186
--- Data for Name: tb_relatorio_ranking; Type: TABLE DATA; Schema: public; Owner: mobisaude_pg_user
---
-
-
-
---
--- TOC entry 3214 (class 0 OID 121230)
--- Dependencies: 191
--- Data for Name: tb_token_sessao; Type: TABLE DATA; Schema: public; Owner: mobisaude_pg_user
---
 
 
 
@@ -434,15 +473,6 @@ ALTER TABLE ONLY tb_relatorio_erbs
 
 ALTER TABLE ONLY tb_relatorio_ranking
     ADD CONSTRAINT pk_tb_relatorio_ranking PRIMARY KEY (no_cod_municipio_ibge, no_prestadora);
-
-
---
--- TOC entry 3205 (class 2606 OID 134281)
--- Name: pk_tb_token_sessao; Type: CONSTRAINT; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
---
-
-ALTER TABLE ONLY tb_token_sessao
-    ADD CONSTRAINT pk_tb_token_sessao PRIMARY KEY (nu_id_token_sessao);
 
 
 --
@@ -495,11 +525,3 @@ REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
--- Completed on 2014-08-05 16:40:01
-
---
--- PostgreSQL database dump complete
---
-

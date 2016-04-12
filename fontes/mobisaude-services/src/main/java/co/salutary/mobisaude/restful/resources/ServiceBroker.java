@@ -1,6 +1,8 @@
 package co.salutary.mobisaude.restful.resources;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,33 +22,38 @@ import co.salutary.mobisaude.model.estabelecimentosaude.facade.EstabelecimentoSa
 import co.salutary.mobisaude.model.municipio.facade.MunicipiosIbgeFacade;
 import co.salutary.mobisaude.model.regiao.Regiao;
 import co.salutary.mobisaude.model.regiao.facade.RegiaoFacade;
+import co.salutary.mobisaude.model.sugestao.Sugestao;
+import co.salutary.mobisaude.model.sugestao.facade.SugestaoFacade;
 import co.salutary.mobisaude.model.tipoestabelecimentosaude.facade.TipoEstabelecimentoSaudeFacade;
 import co.salutary.mobisaude.model.tipogestao.facade.TipoGestaoFacade;
 import co.salutary.mobisaude.model.tiposistemaoperacional.facade.TipoSistemaOperacionalFacade;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
-import co.salutary.mobisaude.restful.message.mobile.ESMsg;
-import co.salutary.mobisaude.restful.message.mobile.RegiaoMsg;
-import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeMsg;
-import co.salutary.mobisaude.restful.message.mobile.TipoGestaoMsg;
-import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacional;
+import co.salutary.mobisaude.restful.message.mobile.EsDTO;
+import co.salutary.mobisaude.restful.message.mobile.RegiaoDTO;
+import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeDTO;
+import co.salutary.mobisaude.restful.message.mobile.TipoGestaoDTO;
+import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacionalDTO;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
+import co.salutary.mobisaude.restful.message.request.ESRequest;
 import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarChaveRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
-import co.salutary.mobisaude.restful.message.request.ESRequest;
+import co.salutary.mobisaude.restful.message.request.SugestaoRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
+import co.salutary.mobisaude.restful.message.response.ESResponse;
 import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
 import co.salutary.mobisaude.restful.message.response.GerarChaveResponse;
 import co.salutary.mobisaude.restful.message.response.GerarTokenResponse;
-import co.salutary.mobisaude.restful.message.response.ESResponse;
+import co.salutary.mobisaude.restful.message.response.SugestaoResponse;
 import co.salutary.mobisaude.restful.message.response.UserResponse;
 
 @Path("/mobile")
 @Controller
 public class ServiceBroker extends AbstractServiceBroker {
 
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private static final Log logger = LogFactory.getLog(ServiceBroker.class);
 
 	public ServiceBroker() {
@@ -201,15 +208,15 @@ public class ServiceBroker extends AbstractServiceBroker {
 			TipoSistemaOperacionalFacade tipoSistemaOperacionalFacade = (TipoSistemaOperacionalFacade)Factory.getInstance().get("tipoSistemaOperacionalFacade");
 			List<co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional> lstTipoSistemaOperacional = tipoSistemaOperacionalFacade.list();
 			if (lstTipoSistemaOperacional != null) {
-				List<TipoSistemaOperacional> lstRetorno = new ArrayList<TipoSistemaOperacional>();
+				List<TipoSistemaOperacionalDTO> lstRetorno = new ArrayList<TipoSistemaOperacionalDTO>();
 				for (co.salutary.mobisaude.model.tiposistemaoperacional.TipoSistemaOperacional tipoSistemaOperacional:lstTipoSistemaOperacional) {
-					TipoSistemaOperacional tso = new TipoSistemaOperacional();
+					TipoSistemaOperacionalDTO tso = new TipoSistemaOperacionalDTO();
 					tso.setId(Integer.toString(tipoSistemaOperacional.getIdTipoSistemaOperacional()));
 					tso.setDescricao(tipoSistemaOperacional.getDescricao());
 
 					lstRetorno.add(tso);
 				}
-				response.setTiposSistemaOperacional((lstRetorno.toArray(new TipoSistemaOperacional[0])));
+				response.setTiposSistemaOperacional((lstRetorno.toArray(new TipoSistemaOperacionalDTO[0])));
 				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));
@@ -220,15 +227,15 @@ public class ServiceBroker extends AbstractServiceBroker {
 			TipoEstabelecimentoSaudeFacade tipoEstabelecimentoSaudeFacade = (TipoEstabelecimentoSaudeFacade)Factory.getInstance().get("tipoEstabelecimentoSaudeFacade");
 			List<co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude> lstTipoEstabelecimentoSaude = tipoEstabelecimentoSaudeFacade.list();
 			if (lstTipoEstabelecimentoSaude != null) {
-				List<TipoEstabelecimentoSaudeMsg> lstRetorno = new ArrayList<TipoEstabelecimentoSaudeMsg>();
+				List<TipoEstabelecimentoSaudeDTO> lstRetorno = new ArrayList<TipoEstabelecimentoSaudeDTO>();
 				for (co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude tipoEstabelecimentoSaude:lstTipoEstabelecimentoSaude) {
-					TipoEstabelecimentoSaudeMsg tes = new TipoEstabelecimentoSaudeMsg();
+					TipoEstabelecimentoSaudeDTO tes = new TipoEstabelecimentoSaudeDTO();
 					tes.setId(Integer.toString(tipoEstabelecimentoSaude.getIdTipoEstabelecimentoSaude()));
 					tes.setNome(tipoEstabelecimentoSaude.getNome());
 
 					lstRetorno.add(tes);
 				}
-				response.setTiposEstabelecimentoSaude((lstRetorno.toArray(new TipoEstabelecimentoSaudeMsg[0])));
+				response.setTiposEstabelecimentoSaude((lstRetorno.toArray(new TipoEstabelecimentoSaudeDTO[0])));
 				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoEstabelecimentoSaude"));
@@ -239,14 +246,14 @@ public class ServiceBroker extends AbstractServiceBroker {
 			RegiaoFacade regiaoFacade = (RegiaoFacade)Factory.getInstance().get("regiaoFacade");
 			List<Regiao> lstRegiao = regiaoFacade.list();
 			if (lstRegiao != null) {
-				List<RegiaoMsg> lstRetorno = new ArrayList<RegiaoMsg>();
+				List<RegiaoDTO> lstRetorno = new ArrayList<RegiaoDTO>();
 				for (Regiao regiao:lstRegiao) {
-					RegiaoMsg r = new RegiaoMsg();
+					RegiaoDTO r = new RegiaoDTO();
 					r.setId(Integer.toString(regiao.getIdRegiao()));
 					r.setNome(regiao.getNome());					
 					lstRetorno.add(r);
 				}
-				response.setRegiao((lstRetorno.toArray(new RegiaoMsg[0])));
+				response.setRegiao((lstRetorno.toArray(new RegiaoDTO[0])));
 				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
@@ -257,14 +264,14 @@ public class ServiceBroker extends AbstractServiceBroker {
 			TipoGestaoFacade tipoGestaoFacade = (TipoGestaoFacade)Factory.getInstance().get("tipoGestaoFacade");
 			List<co.salutary.mobisaude.model.tipogestao.TipoGestao> lstTipoGestao = tipoGestaoFacade.list();
 			if (lstTipoGestao != null) {
-				List<TipoGestaoMsg> lstRetorno = new ArrayList<TipoGestaoMsg>();
+				List<TipoGestaoDTO> lstRetorno = new ArrayList<TipoGestaoDTO>();
 				for (co.salutary.mobisaude.model.tipogestao.TipoGestao tipoGestao:lstTipoGestao) {
-					TipoGestaoMsg tg = new TipoGestaoMsg();
+					TipoGestaoDTO tg = new TipoGestaoDTO();
 					tg.setId(Integer.toString(tipoGestao.getIdTipoGestao()));
 					tg.setNome(tipoGestao.getNome());
 					lstRetorno.add(tg);
 				}
-				response.setTiposGestao((lstRetorno.toArray(new TipoGestaoMsg[0])));
+				response.setTiposGestao((lstRetorno.toArray(new TipoGestaoDTO[0])));
 				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));
@@ -307,9 +314,9 @@ public class ServiceBroker extends AbstractServiceBroker {
 			List<EstabelecimentoSaude> esList = esFacade.list();
 			
 			if (esList != null) {
-				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
+				List<EsDTO> esMsgList = new ArrayList<EsDTO>();
 				for (EstabelecimentoSaude es:esList) {
-					ESMsg esMsg = new ESMsg();
+					EsDTO esMsg = new EsDTO();
 					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
@@ -318,7 +325,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 					esMsgList.add(esMsg);
 				}
-				response.setEstabelecimentoSaude(esMsgList.toArray(new ESMsg[0]));
+				response.setEstabelecimentoSaude(esMsgList.toArray(new EsDTO[0]));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
@@ -363,9 +370,9 @@ public class ServiceBroker extends AbstractServiceBroker {
 			List<EstabelecimentoSaude> esList = esFacade.listByIdMunicipio(idMunicipio);
 			
 			if (esList != null) {
-				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
+				List<EsDTO> esMsgList = new ArrayList<EsDTO>();
 				for (EstabelecimentoSaude es:esList) {
-					ESMsg esMsg = new ESMsg();
+					EsDTO esMsg = new EsDTO();
 					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
@@ -374,7 +381,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 					esMsgList.add(esMsg);
 				}
-				response.setEstabelecimentoSaude(esMsgList.toArray(new ESMsg[0]));
+				response.setEstabelecimentoSaude(esMsgList.toArray(new EsDTO[0]));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
@@ -435,9 +442,9 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 			
 			if (esList != null) {
-				List<ESMsg> esMsgList = new ArrayList<ESMsg>();
+				List<EsDTO> esMsgList = new ArrayList<EsDTO>();
 				for (EstabelecimentoSaude es:esList) {
-					ESMsg esMsg = new ESMsg();
+					EsDTO esMsg = new EsDTO();
 					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
@@ -446,7 +453,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 					esMsgList.add(esMsg);
 				}
-				response.setEstabelecimentoSaude(esMsgList.toArray(new ESMsg[0]));
+				response.setEstabelecimentoSaude(esMsgList.toArray(new EsDTO[0]));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
@@ -620,6 +627,95 @@ public class ServiceBroker extends AbstractServiceBroker {
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), ex);
 			response.setErro(ex.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/sugerir")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public SugestaoResponse sugerir(SugestaoRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		SugestaoResponse response = new SugestaoResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String email = request.getEmail();
+			String sugestaoStr = request.getSugestao();
+			
+			Sugestao sugestao = new Sugestao(Integer.valueOf(idEstabelecimentoSaude), email, sugestaoStr, new Date());
+
+			SugestaoFacade sugestaoFacade = (SugestaoFacade)Factory.getInstance().get("sugestaoFacade");
+			sugestaoFacade.save(sugestao);
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/getSugestao")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public SugestaoResponse getSugestao(SugestaoRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		SugestaoResponse response = new SugestaoResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String email = request.getEmail();			
+			
+			SugestaoFacade sugestaoFacade = (SugestaoFacade)Factory.getInstance().get("sugestaoFacade");
+			Sugestao sugestao = sugestaoFacade.getSugestao(Integer.valueOf(idEstabelecimentoSaude), email);
+			response.setIdEstabelecimentoSaude(sugestao.getIdEstabelecimentoSaude().toString());
+			response.setEmail(sugestao.getEmail());
+			response.setSugestao(sugestao.getSugestao());
+			response.setDate(sdf.format(sugestao.getDate()));
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
 			return response;
 		}
 		return response;

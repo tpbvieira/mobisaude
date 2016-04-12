@@ -56,6 +56,7 @@
     <string name="action_sign_in">Entrar</string>
     <string name="action_logout">Sair</string>
     <string name="action_update">Alterar</string>
+    <string name="action_evaluate">Avaliar</string>
     <string name="updated">Alterado</string>
     <string name="user_guest">Usuário Desconhecido</string>
 

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "regiao")
-public class RegiaoMsg implements Cloneable {
+public class RegiaoDTO implements Cloneable {
 
 	private String id;
 	private String nome;
@@ -28,7 +28,7 @@ public class RegiaoMsg implements Cloneable {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-	    RegiaoMsg cloned = (RegiaoMsg)super.clone();
+	    RegiaoDTO cloned = (RegiaoDTO)super.clone();
 	    return cloned;
 	}
 	

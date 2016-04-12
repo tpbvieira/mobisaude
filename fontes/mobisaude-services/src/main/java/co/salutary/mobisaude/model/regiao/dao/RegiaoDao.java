@@ -5,7 +5,7 @@ import java.util.List;
 import co.salutary.mobisaude.model.regiao.Regiao;
 
 /**
- * Interface implementada pelos DAOs de RegiaoMsg
+ * Interface implementada pelos DAOs de Regiao
  *
  */
 public interface RegiaoDao {

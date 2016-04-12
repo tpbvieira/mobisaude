@@ -11,7 +11,7 @@ import javax.xml.bind.JAXBContext;
 import org.glassfish.jersey.jettison.JettisonConfig;
 import org.glassfish.jersey.jettison.JettisonJaxbContext;
 
-import co.salutary.mobisaude.restful.message.mobile.ESMsg;
+import co.salutary.mobisaude.restful.message.mobile.EsDTO;
 import co.salutary.mobisaude.restful.message.response.ESResponse;
 
 @Provider
@@ -19,7 +19,7 @@ public class ContextResolverJAXB implements ContextResolver<JAXBContext> {
 
     private final JAXBContext context;
     private final Set<Class<?>> types;
-    private final Class<?>[] cTypes = {ESMsg.class, ESResponse.class};
+    private final Class<?>[] cTypes = {EsDTO.class, ESResponse.class};
  
 
     public ContextResolverJAXB() throws Exception {

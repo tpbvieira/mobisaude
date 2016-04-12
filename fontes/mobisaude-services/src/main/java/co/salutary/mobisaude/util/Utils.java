@@ -3,9 +3,7 @@ package co.salutary.mobisaude.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Classe utilitaria 
- */
+
 public class Utils {
 	private static final SimpleDateFormat sdfAnoMes = new SimpleDateFormat("MM/yyyy");
 	

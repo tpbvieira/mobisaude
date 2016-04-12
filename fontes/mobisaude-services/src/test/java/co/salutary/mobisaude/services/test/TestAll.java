@@ -16,17 +16,20 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.salutary.mobisaude.model.Factory;
+import co.salutary.mobisaude.model.sugestao.Sugestao;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.ESRequest;
 import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
+import co.salutary.mobisaude.restful.message.request.SugestaoRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.ESResponse;
 import co.salutary.mobisaude.restful.message.response.GeocodeResponse;
 import co.salutary.mobisaude.restful.message.response.GerarTokenResponse;
+import co.salutary.mobisaude.restful.message.response.SugestaoResponse;
 import co.salutary.mobisaude.restful.message.response.UserResponse;
 import co.salutary.mobisaude.restful.resources.ServiceBroker;
 import co.salutary.mobisaude.util.CryptographyUtil;
@@ -86,6 +89,10 @@ public class TestAll extends TestCase {
 			updateUserTest(mapper, broker, token);
 			signinTest(mapper, broker, token);
 			getUserTest(mapper, broker, token);
+			
+			// test 10 - testing sugestão
+			sugerirTest(mapper, broker, token);
+			getSugestaoTest(mapper, broker, token);
 
 			//			// 14 - Texto Ajuda
 			//			TextoAjudaRequest textoAjudaRequest = mapper.readValue(
@@ -114,10 +121,10 @@ public class TestAll extends TestCase {
 			//				fail("Retorno do serviço Texto Aviso Relatar Problema não OK.");
 			//			}
 
-		} catch (Exception ex){
-			logger.error(ex);	
-			ex.printStackTrace();
-			fail("Exceção: " + ex.getMessage());
+		} catch (Exception e){
+			logger.error(e);	
+			e.printStackTrace();
+			fail("Exceção: " + e.getMessage());
 		}
 	}
 
@@ -320,7 +327,8 @@ public class TestAll extends TestCase {
 
 		}catch(Exception e){
 			logger.error(e);
-			fail(e.getMessage());
+			e.printStackTrace();
+			fail("Exceção: " + e.getMessage());
 		}
 
 	}
@@ -356,7 +364,8 @@ public class TestAll extends TestCase {
 
 		}catch(Exception e){
 			logger.error(e);
-			fail(e.getMessage());
+			e.printStackTrace();
+			fail("Exceção: " + e.getMessage());
 		}
 
 	}
@@ -387,7 +396,8 @@ public class TestAll extends TestCase {
 
 		}catch(Exception e){
 			logger.error(e);
-			fail(e.getMessage());
+			e.printStackTrace();
+			fail("Exceção: " + e.getMessage());
 		}
 
 	}
@@ -420,9 +430,73 @@ public class TestAll extends TestCase {
 
 		}catch(Exception e){
 			logger.error(e);
-			fail(e.getMessage());
+			e.printStackTrace();
+			fail("Exceção: " + e.getMessage());
 		}
 
 	}
+	
+	private void sugerirTest(ObjectMapper mapper, ServiceBroker broker, String token){
+		try{
+			SugestaoRequest sugestaoRequest = new SugestaoRequest();
+			sugestaoRequest.setToken(token);
+			sugestaoRequest.setIdEstabelecimentoSaude("6684181");
+			sugestaoRequest.setEmail("tpbvieira@gmail.com");
+			sugestaoRequest.setSugestao("Sugestão de teste");
+			
+			SugestaoResponse sugestaoResponse = broker.sugerir(sugestaoRequest);
 
+			if (sugestaoResponse == null || !sugestaoResponse.getErro().startsWith("0|")) {//Success
+				logger.error(sugestaoResponse);
+				fail("sugerirTestError");			
+			}
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+		
+	}
+
+	
+	private void getSugestaoTest(ObjectMapper mapper, ServiceBroker broker, String token){
+
+		try{			
+			SugestaoRequest sugestaoRequest = new SugestaoRequest();
+			sugestaoRequest.setToken(token);
+			sugestaoRequest.setIdEstabelecimentoSaude("6684181");
+			sugestaoRequest.setEmail("tpbvieira@gmail.com");
+
+			SugestaoResponse sugestaoResponse = broker.getSugestao(sugestaoRequest);			
+			if (sugestaoResponse == null || !sugestaoResponse.getErro().startsWith("0|")) {//Success
+				logger.error(sugestaoResponse);
+				fail("getSugestaoTestError");			
+			}			
+
+			if (!sugestaoResponse.getEmail().equals("tpbvieira@gmail.com")) {
+				logger.error("Email errado");
+				fail("Email errado");			
+			}
+			
+			if (!sugestaoResponse.getIdEstabelecimentoSaude().equals("6684181")) {
+				logger.error("Estabelecimento Errado");
+				fail("Estabelecimento Errado");			
+			}
+			
+			if (!sugestaoResponse.getSugestao().equals("Sugestão de teste")) {
+				logger.error("Sugestao erradao");
+				fail("Sugestao erradao");
+			}
+			
+			
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+
+	}
+	
 }

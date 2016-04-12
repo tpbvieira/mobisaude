@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "estabelecimentosaude")
-public class ESMsg implements Cloneable {
+public class EsDTO implements Cloneable {
 
 	private String idCnes;
 	private String idMunicipio;
