@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import co.salutary.mobisaude.model.Factory;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
+import co.salutary.mobisaude.restful.message.request.AvaliacaoMediaRequest;
 import co.salutary.mobisaude.restful.message.request.AvaliacaoRequest;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.ESRequest;
@@ -25,6 +26,7 @@ import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.request.SugestaoRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
+import co.salutary.mobisaude.restful.message.response.AvaliacaoMediaResponse;
 import co.salutary.mobisaude.restful.message.response.AvaliacaoResponse;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.ESResponse;
@@ -99,6 +101,10 @@ public class TestAll extends TestCase {
 			avaliarTest(mapper, broker, token);
 			getAvaliacaoTest(mapper, broker, token);
 
+			// test 12 - testing sugestão
+			avaliarMediaTest(mapper, broker, token);
+			getAvaliacaoMediaTest(mapper, broker, token);
+			
 			//			// 14 - Texto Ajuda
 			//			TextoAjudaRequest textoAjudaRequest = mapper.readValue(
 			//					testProperties.getProperty("textoAjuda"),
@@ -528,7 +534,6 @@ public class TestAll extends TestCase {
 		}
 		
 	}
-
 	
 	private void getAvaliacaoTest(ObjectMapper mapper, ServiceBroker broker, String token){
 
@@ -557,6 +562,64 @@ public class TestAll extends TestCase {
 			if (!avaliacaoResponse.getAvaliacao().equals("Avaliacao de teste")) {
 				logger.error("Avaliacao erradao");
 				fail("Avaliacao erradao");
+			}
+			
+			if (!avaliacaoResponse.getRating().equals("5.0")) {
+				logger.error("Rating errado = " + avaliacaoResponse.getRating());
+				fail("Rating errado = " + avaliacaoResponse.getRating());
+			}
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+
+	}
+
+	private void avaliarMediaTest(ObjectMapper mapper, ServiceBroker broker, String token){
+		try{
+			AvaliacaoMediaRequest avalicaoMediaRequest = new AvaliacaoMediaRequest();
+			avalicaoMediaRequest.setToken(token);
+			avalicaoMediaRequest.setIdEstabelecimentoSaude("6684181");
+			avalicaoMediaRequest.setRating("3.5");
+			
+			AvaliacaoMediaResponse avaliacaoMediaResponse = broker.avaliarMedia(avalicaoMediaRequest);
+
+			if (avaliacaoMediaResponse == null || !avaliacaoMediaResponse.getErro().startsWith("0|")) {//Success
+				logger.error(avaliacaoMediaResponse);
+				fail("avaliarTestError");			
+			}
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+		
+	}
+	
+	private void getAvaliacaoMediaTest(ObjectMapper mapper, ServiceBroker broker, String token){
+
+		try{			
+			AvaliacaoMediaRequest avaliacaoMediaRequest = new AvaliacaoMediaRequest();
+			avaliacaoMediaRequest.setToken(token);
+			avaliacaoMediaRequest.setIdEstabelecimentoSaude("6684181");
+			
+			AvaliacaoMediaResponse avaliacaoMediaResponse = broker.getAvaliacaoMedia(avaliacaoMediaRequest);			
+			if (avaliacaoMediaResponse == null || !avaliacaoMediaResponse.getErro().startsWith("0|")) {//Success
+				logger.error(avaliacaoMediaResponse);
+				fail("getAvaliacaoTestError");			
+			}			
+			
+			if (!avaliacaoMediaResponse.getIdEstabelecimentoSaude().equals("6684181")) {
+				logger.error("Estabelecimento Errado");
+				fail("Estabelecimento Errado");			
+			}
+			
+			if (!avaliacaoMediaResponse.getRating().equals("3.5")) {
+				logger.error("Rating errado = " + avaliacaoMediaResponse.getRating());
+				fail("Rating errado = " + avaliacaoMediaResponse.getRating());
 			}
 
 		}catch(Exception e){
