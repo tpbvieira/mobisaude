@@ -1,5 +1,6 @@
 package co.salutary.mobisaude.model.avaliacaomedia.facade;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,12 @@ public class AvaliacaoMediaFacadeImpl implements AvaliacaoMediaFacade {
 		avaliacaoMediaDao.save(avaliacaoMedia);
 	}
 
-	public AvaliacaoMedia getByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
-		return avaliacaoMediaDao.getByIdEstabelecimentoSaude(idEstabelecimentoSaude);
+	public AvaliacaoMedia getByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+		return avaliacaoMediaDao.getByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude,date);
 	}
 
-	public void removeByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
-		avaliacaoMediaDao.removeByIdEstabelecimentoSaude(idEstabelecimentoSaude);
+	public void removeByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+		avaliacaoMediaDao.removeByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude,date);
 	}
 	
 	public List<AvaliacaoMedia> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {

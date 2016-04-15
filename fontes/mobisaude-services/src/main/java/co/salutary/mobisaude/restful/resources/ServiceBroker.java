@@ -33,6 +33,7 @@ import co.salutary.mobisaude.model.tipogestao.facade.TipoGestaoFacade;
 import co.salutary.mobisaude.model.tiposistemaoperacional.facade.TipoSistemaOperacionalFacade;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
+import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaDTO;
 import co.salutary.mobisaude.restful.message.mobile.EsDTO;
 import co.salutary.mobisaude.restful.message.mobile.RegiaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeDTO;
@@ -319,8 +320,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			EstabelecimentoSaudeFacade esFacade = (EstabelecimentoSaudeFacade)Factory.getInstance().get("estabelecimentoSaudeFacade");
-			List<EstabelecimentoSaude> esList = esFacade.list();
-			
+			List<EstabelecimentoSaude> esList = esFacade.list();			
 			if (esList != null) {
 				List<EsDTO> esMsgList = new ArrayList<EsDTO>();
 				for (EstabelecimentoSaude es:esList) {
@@ -337,6 +337,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
+			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
@@ -846,9 +847,15 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
 			String rating = request.getRating();
+			String date = request.getDate();
 			
 			AvaliacaoMediaFacade avaliacaoMediaFacade = (AvaliacaoMediaFacade)Factory.getInstance().get("avaliacaoMediaFacade");
-			AvaliacaoMedia avaliacaoMedia = new AvaliacaoMedia(Integer.valueOf(idEstabelecimentoSaude), Float.valueOf(rating));
+			AvaliacaoMedia avaliacaoMedia;
+			if(date != null){
+				avaliacaoMedia = new AvaliacaoMedia(Integer.valueOf(idEstabelecimentoSaude), Float.valueOf(rating), sdf.parse(date));
+			} else {
+				avaliacaoMedia = new AvaliacaoMedia(Integer.valueOf(idEstabelecimentoSaude), Float.valueOf(rating));
+			}
 			avaliacaoMediaFacade.save(avaliacaoMedia);
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
@@ -861,6 +868,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setErro(e.getMessage());			
 			return response;
 		}
+		
 		return response;
 	}
 	
@@ -887,12 +895,69 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String date = request.getDate();
 			
 			AvaliacaoMediaFacade avaliacaoMediaFacade = (AvaliacaoMediaFacade)Factory.getInstance().get("avaliacaoMediaFacade");
-			AvaliacaoMedia avaliacaoMedia = avaliacaoMediaFacade.getByIdEstabelecimentoSaude(Integer.valueOf(idEstabelecimentoSaude));
+			AvaliacaoMedia avaliacaoMedia = avaliacaoMediaFacade.getByIdEstabelecimentoSaudeDate(Integer.valueOf(idEstabelecimentoSaude), sdf.parse(date));
 			response.setIdEstabelecimentoSaude(avaliacaoMedia.getIdEstabelecimentoSaude().toString());
 			response.setRating(Float.toString(avaliacaoMedia.getRating()));
 			response.setDate(sdf.format(avaliacaoMedia.getDate()));
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+
+	@POST
+	@Path("/listAvalicaoMedia")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoMediaResponse listAvaliacaoMedia(AvaliacaoMediaRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			AvaliacaoMediaFacade avaliacaoMediaFacade = (AvaliacaoMediaFacade)Factory.getInstance().get("avaliacaoMediaFacade");
+			List<AvaliacaoMedia> avaliacoes = avaliacaoMediaFacade.listByIdEstabelecimentoSaude(Integer.valueOf(request.getIdEstabelecimentoSaude()));
+			if (avaliacoes != null) {
+				List<AvaliacaoMediaDTO> lstRetorno = new ArrayList<AvaliacaoMediaDTO>();
+				for (AvaliacaoMedia avaliacaoMedia:avaliacoes) {
+					AvaliacaoMediaDTO amDTO = new AvaliacaoMediaDTO();
+					amDTO.setIdEstabelecimentoSaude(avaliacaoMedia.getIdEstabelecimentoSaude().toString());
+					amDTO.setRating(Float.toString(avaliacaoMedia.getRating()));
+					amDTO.setDate(sdf.format(avaliacaoMedia.getDate()));										
+					lstRetorno.add(amDTO);
+				}
+				response.setAvaliacoes(lstRetorno);
+				
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
+				return response;
+			}
+			
+			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {

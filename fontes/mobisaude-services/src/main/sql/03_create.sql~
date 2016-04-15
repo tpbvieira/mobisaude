@@ -199,7 +199,7 @@ ALTER TABLE public.tb_avaliacao_media OWNER TO mobisaude_pg_user;
 CREATE INDEX idx_avaliacao_media ON tb_avaliacao_media USING btree (nu_id_cnes);
 
 
--- Name: seq_avaliacao; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
+-- Name: seq_avaliacao_media; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
 DROP SEQUENCE seq_avaliacao_media;
 CREATE SEQUENCE seq_avaliacao_media
     START WITH 1

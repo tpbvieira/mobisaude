@@ -188,26 +188,15 @@ SELECT pg_catalog.setval('seq_avaliacao', 9635, true);
 -- Name: tb_avaliacao_media; Type: TABLE; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
 DROP TABLE tb_avaliacao_media;
 CREATE TABLE tb_avaliacao_media (
-    nu_id_avaliacao_media integer NOT NULL,
 	nu_id_cnes integer NOT NULL,
-	nu_rating float NOT NULL, 
 	dh_date timestamp without time zone NOT NULL,
-	CONSTRAINT pk_avaliacao_media PRIMARY KEY (nu_id_avaliacao_media),
+	nu_rating float NOT NULL, 
+	
+	CONSTRAINT pk_avaliacao_media PRIMARY KEY (nu_id_cnes,dh_date),
 	CONSTRAINT fk_avaliacao_estabelecimento_saude FOREIGN KEY (nu_id_cnes) REFERENCES tb_estabelecimento_saude (nu_id_cnes) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 ALTER TABLE public.tb_avaliacao_media OWNER TO mobisaude_pg_user;
-CREATE INDEX idx_avaliacao_media ON tb_avaliacao_media USING btree (nu_id_cnes);
-
-
--- Name: seq_avaliacao_media; Type: SEQUENCE; Schema: public; Owner: mobisaude_pg_user
-DROP SEQUENCE seq_avaliacao_media;
-CREATE SEQUENCE seq_avaliacao_media
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-ALTER TABLE public.seq_avaliacao_media OWNER TO mobisaude_pg_user;
+CREATE INDEX idx_avaliacao_media ON tb_avaliacao_media USING btree (nu_id_cnes,dh_date);
 
 
 

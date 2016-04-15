@@ -1,7 +1,11 @@
 package co.salutary.mobisaude.restful.message.response;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaDTO;
 
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "avaliacaoMediaResponse")
@@ -11,6 +15,7 @@ public class AvaliacaoMediaResponse implements IMobileResponse {
 	private String idEstabelecimentoSaude;
 	private String rating;
 	private String date;
+	private List<AvaliacaoMediaDTO> avaliacoes;
 
 	public String getErro() {
 		return erro;
@@ -44,4 +49,12 @@ public class AvaliacaoMediaResponse implements IMobileResponse {
 		this.date = date;
 	}
 
+	public List<AvaliacaoMediaDTO> getAvaliacoes() {
+		return avaliacoes;
+	}
+
+	public void setAvaliacoes(List<AvaliacaoMediaDTO> avaliacoes) {
+		this.avaliacoes = avaliacoes;
+	}
+	
 }
