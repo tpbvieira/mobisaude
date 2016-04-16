@@ -5,17 +5,17 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaDTO;
+import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaMesDTO;
 
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "avaliacaoMediaResponse")
-public class AvaliacaoMediaResponse implements IMobileResponse {
+public class AvaliacaoMediaMesResponse implements IMobileResponse {
 
 	private String erro;
 	private String idEstabelecimentoSaude;
 	private String rating;
 	private String date;
-	private List<AvaliacaoMediaDTO> avaliacoesMedia;
+	private List<AvaliacaoMediaMesDTO> avaliacoesMedia;
 
 	public String getErro() {
 		return erro;
@@ -49,11 +49,11 @@ public class AvaliacaoMediaResponse implements IMobileResponse {
 		this.date = date;
 	}
 
-	public List<AvaliacaoMediaDTO> getAvaliacoesMedia() {
+	public List<AvaliacaoMediaMesDTO> getAvaliacoesMediaMes() {
 		return avaliacoesMedia;
 	}
 
-	public void setAvaliacoesMedia(List<AvaliacaoMediaDTO> avaliacoesMedia) {
+	public void setAvaliacoesMediaMes(List<AvaliacaoMediaMesDTO> avaliacoesMedia) {
 		this.avaliacoesMedia = avaliacoesMedia;
 	}
 	

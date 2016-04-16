@@ -1,8 +1,8 @@
-package co.salutary.mobisaude.model.avaliacaomedia;
+package co.salutary.mobisaude.model.avaliacaomediames;
 
 import java.util.Date;
 
-public class AvaliacaoMediaId implements java.io.Serializable {
+public class AvaliacaoMediaMesId implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169549167L;
 

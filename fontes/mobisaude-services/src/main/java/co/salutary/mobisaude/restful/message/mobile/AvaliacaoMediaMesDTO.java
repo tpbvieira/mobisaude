@@ -1,52 +1,47 @@
-package co.salutary.mobisaude.restful.message.request;
+package co.salutary.mobisaude.restful.message.mobile;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
-@XmlType(namespace = "mobile", name = "avaliacaoRequest")
-public class AvaliacaoMediaRequest implements IMobileRequest {
+@XmlType(namespace = "mobile", name = "avaliacaomediames")
+public class AvaliacaoMediaMesDTO implements Cloneable {
 
-	private String token;
+	private String idAvaliacaoMediaMes;
 	private String idEstabelecimentoSaude;
-	private String rating;
+	private String rating; 
 	private String date;
 	
-	public String getToken() {
-		return token;
+	public String getIdAvaliacaoMediaMes() {
+		return idAvaliacaoMediaMes;
 	}
-
-	public void setToken(String token) {
-		this.token = token;
+	
+	public void setIdAvaliacaoMediaMes(String idAvaliacaoMediaMes) {
+		this.idAvaliacaoMediaMes = idAvaliacaoMediaMes;
 	}
-
+	
 	public String getIdEstabelecimentoSaude() {
 		return idEstabelecimentoSaude;
 	}
-
+	
 	public void setIdEstabelecimentoSaude(String idEstabelecimentoSaude) {
 		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
 	}
-
+	
 	public String getRating() {
 		return rating;
 	}
-
+	
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
 	
-	@Override
-	public boolean validate() {			
-		return idEstabelecimentoSaude != null;
-	}
-
 	public String getDate() {
 		return date;
 	}
-
+	
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
+
 }

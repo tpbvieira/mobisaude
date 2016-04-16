@@ -1,4 +1,4 @@
-package co.salutary.mobisaude.model.avaliacaomedia.dao;
+package co.salutary.mobisaude.model.avaliacaomediames.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -9,22 +9,22 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import co.salutary.mobisaude.model.avaliacaomedia.AvaliacaoMedia;
+import co.salutary.mobisaude.model.avaliacaomediames.AvaliacaoMediaMes;
 
 @Repository("avaliacaoMediaDao")
-public class AvaliacaoMediaDaoImpl implements AvaliacaoMediaDao {
+public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 
 	@PersistenceContext
 	private EntityManager em;
 
-	public void save(AvaliacaoMedia avaliacaoMedia)  {
+	public void save(AvaliacaoMediaMes avaliacaoMedia)  {
 		em.merge(avaliacaoMedia);			
     }
 
 	@SuppressWarnings("unchecked")
-	public AvaliacaoMedia getByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+	public AvaliacaoMediaMes getByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
 		StringBuffer queryString = new StringBuffer();
-		queryString.append("select s from AvaliacaoMedia s ");
+		queryString.append("select s from AvaliacaoMediaMes s ");
 		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
 				+ "and s.date = :date");
 		Query query = em.createQuery(queryString.toString());	
@@ -36,7 +36,7 @@ public class AvaliacaoMediaDaoImpl implements AvaliacaoMediaDao {
 			query.setParameter("date", date);
 		}
 		
-		List<AvaliacaoMedia> result = query.getResultList();		
+		List<AvaliacaoMediaMes> result = query.getResultList();		
 		if (result != null && !result.isEmpty()) {
 			return result.get(0);
 		} else {
@@ -46,7 +46,7 @@ public class AvaliacaoMediaDaoImpl implements AvaliacaoMediaDao {
 
 	public void removeByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
 		StringBuffer queryString = new StringBuffer();
-		queryString.append("delete from AvaliacaoMedia s ");
+		queryString.append("delete from AvaliacaoMediaMes s ");
 		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
 				+ "and s.date = :date");
 		
@@ -64,9 +64,9 @@ public class AvaliacaoMediaDaoImpl implements AvaliacaoMediaDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<AvaliacaoMedia> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
+	public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
 		StringBuffer queryStr = new StringBuffer();
-		queryStr.append("from AvaliacaoMedia a ");
+		queryStr.append("from AvaliacaoMediaMes a ");
 		queryStr.append("where a.idEstabelecimentoSaude = :idEstabelecimentoSaude ");	
 		
 		Query query = em.createQuery(queryStr.toString());
@@ -79,9 +79,9 @@ public class AvaliacaoMediaDaoImpl implements AvaliacaoMediaDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<AvaliacaoMedia> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+	public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
 		StringBuffer queryStr = new StringBuffer();
-		queryStr.append("from AvaliacaoMedia a ");
+		queryStr.append("from AvaliacaoMediaMes a ");
 		queryStr.append("where a.idEstabelecimentoSaude = :idEstabelecimentoSaude"
 				+ "and s.date = :date");	
 		

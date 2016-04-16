@@ -1,4 +1,4 @@
-package co.salutary.mobisaude.model.avaliacaomedia;
+package co.salutary.mobisaude.model.avaliacaomediames;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -12,19 +12,19 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@IdClass(AvaliacaoMediaId.class)
+@IdClass(AvaliacaoMediaMesId.class)
 @Table(name = "\"tb_avaliacao_media\"", schema = "public")
-public class AvaliacaoMedia implements java.io.Serializable {
+public class AvaliacaoMediaMes implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169349167L;
 	private int idEstabelecimentoSaude;
 	private float rating; 
 	private Date date;
 
-	public AvaliacaoMedia() {
+	public AvaliacaoMediaMes() {
 	}
 
-	public AvaliacaoMedia(int idEstabelecimentoSaude, float rating) {		
+	public AvaliacaoMediaMes(int idEstabelecimentoSaude, float rating) {		
 		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
 		this.rating = rating;
 		Calendar calendar = Calendar.getInstance();
@@ -36,7 +36,7 @@ public class AvaliacaoMedia implements java.io.Serializable {
 		this.date = calendar.getTime();
 	}
 	
-	public AvaliacaoMedia(int idEstabelecimentoSaude, float rating, Date date) {		
+	public AvaliacaoMediaMes(int idEstabelecimentoSaude, float rating, Date date) {		
 		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
 		this.rating = rating;
 		Calendar calendar = Calendar.getInstance();
