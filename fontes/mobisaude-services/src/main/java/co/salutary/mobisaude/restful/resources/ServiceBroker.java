@@ -765,7 +765,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			avaliacaoFacade.save(avaliacao);
 			
 			// Get evaluations for mean calculation 
-			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdEstabelecimentoSaude(Integer.valueOf(idEstabelecimentoSaude));
+			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(idEstabelecimentoSaude));
 			float mean = 0;
 			for(Avaliacao av: avaliacoes){
 				mean = mean + av.getRating();
@@ -823,7 +823,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			String email = request.getEmail();			
 			
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
-			Avaliacao avaliacao = avaliacaoFacade.getAvaliacao(Integer.valueOf(idEstabelecimentoSaude), email);
+			Avaliacao avaliacao = avaliacaoFacade.getByIdEESEmail(Integer.valueOf(idEstabelecimentoSaude), email);
 			response.setIdEstabelecimentoSaude(avaliacao.getIdEstabelecimentoSaude().toString());
 			response.setEmail(avaliacao.getEmail());
 			response.setTitulo(avaliacao.getTitulo());
@@ -861,7 +861,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
-			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdEstabelecimentoSaude(Integer.valueOf(request.getIdEstabelecimentoSaude()));
+			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(request.getIdEstabelecimentoSaude()));
 			if (avaliacoes != null) {
 				List<AvaliacaoDTO> avaliscoesList = new ArrayList<AvaliacaoDTO>();
 				for (Avaliacao avaliacao:avaliacoes) {
@@ -944,6 +944,48 @@ public class ServiceBroker extends AbstractServiceBroker {
 		return response;
 	}
 
+	@POST
+	@Path("/getAvaliacaoMediaByIdES")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoMediaMesResponse getAvaliacaoMediaByIdES(AvaliacaoMediaMesRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoMediaMesResponse response = new AvaliacaoMediaMesResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			
+			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
+			Avaliacao avaliacao = avaliacaoFacade.getAvgByIdEES(Integer.valueOf(idEstabelecimentoSaude));			
+			response.setIdEstabelecimentoSaude(avaliacao.getIdEstabelecimentoSaude().toString());
+			response.setRating(Float.toString(avaliacao.getRating()));			
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
 	@POST
 	@Path("/getAvaliacaoMediaByIdESDate")
 	@Consumes("application/json;charset=utf-8")

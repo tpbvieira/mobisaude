@@ -108,6 +108,7 @@ public class TestAll extends TestCase {
 			
 			// test 12 - testing sugestão
 			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 1);
+			getAvaliacaoMediaByIdESTest(mapper, broker, token, "6684181", "3.5");
 			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/04/2016", "3.5");
 			avaliarMediaTest(mapper, broker, token,"6684181","3.8","11/01/2016");			
 			avaliarMediaTest(mapper, broker, token,"6684181","2.8","01/02/2016");
@@ -612,6 +613,37 @@ public class TestAll extends TestCase {
 
 	}
 
+	private void getAvaliacaoMediaByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String targetRating){
+
+		try{			
+			AvaliacaoMediaMesRequest avaliacaoMediaMesRequest = new AvaliacaoMediaMesRequest();
+			avaliacaoMediaMesRequest.setToken(token);
+			avaliacaoMediaMesRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			
+			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdES(avaliacaoMediaMesRequest);			
+			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
+				logger.error(avaliacaoMediaMesResponse);
+				fail("getAvaliacaoTestError");			
+			}			
+
+			if (!avaliacaoMediaMesResponse.getIdEstabelecimentoSaude().equals(idEstabelecimentoSaude)) {
+				logger.error("Estabelecimento Errado");
+				fail("Estabelecimento Errado");			
+			}
+
+			if (!avaliacaoMediaMesResponse.getRating().equals(targetRating)) {
+				logger.error("MeanRating errado = " + avaliacaoMediaMesResponse.getRating());
+				fail("MeanRating errado = " + avaliacaoMediaMesResponse.getRating());
+			}
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+
+	}
+	
 	private void getAvaliacaoMediaByIdESDateTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String date, String rating){
 
 		try{			
@@ -632,8 +664,8 @@ public class TestAll extends TestCase {
 			}
 
 			if (!avaliacaoMediaMesResponse.getRating().equals(rating)) {
-				logger.error("MeanRating errado = " + avaliacaoMediaMesResponse.getRating());
-				fail("MeanRating errado = " + avaliacaoMediaMesResponse.getRating());
+				logger.error("MeanMonthRating errado = " + avaliacaoMediaMesResponse.getRating());
+				fail("MeanMonthRating errado = " + avaliacaoMediaMesResponse.getRating());
 			}
 
 		}catch(Exception e){

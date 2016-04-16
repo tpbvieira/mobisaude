@@ -21,8 +21,9 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 		em.persist(avaliacao);			
     }
 
+	@Override
 	@SuppressWarnings("unchecked")
-	public Avaliacao getAvaliacao(Integer idEstabelecimentoSaude, String email) {
+	public Avaliacao getByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("select s from Avaliacao s ");
 		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
@@ -44,8 +45,29 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 			return null;
 		}
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Avaliacao getAvgByIdEES(Integer idEstabelecimentoSaude) {
+		StringBuffer queryString = new StringBuffer();
+		queryString.append("select avg(a.rating) as rating from Avaliacao a ");
+		queryString.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude ");
+		queryString.append(" group by a.idEstabelecimentoSaude");
+		Query query = em.createQuery(queryString.toString());	
+		
+		if (idEstabelecimentoSaude != null) {
+			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		}
+		
+		List<Object> result = query.getResultList();
+		Avaliacao avaliacao = new Avaliacao();
+		avaliacao.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+		avaliacao.setRating(Float.parseFloat(result.get(0).toString()));
+		return avaliacao;
+	}
 
-	public void removeAvaliacao(Integer idEstabelecimentoSaude, String email) {
+	@Override
+	public void removeByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("delete from Avaliacao s ");
 		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
@@ -65,7 +87,7 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Avaliacao> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
+	public List<Avaliacao> listByIdES(Integer idEstabelecimentoSaude) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from Avaliacao a");
 		queryStr.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude ");
@@ -80,7 +102,7 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Avaliacao> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+	public List<Avaliacao> listByIdESDate(Integer idEstabelecimentoSaude, Date date) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from Avaliacao a ");
 		queryStr.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude");

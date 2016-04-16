@@ -22,20 +22,29 @@ public class AvaliacaoFacadeImpl implements AvaliacaoFacade {
 		avaliacaoDao.save(avaliacao);
 	}
 
-	public Avaliacao getAvaliacao(Integer idEstabelecimentoSaude, String email) {
-		return avaliacaoDao.getAvaliacao(idEstabelecimentoSaude, email);
-	}
-
-	public void removeAvaliacao(Integer idEstabelecimentoSaude, String email) {
-		avaliacaoDao.removeAvaliacao(idEstabelecimentoSaude, email);
+	@Override
+	public Avaliacao getByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
+		return avaliacaoDao.getByIdEESEmail(idEstabelecimentoSaude, email);
 	}
 	
-	public List<Avaliacao> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
-    	return avaliacaoDao.listByIdEstabelecimentoSaude(idEstabelecimentoSaude);
+	@Override
+	public Avaliacao getAvgByIdEES(Integer idEstabelecimentoSaude) {
+		return avaliacaoDao.getAvgByIdEES(idEstabelecimentoSaude);
+	}
+
+	@Override
+	public void removeByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
+		avaliacaoDao.removeByIdEESEmail(idEstabelecimentoSaude, email);
+	}
+	
+	@Override
+	public List<Avaliacao> listByIdES(Integer idEstabelecimentoSaude) {
+    	return avaliacaoDao.listByIdES(idEstabelecimentoSaude);
     }
 
-	public List<Avaliacao> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
-    	return avaliacaoDao.listByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude, date);
+	@Override
+	public List<Avaliacao> listByIdESDate(Integer idEstabelecimentoSaude, Date date) {
+    	return avaliacaoDao.listByIdESDate(idEstabelecimentoSaude, date);
     }
 	
 }

@@ -8,9 +8,10 @@ import co.salutary.mobisaude.model.avaliacao.Avaliacao;
 public interface AvaliacaoFacade {
 
 	public void save(Avaliacao avaliacao);
-	public void removeAvaliacao(Integer idEstabelecimentoSaude, String email);
-	public Avaliacao getAvaliacao(Integer idEstabelecimentoSaude, String email);
-	public List<Avaliacao> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude);
-	public List<Avaliacao> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date);
+	public void removeByIdEESEmail(Integer idEstabelecimentoSaude, String email);
+	public Avaliacao getByIdEESEmail(Integer idEstabelecimentoSaude, String email);
+	public Avaliacao getAvgByIdEES(Integer idEstabelecimentoSaude);
+	public List<Avaliacao> listByIdES(Integer idEstabelecimentoSaude);
+	public List<Avaliacao> listByIdESDate(Integer idEstabelecimentoSaude, Date date);
 	
 }
