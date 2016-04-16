@@ -1,5 +1,6 @@
 package co.salutary.mobisaude.model.avaliacao.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -66,16 +67,31 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 	@SuppressWarnings("unchecked")
 	public List<Avaliacao> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
 		StringBuffer queryStr = new StringBuffer();
-		queryStr.append("from Avaliacao a ");
-		queryStr.append("where 1=1 ");
-		
-		if (idEstabelecimentoSaude != null) {
-			queryStr.append("and es.idEstabelecimentoSaude = :idEstabelecimentoSaude ");
-		}		
+		queryStr.append("from Avaliacao a");
+		queryStr.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude ");
 		
 		Query query = em.createQuery(queryStr.toString());
 		if (idEstabelecimentoSaude != null ) {
 			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		}
+		
+		return query.getResultList();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Avaliacao> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+		StringBuffer queryStr = new StringBuffer();
+		queryStr.append("from Avaliacao a ");
+		queryStr.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude");
+		queryStr.append(" and a.date = :date ");
+		
+		Query query = em.createQuery(queryStr.toString());
+		if (idEstabelecimentoSaude != null ) {
+			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		}
+		if (date != null) {
+			query.setParameter("date", date);
 		}
 		
 		return query.getResultList();

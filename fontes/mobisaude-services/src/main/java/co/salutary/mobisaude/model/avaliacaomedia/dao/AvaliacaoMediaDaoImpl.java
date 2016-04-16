@@ -76,5 +76,24 @@ public class AvaliacaoMediaDaoImpl implements AvaliacaoMediaDao {
 		
 		return query.getResultList();
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<AvaliacaoMedia> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+		StringBuffer queryStr = new StringBuffer();
+		queryStr.append("from AvaliacaoMedia a ");
+		queryStr.append("where a.idEstabelecimentoSaude = :idEstabelecimentoSaude"
+				+ "and s.date = :date");	
+		
+		Query query = em.createQuery(queryStr.toString());
+		if (idEstabelecimentoSaude != null ) {
+			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		}
+		if (date != null) {
+			query.setParameter("date", date);
+		}
+		
+		return query.getResultList();
+	}
 
 }

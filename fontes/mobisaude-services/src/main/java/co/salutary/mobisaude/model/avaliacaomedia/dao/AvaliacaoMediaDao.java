@@ -11,5 +11,6 @@ public interface AvaliacaoMediaDao {
     public void removeByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date);
     public AvaliacaoMedia getByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date);
     public List<AvaliacaoMedia> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude);
+    public List<AvaliacaoMedia> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date);
 
 }

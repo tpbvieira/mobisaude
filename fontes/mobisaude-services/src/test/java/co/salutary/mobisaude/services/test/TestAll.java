@@ -98,43 +98,21 @@ public class TestAll extends TestCase {
 			getSugestaoTest(mapper, broker, token);
 
 			// test 11 - testing sugestão
-			avaliarTest(mapper, broker, token);
-			getAvaliacaoTest(mapper, broker, token);
-
+			avaliarTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "Título", "Avaliacao de teste", "5");
+			avaliarTest(mapper, broker, token, "6684181","a@a.com", "Título", "Avaliacao de teste", "2.5");
+			avaliarTest(mapper, broker, token, "6684181","b@b.com", "Título", "Avaliacao de teste", "3");
+			getAvaliacaoTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "Título", "Avaliacao de teste", "5.0");
+			getAvaliacaoTest(mapper, broker, token, "6684181","a@a.com", "Título", "Avaliacao de teste", "2.5");
+			getAvaliacaoTest(mapper, broker, token, "6684181","b@b.com", "Título", "Avaliacao de teste", "3.0");
+			listAvaliacaoByIdESTest(mapper, broker, token, "6684181", 3);
+			
 			// test 12 - testing sugestão
-			avaliarMediaTest(mapper, broker, token,"6684181","3.5", "11/04/2016");
-			avaliarMediaTest(mapper, broker, token,"6684181","3.8", "11/04/2016");			
-			getAvaliacaoMediaTest(mapper, broker, token, "6684181", "01/04/2016", "3.8");
-			avaliarMediaTest(mapper, broker, token,"6684181","4.8","01/03/2016");
+			listAvaliacaoMediaTest(mapper, broker, token, "6684181", 1);
+			getAvaliacaoMediaTest(mapper, broker, token, "6684181", "01/04/2016", "3.5");
+			avaliarMediaTest(mapper, broker, token,"6684181","3.8","11/01/2016");			
 			avaliarMediaTest(mapper, broker, token,"6684181","2.8","01/02/2016");
-			listAvaliacaoMediaTest(mapper, broker, token, "6684181", 3);
-
-			//			// 14 - Texto Ajuda
-			//			TextoAjudaRequest textoAjudaRequest = mapper.readValue(
-			//					testProperties.getProperty("textoAjuda"),
-			//					TextoAjudaRequest.class);
-			//			TextoAjudaResponse textoAjudaResponse = broker.textoAjuda(textoAjudaRequest);
-			//			if (textoAjudaResponse == null || !textoAjudaResponse.getErro().startsWith("0|")) {
-			//				fail("Retorno do serviço Texto Ajuda não OK.");
-			//			}
-			//
-			//			// 15 - Texto Ajuda Servico Movel
-			//			TextoAjudaServicoMovelRequest textoAjudaServicoMovelRequest = mapper.readValue(
-			//					testProperties.getProperty("textoAjudaServicoMovel"),
-			//					TextoAjudaServicoMovelRequest.class);
-			//			TextoAjudaServicoMovelResponse textoAjudaServicoMovelResponse = broker.textoAjudaServicoMovel(textoAjudaServicoMovelRequest);
-			//			if (textoAjudaServicoMovelResponse == null || !textoAjudaServicoMovelResponse.getErro().startsWith("0|")) {
-			//				fail("Retorno do serviço Texto Ajuda Servico Movel não OK.");
-			//			}
-			//
-			//			// 16 - Texto Aviso Relatar Problema
-			//			TextoAvisoRelatarProblemaRequest textoAvisoRelatarProblemaRequest = mapper.readValue(
-			//					testProperties.getProperty("textoAvisoRelatarProblema"),
-			//					TextoAvisoRelatarProblemaRequest.class);
-			//			TextoAvisoRelatarProblemaResponse textoAvisoRelatarProblemaResponse = broker.textoAvisoRelatarProblema(textoAvisoRelatarProblemaRequest);
-			//			if (textoAvisoRelatarProblemaResponse == null || !textoAvisoRelatarProblemaResponse.getErro().startsWith("0|")) {
-			//				fail("Retorno do serviço Texto Aviso Relatar Problema não OK.");
-			//			}
+			avaliarMediaTest(mapper, broker, token,"6684181","4.8","01/03/2016");
+			listAvaliacaoMediaTest(mapper, broker, token, "6684181", 4);
 
 		} catch (Exception e){
 			logger.error(e);	
@@ -514,15 +492,15 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void avaliarTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	private void avaliarTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String email, String titulo, String avaliacao, String rating){
 		try{
 			AvaliacaoRequest avalicaoRequest = new AvaliacaoRequest();
 			avalicaoRequest.setToken(token);
-			avalicaoRequest.setIdEstabelecimentoSaude("6684181");
-			avalicaoRequest.setEmail("tpbvieira@gmail.com");
-			avalicaoRequest.setTitulo("Título");
-			avalicaoRequest.setAvaliacao("Avaliacao de teste");
-			avalicaoRequest.setRating("5");
+			avalicaoRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avalicaoRequest.setEmail(email);
+			avalicaoRequest.setTitulo(titulo);
+			avalicaoRequest.setAvaliacao(avaliacao);
+			avalicaoRequest.setRating(rating);
 
 			AvaliacaoResponse avaliacaoResponse = broker.avaliar(avalicaoRequest);
 
@@ -539,39 +517,69 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void getAvaliacaoTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	private void getAvaliacaoTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String email, String titulo, String avaliacao, String rating){
 
 		try{			
 			AvaliacaoRequest avaliacaoRequest = new AvaliacaoRequest();
 			avaliacaoRequest.setToken(token);
-			avaliacaoRequest.setIdEstabelecimentoSaude("6684181");
-			avaliacaoRequest.setEmail("tpbvieira@gmail.com");
+			avaliacaoRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avaliacaoRequest.setEmail(email);
 
 			AvaliacaoResponse avaliacaoResponse = broker.getAvaliacao(avaliacaoRequest);			
 			if (avaliacaoResponse == null || !avaliacaoResponse.getErro().startsWith("0|")) {//Success
 				logger.error(avaliacaoResponse);
 				fail("getAvaliacaoTestError");			
 			}			
-
-			if (!avaliacaoResponse.getEmail().equals("tpbvieira@gmail.com")) {
-				logger.error("Email errado");
-				fail("Email errado");			
-			}
-
-			if (!avaliacaoResponse.getIdEstabelecimentoSaude().equals("6684181")) {
+			if (!avaliacaoResponse.getIdEstabelecimentoSaude().equals(idEstabelecimentoSaude)) {
 				logger.error("Estabelecimento Errado");
 				fail("Estabelecimento Errado");			
 			}
-
-			if (!avaliacaoResponse.getAvaliacao().equals("Avaliacao de teste")) {
-				logger.error("Avaliacao erradao");
-				fail("Avaliacao erradao");
+			if (!avaliacaoResponse.getEmail().equals(email)) {
+				logger.error("Email errado");
+				fail("Email errado");			
 			}
-
-			if (!avaliacaoResponse.getRating().equals("5.0")) {
+			if (!avaliacaoResponse.getTitulo().equals(titulo)) {
+				logger.error("Título Errado");
+				fail("Título Errado");
+			}
+			if (!avaliacaoResponse.getAvaliacao().equals(avaliacao)) {
+				logger.error("Avaliacao errada");
+				fail("Avaliacao errada");
+			}
+			if (!avaliacaoResponse.getRating().equals(rating)) {
 				logger.error("Rating errado = " + avaliacaoResponse.getRating());
 				fail("Rating errado = " + avaliacaoResponse.getRating());
 			}
+
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+
+	}
+	             
+	private void listAvaliacaoByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, int num){
+
+		try{			
+			AvaliacaoRequest avaliacaoRequest = new AvaliacaoRequest();
+			avaliacaoRequest.setToken(token);
+			avaliacaoRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+
+			AvaliacaoResponse avaliacaoResponse = broker.listAvaliacaoByIdES(avaliacaoRequest);			
+
+			if (avaliacaoResponse == null || !avaliacaoResponse.getErro().startsWith("0|")) {//Success
+				logger.error(avaliacaoResponse);
+				fail("listAvaliacaoTestError");			
+			}else
+				if (avaliacaoResponse.getAvaliacoes() == null) {
+					logger.error("listAvaliacaoTest: Avaliacoes == null");
+					fail("listAvaliacaoTest: Avaliacoes == null");
+				}else
+					if (avaliacaoResponse.getAvaliacoes().size() != num) {
+						logger.error("listAvaliacaoTest: invalid size " + avaliacaoResponse.getAvaliacoes().size());
+						fail("listAvaliacaoTest: invalid size " + avaliacaoResponse.getAvaliacoes().size());
+					}
 
 		}catch(Exception e){
 			logger.error(e);
@@ -624,8 +632,8 @@ public class TestAll extends TestCase {
 			}
 
 			if (!avaliacaoMediaResponse.getRating().equals(rating)) {
-				logger.error("Rating errado = " + avaliacaoMediaResponse.getRating());
-				fail("Rating errado = " + avaliacaoMediaResponse.getRating());
+				logger.error("MeanRating errado = " + avaliacaoMediaResponse.getRating());
+				fail("MeanRating errado = " + avaliacaoMediaResponse.getRating());
 			}
 
 		}catch(Exception e){
@@ -649,13 +657,13 @@ public class TestAll extends TestCase {
 				logger.error(avaliacaoMediaResponse);
 				fail("listAvaliacaoMediaTestError");			
 			}else
-				if (avaliacaoMediaResponse.getAvaliacoes() == null) {
+				if (avaliacaoMediaResponse.getAvaliacoesMedia() == null) {
 					logger.error("listAvaliacaoMediaTest: Avaliacoes == null");
 					fail("listAvaliacaoMediaTest: Avaliacoes == null");
 				}else
-					if (avaliacaoMediaResponse.getAvaliacoes().size() != num) {
-						logger.error("listAvaliacaoMediaTest: invalid size");
-						fail("listAvaliacaoMediaTest: invalid size");
+					if (avaliacaoMediaResponse.getAvaliacoesMedia().size() != num) {
+						logger.error("listAvaliacaoMediaTest: invalid size " + avaliacaoMediaResponse.getAvaliacoesMedia().size());
+						fail("listAvaliacaoMediaTest: invalid size " + avaliacaoMediaResponse.getAvaliacoesMedia().size());
 					}
 
 		}catch(Exception e){

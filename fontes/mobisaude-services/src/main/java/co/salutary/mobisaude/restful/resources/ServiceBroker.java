@@ -33,6 +33,7 @@ import co.salutary.mobisaude.model.tipogestao.facade.TipoGestaoFacade;
 import co.salutary.mobisaude.model.tiposistemaoperacional.facade.TipoSistemaOperacionalFacade;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
+import co.salutary.mobisaude.restful.message.mobile.AvaliacaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaDTO;
 import co.salutary.mobisaude.restful.message.mobile.EsDTO;
 import co.salutary.mobisaude.restful.message.mobile.RegiaoDTO;
@@ -57,6 +58,7 @@ import co.salutary.mobisaude.restful.message.response.GerarChaveResponse;
 import co.salutary.mobisaude.restful.message.response.GerarTokenResponse;
 import co.salutary.mobisaude.restful.message.response.SugestaoResponse;
 import co.salutary.mobisaude.restful.message.response.UserResponse;
+import co.salutary.mobisaude.util.Utils;
 
 @Path("/mobile")
 @Controller
@@ -752,18 +754,37 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
+			// Save Avaliacao
 			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
 			String email = request.getEmail();
 			String avaliacaoStr = request.getAvaliacao();
 			String titulo = request.getTitulo();
-			String rating = request.getRating();
-			
+			String rating = request.getRating();			
 			Avaliacao avaliacao = new Avaliacao(Integer.valueOf(idEstabelecimentoSaude), email, titulo, avaliacaoStr, Float.valueOf(rating));
-
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
 			avaliacaoFacade.save(avaliacao);
+			
+			// Get evaluations for mean calculation 
+			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdEstabelecimentoSaude(Integer.valueOf(idEstabelecimentoSaude));
+			float mean = 0;
+			for(Avaliacao av: avaliacoes){
+				mean = mean + av.getRating();
+			}
+			mean = mean/avaliacoes.size();
+			
+			//Update AvaliacaoMedia			
+			AvaliacaoMediaRequest avalicaoMediaRequest = new AvaliacaoMediaRequest();
+			avalicaoMediaRequest.setToken(token);
+			avalicaoMediaRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avalicaoMediaRequest.setRating(Float.toString(mean));
+			Date current = new Date();
+			avalicaoMediaRequest.setDate(Utils.dateTo01DDYY(current));
+			AvaliacaoMediaFacade avaliacaoMediaFacade = (AvaliacaoMediaFacade)Factory.getInstance().get("avaliacaoMediaFacade");
+			AvaliacaoMedia avaliacaoMedia = new AvaliacaoMedia(Integer.valueOf(idEstabelecimentoSaude), mean, current);
+			avaliacaoMediaFacade.save(avaliacaoMedia);
+			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-
+			
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
 			response.setErro(e.getMessage());			
@@ -777,7 +798,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 	
 	@POST
-	@Path("/getAvalicao")
+	@Path("/getAvaliacao")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
 	public AvaliacaoResponse getAvaliacao(AvaliacaoRequest request) {
@@ -823,6 +844,57 @@ public class ServiceBroker extends AbstractServiceBroker {
 		return response;
 	}
 
+	@POST
+	@Path("/listAvaliacaoByIdES")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoResponse listAvaliacaoByIdES(AvaliacaoRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoResponse response = new AvaliacaoResponse();
+		try {
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
+			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdEstabelecimentoSaude(Integer.valueOf(request.getIdEstabelecimentoSaude()));
+			if (avaliacoes != null) {
+				List<AvaliacaoDTO> avaliscoesList = new ArrayList<AvaliacaoDTO>();
+				for (Avaliacao avaliacao:avaliacoes) {
+					AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
+					avaliacaoDTO.setIdEstabelecimentoSaude(avaliacao.getIdEstabelecimentoSaude().toString());
+					avaliacaoDTO.setEmail(avaliacao.getEmail());
+					avaliacaoDTO.setTitulo(avaliacao.getTitulo());
+					avaliacaoDTO.setAvaliacao(avaliacao.getAvaliacao());
+					avaliacaoDTO.setRating(Float.toString(avaliacao.getRating()));
+					avaliacaoDTO.setDate(sdf.format(avaliacao.getDate()));										
+					avaliscoesList.add(avaliacaoDTO);
+				}
+				response.setAvaliacoes(avaliscoesList);				
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
+				return response;
+			}			
+			
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
 	@POST
 	@Path("/avaliarMedia")
 	@Consumes("application/json;charset=utf-8")
@@ -871,7 +943,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 		
 		return response;
 	}
-	
+
 	@POST
 	@Path("/getAvalicaoMedia")
 	@Consumes("application/json;charset=utf-8")
@@ -949,7 +1021,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 					amDTO.setDate(sdf.format(avaliacaoMedia.getDate()));										
 					lstRetorno.add(amDTO);
 				}
-				response.setAvaliacoes(lstRetorno);
+				response.setAvaliacoesMedia(lstRetorno);
 				
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));

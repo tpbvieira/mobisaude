@@ -1,5 +1,6 @@
 package co.salutary.mobisaude.model.avaliacao.facade;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,10 @@ public class AvaliacaoFacadeImpl implements AvaliacaoFacade {
 	
 	public List<Avaliacao> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
     	return avaliacaoDao.listByIdEstabelecimentoSaude(idEstabelecimentoSaude);
+    }
+
+	public List<Avaliacao> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+    	return avaliacaoDao.listByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude, date);
     }
 	
 }

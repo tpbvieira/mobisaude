@@ -34,4 +34,7 @@ public class AvaliacaoMediaFacadeImpl implements AvaliacaoMediaFacade {
     	return avaliacaoMediaDao.listByIdEstabelecimentoSaude(idEstabelecimentoSaude);
     }
 	
+	public List<AvaliacaoMedia> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+    	return avaliacaoMediaDao.listByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude, date);
+    }
 }

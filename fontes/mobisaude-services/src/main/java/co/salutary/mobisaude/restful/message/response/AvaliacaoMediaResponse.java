@@ -15,7 +15,7 @@ public class AvaliacaoMediaResponse implements IMobileResponse {
 	private String idEstabelecimentoSaude;
 	private String rating;
 	private String date;
-	private List<AvaliacaoMediaDTO> avaliacoes;
+	private List<AvaliacaoMediaDTO> avaliacoesMedia;
 
 	public String getErro() {
 		return erro;
@@ -49,12 +49,12 @@ public class AvaliacaoMediaResponse implements IMobileResponse {
 		this.date = date;
 	}
 
-	public List<AvaliacaoMediaDTO> getAvaliacoes() {
-		return avaliacoes;
+	public List<AvaliacaoMediaDTO> getAvaliacoesMedia() {
+		return avaliacoesMedia;
 	}
 
-	public void setAvaliacoes(List<AvaliacaoMediaDTO> avaliacoes) {
-		this.avaliacoes = avaliacoes;
+	public void setAvaliacoesMedia(List<AvaliacaoMediaDTO> avaliacoesMedia) {
+		this.avaliacoesMedia = avaliacoesMedia;
 	}
 	
 }

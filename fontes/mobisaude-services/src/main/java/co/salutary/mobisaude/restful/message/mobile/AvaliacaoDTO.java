@@ -1,33 +1,19 @@
-package co.salutary.mobisaude.restful.message.response;
-
-import java.util.List;
+package co.salutary.mobisaude.restful.message.mobile;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import co.salutary.mobisaude.restful.message.mobile.AvaliacaoDTO;
-
 @XmlRootElement
-@XmlType(namespace = "mobile", name = "avaliacaoResponse")
-public class AvaliacaoResponse implements IMobileResponse {
+@XmlType(namespace = "mobile", name = "avaliacao")
+public class AvaliacaoDTO implements Cloneable {
 
-	private String erro;
 	private String idEstabelecimentoSaude;
 	private String email;
 	private String titulo;
 	private String avaliacao;
 	private String rating;
 	private String date;
-	private List<AvaliacaoDTO> avaliacoes;
-	
-	public String getErro() {
-		return erro;
-	}
-	
-	public void setErro(String erro) {
-		this.erro = erro;
-	}
-	
+		
 	public String getIdEstabelecimentoSaude() {
 		return idEstabelecimentoSaude;
 	}
@@ -74,14 +60,6 @@ public class AvaliacaoResponse implements IMobileResponse {
 	
 	public void setDate(String date) {
 		this.date = date;
-	}
-
-	public List<AvaliacaoDTO> getAvaliacoes() {
-		return avaliacoes;
-	}
-
-	public void setAvaliacoes(List<AvaliacaoDTO> avaliacoes) {
-		this.avaliacoes = avaliacoes;
 	}
 	
 }
