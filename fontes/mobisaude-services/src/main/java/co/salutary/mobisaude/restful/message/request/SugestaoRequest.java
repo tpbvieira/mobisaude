@@ -10,7 +10,7 @@ import co.salutary.mobisaude.util.Validator;
 public class SugestaoRequest implements IMobileRequest {
 
 	private String token;
-	private String idEstabelecimentoSaude;
+	private String idES;
 	private String email;
 	private String sugestao;
 	
@@ -22,12 +22,12 @@ public class SugestaoRequest implements IMobileRequest {
 		this.token = token;
 	}
 	
-	public String getIdEstabelecimentoSaude() {
-		return idEstabelecimentoSaude;
+	public String getIdES() {
+		return idES;
 	}
 
-	public void setIdEstabelecimentoSaude(String idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(String idES) {
+		this.idES = idES;
 	}
 
 	public String getEmail() {

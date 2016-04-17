@@ -23,15 +23,15 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Avaliacao getByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
+	public Avaliacao getByIdESEmail(Integer idES, String email) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("select s from Avaliacao s ");
-		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
+		queryString.append("where s.idES = :idES "
 				+ "and s.email = :email");
 		Query query = em.createQuery(queryString.toString());	
 		
-		if (idEstabelecimentoSaude != null) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null) {
+			query.setParameter("idES", idES);
 		}
 		if (email != null && !email.trim().equals("")) {
 			query.setParameter("email", email);
@@ -48,35 +48,35 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Avaliacao getAvgByIdEES(Integer idEstabelecimentoSaude) {
+	public Avaliacao getAvgByIdES(Integer idES) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("select avg(a.rating) as rating from Avaliacao a ");
-		queryString.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude ");
-		queryString.append(" group by a.idEstabelecimentoSaude");
+		queryString.append(" where a.idES = :idES ");
+		queryString.append(" group by a.idES");
 		Query query = em.createQuery(queryString.toString());	
 		
-		if (idEstabelecimentoSaude != null) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null) {
+			query.setParameter("idES", idES);
 		}
 		
 		List<Object> result = query.getResultList();
 		Avaliacao avaliacao = new Avaliacao();
-		avaliacao.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+		avaliacao.setIdES(idES);
 		avaliacao.setRating(Float.parseFloat(result.get(0).toString()));
 		return avaliacao;
 	}
 
 	@Override
-	public void removeByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
+	public void removeByIdESEmail(Integer idES, String email) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("delete from Avaliacao s ");
-		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
+		queryString.append("where s.idES = :idES "
 				+ "and s.email = :email");
 		
 		Query query = em.createQuery(queryString.toString());
 		
-		if (idEstabelecimentoSaude != null) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null) {
+			query.setParameter("idES", idES);
 		}
 		if (email != null && !email.trim().equals("")) {
 			query.setParameter("email", email);
@@ -87,14 +87,14 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Avaliacao> listByIdES(Integer idEstabelecimentoSaude) {
+	public List<Avaliacao> listByIdES(Integer idES) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from Avaliacao a");
-		queryStr.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude ");
+		queryStr.append(" where a.idES = :idES ");
 		
 		Query query = em.createQuery(queryStr.toString());
-		if (idEstabelecimentoSaude != null ) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null ) {
+			query.setParameter("idES", idES);
 		}
 		
 		return query.getResultList();
@@ -102,15 +102,15 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Avaliacao> listByIdESDate(Integer idEstabelecimentoSaude, Date date) {
+	public List<Avaliacao> listByIdESDate(Integer idES, Date date) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from Avaliacao a ");
-		queryStr.append(" where a.idEstabelecimentoSaude = :idEstabelecimentoSaude");
+		queryStr.append(" where a.idES = :idES");
 		queryStr.append(" and a.date = :date ");
 		
 		Query query = em.createQuery(queryStr.toString());
-		if (idEstabelecimentoSaude != null ) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null ) {
+			query.setParameter("idES", idES);
 		}
 		if (date != null) {
 			query.setParameter("date", date);

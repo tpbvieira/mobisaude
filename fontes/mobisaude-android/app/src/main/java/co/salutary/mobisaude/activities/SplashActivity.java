@@ -46,13 +46,13 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     private TextView txtLabel;
 
+    private LocalDataBase db;
     private UserController userController;
-
     private Location location;
 
     private boolean isShowDialog = true;
 
-    private LocalDataBase localDataBase;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         txtLabel = (TextView) findViewById(R.id.frm_splash_label);
 
         DeviceInfo.setUpGCM(this);
-        localDataBase = LocalDataBase.getInstance();
+        db = LocalDataBase.getInstance();
         userController = UserController.getInstance();
         location = DeviceInfo.updateLocation(getApplicationContext(), this);
 
@@ -150,9 +150,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             boolean isSuccess = false;
 
             try {
-                // Initiate Database
-                localDataBase.open(getApplicationContext());
-
                 // verify connection
                 ConnectivityUtils.getInstance(getApplicationContext()).requisitConexaoMobile();
                 isSuccess = DeviceInfo.hasConnectivity(getApplicationContext());
@@ -369,19 +366,19 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                             } else if (idErro == 0) {
                                 int codMunicipioIbge = jReponder.getInt("codMunicipioIbge");
 
-                                Cidade cidade = new CidadeDAO(localDataBase).getCidadeById(codMunicipioIbge);
+                                db.open(getApplicationContext());
+                                Cidade cidade = new CidadeDAO(db).getCidadeById(codMunicipioIbge);
                                 if (cidade != null) {
-                                    UF uf = new UfDAO(localDataBase).getUfById(cidade.getIdUF());
+                                    UF uf = new UfDAO(db).getUfById(cidade.getIdUF());
                                     userController.setUf(uf);
                                     userController.setCidade(cidade);
-                                    userController.atualizarCidadeSelecionado();
-
-                                    // para a cidade local
-                                    userController.setCidadeLocal(cidade);
+                                    db.close();
                                     return true;
                                 } else {
+                                    db.close();
                                     return false;
                                 }
+
                             } else {
                                 return false;
                             }
@@ -512,15 +509,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             Log.d(new Object() {
             }.getClass().getName(), new Object() {
             }.getClass().getEnclosingMethod().getName());
-            try {
-                if (isShowDialog) {
-                    dismissDialog(PROGRESS_BAR);
-                }
-                isShowDialog = true;
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
-            }
             try {
                 if (result) {
                     Intent it = new Intent(SplashActivity.this, MainActivity.class);

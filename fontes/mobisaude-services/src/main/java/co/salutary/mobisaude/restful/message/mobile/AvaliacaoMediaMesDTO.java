@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 public class AvaliacaoMediaMesDTO implements Cloneable {
 
 	private String idAvaliacaoMediaMes;
-	private String idEstabelecimentoSaude;
+	private String idES;
 	private String rating; 
 	private String date;
 	
@@ -20,12 +20,12 @@ public class AvaliacaoMediaMesDTO implements Cloneable {
 		this.idAvaliacaoMediaMes = idAvaliacaoMediaMes;
 	}
 	
-	public String getIdEstabelecimentoSaude() {
-		return idEstabelecimentoSaude;
+	public String getIdES() {
+		return idES;
 	}
 	
-	public void setIdEstabelecimentoSaude(String idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(String idES) {
+		this.idES = idES;
 	}
 	
 	public String getRating() {

@@ -208,8 +208,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
         Cidade cidade = UserController.getInstance().getCidade();
         if(cidade != null){
             edtCidade.setText(cidade.getNome());
-            userController.setMapErbsControle(null);
-            userController.setListEstabelecimentoSaudes(null);
+            userController.setListEstabelecimentosSaude(null);
         }
     }
 
@@ -309,14 +308,9 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                                     UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
                                     userController.setUf(uf);
                                     userController.setCidade(cidade);
-                                    userController.atualizarCidadeSelecionado();
 
-                                    // para a cidade local
-                                    userController.setCidadeLocal(cidade);
-
-                                    // resetar memoria
-                                    userController.setMapErbsControle(null);
-                                    userController.setListEstabelecimentoSaudes(null);
+                                    // reset
+                                    userController.setListEstabelecimentosSaude(null);
                                     return true;
                                 }
                                 else {

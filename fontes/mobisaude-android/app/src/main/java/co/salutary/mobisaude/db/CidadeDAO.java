@@ -43,9 +43,9 @@ public class CidadeDAO {
             }
 
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         }
         return cidades;
     }
@@ -67,9 +67,9 @@ public class CidadeDAO {
                 return cidade;
             }
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         }
         return null;
     }
@@ -92,9 +92,9 @@ public class CidadeDAO {
                 return cidade;
             }
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         }
         return null;
     }
@@ -118,9 +118,9 @@ public class CidadeDAO {
                 return cidade;
             }
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         }
         return null;
     }

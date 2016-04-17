@@ -22,15 +22,15 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
     }
 
 	@SuppressWarnings("unchecked")
-	public AvaliacaoMediaMes getByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+	public AvaliacaoMediaMes getByIdESDate(Integer idES, Date date) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("select s from AvaliacaoMediaMes s ");
-		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
+		queryString.append("where s.idES = :idES "
 				+ "and s.date = :date");
 		Query query = em.createQuery(queryString.toString());	
 		
-		if (idEstabelecimentoSaude != null) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null) {
+			query.setParameter("idES", idES);
 		}
 		if (date != null) {
 			query.setParameter("date", date);
@@ -44,16 +44,16 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 		}
 	}
 
-	public void removeByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+	public void removeByIdESDate(Integer idES, Date date) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("delete from AvaliacaoMediaMes s ");
-		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
+		queryString.append("where s.idES = :idES "
 				+ "and s.date = :date");
 		
 		Query query = em.createQuery(queryString.toString());
 		
-		if (idEstabelecimentoSaude != null) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null) {
+			query.setParameter("idES", idES);
 		}
 		if (date != null) {
 			query.setParameter("date", date);
@@ -64,14 +64,14 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
+	public List<AvaliacaoMediaMes> listByIdES(Integer idES) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from AvaliacaoMediaMes a ");
-		queryStr.append("where a.idEstabelecimentoSaude = :idEstabelecimentoSaude ");	
+		queryStr.append("where a.idES = :idES ");	
 		
 		Query query = em.createQuery(queryStr.toString());
-		if (idEstabelecimentoSaude != null ) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null ) {
+			query.setParameter("idES", idES);
 		}
 		
 		return query.getResultList();
@@ -79,15 +79,15 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
+	public List<AvaliacaoMediaMes> listByIdESDate(Integer idES, Date date) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from AvaliacaoMediaMes a ");
-		queryStr.append("where a.idEstabelecimentoSaude = :idEstabelecimentoSaude"
+		queryStr.append("where a.idES = :idES"
 				+ "and s.date = :date");	
 		
 		Query query = em.createQuery(queryStr.toString());
-		if (idEstabelecimentoSaude != null ) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null ) {
+			query.setParameter("idES", idES);
 		}
 		if (date != null) {
 			query.setParameter("date", date);

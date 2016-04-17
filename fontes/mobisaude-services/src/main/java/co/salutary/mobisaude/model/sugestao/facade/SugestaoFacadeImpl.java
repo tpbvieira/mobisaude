@@ -19,12 +19,12 @@ public class SugestaoFacadeImpl implements SugestaoFacade {
 		sugestaoDao.save(sugestao);
 	}
 
-	public Sugestao getSugestao(Integer idEstabelecimentoSaude, String email) {
-		return sugestaoDao.getSugestao(idEstabelecimentoSaude, email);
+	public Sugestao getSugestao(Integer idES, String email) {
+		return sugestaoDao.getSugestao(idES, email);
 	}
 
-	public void removeSugestao(Integer idEstabelecimentoSaude, String email) {
-		sugestaoDao.removeSugestao(idEstabelecimentoSaude, email);
+	public void removeSugestao(Integer idES, String email) {
+		sugestaoDao.removeSugestao(idES, email);
 	}
 	
 }

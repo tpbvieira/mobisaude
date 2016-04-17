@@ -84,7 +84,7 @@ public class TestAll extends TestCase {
 			String[] tiposES = new String[2];
 			tiposES[0] = "10";
 			tiposES[1] = "11";
-			getESByIdMunicipioIdTiposEstabelecimentoTest(mapper, broker, token, idMunicipio, tiposES);// Brasilia (530010) and [10,11]
+			getESByIdMunicipioIdTiposESTest(mapper, broker, token, idMunicipio, tiposES);// Brasilia (530010) and [10,11]
 
 			// test 09 - testing user services
 			deleteUserTest(mapper, broker, "tpbvieira@gmail.com");
@@ -144,7 +144,7 @@ public class TestAll extends TestCase {
 		if(consultaDominiosResponse.getTiposSistemaOperacional().length != 3){
 			fail("Número inesperado de tipos de sistema operacional.");
 		}
-		if(consultaDominiosResponse.getTiposEstabelecimentoSaude().length != 36){
+		if(consultaDominiosResponse.getTiposES().length != 36){
 			fail("Número inesperado de tipos de estabelecimentos de saúde.");
 		}
 		if(consultaDominiosResponse.getTiposGestao().length != 3){
@@ -260,10 +260,10 @@ public class TestAll extends TestCase {
 		idMunicipio = idMunicipio.substring(0, idMunicipio.length()-1);
 
 		ESRequest getESRequest = mapper.readValue(testProperties.
-				getProperty("getESByIdMunicipioIdTipoEstabelecimento").
+				getProperty("getESByIdMunicipioIdTipoES").
 				replaceAll("<token>", token).
 				replaceAll("<idMunicipio>",idMunicipio).
-				replaceAll("<idTipoEstabelecimentoSaude>", idTipoEstabelecimento), ESRequest.class);
+				replaceAll("<idTipoES>", idTipoEstabelecimento), ESRequest.class);
 		ESResponse getESResponse = broker.getESByIdMunicipioIdTipoES(getESRequest);
 
 		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
@@ -277,26 +277,26 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void getESByIdMunicipioIdTiposEstabelecimentoTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String[] idTiposEstabelecimento) 
+	private void getESByIdMunicipioIdTiposESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String[] idTiposES) 
 			throws IOException, JsonParseException, JsonMappingException {
 
 		//parsing to make it compatible to ibge data
 		idMunicipio = idMunicipio.substring(0, idMunicipio.length()-1);
 
 		ESRequest getESRequest = mapper.readValue(testProperties.
-				getProperty("getESByIdMunicipioIdTipoEstabelecimento").
+				getProperty("getESByIdMunicipioIdTipoES").
 				replaceAll("<token>", token).
 				replaceAll("<idMunicipio>",idMunicipio), ESRequest.class);		
-		getESRequest.setIdTiposEstabelecimentoSaude(idTiposEstabelecimento);
+		getESRequest.setIdTiposES(idTiposES);
 		ESResponse getESResponse = broker.getESByIdMunicipioIdTipoES(getESRequest);
 
 		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
 			logger.error(getESResponse);
-			fail("Error = getESByIdMunicipioIdTiposEstabelecimentoTest.");			
+			fail("Error = getESByIdMunicipioIdTiposESTest.");			
 		}
 		if (getESResponse.getEstabelecimentoSaude().length != 2547) {//Brasilia and [10,11]
 			logger.error(getESResponse);
-			fail("getESByIdMunicipioIdTiposEstabelecimentoTest: Quantidade (" + getESResponse.getEstabelecimentoSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
+			fail("getESByIdMunicipioIdTiposESTest: Quantidade (" + getESResponse.getEstabelecimentoSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
 		}
 
 	}
@@ -434,7 +434,7 @@ public class TestAll extends TestCase {
 		try{
 			SugestaoRequest sugestaoRequest = new SugestaoRequest();
 			sugestaoRequest.setToken(token);
-			sugestaoRequest.setIdEstabelecimentoSaude("6684181");
+			sugestaoRequest.setIdES("6684181");
 			sugestaoRequest.setEmail("tpbvieira@gmail.com");
 			sugestaoRequest.setSugestao("Sugestão de teste");
 
@@ -459,7 +459,7 @@ public class TestAll extends TestCase {
 		try{			
 			SugestaoRequest sugestaoRequest = new SugestaoRequest();
 			sugestaoRequest.setToken(token);
-			sugestaoRequest.setIdEstabelecimentoSaude("6684181");
+			sugestaoRequest.setIdES("6684181");
 			sugestaoRequest.setEmail("tpbvieira@gmail.com");
 
 			SugestaoResponse sugestaoResponse = broker.getSugestao(sugestaoRequest);			
@@ -473,7 +473,7 @@ public class TestAll extends TestCase {
 				fail("Email errado");			
 			}
 
-			if (!sugestaoResponse.getIdEstabelecimentoSaude().equals("6684181")) {
+			if (!sugestaoResponse.getIdES().equals("6684181")) {
 				logger.error("Estabelecimento Errado");
 				fail("Estabelecimento Errado");			
 			}
@@ -493,11 +493,11 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void avaliarTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String email, String titulo, String avaliacao, String rating){
+	private void avaliarTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String email, String titulo, String avaliacao, String rating){
 		try{
 			AvaliacaoRequest avalicaoRequest = new AvaliacaoRequest();
 			avalicaoRequest.setToken(token);
-			avalicaoRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avalicaoRequest.setIdES(idES);
 			avalicaoRequest.setEmail(email);
 			avalicaoRequest.setTitulo(titulo);
 			avalicaoRequest.setAvaliacao(avaliacao);
@@ -518,12 +518,12 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void getAvaliacaoByIdESEmailTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String email, String titulo, String avaliacao, String rating){
+	private void getAvaliacaoByIdESEmailTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String email, String titulo, String avaliacao, String rating){
 
 		try{			
 			AvaliacaoRequest avaliacaoRequest = new AvaliacaoRequest();
 			avaliacaoRequest.setToken(token);
-			avaliacaoRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avaliacaoRequest.setIdES(idES);
 			avaliacaoRequest.setEmail(email);
 
 			AvaliacaoResponse avaliacaoResponse = broker.getAvaliacaoByIdESEmail(avaliacaoRequest);			
@@ -531,7 +531,7 @@ public class TestAll extends TestCase {
 				logger.error(avaliacaoResponse);
 				fail("getAvaliacaoTestError");			
 			}			
-			if (!avaliacaoResponse.getIdEstabelecimentoSaude().equals(idEstabelecimentoSaude)) {
+			if (!avaliacaoResponse.getIdES().equals(idES)) {
 				logger.error("Estabelecimento Errado");
 				fail("Estabelecimento Errado");			
 			}
@@ -560,12 +560,12 @@ public class TestAll extends TestCase {
 
 	}
 	             
-	private void listAvaliacaoByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, int num){
+	private void listAvaliacaoByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, int num){
 
 		try{			
 			AvaliacaoRequest avaliacaoRequest = new AvaliacaoRequest();
 			avaliacaoRequest.setToken(token);
-			avaliacaoRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avaliacaoRequest.setIdES(idES);
 
 			AvaliacaoResponse avaliacaoResponse = broker.listAvaliacaoByIdES(avaliacaoRequest);			
 
@@ -590,11 +590,11 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void avaliarMediaTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String rating, String date){
+	private void avaliarMediaTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String rating, String date){
 		try{
 			AvaliacaoMediaMesRequest avalicaoMediaRequest = new AvaliacaoMediaMesRequest();
 			avalicaoMediaRequest.setToken(token);
-			avalicaoMediaRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avalicaoMediaRequest.setIdES(idES);
 			avalicaoMediaRequest.setRating(rating);
 			avalicaoMediaRequest.setDate(date);
 
@@ -613,12 +613,12 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void getAvaliacaoMediaByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String targetRating){
+	private void getAvaliacaoMediaByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String targetRating){
 
 		try{			
 			AvaliacaoMediaMesRequest avaliacaoMediaMesRequest = new AvaliacaoMediaMesRequest();
 			avaliacaoMediaMesRequest.setToken(token);
-			avaliacaoMediaMesRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avaliacaoMediaMesRequest.setIdES(idES);
 			
 			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdES(avaliacaoMediaMesRequest);			
 			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
@@ -626,7 +626,7 @@ public class TestAll extends TestCase {
 				fail("getAvaliacaoTestError");			
 			}			
 
-			if (!avaliacaoMediaMesResponse.getIdEstabelecimentoSaude().equals(idEstabelecimentoSaude)) {
+			if (!avaliacaoMediaMesResponse.getIdES().equals(idES)) {
 				logger.error("Estabelecimento Errado");
 				fail("Estabelecimento Errado");			
 			}
@@ -644,12 +644,12 @@ public class TestAll extends TestCase {
 
 	}
 	
-	private void getAvaliacaoMediaByIdESDateTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, String date, String rating){
+	private void getAvaliacaoMediaByIdESDateTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String date, String rating){
 
 		try{			
 			AvaliacaoMediaMesRequest avaliacaoMediaMesRequest = new AvaliacaoMediaMesRequest();
 			avaliacaoMediaMesRequest.setToken(token);
-			avaliacaoMediaMesRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avaliacaoMediaMesRequest.setIdES(idES);
 			avaliacaoMediaMesRequest.setDate(date);
 
 			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdESDate(avaliacaoMediaMesRequest);			
@@ -658,7 +658,7 @@ public class TestAll extends TestCase {
 				fail("getAvaliacaoTestError");			
 			}			
 
-			if (!avaliacaoMediaMesResponse.getIdEstabelecimentoSaude().equals(idEstabelecimentoSaude)) {
+			if (!avaliacaoMediaMesResponse.getIdES().equals(idES)) {
 				logger.error("Estabelecimento Errado");
 				fail("Estabelecimento Errado");			
 			}
@@ -676,12 +676,12 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void listAvalicaoMediaMesByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idEstabelecimentoSaude, int num){
+	private void listAvalicaoMediaMesByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, int num){
 
 		try{			
 			AvaliacaoMediaMesRequest avaliacaoMediaMesRequest = new AvaliacaoMediaMesRequest();
 			avaliacaoMediaMesRequest.setToken(token);
-			avaliacaoMediaMesRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avaliacaoMediaMesRequest.setIdES(idES);
 
 			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.listAvalicaoMediaMesByIdES(avaliacaoMediaMesRequest);			
 

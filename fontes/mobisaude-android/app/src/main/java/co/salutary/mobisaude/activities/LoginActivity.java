@@ -335,12 +335,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     JSONObject signinResponse = (JSONObject) json.get("userResponse");
                     int idErro = JsonUtils.getErrorCode(signinResponse);
                     if (idErro == 0) {
-                        DeviceInfo.isLoggedin = hasAuth = true;
                         settings.setPreferenceValue(Settings.USER_EMAIL, mEmail);
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).getUser(request.toString());
                         json = new JSONObject(responseStr);
                         JSONObject userResponse = (JSONObject) json.get("userResponse");
                         settings.setPreferenceValue(Settings.USER_NAME, userResponse.get("name").toString());
+                        DeviceInfo.isLoggedin = hasAuth = true;
                     } else {
                         throw new MobiSaudeAppException(JsonUtils.getErrorMessage(signinResponse));
                     }

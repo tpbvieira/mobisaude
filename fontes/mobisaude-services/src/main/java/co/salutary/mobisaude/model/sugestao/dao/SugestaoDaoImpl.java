@@ -21,15 +21,15 @@ public class SugestaoDaoImpl implements SugestaoDao {
     }
 
 	@SuppressWarnings("unchecked")
-	public Sugestao getSugestao(Integer idEstabelecimentoSaude, String email) {
+	public Sugestao getSugestao(Integer idES, String email) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("select s from Sugestao s ");
-		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
+		queryString.append("where s.idES = :idES "
 				+ "and s.email = :email");
 		Query query = em.createQuery(queryString.toString());	
 		
-		if (idEstabelecimentoSaude != null) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null) {
+			query.setParameter("idES", idES);
 		}
 		if (email != null && !email.trim().equals("")) {
 			query.setParameter("email", email);
@@ -44,16 +44,16 @@ public class SugestaoDaoImpl implements SugestaoDao {
 		}
 	}
 
-	public void removeSugestao(Integer idEstabelecimentoSaude, String email) {
+	public void removeSugestao(Integer idES, String email) {
 		StringBuffer queryString = new StringBuffer();
 		queryString.append("delete from Sugestao s ");
-		queryString.append("where s.idEstabelecimentoSaude = :idEstabelecimentoSaude "
+		queryString.append("where s.idES = :idES "
 				+ "and s.email = :email");
 		
 		Query query = em.createQuery(queryString.toString());
 		
-		if (idEstabelecimentoSaude != null) {
-			query.setParameter("idEstabelecimentoSaude", idEstabelecimentoSaude);
+		if (idES != null) {
+			query.setParameter("idES", idES);
 		}
 		if (email != null && !email.trim().equals("")) {
 			query.setParameter("email", email);

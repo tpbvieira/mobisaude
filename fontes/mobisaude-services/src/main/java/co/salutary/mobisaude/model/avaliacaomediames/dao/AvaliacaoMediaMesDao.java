@@ -8,9 +8,9 @@ import co.salutary.mobisaude.model.avaliacaomediames.AvaliacaoMediaMes;
 public interface AvaliacaoMediaMesDao {
 
     public void save(AvaliacaoMediaMes avaliacaoMedia);
-    public void removeByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date);
-    public AvaliacaoMediaMes getByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date);
-    public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude);
-    public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date);
+    public void removeByIdESDate(Integer idES, Date date);
+    public AvaliacaoMediaMes getByIdESDate(Integer idES, Date date);
+    public List<AvaliacaoMediaMes> listByIdES(Integer idES);
+    public List<AvaliacaoMediaMes> listByIdESDate(Integer idES, Date date);
 
 }

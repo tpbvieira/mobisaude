@@ -49,8 +49,6 @@ import co.salutary.mobisaude.adapters.ListAdapterModel.Section;
 import co.salutary.mobisaude.adapters.StringListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.UserController;
-import co.salutary.mobisaude.db.EsDAO;
-import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.JsonUtils;
 
@@ -79,22 +77,23 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
     private EditText mSearchText;
     private ImageView mSearchButton;
 
-    private LocalDataBase userDataBase;
     private UserController userController;
+    private Settings settings;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_healthplace_selection_list);
+        // Contextual information
         Context context = this.getApplicationContext();
-        Settings settings = new Settings(context);
+        settings = new Settings(context);
+        userController = UserController.getInstance();
 
+        // UI
+        setContentView(R.layout.activity_healthplace_selection_list);
         mProgressView = findViewById(R.id.hp_select_list_progress_bar);
-
         mTitleText = (TextView) findViewById(R.id.hp_select_list_title);
         mTitleText.setText(R.string.estabelecimentos_saude);
-
         try {
             String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
             HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
@@ -115,14 +114,10 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
         mSearchText = (EditText) findViewById(R.id.hp_select_list_search_text);
         mSearchText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -144,10 +139,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
                 onClickSearch();
             }
         });
-
-        userDataBase = LocalDataBase.getInstance();
-        userController = UserController.getInstance();
-        mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());;
+        mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
     }
 
     @Override
@@ -156,9 +148,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
+    public void onNothingSelected(AdapterView<?> parent) { }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -171,10 +161,9 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
 
         if (mListAdapterModel.getRows().get(position) instanceof Item) {
             Item item = (Item) mListAdapterModel.getRows().get(position);
-            EstabelecimentoSaude es = new EsDAO((userDataBase)).getESByIdCnes(item.id);
-            userController.setEstabelecimentoSaude(es);
+            settings.setPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE, Integer.toString(item.id));
             setResult(SELECTED);
-            startActivity(MapsActivity.class);
+            startActivity(HealthPlaceActivity.class);
         }
     }
 
@@ -201,7 +190,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
         List<Row> rows = new ArrayList<Row>();
         Pattern numberPattern = Pattern.compile("[0-9]");
 
-        List<EstabelecimentoSaude> esList = userController.getListEstabelecimentoSaudes();
+        List<EstabelecimentoSaude> esList = userController.getListEstabelecimentosSaude();
         if(mTipoESSpiner.isSelected()){
             List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
             for(EstabelecimentoSaude es : esList ){
@@ -326,7 +315,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
         try {
             mListAdapterModel = new ListAdapterModel();
 
-            List<EstabelecimentoSaude> esList = userController.getListEstabelecimentoSaudes();
+            List<EstabelecimentoSaude> esList = userController.getListEstabelecimentosSaude();
             if(mTipoESSpiner.isSelected()){
                 List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
                 for(EstabelecimentoSaude es : esList ){

@@ -78,6 +78,9 @@
             android:name=".activities.HealthPlaceSelectionListActivity"
             android:label="@string/search" />
         <activity
+            android:name=".activities.HealthPlaceActivity"
+            android:label="@string/estabelecimento_saude" />
+        <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity

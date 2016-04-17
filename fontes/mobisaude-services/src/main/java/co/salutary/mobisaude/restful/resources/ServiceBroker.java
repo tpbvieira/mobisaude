@@ -28,7 +28,8 @@ import co.salutary.mobisaude.model.regiao.Regiao;
 import co.salutary.mobisaude.model.regiao.facade.RegiaoFacade;
 import co.salutary.mobisaude.model.sugestao.Sugestao;
 import co.salutary.mobisaude.model.sugestao.facade.SugestaoFacade;
-import co.salutary.mobisaude.model.tipoestabelecimentosaude.facade.TipoEstabelecimentoSaudeFacade;
+import co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoES;
+import co.salutary.mobisaude.model.tipoestabelecimentosaude.facade.TipoESFacade;
 import co.salutary.mobisaude.model.tipogestao.facade.TipoGestaoFacade;
 import co.salutary.mobisaude.model.tiposistemaoperacional.facade.TipoSistemaOperacionalFacade;
 import co.salutary.mobisaude.model.user.User;
@@ -37,7 +38,7 @@ import co.salutary.mobisaude.restful.message.mobile.AvaliacaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaMesDTO;
 import co.salutary.mobisaude.restful.message.mobile.EsDTO;
 import co.salutary.mobisaude.restful.message.mobile.RegiaoDTO;
-import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeDTO;
+import co.salutary.mobisaude.restful.message.mobile.TipoESDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoGestaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacionalDTO;
 import co.salutary.mobisaude.restful.message.request.AvaliacaoMediaMesRequest;
@@ -235,22 +236,22 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}			
 
-			TipoEstabelecimentoSaudeFacade tipoEstabelecimentoSaudeFacade = (TipoEstabelecimentoSaudeFacade)Factory.getInstance().get("tipoEstabelecimentoSaudeFacade");
-			List<co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude> lstTipoEstabelecimentoSaude = tipoEstabelecimentoSaudeFacade.list();
-			if (lstTipoEstabelecimentoSaude != null) {
-				List<TipoEstabelecimentoSaudeDTO> lstRetorno = new ArrayList<TipoEstabelecimentoSaudeDTO>();
-				for (co.salutary.mobisaude.model.tipoestabelecimentosaude.TipoEstabelecimentoSaude tipoEstabelecimentoSaude:lstTipoEstabelecimentoSaude) {
-					TipoEstabelecimentoSaudeDTO tes = new TipoEstabelecimentoSaudeDTO();
-					tes.setId(Integer.toString(tipoEstabelecimentoSaude.getIdTipoEstabelecimentoSaude()));
-					tes.setNome(tipoEstabelecimentoSaude.getNome());
+			TipoESFacade tipoESFacade = (TipoESFacade)Factory.getInstance().get("tipoESFacade");
+			List<TipoES> lstTipoES = tipoESFacade.list();
+			if (lstTipoES != null) {
+				List<TipoESDTO> lstRetorno = new ArrayList<TipoESDTO>();
+				for (TipoES tipoES:lstTipoES) {
+					TipoESDTO tes = new TipoESDTO();
+					tes.setId(Integer.toString(tipoES.getIdTipoES()));
+					tes.setNome(tipoES.getNome());
 
 					lstRetorno.add(tes);
 				}
-				response.setTiposEstabelecimentoSaude((lstRetorno.toArray(new TipoEstabelecimentoSaudeDTO[0])));
+				response.setTiposES((lstRetorno.toArray(new TipoESDTO[0])));
 				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoEstabelecimentoSaude"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoEstabelecimentoSaude"));				
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoES"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoES"));				
 				return response;
 			}
 			
@@ -300,6 +301,55 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 	
 	@POST
+	@Path("/getESByIdES")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public ESResponse getESByIdES(ESRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		ESResponse response = new ESResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			String idES = request.getIdES();
+			
+			EstabelecimentoSaudeFacade esFacade = (EstabelecimentoSaudeFacade)Factory.getInstance().get("estabelecimentoSaudeFacade");
+			EstabelecimentoSaude es = esFacade.getByIdES(Integer.valueOf(idES));
+			EsDTO esDTO = new EsDTO();
+			esDTO.setIdES(Integer.toString(es.getIdES()));
+			esDTO.setNomeFantasia(es.getNomeFantasia());
+			esDTO.setEndereco(es.getEndereco());
+			esDTO.setIdTipoES(Short.toString(es.getIdTipoES()));
+			esDTO.setIdTipoGestao(Short.toString(es.getIdTipoGestao()));
+			EsDTO[] esDTOArray = new EsDTO[1];
+			esDTOArray[0] = esDTO; 
+			response.setEstabelecimentoSaude(esDTOArray);			
+			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
 	@Path("/listES")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
@@ -327,11 +377,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 				List<EsDTO> esMsgList = new ArrayList<EsDTO>();
 				for (EstabelecimentoSaude es:esList) {
 					EsDTO esMsg = new EsDTO();
-					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
+					esMsg.setIdES(String.valueOf(es.getIdES()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
-					esMsg.setIdTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+					esMsg.setIdTipoES(String.valueOf(es.getIdTipoES()));
 
 					esMsgList.add(esMsg);
 				}
@@ -384,11 +434,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 				List<EsDTO> esMsgList = new ArrayList<EsDTO>();
 				for (EstabelecimentoSaude es:esList) {
 					EsDTO esMsg = new EsDTO();
-					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
+					esMsg.setIdES(String.valueOf(es.getIdES()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
-					esMsg.setIdTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+					esMsg.setIdTipoES(String.valueOf(es.getIdTipoES()));
 
 					esMsgList.add(esMsg);
 				}
@@ -421,8 +471,8 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 			String token = request.getToken();
 			String idMunicipio = request.getIdMunicipio();
-			String idTipoES = request.getIdTipoEstabelecimentoSaude();
-			String[] idTiposES = request.getIdTiposEstabelecimentoSaude();
+			String idTipoES = request.getIdTipoES();
+			String[] idTiposES = request.getIdTiposES();
 
 			if (!validarToken(token)) {
 				logger.error(properties.getProperty("co.mobisaude.strings.tokenInvalido"));
@@ -440,13 +490,13 @@ public class ServiceBroker extends AbstractServiceBroker {
 			
 			if (idTiposES != null) {
 				if (idTiposES.length > 0) {
-					esList = esFacade.listByIdMunicipioIdTiposEstabelecimento(idMunicipio, idTiposES);
+					esList = esFacade.listByIdMunicipioIdTiposES(idMunicipio, idTiposES);
 				} else {
 					esList = new ArrayList<EstabelecimentoSaude>();
 				}
 			} else {
 				if (idTipoES != null) {
-					esList = esFacade.listByIdMunicipioIdTipoEstabelecimento(idMunicipio, idTipoES);
+					esList = esFacade.listByIdMunicipioIdTipoES(idMunicipio, idTipoES);
 				} else {
 					esList = new ArrayList<EstabelecimentoSaude>();
 				}
@@ -456,11 +506,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 				List<EsDTO> esMsgList = new ArrayList<EsDTO>();
 				for (EstabelecimentoSaude es:esList) {
 					EsDTO esMsg = new EsDTO();
-					esMsg.setIdCnes(String.valueOf(es.getIdCnes()));
+					esMsg.setIdES(String.valueOf(es.getIdES()));
 					esMsg.setLatitude(String.valueOf(es.getLatitude()));
 					esMsg.setLongitude(String.valueOf(es.getLongitude()));
 					esMsg.setNomeFantasia(es.getNomeFantasia()); 
-					esMsg.setIdTipoEstabelecimentoSaude(String.valueOf(es.getIdTipoEstabelecimentoSaude()));
+					esMsg.setIdTipoES(String.valueOf(es.getIdTipoES()));
 
 					esMsgList.add(esMsg);
 				}
@@ -665,11 +715,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String idES = request.getIdES();
 			String email = request.getEmail();
 			String sugestaoStr = request.getSugestao();
 			
-			Sugestao sugestao = new Sugestao(Integer.valueOf(idEstabelecimentoSaude), email, sugestaoStr, new Date());
+			Sugestao sugestao = new Sugestao(Integer.valueOf(idES), email, sugestaoStr, new Date());
 
 			SugestaoFacade sugestaoFacade = (SugestaoFacade)Factory.getInstance().get("sugestaoFacade");
 			sugestaoFacade.save(sugestao);
@@ -709,12 +759,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String idES = request.getIdES();
 			String email = request.getEmail();			
 			
 			SugestaoFacade sugestaoFacade = (SugestaoFacade)Factory.getInstance().get("sugestaoFacade");
-			Sugestao sugestao = sugestaoFacade.getSugestao(Integer.valueOf(idEstabelecimentoSaude), email);
-			response.setIdEstabelecimentoSaude(sugestao.getIdEstabelecimentoSaude().toString());
+			Sugestao sugestao = sugestaoFacade.getSugestao(Integer.valueOf(idES), email);
+			response.setIdES(sugestao.getIdES().toString());
 			response.setEmail(sugestao.getEmail());
 			response.setSugestao(sugestao.getSugestao());
 			response.setDate(sdf.format(sugestao.getDate()));
@@ -755,17 +805,17 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			// Save Avaliacao
-			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String idES = request.getIdES();
 			String email = request.getEmail();
 			String avaliacaoStr = request.getAvaliacao();
 			String titulo = request.getTitulo();
 			String rating = request.getRating();			
-			Avaliacao avaliacao = new Avaliacao(Integer.valueOf(idEstabelecimentoSaude), email, titulo, avaliacaoStr, Float.valueOf(rating));
+			Avaliacao avaliacao = new Avaliacao(Integer.valueOf(idES), email, titulo, avaliacaoStr, Float.valueOf(rating));
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
 			avaliacaoFacade.save(avaliacao);
 			
 			// Get evaluations for mean calculation 
-			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(idEstabelecimentoSaude));
+			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(idES));
 			float mean = 0;
 			for(Avaliacao av: avaliacoes){
 				mean = mean + av.getRating();
@@ -775,12 +825,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 			//Update AvaliacaoMediaMes			
 			AvaliacaoMediaMesRequest avaliacaoMediaRequest = new AvaliacaoMediaMesRequest();
 			avaliacaoMediaRequest.setToken(token);
-			avaliacaoMediaRequest.setIdEstabelecimentoSaude(idEstabelecimentoSaude);
+			avaliacaoMediaRequest.setIdES(idES);
 			avaliacaoMediaRequest.setRating(Float.toString(mean));
 			Date current = new Date();
 			avaliacaoMediaRequest.setDate(Utils.dateTo01DDYY(current));
 			AvaliacaoMediaMesFacade avaliacaoMediaMesFacade = (AvaliacaoMediaMesFacade)Factory.getInstance().get("avaliacaoMediaMesFacade");
-			AvaliacaoMediaMes avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idEstabelecimentoSaude), mean, current);
+			AvaliacaoMediaMes avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idES), mean, current);
 			avaliacaoMediaMesFacade.save(avaliacaoMediaMes);
 			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
@@ -819,12 +869,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String idES = request.getIdES();
 			String email = request.getEmail();			
 			
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
-			Avaliacao avaliacao = avaliacaoFacade.getByIdEESEmail(Integer.valueOf(idEstabelecimentoSaude), email);
-			response.setIdEstabelecimentoSaude(avaliacao.getIdEstabelecimentoSaude().toString());
+			Avaliacao avaliacao = avaliacaoFacade.getByIdESEmail(Integer.valueOf(idES), email);
+			response.setIdES(avaliacao.getIdES().toString());
 			response.setEmail(avaliacao.getEmail());
 			response.setTitulo(avaliacao.getTitulo());
 			response.setAvaliacao(avaliacao.getAvaliacao());
@@ -861,12 +911,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
-			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(request.getIdEstabelecimentoSaude()));
+			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(request.getIdES()));
 			if (avaliacoes != null) {
 				List<AvaliacaoDTO> avaliscoesList = new ArrayList<AvaliacaoDTO>();
 				for (Avaliacao avaliacao:avaliacoes) {
 					AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
-					avaliacaoDTO.setIdEstabelecimentoSaude(avaliacao.getIdEstabelecimentoSaude().toString());
+					avaliacaoDTO.setIdES(avaliacao.getIdES().toString());
 					avaliacaoDTO.setEmail(avaliacao.getEmail());
 					avaliacaoDTO.setTitulo(avaliacao.getTitulo());
 					avaliacaoDTO.setAvaliacao(avaliacao.getAvaliacao());
@@ -917,16 +967,16 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String idES = request.getIdES();
 			String rating = request.getRating();
 			String date = request.getDate();
 			
 			AvaliacaoMediaMesFacade avaliacaoMediaMesFacade = (AvaliacaoMediaMesFacade)Factory.getInstance().get("avaliacaoMediaMesFacade");
 			AvaliacaoMediaMes avaliacaoMediaMes;
 			if(date != null){
-				avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idEstabelecimentoSaude), Float.valueOf(rating), sdf.parse(date));
+				avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idES), Float.valueOf(rating), sdf.parse(date));
 			} else {
-				avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idEstabelecimentoSaude), Float.valueOf(rating));
+				avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idES), Float.valueOf(rating));
 			}
 			avaliacaoMediaMesFacade.save(avaliacaoMediaMes);
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
@@ -966,11 +1016,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String idES = request.getIdES();
 			
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
-			Avaliacao avaliacao = avaliacaoFacade.getAvgByIdEES(Integer.valueOf(idEstabelecimentoSaude));			
-			response.setIdEstabelecimentoSaude(avaliacao.getIdEstabelecimentoSaude().toString());
+			Avaliacao avaliacao = avaliacaoFacade.getAvgByIdES(Integer.valueOf(idES));			
+			response.setIdES(avaliacao.getIdES().toString());
 			response.setRating(Float.toString(avaliacao.getRating()));			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
@@ -1008,12 +1058,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			String idEstabelecimentoSaude = request.getIdEstabelecimentoSaude();
+			String idES = request.getIdES();
 			String date = request.getDate();
 			
 			AvaliacaoMediaMesFacade avaliacaoMediaMesFacade = (AvaliacaoMediaMesFacade)Factory.getInstance().get("avaliacaoMediaMesFacade");
-			AvaliacaoMediaMes avaliacaoMediaMes = avaliacaoMediaMesFacade.getByIdEstabelecimentoSaudeDate(Integer.valueOf(idEstabelecimentoSaude), sdf.parse(date));
-			response.setIdEstabelecimentoSaude(avaliacaoMediaMes.getIdEstabelecimentoSaude().toString());
+			AvaliacaoMediaMes avaliacaoMediaMes = avaliacaoMediaMesFacade.getByIdESDate(Integer.valueOf(idES), sdf.parse(date));
+			response.setIdES(avaliacaoMediaMes.getIdES().toString());
 			response.setRating(Float.toString(avaliacaoMediaMes.getRating()));
 			response.setDate(sdf.format(avaliacaoMediaMes.getDate()));
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
@@ -1053,12 +1103,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			AvaliacaoMediaMesFacade avaliacaoMediaMesFacade = (AvaliacaoMediaMesFacade)Factory.getInstance().get("avaliacaoMediaMesFacade");
-			List<AvaliacaoMediaMes> avaliacoes = avaliacaoMediaMesFacade.listByIdEstabelecimentoSaude(Integer.valueOf(request.getIdEstabelecimentoSaude()));
+			List<AvaliacaoMediaMes> avaliacoes = avaliacaoMediaMesFacade.listByIdES(Integer.valueOf(request.getIdES()));
 			if (avaliacoes != null) {
 				List<AvaliacaoMediaMesDTO> lstRetorno = new ArrayList<AvaliacaoMediaMesDTO>();
 				for (AvaliacaoMediaMes avaliacaoMediaMes:avaliacoes) {
 					AvaliacaoMediaMesDTO amDTO = new AvaliacaoMediaMesDTO();
-					amDTO.setIdEstabelecimentoSaude(avaliacaoMediaMes.getIdEstabelecimentoSaude().toString());
+					amDTO.setIdES(avaliacaoMediaMes.getIdES().toString());
 					amDTO.setRating(Float.toString(avaliacaoMediaMes.getRating()));
 					amDTO.setDate(sdf.format(avaliacaoMediaMes.getDate()));										
 					lstRetorno.add(amDTO);

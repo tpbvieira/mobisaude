@@ -13,9 +13,9 @@ import javax.persistence.Table;
 public class EstabelecimentoSaude implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169349146L;
-	private int idCnes;
+	private int idES;
 	private int idMunicipio;
-	private short idTipoEstabelecimentoSaude;
+	private short idTipoES;
 	private short idTipoGestao;
 	private String cnpjMantenedora;
 	private String razaoSocialMantenedora;
@@ -38,12 +38,12 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 	@Column(name = "\"nu_id_cnes\"", unique = true, nullable = false)
 	@SequenceGenerator(name = "seqEstabelecimentoSaude", sequenceName = "\"seq_estabelecimento_saude\"", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqEstabelecimentoSaude")
-	public int getIdCnes() {
-		return this.idCnes;
+	public int getIdES() {
+		return this.idES;
 	}
 
-	public void setIdCnes(int idCnes) {
-		this.idCnes = idCnes;
+	public void setIdES(int idES) {
+		this.idES = idES;
 	}
 
 	@Column(name = "\"nu_id_municipio\"")
@@ -92,12 +92,12 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 	}
 	
 	@Column(name = "\"nu_id_tipo_estabelecimento_saude\"")
-	public Short getIdTipoEstabelecimentoSaude() {
-		return this.idTipoEstabelecimentoSaude;
+	public Short getIdTipoES() {
+		return this.idTipoES;
 	}
 
-	public void setIdTipoEstabelecimentoSaude(Short idTipoEstabelecimentoSaude) {
-		this.idTipoEstabelecimentoSaude = idTipoEstabelecimentoSaude;
+	public void setIdTipoES(Short idTipoES) {
+		this.idTipoES = idTipoES;
 	}
 
 	@Column(name = "\"tx_natureza_organizacao\"")

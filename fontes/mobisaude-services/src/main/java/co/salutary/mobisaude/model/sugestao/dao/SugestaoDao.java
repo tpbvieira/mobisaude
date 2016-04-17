@@ -6,8 +6,8 @@ public interface SugestaoDao {
 
     public void save(Sugestao sugestao);
 
-    public Sugestao getSugestao(Integer idEstabelecimentoSaude, String email);
+    public Sugestao getSugestao(Integer idES, String email);
 
-    public void removeSugestao(Integer idEstabelecimentoSaude, String email);
+    public void removeSugestao(Integer idES, String email);
 
 }

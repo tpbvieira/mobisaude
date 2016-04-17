@@ -18,7 +18,7 @@ public class Sugestao implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169349167L;
 	private int idSugestao;
-	private int idEstabelecimentoSaude;
+	private int idES;
 	private String email;
 	private String sugestao;
 	private Date date;
@@ -26,16 +26,16 @@ public class Sugestao implements java.io.Serializable {
 	public Sugestao() {
 	}
 
-	public Sugestao(int idSugestao, int idEstabelecimentoSaude, String email, String sugestao, Date date) {
+	public Sugestao(int idSugestao, int idES, String email, String sugestao, Date date) {
 		this.idSugestao = idSugestao;
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+		this.idES = idES;
 		this.email = email;
 		this.sugestao = sugestao;
 		this.date = date;
 	}
 	
-	public Sugestao(int idEstabelecimentoSaude, String email, String sugestao, Date date) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public Sugestao(int idES, String email, String sugestao, Date date) {
+		this.idES = idES;
 		this.email = email;
 		this.sugestao = sugestao;
 		this.date = date;
@@ -54,12 +54,12 @@ public class Sugestao implements java.io.Serializable {
 	}
 
 	@Column(name = "\"nu_id_cnes\"")
-	public Integer getIdEstabelecimentoSaude() {
-		return this.idEstabelecimentoSaude;
+	public Integer getIdES() {
+		return this.idES;
 	}
 
-	public void setIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(Integer idES) {
+		this.idES = idES;
 	}
 
 	@Column(name = "\"tx_email\"", length = 100)

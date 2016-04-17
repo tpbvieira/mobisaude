@@ -23,28 +23,28 @@ public class AvaliacaoFacadeImpl implements AvaliacaoFacade {
 	}
 
 	@Override
-	public Avaliacao getByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
-		return avaliacaoDao.getByIdEESEmail(idEstabelecimentoSaude, email);
+	public Avaliacao getByIdESEmail(Integer idES, String email) {
+		return avaliacaoDao.getByIdESEmail(idES, email);
 	}
 	
 	@Override
-	public Avaliacao getAvgByIdEES(Integer idEstabelecimentoSaude) {
-		return avaliacaoDao.getAvgByIdEES(idEstabelecimentoSaude);
+	public Avaliacao getAvgByIdES(Integer idES) {
+		return avaliacaoDao.getAvgByIdES(idES);
 	}
 
 	@Override
-	public void removeByIdEESEmail(Integer idEstabelecimentoSaude, String email) {
-		avaliacaoDao.removeByIdEESEmail(idEstabelecimentoSaude, email);
+	public void removeByIdESEmail(Integer idES, String email) {
+		avaliacaoDao.removeByIdESEmail(idES, email);
 	}
 	
 	@Override
-	public List<Avaliacao> listByIdES(Integer idEstabelecimentoSaude) {
-    	return avaliacaoDao.listByIdES(idEstabelecimentoSaude);
+	public List<Avaliacao> listByIdES(Integer idES) {
+    	return avaliacaoDao.listByIdES(idES);
     }
 
 	@Override
-	public List<Avaliacao> listByIdESDate(Integer idEstabelecimentoSaude, Date date) {
-    	return avaliacaoDao.listByIdESDate(idEstabelecimentoSaude, date);
+	public List<Avaliacao> listByIdESDate(Integer idES, Date date) {
+    	return avaliacaoDao.listByIdESDate(idES, date);
     }
 	
 }

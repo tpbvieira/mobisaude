@@ -6,13 +6,13 @@ public class AvaliacaoMediaMesId implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169549167L;
 
-	private int idEstabelecimentoSaude; 
+	private int idES; 
 	private Date date;
-	public int getIdEstabelecimentoSaude() {
-		return idEstabelecimentoSaude;
+	public int getIdES() {
+		return idES;
 	}
-	public void setIdEstabelecimentoSaude(int idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(int idES) {
+		this.idES = idES;
 	}
 	public Date getDate() {
 		return date;

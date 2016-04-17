@@ -22,19 +22,19 @@ public class AvaliacaoMediaMesFacadeImpl implements AvaliacaoMediaMesFacade {
 		avaliacaoMediaDao.save(avaliacaoMedia);
 	}
 
-	public AvaliacaoMediaMes getByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
-		return avaliacaoMediaDao.getByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude,date);
+	public AvaliacaoMediaMes getByIdESDate(Integer idES, Date date) {
+		return avaliacaoMediaDao.getByIdESDate(idES,date);
 	}
 
-	public void removeByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
-		avaliacaoMediaDao.removeByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude,date);
+	public void removeByIdESDate(Integer idES, Date date) {
+		avaliacaoMediaDao.removeByIdESDate(idES,date);
 	}
 	
-	public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
-    	return avaliacaoMediaDao.listByIdEstabelecimentoSaude(idEstabelecimentoSaude);
+	public List<AvaliacaoMediaMes> listByIdES(Integer idES) {
+    	return avaliacaoMediaDao.listByIdES(idES);
     }
 	
-	public List<AvaliacaoMediaMes> listByIdEstabelecimentoSaudeDate(Integer idEstabelecimentoSaude, Date date) {
-    	return avaliacaoMediaDao.listByIdEstabelecimentoSaudeDate(idEstabelecimentoSaude, date);
+	public List<AvaliacaoMediaMes> listByIdESDate(Integer idES, Date date) {
+    	return avaliacaoMediaDao.listByIdESDate(idES, date);
     }
 }

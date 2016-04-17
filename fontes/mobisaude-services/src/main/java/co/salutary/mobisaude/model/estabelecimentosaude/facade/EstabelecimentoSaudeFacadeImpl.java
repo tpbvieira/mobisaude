@@ -16,20 +16,29 @@ public class EstabelecimentoSaudeFacadeImpl implements EstabelecimentoSaudeFacad
 	@Autowired
 	private EstabelecimentoSaudeDao eSDAO;
 
+	@Override
+	public EstabelecimentoSaude getByIdES(Integer idES) {
+		return eSDAO.getByIdES(idES);
+	}
+	
+	@Override
 	public List<EstabelecimentoSaude> list() {
 		return eSDAO.list();
 	}
 
+	@Override
 	public List<EstabelecimentoSaude> listByIdMunicipio(String idMunicipio) {
     	return eSDAO.listByIdMunicipio(idMunicipio);
     }
 	
-    public List<EstabelecimentoSaude> listByIdMunicipioIdTipoEstabelecimento(String idMunicipio, String idTipoEstabelecimento) {
+	@Override
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTipoES(String idMunicipio, String idTipoEstabelecimento) {
     	return eSDAO.listByIdMunicipioIdTipoEstabelecimento(idMunicipio, idTipoEstabelecimento);
     }
 
-    public List<EstabelecimentoSaude> listByIdMunicipioIdTiposEstabelecimento(String idMunicipio, String[] idTiposEstabelecimento) {
-    	return eSDAO.listByIdMunicipioIdTiposEstabelecimento(idMunicipio, idTiposEstabelecimento);
+	@Override
+    public List<EstabelecimentoSaude> listByIdMunicipioIdTiposES(String idMunicipio, String[] idTiposES) {
+    	return eSDAO.listByIdMunicipioIdTiposES(idMunicipio, idTiposES);
     }
-    
+   
 }

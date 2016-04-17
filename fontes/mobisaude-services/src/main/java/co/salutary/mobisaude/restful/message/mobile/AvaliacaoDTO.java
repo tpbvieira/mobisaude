@@ -7,19 +7,19 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(namespace = "mobile", name = "avaliacao")
 public class AvaliacaoDTO implements Cloneable {
 
-	private String idEstabelecimentoSaude;
+	private String idES;
 	private String email;
 	private String titulo;
 	private String avaliacao;
 	private String rating;
 	private String date;
 		
-	public String getIdEstabelecimentoSaude() {
-		return idEstabelecimentoSaude;
+	public String getIdES() {
+		return idES;
 	}
 	
-	public void setIdEstabelecimentoSaude(String idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(String idES) {
+		this.idES = idES;
 	}
 	
 	public String getEmail() {

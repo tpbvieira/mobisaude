@@ -17,15 +17,15 @@ import javax.persistence.TemporalType;
 public class AvaliacaoMediaMes implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169349167L;
-	private int idEstabelecimentoSaude;
+	private int idES;
 	private float rating; 
 	private Date date;
 
 	public AvaliacaoMediaMes() {
 	}
 
-	public AvaliacaoMediaMes(int idEstabelecimentoSaude, float rating) {		
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public AvaliacaoMediaMes(int idES, float rating) {		
+		this.idES = idES;
 		this.rating = rating;
 		Calendar calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
@@ -36,8 +36,8 @@ public class AvaliacaoMediaMes implements java.io.Serializable {
 		this.date = calendar.getTime();
 	}
 	
-	public AvaliacaoMediaMes(int idEstabelecimentoSaude, float rating, Date date) {		
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public AvaliacaoMediaMes(int idES, float rating, Date date) {		
+		this.idES = idES;
 		this.rating = rating;
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -51,12 +51,12 @@ public class AvaliacaoMediaMes implements java.io.Serializable {
 
 	@Id
 	@Column(name = "\"nu_id_cnes\"")
-	public Integer getIdEstabelecimentoSaude() {
-		return this.idEstabelecimentoSaude;
+	public Integer getIdES() {
+		return this.idES;
 	}
 
-	public void setIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(Integer idES) {
+		this.idES = idES;
 	}
 
 	@Column(name = "\"nu_rating\"")

@@ -18,7 +18,7 @@ public class Avaliacao implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169349167L;
 	private int idAvaliacao;
-	private int idEstabelecimentoSaude;
+	private int idES;
 	private String email;
 	private String avaliacao;
 	private String titulo;
@@ -28,8 +28,8 @@ public class Avaliacao implements java.io.Serializable {
 	public Avaliacao() {
 	}
 
-	public Avaliacao(int idEstabelecimentoSaude, String email, String titulo, String avaliacao, float rating) {		
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public Avaliacao(int idES, String email, String titulo, String avaliacao, float rating) {		
+		this.idES = idES;
 		this.email = email;
 		this.titulo = titulo;
 		this.avaliacao = avaliacao;
@@ -51,12 +51,12 @@ public class Avaliacao implements java.io.Serializable {
 	}
 
 	@Column(name = "\"nu_id_cnes\"")
-	public Integer getIdEstabelecimentoSaude() {
-		return this.idEstabelecimentoSaude;
+	public Integer getIdES() {
+		return this.idES;
 	}
 
-	public void setIdEstabelecimentoSaude(Integer idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(Integer idES) {
+		this.idES = idES;
 	}
 
 	@Column(name = "\"tx_email\"", length = 100)

@@ -12,7 +12,7 @@ import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaMesDTO;
 public class AvaliacaoMediaMesResponse implements IMobileResponse {
 
 	private String erro;
-	private String idEstabelecimentoSaude;
+	private String idES;
 	private String rating;
 	private String date;
 	private List<AvaliacaoMediaMesDTO> avaliacoesMedia;
@@ -25,12 +25,12 @@ public class AvaliacaoMediaMesResponse implements IMobileResponse {
 		this.erro = erro;
 	}
 
-	public String getIdEstabelecimentoSaude() {
-		return idEstabelecimentoSaude;
+	public String getIdES() {
+		return idES;
 	}
 
-	public void setIdEstabelecimentoSaude(String idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(String idES) {
+		this.idES = idES;
 	}
 
 	public String getRating() {

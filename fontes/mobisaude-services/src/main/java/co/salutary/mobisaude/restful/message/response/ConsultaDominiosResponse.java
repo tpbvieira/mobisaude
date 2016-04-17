@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import co.salutary.mobisaude.restful.message.mobile.RegiaoDTO;
-import co.salutary.mobisaude.restful.message.mobile.TipoEstabelecimentoSaudeDTO;
+import co.salutary.mobisaude.restful.message.mobile.TipoESDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoGestaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacionalDTO;
 
@@ -14,7 +14,7 @@ public class ConsultaDominiosResponse implements IMobileResponse {
 	
 	private String erro;
 	private TipoSistemaOperacionalDTO[] tipoSistemaOperacional;
-	private TipoEstabelecimentoSaudeDTO[] tipoEstabelecimentoSaude;
+	private TipoESDTO[] tipoES;
 	private TipoGestaoDTO[] tipoGestaoMsg;
 	private RegiaoDTO[] regiaoMsg;
 
@@ -34,12 +34,12 @@ public class ConsultaDominiosResponse implements IMobileResponse {
 		this.tipoSistemaOperacional = tipoSistemaOperacional.clone();
 	}
 
-	public TipoEstabelecimentoSaudeDTO[] getTiposEstabelecimentoSaude() {
-		return tipoEstabelecimentoSaude;
+	public TipoESDTO[] getTiposES() {
+		return tipoES;
 	}
 	
-	public void setTiposEstabelecimentoSaude(TipoEstabelecimentoSaudeDTO[] tipoEstabelecimentoSaude) {
-		this.tipoEstabelecimentoSaude = tipoEstabelecimentoSaude.clone();
+	public void setTiposES(TipoESDTO[] tipoES) {
+		this.tipoES = tipoES.clone();
 	}
 	
 	public TipoGestaoDTO[] getTiposGestao() {

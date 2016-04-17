@@ -10,9 +10,6 @@ import java.util.List;
 import co.salutary.mobisaude.db.scripts.ScriptUF;
 import co.salutary.mobisaude.model.UF;
 
-/**
- * Created by thiago on 10/02/16.
- */
 public class UfDAO {
 
     private static final String TAG = UfDAO.class.getSimpleName();
@@ -23,9 +20,6 @@ public class UfDAO {
         localDB = db;
     }
 
-    /***
-     * Metodos da tabela UF and CIDADE
-     */
     public UF getUfById(long id) {
         try {
             Cursor c = localDB.getDb().query(true, ScriptUF.NOME_TABELA, ScriptUF.colunas, ScriptUF._ID_UF + "=" + id, null, null, null, null, null);
@@ -43,9 +37,9 @@ public class UfDAO {
                 return uf;
             }
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         }
         return null;
     }
@@ -71,9 +65,9 @@ public class UfDAO {
             }
 
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         }
         return ufs;
     }
@@ -96,9 +90,9 @@ public class UfDAO {
                 return uf;
             }
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
         }
         return null;
     }

@@ -15,13 +15,17 @@ import co.salutary.mobisaude.model.estabelecimentosaude.EstabelecimentoSaude;
 public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 
 	@PersistenceContext
-	private EntityManager entityMngr;
+	private EntityManager em;
 
+	@Override
+	public EstabelecimentoSaude getByIdES(Integer idES) {
+		return em.find(EstabelecimentoSaude.class, idES);
+	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<EstabelecimentoSaude> list() {
-		Query query = entityMngr.createQuery("select es from EstabelecimentoSaude es");
+		Query query = em.createQuery("select es from EstabelecimentoSaude es");
 		return query.getResultList();
 	}
 	
@@ -36,7 +40,7 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 			queryStr.append("and es.idMunicipio = :idMunicipio ");
 		}		
 		
-		Query query = entityMngr.createQuery(queryStr.toString());
+		Query query = em.createQuery(queryStr.toString());
 		if (idMunicipio != null && !idMunicipio.trim().equals("")) {
 			query.setParameter("idMunicipio", Integer.valueOf(idMunicipio));
 		}
@@ -46,14 +50,14 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 
 	@Override
 	public List<EstabelecimentoSaude> listByIdMunicipioIdTipoEstabelecimento(String idMunicipio, String idTipoEstabelecimento) {
-		String[] idTiposEstabelecimento = new String[1];
-		idTiposEstabelecimento[0] = idTipoEstabelecimento;
-		return listByIdMunicipioIdTiposEstabelecimento(idMunicipio, idTiposEstabelecimento);
+		String[] idTiposES = new String[1];
+		idTiposES[0] = idTipoEstabelecimento;
+		return listByIdMunicipioIdTiposES(idMunicipio, idTiposES);
 	}
 
 	@Override
 	@SuppressWarnings({ "unchecked", "unused" })
-	public List<EstabelecimentoSaude> listByIdMunicipioIdTiposEstabelecimento(String idMunicipio, String[] idTiposEstabelecimento) {
+	public List<EstabelecimentoSaude> listByIdMunicipioIdTiposES(String idMunicipio, String[] idTiposES) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from EstabelecimentoSaude es ");
 		queryStr.append("where 1=1 ");
@@ -62,29 +66,29 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 			queryStr.append("and es.idMunicipio = :idMunicipio ");
 		}
 		
-		if (idTiposEstabelecimento != null && idTiposEstabelecimento.length > 0) {
+		if (idTiposES != null && idTiposES.length > 0) {
 			int i = 1;
-			queryStr.append("and es.idTipoEstabelecimentoSaude in (");
-			for (String idTipoEstabelecimento:idTiposEstabelecimento) {
-				queryStr.append(":idTipoEstabelecimentoSaude" + i + ",");
+			queryStr.append("and es.idTiposES in (");
+			for (String idTipoEstabelecimento:idTiposES) {
+				queryStr.append(":idTiposES" + i + ",");
 				i++;
 			}
 			queryStr.setLength(queryStr.length()-1);
 			queryStr.append(") ");
 		}
 		
-		queryStr.append("order by es.idTipoEstabelecimentoSaude");
+		queryStr.append("order by es.idTiposES");
 		
-		Query query = entityMngr.createQuery(queryStr.toString());
+		Query query = em.createQuery(queryStr.toString());
 		
 		if (idMunicipio != null && !idMunicipio.trim().equals("")) {
 			query.setParameter("idMunicipio", Integer.valueOf(idMunicipio));
 		}
 		
 		int i = 1;
-		if (idTiposEstabelecimento != null && idTiposEstabelecimento.length > 0) {
-			for (String idTipoEstabelecimento:idTiposEstabelecimento) {
-				query.setParameter("idTipoEstabelecimentoSaude"+i, Short.valueOf(idTipoEstabelecimento));
+		if (idTiposES != null && idTiposES.length > 0) {
+			for (String idTipoEstabelecimento:idTiposES) {
+				query.setParameter("idTiposES"+i, Short.valueOf(idTipoEstabelecimento));
 				i++;
 			}
 		}

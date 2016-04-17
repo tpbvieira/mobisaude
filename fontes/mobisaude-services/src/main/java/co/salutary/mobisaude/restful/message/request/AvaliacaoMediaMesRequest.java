@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 public class AvaliacaoMediaMesRequest implements IMobileRequest {
 
 	private String token;
-	private String idEstabelecimentoSaude;
+	private String idES;
 	private String rating;
 	private String date;
 	
@@ -20,12 +20,12 @@ public class AvaliacaoMediaMesRequest implements IMobileRequest {
 		this.token = token;
 	}
 
-	public String getIdEstabelecimentoSaude() {
-		return idEstabelecimentoSaude;
+	public String getIdES() {
+		return idES;
 	}
 
-	public void setIdEstabelecimentoSaude(String idEstabelecimentoSaude) {
-		this.idEstabelecimentoSaude = idEstabelecimentoSaude;
+	public void setIdES(String idES) {
+		this.idES = idES;
 	}
 
 	public String getRating() {
@@ -38,7 +38,7 @@ public class AvaliacaoMediaMesRequest implements IMobileRequest {
 	
 	@Override
 	public boolean validate() {			
-		return idEstabelecimentoSaude != null;
+		return idES != null;
 	}
 
 	public String getDate() {

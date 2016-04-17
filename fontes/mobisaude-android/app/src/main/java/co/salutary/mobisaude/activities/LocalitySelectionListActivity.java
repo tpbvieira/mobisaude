@@ -147,7 +147,6 @@ public class LocalitySelectionListActivity extends ListActivity {
                 Item item = (Item) adapter.getRows().get(position);
                 Cidade cidade = new CidadeDAO(userDataBase).getCidadeById(item.id);
                 userController.setCidade(cidade);
-                userController.atualizarCidadeSelecionado();
                 setResult(RESULTADO_ITEM_SELECIONADO);
                 finish();
             }

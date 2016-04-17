@@ -48,10 +48,10 @@ public class LocalDataBase {
             long id = db.insert(tabela, "", valores);
             return id;
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         }
     }
@@ -61,10 +61,10 @@ public class LocalDataBase {
             int count = db.update(tabela, valores, where, whereArgs);
             return count;
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         }
     }
@@ -74,10 +74,10 @@ public class LocalDataBase {
             int count = db.delete(tabela, where, whereArgs);
             return count;
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         }
     }
@@ -87,10 +87,10 @@ public class LocalDataBase {
             int count = db.delete(tabela, where, whereArgs);
             return count;
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return 0;
         }
     }
@@ -99,10 +99,10 @@ public class LocalDataBase {
         try {
             return db.query(tabela, colunas, null, null, null, null, null, null);
         } catch (SQLException e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return null;
         } catch (Exception e) {
-            Log.d(TAG, "DB Error", e);
+            Log.e(TAG, "DB Error", e);
             return null;
         }
     }

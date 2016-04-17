@@ -8,10 +8,11 @@ import javax.xml.bind.annotation.XmlType;
 public class ESRequest implements IMobileRequest {
 	
 	private String token;
+	private String idES;
 	private String idMunicipio;
 	private String idTipoGestao;
-	private String idTipoEstabelecimentoSaude;	
-	private String[] idTiposEstabelecimentoSaude;
+	private String idTipoES;	
+	private String[] idTiposES;
 	
 	public String getToken() {
 		return token;
@@ -19,6 +20,14 @@ public class ESRequest implements IMobileRequest {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	public String getIdES() {
+		return idES;
+	}
+
+	public void setIdES(String idES) {
+		this.idES = idES;
 	}
 
 	public String getIdMunicipio() {
@@ -37,20 +46,20 @@ public class ESRequest implements IMobileRequest {
 		this.idTipoGestao = idTipoGestao;
 	}
 
-	public String getIdTipoEstabelecimentoSaude() {
-		return idTipoEstabelecimentoSaude;
+	public String getIdTipoES() {
+		return idTipoES;
 	}
 
-	public void setIdTipoEstabelecimentoSaude(String idTipoEstabelecimentoSaude) {
-		this.idTipoEstabelecimentoSaude = idTipoEstabelecimentoSaude;
+	public void setIdTipoES(String idTipoES) {
+		this.idTipoES = idTipoES;
 	}
 
-	public String[] getIdTiposEstabelecimentoSaude() {
-		return idTiposEstabelecimentoSaude;
+	public String[] getIdTiposES() {
+		return idTiposES;
 	}
 
-	public void setIdTiposEstabelecimentoSaude(String[] idTiposEstabelecimentoSaude) {
-		this.idTiposEstabelecimentoSaude = idTiposEstabelecimentoSaude;
+	public void setIdTiposES(String[] idTiposES) {
+		this.idTiposES = idTiposES;
 	}
 
 	@Override

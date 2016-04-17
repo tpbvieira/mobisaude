@@ -24,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,10 +44,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int RECEIVER_ABRIR_ATUALIZAR_PRESTADORES = 1;
     public static final int RECEIVER_ATUALIZAR_PRESTADORES = 2;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = new Object() {
+    }.getClass().getName();
     private boolean isInFront;
 
     private LocalDataBase db;
+    private Settings settings;
     private UserController userController;
 
     TextView mESView;
@@ -70,9 +71,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        // contextual information
         userController = userController = UserController.getInstance();
         db = LocalDataBase.getInstance();
-        Settings settings = new Settings(getApplicationContext());
+        settings = new Settings(getApplicationContext());
 
         TextView stateView = (TextView) findViewById(R.id.main_content_state);
         stateView.setText(getString(R.string.estado) + "=" + userController.getUf().getNome());
@@ -181,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (DeviceInfo.isLoggedin) {
             TextView textUserName = (TextView) findViewById(R.id.text_userName);
             if (textUserName != null) {
-                Settings settings = new Settings(getApplicationContext());
                 String userName = settings.getPreferenceValue(Settings.USER_NAME);
                 textUserName.setText(userName);
             }
@@ -229,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(LoginActivity.class);
         } else if (id == R.id.menu_logout) {
             DeviceInfo.isLoggedin = false;
-            Settings settings = new Settings(getApplicationContext());
             settings.setPreferenceValue(Settings.USER_EMAIL, null);
             finish();
         }
@@ -263,12 +263,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected Boolean doInBackground(Void... params) {
             boolean ok = true;
 
-            List<EstabelecimentoSaude> esList = userController.getListEstabelecimentoSaudes();
+            List<EstabelecimentoSaude> esList = userController.getListEstabelecimentosSaude();
             if(esList == null || esList.size() == 0){
 
-                userController.setListEstabelecimentoSaudes(new ArrayList<EstabelecimentoSaude>());
-
-                Settings settings = new Settings(getApplicationContext());
+                userController.setListEstabelecimentosSaude(new ArrayList<EstabelecimentoSaude>());
 
                 String token = settings.getPreferenceValue(Settings.TOKEN);
                 if (token == null || token.isEmpty()) {
@@ -296,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 JSONObject rec = ess.getJSONObject(i);
                                 EstabelecimentoSaude es = jsonObjectToES(rec);
                                 if(es != null){
-                                    userController.getListEstabelecimentoSaudes().add(es);
+                                    userController.getListEstabelecimentosSaude().add(es);
                                 }
                             }
                         } else {

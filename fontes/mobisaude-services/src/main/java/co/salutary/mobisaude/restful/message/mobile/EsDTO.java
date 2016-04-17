@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(namespace = "mobile", name = "estabelecimentosaude")
 public class EsDTO implements Cloneable {
 
-	private String idCnes;
+	private String idES;
 	private String idMunicipio;
-	private String idTipoEstabelecimentoSaude;
+	private String idTipoES;
 	private String idTipoGestao;
 	private String idRegiao;
 	private String cnpjMantenedora;
@@ -27,12 +27,12 @@ public class EsDTO implements Cloneable {
 	private String latitude;
 	private String longitude;
 	
-	public String getIdCnes() {
-		return idCnes;
+	public String getIdES() {
+		return idES;
 	}
 
-	public void setIdCnes(String idCnes) {
-		this.idCnes = idCnes;
+	public void setIdES(String idES) {
+		this.idES = idES;
 	}
 
 	public String getIdMunicipio() {
@@ -43,12 +43,12 @@ public class EsDTO implements Cloneable {
 		this.idMunicipio = idMunicipio;
 	}
 	
-	public String getIdTipoEstabelecimentoSaude() {
-		return idTipoEstabelecimentoSaude;
+	public String getIdTipoES() {
+		return idTipoES;
 	}
 	
-	public void setIdTipoEstabelecimentoSaude(String idTipoEstabelecimentoSaude) {
-		this.idTipoEstabelecimentoSaude = idTipoEstabelecimentoSaude;
+	public void setIdTipoES(String idTipoES) {
+		this.idTipoES = idTipoES;
 	}
 	
 	public String getIdTipoGestao() {
