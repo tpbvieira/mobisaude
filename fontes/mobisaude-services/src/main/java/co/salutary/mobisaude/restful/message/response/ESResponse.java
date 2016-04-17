@@ -12,11 +12,11 @@ public class ESResponse implements IMobileResponse {
 	private EsDTO[] esMsg;
 	private String erro;
 
-	public EsDTO[] getEstabelecimentoSaude() {
+	public EsDTO[] getEstabelecimentosSaude() {
 		return esMsg;
 	}
 
-	public void setEstabelecimentoSaude(EsDTO[] esMsg) {
+	public void setEstabelecimentosSaude(EsDTO[] esMsg) {
 		this.esMsg = esMsg.clone();
 	}
 

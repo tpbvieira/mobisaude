@@ -334,7 +334,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			esDTO.setIdTipoGestao(Short.toString(es.getIdTipoGestao()));
 			EsDTO[] esDTOArray = new EsDTO[1];
 			esDTOArray[0] = esDTO; 
-			response.setEstabelecimentoSaude(esDTOArray);			
+			response.setEstabelecimentosSaude(esDTOArray);			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
@@ -385,7 +385,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 					esMsgList.add(esMsg);
 				}
-				response.setEstabelecimentoSaude(esMsgList.toArray(new EsDTO[0]));
+				response.setEstabelecimentosSaude(esMsgList.toArray(new EsDTO[0]));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
@@ -442,7 +442,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 					esMsgList.add(esMsg);
 				}
-				response.setEstabelecimentoSaude(esMsgList.toArray(new EsDTO[0]));
+				response.setEstabelecimentosSaude(esMsgList.toArray(new EsDTO[0]));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
@@ -514,7 +514,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 					esMsgList.add(esMsg);
 				}
-				response.setEstabelecimentoSaude(esMsgList.toArray(new EsDTO[0]));
+				response.setEstabelecimentosSaude(esMsgList.toArray(new EsDTO[0]));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}

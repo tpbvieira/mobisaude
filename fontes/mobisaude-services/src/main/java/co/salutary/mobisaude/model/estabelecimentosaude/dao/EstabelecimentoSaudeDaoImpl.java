@@ -68,16 +68,16 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 		
 		if (idTiposES != null && idTiposES.length > 0) {
 			int i = 1;
-			queryStr.append("and es.idTiposES in (");
+			queryStr.append("and es.idTipoES in (");
 			for (String idTipoEstabelecimento:idTiposES) {
-				queryStr.append(":idTiposES" + i + ",");
+				queryStr.append(":idTipoES" + i + ",");
 				i++;
 			}
 			queryStr.setLength(queryStr.length()-1);
 			queryStr.append(") ");
 		}
 		
-		queryStr.append("order by es.idTiposES");
+		queryStr.append("order by es.idTipoES");
 		
 		Query query = em.createQuery(queryStr.toString());
 		
@@ -88,7 +88,7 @@ public class EstabelecimentoSaudeDaoImpl implements EstabelecimentoSaudeDao {
 		int i = 1;
 		if (idTiposES != null && idTiposES.length > 0) {
 			for (String idTipoEstabelecimento:idTiposES) {
-				query.setParameter("idTiposES"+i, Short.valueOf(idTipoEstabelecimento));
+				query.setParameter("idTipoES"+i, Short.valueOf(idTipoEstabelecimento));
 				i++;
 			}
 		}
