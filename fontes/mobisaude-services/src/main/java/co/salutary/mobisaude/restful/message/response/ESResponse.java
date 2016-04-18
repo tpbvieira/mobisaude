@@ -9,15 +9,15 @@ import co.salutary.mobisaude.restful.message.mobile.EsDTO;
 @XmlType(namespace = "mobile", name = "esResponse")
 public class ESResponse implements IMobileResponse {
 
-	private EsDTO[] esMsg;
+	private EsDTO[] estabelecimentosSaude;
 	private String erro;
 
 	public EsDTO[] getEstabelecimentosSaude() {
-		return esMsg;
+		return estabelecimentosSaude;
 	}
 
 	public void setEstabelecimentosSaude(EsDTO[] esMsg) {
-		this.esMsg = esMsg.clone();
+		this.estabelecimentosSaude = esMsg.clone();
 	}
 
 	public String getErro() {

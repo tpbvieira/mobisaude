@@ -19,6 +19,7 @@ import java.util.Iterator;
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.TokenManager;
+import co.salutary.mobisaude.model.EstabelecimentoSaude;
 
 public class JsonUtils {
 
@@ -137,6 +138,30 @@ public class JsonUtils {
         }
 
         return pairs;
+    }
+
+    public static EstabelecimentoSaude jsonObjectToES(JSONObject rec){
+        try {
+            EstabelecimentoSaude es = new EstabelecimentoSaude();
+            es.setIdCnes(rec.getInt("idES"));
+            if (rec.has("idTipoES")){
+                es.setIdTipoEstabelecimentoSaude(Short.parseShort(rec.getString("idTipoES")));
+            }
+            if (rec.has("latitude")){
+                es.setLatitude(Double.parseDouble(rec.getString("latitude")));
+            }
+            if (rec.has("longitude")){
+                es.setLongitude(Double.parseDouble(rec.getString("longitude")));
+            }
+            if (rec.has("nomeFantasia")){
+                es.setNomeFantasia(rec.getString("nomeFantasia"));
+            }
+            return es;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -16,6 +16,8 @@
     <string name="estabelecimento_saude">Estabelecimento de Saúde</string>
     <string name="estabelecimentos_saude">Estabelecimentos de Saúde</string>
 
+    <string name="estabelecimento_saude_label">Estabelecimento:</string>
+
     <string name="profile_contactable">Receber Emails</string>
 
     <string name="error">1|Erro Inesperado</string>

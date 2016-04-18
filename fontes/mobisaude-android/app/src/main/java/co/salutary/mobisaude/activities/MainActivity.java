@@ -288,11 +288,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         JSONObject esResponse = (JSONObject) json.get("esResponse");
                         int idErro = JsonUtils.getErrorCode(esResponse);
                         if (idErro == 0) {
-                            JSONArray ess = esResponse.getJSONArray("estabelecimentoSaude");
+                            JSONArray ess = esResponse.getJSONArray("estabelecimentosSaude");
                             mNumES = String.valueOf(ess.length());
                             for (int i = 0; i < ess.length(); ++i) {
                                 JSONObject rec = ess.getJSONObject(i);
-                                EstabelecimentoSaude es = jsonObjectToES(rec);
+                                EstabelecimentoSaude es = JsonUtils.jsonObjectToES(rec);
                                 if(es != null){
                                     userController.getListEstabelecimentosSaude().add(es);
                                 }
@@ -330,22 +330,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onCancelled() { }
 
-    }
-
-    public static EstabelecimentoSaude jsonObjectToES(JSONObject rec){
-        try {
-            EstabelecimentoSaude es = new EstabelecimentoSaude();
-            es.setIdCnes(rec.getInt("idCnes"));
-            es.setIdTipoEstabelecimentoSaude((short) rec.getInt("idTipoEstabelecimentoSaude"));
-            es.setLatitude(rec.getDouble("latitude"));
-            es.setLongitude(rec.getDouble("longitude"));
-            es.setNomeFantasia(rec.getString("nomeFantasia"));
-            return es;
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
     }
 
 }

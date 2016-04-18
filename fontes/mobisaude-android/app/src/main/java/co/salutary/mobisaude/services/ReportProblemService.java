@@ -98,7 +98,7 @@ public class ReportProblemService extends Service{
 						JSONObject jRequest = new JSONObject();
 						jRequest.put("relatarProblemaRequest", jDados);
 
-						String reponder = ServiceBroker.getInstance(getApplicationContext()).report(jRequest.toString());
+						String reponder = ServiceBroker.getInstance(getApplicationContext()).avaliar(jRequest.toString());
 						if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
 							// salvar registros
 							JSONObject jObject = new JSONObject(reponder);

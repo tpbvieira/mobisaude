@@ -27,7 +27,6 @@ public class ServiceBroker {
 
 	private ConnectivityUtils connectivityUtils;
 
-
 	public static ServiceBroker getInstance(Context context) {
 		if (instance == null) {
 			instance = new ServiceBroker(context);
@@ -42,25 +41,9 @@ public class ServiceBroker {
 	public String gerarToken(String json) {
 		return requestJson("/gerarToken", json);
 	}
-	
+
 	public String geocode(String json) {
 		return requestJson("/geocode", json);
-	}
-	
-	public String consultaDominios(String json) {
-		return requestJson("/consultaDominios", json);
-	}
-
-	public String getESByIdMunicipio(String json) {
-		return requestJson("/getESByIdMunicipio", json);
-	}
-
-    public String getESByIdMunicipioIdTipoEstabelecimento(String json) {
-        return requestJson("/getESByIdMunicipioIdTipoEstabelecimento", json);
-    }
-
-	public String report(String json) {
-		return requestJson("/relatarProblema", json);
 	}
 
     public String signup(String json) {
@@ -77,6 +60,47 @@ public class ServiceBroker {
 
     public String updateUser(String json) {
         return requestJson("/updateUser", json);
+    }
+
+
+    public String consultaDominios(String json) {
+		return requestJson("/consultaDominios", json);
+	}
+
+    public String getESByIdES(String json) {
+        return requestJson("/getESByIdES", json);
+    }
+
+	public String getESByIdMunicipio(String json) {
+		return requestJson("/getESByIdMunicipio", json);
+	}
+
+    public String getESByIdMunicipioIdTipoES(String json) {
+        return requestJson("/getESByIdMunicipioIdTipoES", json);
+    }
+
+    public String avaliar(String json) {
+        return requestJson("/avaliar", json);
+    }
+
+    public String getAvaliacaoByIdESEmail(String json) {
+        return requestJson("/getAvaliacaoByIdESEmail", json);
+    }
+
+    public String listAvaliacaoByIdES(String json) {
+        return requestJson("/listAvaliacaoByIdES", json);
+    }
+
+    public String getAvaliacaoMediaByIdES(String json) {
+        return requestJson("/getAvaliacaoMediaByIdES", json);
+    }
+
+    public String getAvaliacaoMediaByIdESDate(String json) {
+        return requestJson("/getAvaliacaoMediaByIdESDate", json);
+    }
+
+    public String listAvalicaoMediaMesByIdES(String json) {
+        return requestJson("/listAvalicaoMediaMesByIdES", json);
     }
 
     private String requestJson(String service, String json) {
