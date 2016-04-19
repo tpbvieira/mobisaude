@@ -147,6 +147,12 @@ public class JsonUtils {
             if (rec.has("idTipoES")){
                 es.setIdTipoEstabelecimentoSaude(Short.parseShort(rec.getString("idTipoES")));
             }
+            if (rec.has("idTipoGestao")){
+                es.setIdTipoGestao(Short.parseShort(rec.getString("idTipoGestao")));
+            }
+            if (rec.has("endereco")){
+                es.setEndereco(rec.getString("endereco"));
+            }
             if (rec.has("latitude")){
                 es.setLatitude(Double.parseDouble(rec.getString("latitude")));
             }
@@ -156,6 +162,7 @@ public class JsonUtils {
             if (rec.has("nomeFantasia")){
                 es.setNomeFantasia(rec.getString("nomeFantasia"));
             }
+
             return es;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());

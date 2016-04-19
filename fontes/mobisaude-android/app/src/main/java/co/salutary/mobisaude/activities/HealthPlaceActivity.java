@@ -22,10 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
@@ -287,10 +289,22 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
             if (success) {
                 EstabelecimentoSaude es = userController.getEstabelecimentoSaude();
                 if(es != null){
-                    mTipoESText.setText(Short.toString(es.getIdTipoEstabelecimentoSaude()));
-                    mTipoGestãoText.setText(Short.toString(es.getIdTipoGestao()));
-                    mNomeFantasiaText.setText(es.getNomeFantasia());
-                    mEnderecoText.setText(es.getEndereco());
+                    try {
+                        String values = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
+                        Map map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
+                        short id = es.getIdTipoEstabelecimentoSaude();
+                        String name = (String)map.get(Short.toString(id));
+                        mTipoESText.setText(name);
+                        values = settings.getPreferenceValues(Settings.TIPO_GESTAO);
+                        map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
+                        id = es.getIdTipoGestao();
+                        name = (String)map.get(Short.toString(id));
+                        mTipoGestãoText.setText(name);
+                        mNomeFantasiaText.setText(es.getNomeFantasia());
+                        mEnderecoText.setText(es.getEndereco());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_connecting_server), Toast.LENGTH_SHORT).show();

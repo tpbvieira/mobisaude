@@ -17,6 +17,11 @@
     <string name="estabelecimentos_saude">Estabelecimentos de Saúde</string>
 
     <string name="estabelecimento_saude_label">Estabelecimento:</string>
+    <string name="tipo_label">Tipo:</string>
+    <string name="gestao_label">Gestão:</string>
+    <string name="endereco_label">Endereço:</string>
+    <string name="avaliacoes_label">Avaliações:</string>
+    <string name="avaliacao_label">Avaliação:</string>
 
     <string name="profile_contactable">Receber Emails</string>
 
