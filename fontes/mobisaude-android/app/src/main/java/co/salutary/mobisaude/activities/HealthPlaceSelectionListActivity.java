@@ -48,7 +48,7 @@ import co.salutary.mobisaude.adapters.ListAdapterModel.Row;
 import co.salutary.mobisaude.adapters.ListAdapterModel.Section;
 import co.salutary.mobisaude.adapters.StringListAdapter;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.UserController;
+import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.JsonUtils;
 
@@ -71,13 +71,16 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
     private int sideIndexHeight;
     private int indexListSize;
 
-    private View mProgressView;
+    //ui
     private TextView mTitleText;
     private Spinner mTipoESSpiner;
     private EditText mSearchText;
     private ImageView mSearchButton;
+    private View mContentView;
+    private View mProgressView;
 
-    private UserController userController;
+    //context
+    private ClientCache clientCache;
     private Settings settings;
 
     @Override
@@ -87,11 +90,13 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
         // Contextual information
         Context context = this.getApplicationContext();
         settings = new Settings(context);
-        userController = UserController.getInstance();
+        clientCache = ClientCache.getInstance();
 
         // UI
         setContentView(R.layout.activity_healthplace_selection_list);
         mProgressView = findViewById(R.id.hp_select_list_progress_bar);
+        mContentView = findViewById(R.id.hp_select_list_content);
+        showProgress(true);
         mTitleText = (TextView) findViewById(R.id.hp_select_list_title);
         mTitleText.setText(R.string.estabelecimentos_saude);
         try {
@@ -183,14 +188,14 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
     }
 
     private void loadData() {
-        showProgress(true);
+
         int start = 0, end = 0;
         String previousLetter = null;
         Object[] tmpIndexItem;
         List<Row> rows = new ArrayList<Row>();
         Pattern numberPattern = Pattern.compile("[0-9]");
 
-        List<EstabelecimentoSaude> esList = userController.getListEstabelecimentosSaude();
+        List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaude();
         if(mTipoESSpiner.isSelected()){
             List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
             for(EstabelecimentoSaude es : esList ){
@@ -315,7 +320,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
         try {
             mListAdapterModel = new ListAdapterModel();
 
-            List<EstabelecimentoSaude> esList = userController.getListEstabelecimentosSaude();
+            List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaude();
             if(mTipoESSpiner.isSelected()){
                 List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
                 for(EstabelecimentoSaude es : esList ){
@@ -368,20 +373,18 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//                }
-//            });
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
@@ -392,11 +395,10 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
                 }
             });
         } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+
     }
 
     public void startActivity(final Class<? extends Activity> activity) {

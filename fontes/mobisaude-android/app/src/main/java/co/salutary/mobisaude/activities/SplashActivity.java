@@ -17,14 +17,13 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.ServiceBroker;
-import co.salutary.mobisaude.controller.UserController;
+import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.db.CidadeDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
@@ -47,7 +46,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     private TextView txtLabel;
 
     private LocalDataBase db;
-    private UserController userController;
+    private ClientCache clientCache;
     private Location location;
 
     private boolean isShowDialog = true;
@@ -66,7 +65,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
         DeviceInfo.setUpGCM(this);
         db = LocalDataBase.getInstance();
-        userController = UserController.getInstance();
+        clientCache = ClientCache.getInstance();
         location = DeviceInfo.updateLocation(getApplicationContext(), this);
 
         Settings.setPreferenceValue(this, Settings.VIEWPAGER_POS_PORTRAIT, 0);
@@ -262,7 +261,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             }.getClass().getEnclosingMethod().getName());
 
             try {
-                if(userController.getUf() != null && userController.getCidade() != null){
+                if(clientCache.getUf() != null && clientCache.getCidade() != null){
                     return true;
                 }
             } catch (Exception e) {
@@ -370,8 +369,8 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                                 Cidade cidade = new CidadeDAO(db).getCidadeById(codMunicipioIbge);
                                 if (cidade != null) {
                                     UF uf = new UfDAO(db).getUfById(cidade.getIdUF());
-                                    userController.setUf(uf);
-                                    userController.setCidade(cidade);
+                                    clientCache.setUf(uf);
+                                    clientCache.setCidade(cidade);
                                     db.close();
                                     return true;
                                 } else {

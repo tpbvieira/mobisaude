@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -25,10 +26,9 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="0dp"
 	    android:layout_weight="1" />
-	
-	
+
 	<LinearLayout
-	    android:id="@+id/tela_localidade_btn_uf"
+	    android:id="@+id/locality_selection_btn_uf"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:background="@drawable/roundborder"
@@ -40,7 +40,7 @@
 		android:orientation="horizontal" >
 		
 		<EditText
-		    android:id="@+id/tela_localidade_edt_uf"
+		    android:id="@+id/locality_selection_edt_uf"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -61,7 +61,7 @@
 	</LinearLayout>
 
 	<LinearLayout
-	    android:id="@+id/tela_localidade_btn_cidade"
+	    android:id="@+id/locality_selection_btn_cidade"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:background="@drawable/roundborder"
@@ -73,7 +73,7 @@
 		android:orientation="horizontal" >
 		
 		<EditText
-		    android:id="@+id/tela_localidade_edt_cidade"
+		    android:id="@+id/locality_selection_edt_cidade"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -94,7 +94,7 @@
 	</LinearLayout>
 
 	<Button
-	    android:id="@+id/tela_localidade_btn_meu_local"
+	    android:id="@+id/locality_selection_btn_meu_local"
 	    android:layout_width="match_parent"
 	    android:layout_height="45dp"
 	    android:text="@string/select"
@@ -132,5 +132,20 @@
 			android:layout_weight="1"/>
 		
 	</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:id="@+id/locality_selection_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    </LinearLayout>
 
 </LinearLayout>

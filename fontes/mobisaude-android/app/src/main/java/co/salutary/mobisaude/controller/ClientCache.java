@@ -1,37 +1,34 @@
 package co.salutary.mobisaude.controller;
 
 import java.util.List;
-import java.util.Map;
 
+import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.model.UF;
 
-public class UserController {
+public class ClientCache {
 
     private UF uf;
     private Cidade cidade;
     private EstabelecimentoSaude estabelecimentoSaude;
     private List<EstabelecimentoSaude> listEstabelecimentoSaudes;
+    private List<Avaliacao> listAvaliacoes;
 
-    private static UserController instance = null;
+    private static ClientCache instance = null;
 
-    public static UserController getInstance() {
+    public static ClientCache getInstance() {
         if (instance == null) {
-            instance = new UserController();
+            instance = new ClientCache();
         }
         return instance;
     }
 
     public Cidade getCidade() {return cidade;}
 
-    public void setCidade(Cidade cidade) {
-        this.cidade = cidade;
-    }
+    public void setCidade(Cidade cidade) {this.cidade = cidade;}
 
-    public UF getUf() {
-        return uf;
-    }
+    public UF getUf() {return uf;}
 
     public void setUf(UF uf) {this.uf = uf;	}
 
@@ -42,5 +39,9 @@ public class UserController {
     public EstabelecimentoSaude getEstabelecimentoSaude(){return estabelecimentoSaude;}
 
     public void setEstabelecimentoSaude(EstabelecimentoSaude es){estabelecimentoSaude = es;}
+
+    public List<Avaliacao> getListAvaliacoes() {return listAvaliacoes;}
+
+    public void setListAvaliacoes(List<Avaliacao> listAvaliacoes) {this.listAvaliacoes = listAvaliacoes;}
 
 }

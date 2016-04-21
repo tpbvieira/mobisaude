@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,11 +20,13 @@ import java.util.Iterator;
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.TokenManager;
+import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 
 public class JsonUtils {
 
     private static final String TAG = new Object(){}.getClass().getName();
+    private static final SimpleDateFormat sdfDMY = new SimpleDateFormat("dd/MM/yyyy");
 
     public static Double parceJsonToDouble(JSONObject json, String key){
         try {
@@ -164,6 +167,34 @@ public class JsonUtils {
             }
 
             return es;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Avaliacao jsonObjectToAvaliacao(JSONObject obj){
+        try {
+            Avaliacao av = new Avaliacao();
+            av.setIdES(obj.getInt("idES"));
+            if (obj.has("email")){
+                av.setEmail(obj.getString("email"));
+            }
+            if (obj.has("titulo")){
+                av.setTitulo(obj.getString("titulo"));
+            }
+            if (obj.has("avaliacao")){
+                av.setAvaliacao(obj.getString("avaliacao"));
+            }
+            if (obj.has("rating")){
+                av.setRating(Float.parseFloat(obj.getString("rating")));
+            }
+            if (obj.has("longitude")){
+                av.setDate(sdfDMY.parse(obj.getString("date")));
+            }
+
+            return av;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
             e.printStackTrace();

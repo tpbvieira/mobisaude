@@ -35,7 +35,7 @@ import co.salutary.mobisaude.adapters.ListAdapterModel;
 import co.salutary.mobisaude.adapters.ListAdapterModel.Item;
 import co.salutary.mobisaude.adapters.ListAdapterModel.Row;
 import co.salutary.mobisaude.adapters.ListAdapterModel.Section;
-import co.salutary.mobisaude.controller.UserController;
+import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.db.CidadeDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
@@ -62,8 +62,8 @@ public class LocalitySelectionListActivity extends ListActivity {
     private EditText mSearchText;
     private ImageView mSearchButton;
 
-    private LocalDataBase userDataBase;
-    private UserController userController;
+    private LocalDataBase db;
+    private ClientCache clientCache;
 
     private int tipoLista;
 
@@ -76,8 +76,8 @@ public class LocalitySelectionListActivity extends ListActivity {
         mSearchText = (EditText) findViewById(R.id.select_list_search_text);
         mSearchButton = (ImageView) findViewById(R.id.select_list_search_button);
 
-        userDataBase = LocalDataBase.getInstance();
-        userController = UserController.getInstance();
+        db = LocalDataBase.getInstance();
+        clientCache = ClientCache.getInstance();
 
         Intent intent = getIntent();
         if(intent != null){
@@ -135,21 +135,22 @@ public class LocalitySelectionListActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
 
         if (adapter.getRows().get(position) instanceof Item) {
-
+            db.open(getApplicationContext());
             if(tipoLista==LISTA_UF){
                 Item item = (Item) adapter.getRows().get(position);
-                UF uf = new UfDAO(userDataBase).getUfById(item.id);
-                userController.setUf(uf);
-                userController.setCidade(null);
+                UF uf = new UfDAO(db).getUfById(item.id);
+                clientCache.setUf(uf);
+                clientCache.setCidade(null);
                 setResult(RESULTADO_ITEM_SELECIONADO);
                 finish();
             } else {
                 Item item = (Item) adapter.getRows().get(position);
-                Cidade cidade = new CidadeDAO(userDataBase).getCidadeById(item.id);
-                userController.setCidade(cidade);
+                Cidade cidade = new CidadeDAO(db).getCidadeById(item.id);
+                clientCache.setCidade(cidade);
                 setResult(RESULTADO_ITEM_SELECIONADO);
                 finish();
             }
+            db.close();
         }
     }
 
@@ -177,7 +178,9 @@ public class LocalitySelectionListActivity extends ListActivity {
         Pattern numberPattern = Pattern.compile("[0-9]");
 
         if(tipoLista == LISTA_UF){
-            List<UF> listUf = new UfDAO(userDataBase).listarUF();
+            db.open(getApplicationContext());
+            List<UF> listUf = new UfDAO(db).listarUF();
+            db.close();
             Collections.sort(listUf, new Comparator<UF>() {
                 @Override
                 public int compare(UF t1, UF t2) {
@@ -214,9 +217,10 @@ public class LocalitySelectionListActivity extends ListActivity {
             }
         }
         else if (tipoLista == LISTA_CIDADE){
-            UF uf = UserController.getInstance().getUf();
-
-            List<Cidade> listCidade = new CidadeDAO(userDataBase).listarCidadesByUF(uf.getIdUf());
+            UF uf = ClientCache.getInstance().getUf();
+            db.open(getApplicationContext());
+            List<Cidade> listCidade = new CidadeDAO(db).listarCidadesByUF(uf.getIdUf());
+            db.close();
             Collections.sort(listCidade, new Comparator<Cidade>() {
                 @Override
                 public int compare(Cidade t1, Cidade t2) {
@@ -273,21 +277,23 @@ public class LocalitySelectionListActivity extends ListActivity {
     private void setSearchResult(String str) {
         try {
             adapter = new ListAdapterModel();
+            db.open(getApplicationContext());
             if(tipoLista==LISTA_UF){
-                for (UF uf : new UfDAO(userDataBase).listarUF()) {
+                for (UF uf : new UfDAO(db).listarUF()) {
                     if (uf.getNome().toLowerCase(Locale.getDefault()).contains(str.toLowerCase())) {
                         adapter.addItem(new Item(uf.getNome(), uf.getIdUf()));
                     }
                 }
             }
             else {
-                UF uf = UserController.getInstance().getUf();
-                for (Cidade cidade : new CidadeDAO(userDataBase).listarCidadesByUF(uf.getIdUf())) {
+                UF uf = ClientCache.getInstance().getUf();
+                for (Cidade cidade : new CidadeDAO(db).listarCidadesByUF(uf.getIdUf())) {
                     if (cidade.getNome().toLowerCase(Locale.getDefault()).contains(str.toLowerCase())) {
                         adapter.addItem(new Item(cidade.getNome(), cidade.getIdCidade()));
                     }
                 }
             }
+            db.close();
             setListAdapter(adapter);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());

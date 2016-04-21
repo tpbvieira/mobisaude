@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,14 +27,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.adapters.ListViewAdapter;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.controller.UserController;
+import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
@@ -47,7 +50,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    private UpdateFieldsTask mloadUITask = null;
+    private UpdateUITask mloadUITask = null;
 
     // UI references.
     private View mESFormView;
@@ -56,8 +59,9 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
     private TextView mTipoESText;
     private TextView mTipoGestãoText;
     private TextView mEnderecoText;
+    private ListView mEvaluationsList;
 
-    private UserController userController;
+    private ClientCache clientCache;
     private Settings settings;
 
     @Override
@@ -65,7 +69,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         super.onCreate(savedInstanceState);
 
         // contextual information
-        userController = userController = UserController.getInstance();
+        clientCache = clientCache = ClientCache.getInstance();
         settings = new Settings(getApplicationContext());
 
         setContentView(R.layout.activity_healthplace);
@@ -87,8 +91,9 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
             mUpdateButton.setEnabled(false);
         }
 
-        new UpdateFieldsTask().execute();
+        mEvaluationsList = (ListView) findViewById(R.id.healthplace_evaluations_list);        ;
 
+        new UpdateUITask().execute();
     }
 
     @Override
@@ -157,14 +162,9 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -186,8 +186,6 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 }
             });
         } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mESFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
@@ -233,9 +231,18 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         int IS_PRIMARY = 1;
     }
 
-    public class UpdateFieldsTask extends AsyncTask<Void, Void, Boolean> {
+    public class UpdateUITask extends AsyncTask<Void, Void, Boolean> {
 
-        UpdateFieldsTask() { }
+        UpdateUITask() { }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+            showProgress(true);
+
+        }
+
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -250,12 +257,12 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
             }
 
             try {
+                // ES data
                 JSONObject data = new JSONObject();
                 data.put("token", token);
                 data.put("idES", settings.getPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE));
                 JSONObject request = new JSONObject();
                 request.put("esRequest", data);
-
                 String responseStr = ServiceBroker.getInstance(getApplicationContext()).getESByIdES(request.toString());
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
@@ -265,12 +272,46 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                         JSONObject esJson = (JSONObject) esResponse.get("estabelecimentosSaude");
                         EstabelecimentoSaude es = JsonUtils.jsonObjectToES(esJson);
                         if(es != null){
-                            userController.setEstabelecimentoSaude(es);
+                            clientCache.setEstabelecimentoSaude(es);
+                        }else{
+                            throw new MobiSaudeAppException(JsonUtils.getErrorMessage(esResponse));
                         }
                     } else {
                         throw new MobiSaudeAppException(JsonUtils.getErrorMessage(esResponse));
                     }
+                }else{
+                    throw new MobiSaudeAppException("responseStr == null");
                 }
+
+                // Evaluations
+                data = new JSONObject();
+                data.put("token", token);
+                data.put("idES", settings.getPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE));
+                request = new JSONObject();
+                request.put("avaliacaoRequest", data);
+                responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdES(request.toString());
+                if (responseStr != null) {
+                    JSONObject json = new JSONObject(responseStr);
+                    JSONObject avaliacaoResponse = (JSONObject) json.get("avaliacaoResponse");
+                    int idErro = JsonUtils.getErrorCode(avaliacaoResponse);
+                    if (idErro == 0) {
+                        JSONArray avaliacoesArr = avaliacaoResponse.getJSONArray("avaliacoes");
+                        List<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
+                        for (int i = 0; i < avaliacoesArr.length(); ++i) {
+                            JSONObject obj = avaliacoesArr.getJSONObject(i);
+                            Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(obj);
+                            if(avaliacao != null){
+                                avaliacoes.add(avaliacao);
+                            }
+                        }
+                        clientCache.setListAvaliacoes(avaliacoes);
+                    } else {
+                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(avaliacaoResponse));
+                    }
+                } else {
+                    throw new MobiSaudeAppException("responseStr == null");
+                }
+
             } catch (Exception e) {
                 mErrorMsg = e.getMessage();
                 Log.e(TAG, e.getMessage());
@@ -284,14 +325,13 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         @Override
         protected void onPostExecute(final Boolean success) {
             mloadUITask = null;
-            showProgress(false);
 
             if (success) {
-                EstabelecimentoSaude es = userController.getEstabelecimentoSaude();
+                EstabelecimentoSaude es = clientCache.getEstabelecimentoSaude();
                 if(es != null){
                     try {
                         String values = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
-                        Map map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
+                        HashMap map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
                         short id = es.getIdTipoEstabelecimentoSaude();
                         String name = (String)map.get(Short.toString(id));
                         mTipoESText.setText(name);
@@ -303,13 +343,22 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                         mNomeFantasiaText.setText(es.getNomeFantasia());
                         mEnderecoText.setText(es.getEndereco());
                     } catch (JSONException e) {
+                        Log.e(TAG, e.getMessage());
                         e.printStackTrace();
                     }
+                }
+
+                List<Avaliacao> avaliacoes = clientCache.getListAvaliacoes();
+                if(avaliacoes != null){
+                    mEvaluationsList.setAdapter(new ListViewAdapter(HealthPlaceActivity.this, R.layout.item_listview, avaliacoes));
+//                    mEvaluationsList.setOnItemClickListener(onItemClickListener());
                 }
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_connecting_server), Toast.LENGTH_SHORT).show();
                 finish();
             }
+
+            showProgress(false);
         }
 
         @Override
@@ -319,5 +368,28 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         }
 
     }
+//
+//    private AdapterView.OnItemClickListener onItemClickListener() {
+//        return new AdapterView.OnItemClickListener() {
+//            @SuppressLint("SetTextI18n")
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                final Dialog dialog = new Dialog(MainActivity.this);
+//                dialog.setContentView(R.layout.layout_dialog);
+//                dialog.setTitle("Movie details");
+//
+//                TextView name = (TextView) dialog.findViewById(R.id.movie_name);
+//                TextView country = (TextView) dialog.findViewById(R.id.country);
+//                TextView starRate = (TextView) dialog.findViewById(R.id.rate);
+//
+//                Movie movie = (Movie) parent.getAdapter().getItem(position);
+//                name.setText("Movie name: " + movie.getName());
+//                country.setText("Producing country: " + movie.getCountry());
+//                starRate.setText("Your rate: " + movie.getRatingStar());
+//
+//                dialog.show();
+//            }
+//        };
+//    }
 
 }

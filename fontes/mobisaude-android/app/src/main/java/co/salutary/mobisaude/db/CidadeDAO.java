@@ -10,9 +10,7 @@ import java.util.List;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.db.scripts.ScriptCidade;
 
-/**
- * Created by thiago on 08/02/16.
- */
+
 public class CidadeDAO {
 
     private static final String TAG = CidadeDAO.class.getSimpleName();
@@ -44,8 +42,10 @@ public class CidadeDAO {
 
         } catch (SQLException e) {
             Log.e(TAG, "DB Error", e);
+            e.printStackTrace();
         } catch (Exception e) {
             Log.e(TAG, "DB Error", e);
+            e.printStackTrace();
         }
         return cidades;
     }
@@ -119,8 +119,10 @@ public class CidadeDAO {
             }
         } catch (SQLException e) {
             Log.e(TAG, "DB Error", e);
+            e.printStackTrace();
         } catch (Exception e) {
             Log.e(TAG, "DB Error", e);
+            e.printStackTrace();
         }
         return null;
     }

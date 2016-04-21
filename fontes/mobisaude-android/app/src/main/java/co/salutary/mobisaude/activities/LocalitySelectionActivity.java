@@ -25,7 +25,7 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.controller.ServiceBroker;
-import co.salutary.mobisaude.controller.UserController;
+import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.db.CidadeDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
@@ -51,14 +51,14 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
     private EditText edtUF;
     private EditText edtCidade;
 
-    private UserController userController;
+    private ClientCache clientCache;
+    private LocalDataBase db;
+    private Location location;
 
     // thread loop
     private boolean timerInatividadeBool;
     private int timerInatividadeCount;
     private Handler timerInatividade;
-
-    private Location location;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,15 +66,15 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
 
         setContentView(R.layout.activity_locality_selection);
 
-        userController = UserController.getInstance();
-
+        clientCache = ClientCache.getInstance();
+        db = LocalDataBase.getInstance();
         location = DeviceInfo.updateLocation(getApplicationContext(),this);
 
-        LinearLayout btnUF = (LinearLayout) findViewById(R.id.tela_localidade_btn_uf);
-        LinearLayout btnCidade = (LinearLayout) findViewById(R.id.tela_localidade_btn_cidade);
-        edtUF = (EditText) findViewById(R.id.tela_localidade_edt_uf);
-        edtCidade = (EditText) findViewById(R.id.tela_localidade_edt_cidade);
-        Button btnMeuLocal = (Button) findViewById(R.id.tela_localidade_btn_meu_local);
+        LinearLayout btnUF = (LinearLayout) findViewById(R.id.locality_selection_btn_uf);
+        LinearLayout btnCidade = (LinearLayout) findViewById(R.id.locality_selection_btn_cidade);
+        edtUF = (EditText) findViewById(R.id.locality_selection_edt_uf);
+        edtCidade = (EditText) findViewById(R.id.locality_selection_edt_cidade);
+        Button btnMeuLocal = (Button) findViewById(R.id.locality_selection_btn_meu_local);
 
         btnUF.setOnClickListener(new OnClickListener() {
             @Override
@@ -167,7 +167,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
 
     public void onShowListaSelect(int tipoLista) {
         if(tipoLista == LocalitySelectionListActivity.LISTA_CIDADE){
-            if(UserController.getInstance().getUf() != null){
+            if(ClientCache.getInstance().getUf() != null){
                 Intent it = new Intent(this, LocalitySelectionListActivity.class);
                 it.putExtra("tipoLista", tipoLista);
                 startActivityForResult(it, ACTIVITY_LIST_SELECT);
@@ -186,29 +186,31 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
 
         if(requestCode == ACTIVITY_LIST_SELECT && resultCode == LocalitySelectionListActivity.RESULTADO_ITEM_SELECIONADO){
             atualizarCampos();
-            if(UserController.getInstance().getCidade() != null){
-                final String cidadeName = UserController.getInstance().getCidade().getNome();
-                Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeByNome(cidadeName);
-                UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
-                userController.setCidade(cidade);
-                userController.setUf(uf);
+            if(ClientCache.getInstance().getCidade() != null){
+                final String cidadeName = ClientCache.getInstance().getCidade().getNome();
+                db.open(getApplicationContext());
+                Cidade cidade = new CidadeDAO(db).getCidadeByNome(cidadeName);
+                UF uf = new UfDAO(db).getUfById(cidade.getIdUF());
+                db.close();
+                clientCache.setCidade(cidade);
+                clientCache.setUf(uf);
                 fecharTela();
             }
         }
     }
 
     private void atualizarCampos(){
-        UF uf = UserController.getInstance().getUf();
+        UF uf = ClientCache.getInstance().getUf();
         if(uf != null){
             edtUF.setText(uf.getNome());
             edtCidade.setText(getString(R.string.empty));
             edtCidade.setHint(R.string.cidade);
         }
 
-        Cidade cidade = UserController.getInstance().getCidade();
+        Cidade cidade = ClientCache.getInstance().getCidade();
         if(cidade != null){
             edtCidade.setText(cidade.getNome());
-            userController.setListEstabelecimentosSaude(null);
+            clientCache.setListEstabelecimentosSaude(null);
         }
     }
 
@@ -302,20 +304,23 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                             }
                             else if(idErro == 0) {
                                 int codMunicipioIbge = jReponder.getInt("codMunicipioIbge");
-
-                                Cidade cidade = new CidadeDAO(LocalDataBase.getInstance()).getCidadeById(codMunicipioIbge);
+                                db.open(getApplicationContext());
+                                Cidade cidade = new CidadeDAO(db).getCidadeById(codMunicipioIbge);
                                 if(cidade != null){
-                                    UF uf = new UfDAO(LocalDataBase.getInstance()).getUfById(cidade.getIdUF());
-                                    userController.setUf(uf);
-                                    userController.setCidade(cidade);
+                                    UF uf = new UfDAO(db).getUfById(cidade.getIdUF());
+                                    clientCache.setUf(uf);
+                                    clientCache.setCidade(cidade);
 
                                     // reset
-                                    userController.setListEstabelecimentosSaude(null);
+                                    db.close();
+                                    clientCache.setListEstabelecimentosSaude(null);
                                     return true;
                                 }
                                 else {
+                                    db.close();
                                     return false;
                                 }
+
                             }
                             else {
                                 return false;

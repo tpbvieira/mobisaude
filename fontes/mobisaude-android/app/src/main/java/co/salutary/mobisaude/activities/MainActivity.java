@@ -1,8 +1,12 @@
 package co.salutary.mobisaude.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -31,8 +35,7 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.controller.UserController;
-import co.salutary.mobisaude.db.LocalDataBase;
+import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
@@ -48,11 +51,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }.getClass().getName();
     private boolean isInFront;
 
-    private LocalDataBase db;
+    //context
     private Settings settings;
-    private UserController userController;
+    private ClientCache clientCache;
 
-    TextView mESView;
+    //ui
+    private View mMainContentView;
+    private View mProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +77,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         // contextual information
-        userController = userController = UserController.getInstance();
-        db = LocalDataBase.getInstance();
         settings = new Settings(getApplicationContext());
+        clientCache = clientCache = ClientCache.getInstance();
 
+        //ui
+        mMainContentView = findViewById(R.id.main_content_form_view);
+        mProgressView = findViewById(R.id.main_content_progress_bar);
+
+        // debugging ui
         TextView stateView = (TextView) findViewById(R.id.main_content_state);
-        stateView.setText(getString(R.string.estado) + "=" + userController.getUf().getNome());
-
+        stateView.setText(getString(R.string.estado) + "=" + clientCache.getUf().getNome());
         TextView citieView = (TextView) findViewById(R.id.main_content_city);
-        citieView.setText(getString(R.string.cidade) + "=" + userController.getCidade().getNome());
-
-        mESView = (TextView) findViewById(R.id.main_content_es);
-
+        citieView.setText(getString(R.string.cidade) + "=" + clientCache.getCidade().getNome());
+        TextView mESView = (TextView) findViewById(R.id.main_content_es);
         try {
             String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
             HashMap<String,String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
 
-        new UpdateFieldsTask(String.valueOf(userController.getCidade().getIdCidade())).execute();
+        new UpdateFieldsTask(String.valueOf(clientCache.getCidade().getIdCidade())).execute();
 
     }
 
@@ -260,13 +266,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+            showProgress(true);
+
+        }
+
+        @Override
         protected Boolean doInBackground(Void... params) {
             boolean ok = true;
 
-            List<EstabelecimentoSaude> esList = userController.getListEstabelecimentosSaude();
+            List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaude();
             if(esList == null || esList.size() == 0){
 
-                userController.setListEstabelecimentosSaude(new ArrayList<EstabelecimentoSaude>());
+                clientCache.setListEstabelecimentosSaude(new ArrayList<EstabelecimentoSaude>());
 
                 String token = settings.getPreferenceValue(Settings.TOKEN);
                 if (token == null || token.isEmpty()) {
@@ -294,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 JSONObject rec = ess.getJSONObject(i);
                                 EstabelecimentoSaude es = JsonUtils.jsonObjectToES(rec);
                                 if(es != null){
-                                    userController.getListEstabelecimentosSaude().add(es);
+                                    clientCache.getListEstabelecimentosSaude().add(es);
                                 }
                             }
                         } else {
@@ -317,6 +331,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(final Boolean success) {
 
             if (success) {
+                showProgress(false);
+                TextView mESView = (TextView) findViewById(R.id.main_content_es);
                 mESView.setEnabled(false);
                 mESView.setText(getString(R.string.estabelecimento_saude) + "=" + mNumES);
                 mESView.setEnabled(true);
@@ -329,6 +345,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected void onCancelled() { }
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mMainContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mMainContentView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mMainContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mMainContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
 
     }
 

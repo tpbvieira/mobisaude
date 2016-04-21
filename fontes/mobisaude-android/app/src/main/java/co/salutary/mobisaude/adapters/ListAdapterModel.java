@@ -105,4 +105,5 @@ public class ListAdapterModel extends BaseAdapter {
         }
         return view;
     }
+
 }
