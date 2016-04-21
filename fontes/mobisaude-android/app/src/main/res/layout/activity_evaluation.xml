@@ -22,64 +22,57 @@
         android:clickable="true"
         android:numStars="5"
         android:stepSize="1.0"
-        android:rating="1"
+        android:rating="0"
         android:isIndicator="false"/>
 
-    <ScrollView
-        android:id="@+id/evaluation_form_view"
+    <LinearLayout
+        android:id="@+id/evaluation_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/evaluation_form"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/evaluation_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_title"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/evaluation_text_evaluation"
-                    android:hint="@string/prompt_evaluation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|left"
-                    android:inputType="textMultiLine"
-                    android:lines="5"
-                    android:maxLines="5"
-                    android:scrollbars="vertical"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <Button
-                style="?android:textAppearanceSmall"
-                android:id="@+id/evaluation_button"
-                android:text="@string/action_evaluate"
+            <AutoCompleteTextView
+                android:id="@+id/evaluation_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textStyle="bold"/>
+                android:hint="@string/prompt_title"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"/>
 
-        </LinearLayout>
+        </android.support.design.widget.TextInputLayout>
 
-    </ScrollView>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:id="@+id/evaluation_text_evaluation"
+                android:hint="@string/prompt_evaluation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|left"
+                android:inputType="textMultiLine"
+                android:maxLength="300"
+                android:maxLines="5"
+                android:scrollbars="vertical"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            style="?android:textAppearanceSmall"
+            android:id="@+id/evaluation_button"
+            android:text="@string/action_evaluate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

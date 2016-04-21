@@ -191,14 +191,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         if (isValid) {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         } else {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         }
 
@@ -302,6 +298,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private String errMsg = null;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -346,9 +343,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
                 DeviceInfo.isLoggedin = hasAuth = false;
                 settings.setPreferenceValue(Settings.USER_EMAIL, null);
+                errMsg = e.getMessage();
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
 
             return hasAuth;
@@ -363,8 +362,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Toast.makeText(getApplicationContext(), getString(R.string.signedin), Toast.LENGTH_SHORT).show();
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                if(errMsg == null){
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }else{
+                    Toast.makeText(getApplicationContext(), errMsg, Toast.LENGTH_SHORT).show();
+                }
             }
 
         }

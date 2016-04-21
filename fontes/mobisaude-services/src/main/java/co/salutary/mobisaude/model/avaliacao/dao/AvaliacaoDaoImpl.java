@@ -61,8 +61,11 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 		
 		List<Object> result = query.getResultList();
 		Avaliacao avaliacao = new Avaliacao();
-		avaliacao.setIdES(idES);
-		avaliacao.setRating(Float.parseFloat(result.get(0).toString()));
+		if(result != null && result.size() > 0){
+			avaliacao.setIdES(idES);
+			avaliacao.setRating(Float.parseFloat(result.get(0).toString()));	
+		}
+		
 		return avaliacao;
 	}
 

@@ -4,8 +4,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
-@XmlType(namespace = "mobile", name = "avaliacaoRequest")
-public class AvaliacaoMediaMesRequest implements IMobileRequest {
+@XmlType(namespace = "mobile", name = "avaliacaoMediaRequest")
+public class AvaliacaoMediaRequest implements IMobileRequest {
 
 	private String token;
 	private String idES;

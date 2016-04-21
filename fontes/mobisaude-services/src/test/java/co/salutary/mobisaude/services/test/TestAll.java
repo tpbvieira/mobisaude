@@ -19,7 +19,7 @@ import co.salutary.mobisaude.model.Factory;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
 import co.salutary.mobisaude.restful.message.mobile.EsDTO;
-import co.salutary.mobisaude.restful.message.request.AvaliacaoMediaMesRequest;
+import co.salutary.mobisaude.restful.message.request.AvaliacaoMediaRequest;
 import co.salutary.mobisaude.restful.message.request.AvaliacaoRequest;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.ESRequest;
@@ -27,7 +27,7 @@ import co.salutary.mobisaude.restful.message.request.GeocodeRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.request.SugestaoRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
-import co.salutary.mobisaude.restful.message.response.AvaliacaoMediaMesResponse;
+import co.salutary.mobisaude.restful.message.response.AvaliacaoMediaResponse;
 import co.salutary.mobisaude.restful.message.response.AvaliacaoResponse;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.ESResponse;
@@ -606,13 +606,13 @@ public class TestAll extends TestCase {
 
 	private void avaliarMediaTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String rating, String date){
 		try{
-			AvaliacaoMediaMesRequest avalicaoMediaRequest = new AvaliacaoMediaMesRequest();
+			AvaliacaoMediaRequest avalicaoMediaRequest = new AvaliacaoMediaRequest();
 			avalicaoMediaRequest.setToken(token);
 			avalicaoMediaRequest.setIdES(idES);
 			avalicaoMediaRequest.setRating(rating);
 			avalicaoMediaRequest.setDate(date);
 
-			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.avaliarMedia(avalicaoMediaRequest);
+			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.avaliarMedia(avalicaoMediaRequest);
 
 			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
 				logger.error(avaliacaoMediaMesResponse);
@@ -630,11 +630,11 @@ public class TestAll extends TestCase {
 	private void getAvaliacaoMediaByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String targetRating){
 
 		try{			
-			AvaliacaoMediaMesRequest avaliacaoMediaMesRequest = new AvaliacaoMediaMesRequest();
+			AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
 			avaliacaoMediaMesRequest.setToken(token);
 			avaliacaoMediaMesRequest.setIdES(idES);
 
-			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdES(avaliacaoMediaMesRequest);			
+			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdES(avaliacaoMediaMesRequest);			
 			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
 				logger.error(avaliacaoMediaMesResponse);
 				fail("getAvaliacaoTestError");			
@@ -661,12 +661,12 @@ public class TestAll extends TestCase {
 	private void getAvaliacaoMediaByIdESDateTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String date, String rating){
 
 		try{			
-			AvaliacaoMediaMesRequest avaliacaoMediaMesRequest = new AvaliacaoMediaMesRequest();
+			AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
 			avaliacaoMediaMesRequest.setToken(token);
 			avaliacaoMediaMesRequest.setIdES(idES);
 			avaliacaoMediaMesRequest.setDate(date);
 
-			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdESDate(avaliacaoMediaMesRequest);			
+			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdESDate(avaliacaoMediaMesRequest);			
 			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
 				logger.error(avaliacaoMediaMesResponse);
 				fail("getAvaliacaoTestError");			
@@ -693,11 +693,11 @@ public class TestAll extends TestCase {
 	private void listAvalicaoMediaMesByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, int num){
 
 		try{			
-			AvaliacaoMediaMesRequest avaliacaoMediaMesRequest = new AvaliacaoMediaMesRequest();
+			AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
 			avaliacaoMediaMesRequest.setToken(token);
 			avaliacaoMediaMesRequest.setIdES(idES);
 
-			AvaliacaoMediaMesResponse avaliacaoMediaMesResponse = broker.listAvalicaoMediaMesByIdES(avaliacaoMediaMesRequest);			
+			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvalicaoMediaMesByIdES(avaliacaoMediaMesRequest);			
 
 			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
 				logger.error(avaliacaoMediaMesResponse);

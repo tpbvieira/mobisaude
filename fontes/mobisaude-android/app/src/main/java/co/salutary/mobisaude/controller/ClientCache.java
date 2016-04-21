@@ -12,6 +12,7 @@ public class ClientCache {
     private UF uf;
     private Cidade cidade;
     private EstabelecimentoSaude estabelecimentoSaude;
+    private Avaliacao avaliacaoMedia;
     private List<EstabelecimentoSaude> listEstabelecimentoSaudes;
     private List<Avaliacao> listAvaliacoes;
 
@@ -43,5 +44,21 @@ public class ClientCache {
     public List<Avaliacao> getListAvaliacoes() {return listAvaliacoes;}
 
     public void setListAvaliacoes(List<Avaliacao> listAvaliacoes) {this.listAvaliacoes = listAvaliacoes;}
+
+    public List<EstabelecimentoSaude> getListEstabelecimentoSaudes() {
+        return listEstabelecimentoSaudes;
+    }
+
+    public void setListEstabelecimentoSaudes(List<EstabelecimentoSaude> listEstabelecimentoSaudes) {
+        this.listEstabelecimentoSaudes = listEstabelecimentoSaudes;
+    }
+
+    public Avaliacao getAvaliacaoMedia() {
+        return avaliacaoMedia;
+    }
+
+    public void setAvaliacaoMedia(Avaliacao avaliacaoMedia) {
+        this.avaliacaoMedia = avaliacaoMedia;
+    }
 
 }

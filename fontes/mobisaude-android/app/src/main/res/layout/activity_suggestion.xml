@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="top|left"
                     android:inputType="textMultiLine"
-                    android:lines="5"
+                    android:maxLength="300"
                     android:maxLines="5"
                     android:scrollbars="vertical"/>
 

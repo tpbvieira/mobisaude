@@ -79,6 +79,10 @@ public class ServiceBroker {
         return requestJson("/getESByIdMunicipioIdTipoES", json);
     }
 
+    public String sugerir(String json) {
+        return requestJson("/sugerir", json);
+    }
+
     public String avaliar(String json) {
         return requestJson("/avaliar", json);
     }

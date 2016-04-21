@@ -71,6 +71,13 @@
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activities.EvaluationActivity"
+            android:label="@string/action_evaluate" />
+        <activity
+            android:name=".activities.SuggestionActivity"
+            android:label="@string/action_suggest" />
         <activity
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps" />

@@ -9,7 +9,7 @@ import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaMesDTO;
 
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "avaliacaoMediaResponse")
-public class AvaliacaoMediaMesResponse implements IMobileResponse {
+public class AvaliacaoMediaResponse implements IMobileResponse {
 
 	private String erro;
 	private String idES;

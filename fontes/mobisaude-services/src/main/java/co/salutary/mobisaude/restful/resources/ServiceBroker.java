@@ -41,7 +41,7 @@ import co.salutary.mobisaude.restful.message.mobile.RegiaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoESDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoGestaoDTO;
 import co.salutary.mobisaude.restful.message.mobile.TipoSistemaOperacionalDTO;
-import co.salutary.mobisaude.restful.message.request.AvaliacaoMediaMesRequest;
+import co.salutary.mobisaude.restful.message.request.AvaliacaoMediaRequest;
 import co.salutary.mobisaude.restful.message.request.AvaliacaoRequest;
 import co.salutary.mobisaude.restful.message.request.ConsultaDominiosRequest;
 import co.salutary.mobisaude.restful.message.request.ESRequest;
@@ -50,7 +50,7 @@ import co.salutary.mobisaude.restful.message.request.GerarChaveRequest;
 import co.salutary.mobisaude.restful.message.request.GerarTokenRequest;
 import co.salutary.mobisaude.restful.message.request.SugestaoRequest;
 import co.salutary.mobisaude.restful.message.request.UserRequest;
-import co.salutary.mobisaude.restful.message.response.AvaliacaoMediaMesResponse;
+import co.salutary.mobisaude.restful.message.response.AvaliacaoMediaResponse;
 import co.salutary.mobisaude.restful.message.response.AvaliacaoResponse;
 import co.salutary.mobisaude.restful.message.response.ConsultaDominiosResponse;
 import co.salutary.mobisaude.restful.message.response.ESResponse;
@@ -807,8 +807,8 @@ public class ServiceBroker extends AbstractServiceBroker {
 			// Save Avaliacao
 			String idES = request.getIdES();
 			String email = request.getEmail();
-			String avaliacaoStr = request.getAvaliacao();
 			String titulo = request.getTitulo();
+			String avaliacaoStr = request.getAvaliacao();			
 			String rating = request.getRating();			
 			Avaliacao avaliacao = new Avaliacao(Integer.valueOf(idES), email, titulo, avaliacaoStr, Float.valueOf(rating));
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
@@ -823,7 +823,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			mean = mean/avaliacoes.size();
 			
 			//Update AvaliacaoMediaMes			
-			AvaliacaoMediaMesRequest avaliacaoMediaRequest = new AvaliacaoMediaMesRequest();
+			AvaliacaoMediaRequest avaliacaoMediaRequest = new AvaliacaoMediaRequest();
 			avaliacaoMediaRequest.setToken(token);
 			avaliacaoMediaRequest.setIdES(idES);
 			avaliacaoMediaRequest.setRating(Float.toString(mean));
@@ -874,12 +874,14 @@ public class ServiceBroker extends AbstractServiceBroker {
 			
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
 			Avaliacao avaliacao = avaliacaoFacade.getByIdESEmail(Integer.valueOf(idES), email);
-			response.setIdES(avaliacao.getIdES().toString());
-			response.setEmail(avaliacao.getEmail());
-			response.setTitulo(avaliacao.getTitulo());
-			response.setAvaliacao(avaliacao.getAvaliacao());
-			response.setRating(Float.toString(avaliacao.getRating()));
-			response.setDate(sdf.format(avaliacao.getDate()));
+			if(avaliacao != null){
+				response.setIdES(avaliacao.getIdES().toString());
+				response.setEmail(avaliacao.getEmail());
+				response.setTitulo(avaliacao.getTitulo());
+				response.setAvaliacao(avaliacao.getAvaliacao());
+				response.setRating(Float.toString(avaliacao.getRating()));
+				response.setDate(sdf.format(avaliacao.getDate()));	
+			}			
 			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
@@ -949,9 +951,9 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/avaliarMedia")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public AvaliacaoMediaMesResponse avaliarMedia(AvaliacaoMediaMesRequest request) {
+	public AvaliacaoMediaResponse avaliarMedia(AvaliacaoMediaRequest request) {
 		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
-		AvaliacaoMediaMesResponse response = new AvaliacaoMediaMesResponse();
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
 		try {
 
 			if (!request.validate()) {
@@ -998,9 +1000,9 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/getAvaliacaoMediaByIdES")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public AvaliacaoMediaMesResponse getAvaliacaoMediaByIdES(AvaliacaoMediaMesRequest request) {
+	public AvaliacaoMediaResponse getAvaliacaoMediaByIdES(AvaliacaoMediaRequest request) {
 		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
-		AvaliacaoMediaMesResponse response = new AvaliacaoMediaMesResponse();
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
 		try {
 
 			if (!request.validate()) {
@@ -1040,9 +1042,9 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/getAvaliacaoMediaByIdESDate")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public AvaliacaoMediaMesResponse getAvaliacaoMediaByIdESDate(AvaliacaoMediaMesRequest request) {
+	public AvaliacaoMediaResponse getAvaliacaoMediaByIdESDate(AvaliacaoMediaRequest request) {
 		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
-		AvaliacaoMediaMesResponse response = new AvaliacaoMediaMesResponse();
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
 		try {
 
 			if (!request.validate()) {
@@ -1084,9 +1086,9 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Path("/listAvalicaoMediaMesByIdES")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public AvaliacaoMediaMesResponse listAvalicaoMediaMesByIdES(AvaliacaoMediaMesRequest request) {
+	public AvaliacaoMediaResponse listAvalicaoMediaMesByIdES(AvaliacaoMediaRequest request) {
 		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
-		AvaliacaoMediaMesResponse response = new AvaliacaoMediaMesResponse();
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
 		try {
 
 			if (!request.validate()) {
