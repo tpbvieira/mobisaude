@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ClientCache clientCache;
 
     //ui
-    private View mMainContentView;
+    private View mContentView;
     private View mProgressView;
 
     @Override
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         clientCache = clientCache = ClientCache.getInstance();
 
         //ui
-        mMainContentView = findViewById(R.id.main_content_form_view);
+        mContentView = findViewById(R.id.main_content_form_view);
         mProgressView = findViewById(R.id.main_content_progress_bar);
 
         // debugging ui
@@ -354,12 +354,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mMainContentView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mMainContentView.animate().setDuration(shortAnimTime).alpha(
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mMainContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         } else {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mMainContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
 
     }

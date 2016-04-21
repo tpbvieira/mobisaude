@@ -53,7 +53,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
     private UpdateUITask mloadUITask = null;
 
     // UI references.
-    private View mESFormView;
+    private View mContentView;
     private View mProgressView;
     private TextView mNomeFantasiaText;
     private TextView mTipoESText;
@@ -74,7 +74,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
         setContentView(R.layout.activity_healthplace);
         mProgressView = findViewById(R.id.healthplace_progress_bar);
-        mESFormView = findViewById(R.id.healthplace_form_view);
+        mContentView = findViewById(R.id.healthplace_form_view);
         mNomeFantasiaText = (TextView) findViewById(R.id.healthplace_name);
         mTipoESText = (TextView) findViewById(R.id.healthplace_tipo_es);
         mTipoGestãoText = (TextView) findViewById(R.id.healthplace_tipo_gestao);
@@ -168,12 +168,12 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mESFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mESFormView.animate().setDuration(shortAnimTime).alpha(
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mESFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -187,7 +187,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
             });
         } else {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mESFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

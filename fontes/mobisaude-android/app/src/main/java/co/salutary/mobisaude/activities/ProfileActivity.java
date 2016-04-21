@@ -67,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
     private EditText mNameView;
     private CheckBox mContactable;
     private View mProgressView;
-    private View mLoginFormView;
+    private View mContentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
         mProgressView = findViewById(R.id.profile_progress_bar);
 
         // Set up the login form.
-        mLoginFormView = findViewById(R.id.profile_form_view);
+        mContentView = findViewById(R.id.profile_form_view);
 
         // email field
         mEmailView = (AutoCompleteTextView) findViewById(R.id.profile_email);
@@ -236,12 +236,12 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -257,7 +257,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
