@@ -296,13 +296,13 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                         if(reponder != null && !reponder.startsWith(getString(R.string.erro_starts))){
                             JSONObject jObject = new JSONObject(reponder);
                             JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
-                            int idErro = JsonUtils.getErrorCode(jReponder);
-                            if(idErro == 6){
+                            String error = JsonUtils.getError(jReponder);
+                            if(error != null && error.contains("Token")){
                                 if(!TokenManager.gerarToken(getApplicationContext())){
                                     return false;
                                 }
                             }
-                            else if(idErro == 0) {
+                            else if(error == null) {
                                 int codMunicipioIbge = jReponder.getInt("codMunicipioIbge");
                                 db.open(getApplicationContext());
                                 Cidade cidade = new CidadeDAO(db).getCidadeById(codMunicipioIbge);

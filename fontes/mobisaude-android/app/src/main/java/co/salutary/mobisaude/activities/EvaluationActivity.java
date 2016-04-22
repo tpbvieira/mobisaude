@@ -154,8 +154,7 @@ public class EvaluationActivity extends AppCompatActivity  {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            boolean success = false;
-
+            boolean success = true;
             Settings settings = new Settings(getApplicationContext());
 
             String token = settings.getPreferenceValue(Settings.TOKEN);
@@ -179,31 +178,40 @@ public class EvaluationActivity extends AppCompatActivity  {
                 // verify it it is the first evaluation
                 String responseStr = ServiceBroker.getInstance(getApplicationContext()).getAvaliacaoByIdESEmail(request.toString());
                 if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    JSONObject response = (JSONObject) json.get("avaliacaoResponse");
-                    int idErro = JsonUtils.getErrorCode(response);
-                    if (idErro == 0) {
-                        if(response.has("email") && response.getString("email").equals(settings.getPreferenceValue(Settings.USER_EMAIL))){
-                            throw new MobiSaudeAppException(getString(R.string.warn_many_evaluations));
+                    JSONObject response = new JSONObject(responseStr);
+                    if(response.has("avaliacaoResponse")){
+                        Object objResponse = response.get("avaliacaoResponse");
+                        try{
+                            JSONObject avaliacaoResponse = (JSONObject) objResponse;
+                            if(!JsonUtils.hasError(avaliacaoResponse) && avaliacaoResponse.has("email") && avaliacaoResponse.getString("email").equals(settings.getPreferenceValue(Settings.USER_EMAIL)) ){
+                                success = false;
+                                throw new MobiSaudeAppException(getString(R.string.warn_many_evaluations));
+                            }
+                        }catch (ClassCastException e){
+                            Log.d(TAG,e.getMessage());
                         }
-                    } else{
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(response));
                     }
                 }
 
                 //evaluates
                 responseStr = ServiceBroker.getInstance(getApplicationContext()).avaliar(request.toString());
                 if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    JSONObject response = (JSONObject) json.get("avaliacaoResponse");
-                    int idErro = JsonUtils.getErrorCode(response);
-                    if (idErro == 0) {
-                        success = true;
-                    } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(response));
+                    JSONObject response = new JSONObject(responseStr);
+                    if(response.has("avaliacaoResponse")){
+                        Object objResponse = response.get("avaliacaoResponse");
+                        try{
+                            JSONObject avaliacaoResponse = (JSONObject) objResponse;
+                            if(JsonUtils.hasError(avaliacaoResponse)){
+                                success = false;
+                                throw new MobiSaudeAppException(JsonUtils.getError(response));
+                            }
+                        }catch (ClassCastException e){
+                            Log.d(TAG,e.getMessage());
+                        }
                     }
                 }
             } catch (Exception e) {
+                success = false;
                 errMsg = e.getMessage();
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();

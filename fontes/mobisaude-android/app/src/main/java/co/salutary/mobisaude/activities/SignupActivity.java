@@ -293,7 +293,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     /**
@@ -340,11 +339,11 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     JSONObject signinResponse = (JSONObject) json.get("userResponse");
-                    int idErro = JsonUtils.getErrorCode(signinResponse);
-                    if (idErro == 0) {
+                    String error = JsonUtils.getError(signinResponse);
+                    if (error == null) {
                         signedUp = true;
                     } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(signinResponse));
+                        throw new MobiSaudeAppException(JsonUtils.getError(signinResponse));
                     }
                 }
             } catch (Exception e) {

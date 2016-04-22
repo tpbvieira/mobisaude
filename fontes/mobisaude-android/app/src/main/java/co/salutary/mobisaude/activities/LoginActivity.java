@@ -287,7 +287,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     /**
@@ -330,8 +329,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     JSONObject signinResponse = (JSONObject) json.get("userResponse");
-                    int idErro = JsonUtils.getErrorCode(signinResponse);
-                    if (idErro == 0) {
+                    String error = JsonUtils.getError(signinResponse);
+                    if (error == null) {
                         settings.setPreferenceValue(Settings.USER_EMAIL, mEmail);
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).getUser(request.toString());
                         json = new JSONObject(responseStr);
@@ -339,7 +338,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         settings.setPreferenceValue(Settings.USER_NAME, userResponse.get("name").toString());
                         DeviceInfo.isLoggedin = hasAuth = true;
                     } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(signinResponse));
+                        throw new MobiSaudeAppException(JsonUtils.getError(signinResponse));
                     }
                 }
             } catch (Exception e) {

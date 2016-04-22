@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.RatingBar;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -130,7 +129,6 @@ public class SuggestionActivity extends AppCompatActivity  {
         protected Boolean doInBackground(Void... params) {
 
             boolean success = false;
-
             Settings settings = new Settings(getApplicationContext());
 
             String token = settings.getPreferenceValue(Settings.TOKEN);
@@ -151,13 +149,20 @@ public class SuggestionActivity extends AppCompatActivity  {
 
                 String responseStr = ServiceBroker.getInstance(getApplicationContext()).sugerir(request.toString());
                 if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    JSONObject response = (JSONObject) json.get("sugestaoResponse");
-                    int idErro = JsonUtils.getErrorCode(response);
-                    if (idErro == 0) {
-                        success = true;
-                    } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(response));
+                    JSONObject response = new JSONObject(responseStr);
+                    if(response.has("sugestaoResponse")){
+                        Object objResponse = response.get("sugestaoResponse");
+                        try{
+                            JSONObject sugestaoResponse = (JSONObject) objResponse;
+                            if(!JsonUtils.hasError(sugestaoResponse)){
+                                success = true;
+                            }else {
+                                throw new MobiSaudeAppException(JsonUtils.getError(response));
+                            }
+                        }catch (ClassCastException e){
+                            success = true;
+                            Log.d(TAG,e.getMessage());
+                        }
                     }
                 }
             } catch (Exception e) {

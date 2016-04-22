@@ -35,21 +35,20 @@ public class TokenManager {
 		    String response = ServiceBroker.getInstance(context).gerarToken(gerarTokenRequest.toString());
 
 		    if(response != null) {
-                int idErro;
 		    	JSONObject jsonResponse = new JSONObject(response);
                 if(!jsonResponse.has("gerarTokenResponse")){
-                    throw new MobiSaudeAppException(JsonUtils.getErrorMessage(jsonResponse));
+                    throw new MobiSaudeAppException(JsonUtils.getError(jsonResponse));
                 }
 				JSONObject gerarTokenResponse = (JSONObject) jsonResponse.get("gerarTokenResponse");
-                idErro = JsonUtils.getErrorCode(gerarTokenResponse);
-                if(idErro == 0){// 0 = success
+                String error = JsonUtils.getError(gerarTokenResponse);
+                if(error == null){// null == success
 					String token = gerarTokenResponse.getString("token");
                     Settings localPref = new Settings(context);
 					localPref.setPreferenceValue(Settings.TOKEN, token);
 					return true;
 				}
 				else {
-                    throw new MobiSaudeAppException(JsonUtils.getErrorMessage(gerarTokenResponse));
+                    throw new MobiSaudeAppException(JsonUtils.getError(gerarTokenResponse));
 				}
 			}
 			else {

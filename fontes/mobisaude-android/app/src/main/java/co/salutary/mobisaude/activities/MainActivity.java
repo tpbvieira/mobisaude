@@ -33,19 +33,15 @@ import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    public static final String RECEIVER_MAIN_ACTIVITY = "ReceiverMainActivity";
-    public static final int RECEIVER_ABRIR_ATUALIZAR_PRESTADORES = 1;
-    public static final int RECEIVER_ATUALIZAR_PRESTADORES = 2;
 
     private static final String TAG = new Object() {
     }.getClass().getName();
@@ -78,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // contextual information
         settings = new Settings(getApplicationContext());
-        clientCache = clientCache = ClientCache.getInstance();
+        clientCache = ClientCache.getInstance();
 
         //ui
         mContentView = findViewById(R.id.main_content_form_view);
@@ -89,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         stateView.setText(getString(R.string.estado) + "=" + clientCache.getUf().getNome());
         TextView citieView = (TextView) findViewById(R.id.main_content_city);
         citieView.setText(getString(R.string.cidade) + "=" + clientCache.getCidade().getNome());
-        TextView mESView = (TextView) findViewById(R.id.main_content_es);
+
         try {
             String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
             HashMap<String,String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
@@ -300,8 +296,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (responseStr != null) {
                         JSONObject json = new JSONObject(responseStr);
                         JSONObject esResponse = (JSONObject) json.get("esResponse");
-                        int idErro = JsonUtils.getErrorCode(esResponse);
-                        if (idErro == 0) {
+                        String error = JsonUtils.getError(esResponse);
+                        if (error == null) {
                             JSONArray ess = esResponse.getJSONArray("estabelecimentosSaude");
                             mNumES = String.valueOf(ess.length());
                             for (int i = 0; i < ess.length(); ++i) {
@@ -312,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }
                             }
                         } else {
-                            throw new MobiSaudeAppException(JsonUtils.getErrorMessage(esResponse));
+                            throw new MobiSaudeAppException(JsonUtils.getError(esResponse));
                         }
                     }
                 } catch (Exception e) {

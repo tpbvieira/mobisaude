@@ -90,7 +90,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 			if (token != null) {
 				response.setToken(token);
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroGerandoToken"));
 				return response;
@@ -121,7 +120,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 			if (chave != null) {
 				response.setChave(chave);
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				response.setErro(properties.getProperty("co.mobisaude.gerarchave.msg.erroGerandoChave"));
 				return response;
@@ -180,7 +178,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				response.setCodMunicipioIbge(dadosMunicipio[0]);
 				response.setMunicipio(dadosMunicipio[1]);
 				response.setUf(dadosMunicipio[2]);
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.geocode.localidadeNaoEncontrada"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.localidadeNaoEncontrada"));				
@@ -229,7 +226,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 					lstRetorno.add(tso);
 				}
 				response.setTiposSistemaOperacional((lstRetorno.toArray(new TipoSistemaOperacionalDTO[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoSistemaOperacional"));				
@@ -248,7 +244,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 					lstRetorno.add(tes);
 				}
 				response.setTiposES((lstRetorno.toArray(new TipoESDTO[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoES"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoES"));				
@@ -266,7 +261,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 					lstRetorno.add(r);
 				}
 				response.setRegiao((lstRetorno.toArray(new RegiaoDTO[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
@@ -284,14 +278,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 					lstRetorno.add(tg);
 				}
 				response.setTiposGestao((lstRetorno.toArray(new TipoGestaoDTO[0])));
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioTipoGestao"));				
 				return response;
 			}
-			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.erroProcessandoServico"), ex);
 			response.setErro(properties.getProperty("co.mobisaude.strings.erroProcessandoServico"));			
@@ -334,8 +325,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			esDTO.setIdTipoGestao(Short.toString(es.getIdTipoGestao()));
 			EsDTO[] esDTOArray = new EsDTO[1];
 			esDTOArray[0] = esDTO; 
-			response.setEstabelecimentosSaude(esDTOArray);			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			response.setEstabelecimentosSaude(esDTOArray);
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -390,7 +380,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
 			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
 			response.setErro(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));			
@@ -446,7 +435,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			} else {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
 			response.setErro(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));			
@@ -519,8 +508,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				logger.warn(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));
 			}
 			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"), ex);
 			response.setErro(properties.getProperty("co.mobisaude.strings.getesbymunicipio.erroProcessandoServico"));			
@@ -559,7 +546,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
 			userFacade.save(newUser);
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -608,7 +594,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setName(newUser.getName());
 			response.setPhone(newUser.getPhone());
 			response.setContactable(newUser.isContactable());
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), ex);
@@ -646,7 +631,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setName(newUser.getName());
 			response.setPhone(newUser.getPhone());
 			response.setContactable(newUser.isContactable());
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), ex);
@@ -679,9 +663,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 			UserFacade userFacade = (UserFacade)Factory.getInstance().get("userFacade");
 			User user = userFacade.get(request.getEmail());
-			if(user.getEmail().equals(request.getEmail()) && user.getPassword().equals(request.getPassword())){
-				response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			}else{
+			if(!user.getEmail().equals(request.getEmail()) || !user.getPassword().equals(request.getPassword())){
 				throw new MobisaudeServicesException("Login ou Senha inválido");
 			}
 
@@ -723,7 +705,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 
 			SugestaoFacade sugestaoFacade = (SugestaoFacade)Factory.getInstance().get("sugestaoFacade");
 			sugestaoFacade.save(sugestao);
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -768,7 +749,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setEmail(sugestao.getEmail());
 			response.setSugestao(sugestao.getSugestao());
 			response.setDate(sdf.format(sugestao.getDate()));
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -833,8 +813,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 			AvaliacaoMediaMes avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idES), mean, current);
 			avaliacaoMediaMesFacade.save(avaliacaoMediaMes);
 			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
-			
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
 			response.setErro(e.getMessage());			
@@ -881,8 +859,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 				response.setAvaliacao(avaliacao.getAvaliacao());
 				response.setRating(Float.toString(avaliacao.getRating()));
 				response.setDate(sdf.format(avaliacao.getDate()));	
-			}			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			}
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -931,9 +908,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
 				return response;
-			}			
-			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			}
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -981,7 +956,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				avaliacaoMediaMes = new AvaliacaoMediaMes(Integer.valueOf(idES), Float.valueOf(rating));
 			}
 			avaliacaoMediaMesFacade.save(avaliacaoMediaMes);
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -1023,8 +997,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
 			Avaliacao avaliacao = avaliacaoFacade.getAvgByIdES(Integer.valueOf(idES));			
 			response.setIdES(avaliacao.getIdES().toString());
-			response.setRating(Float.toString(avaliacao.getRating()));			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
+			response.setRating(Float.toString(avaliacao.getRating()));
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -1068,7 +1041,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setIdES(avaliacaoMediaMes.getIdES().toString());
 			response.setRating(Float.toString(avaliacaoMediaMes.getRating()));
 			response.setDate(sdf.format(avaliacaoMediaMes.getDate()));
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -1122,9 +1094,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
 				return response;
 			}
-			
-			
-			response.setErro(properties.getProperty("co.mobisaude.strings.sucesso"));
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);

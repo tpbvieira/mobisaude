@@ -103,15 +103,15 @@ public class ReportProblemService extends Service{
 							// salvar registros
 							JSONObject jObject = new JSONObject(reponder);
 							JSONObject jReponder = (JSONObject) jObject.get("relatarProblemaResponse");
-                            int idErro = JsonUtils.getErrorCode(jReponder);
-							if(idErro == 6){
+                            String error = JsonUtils.getError(jReponder);
+							if(error != null && error.contains("Token")){
 								// gerar novo token
 								if(!TokenManager.gerarToken(getApplicationContext())){
 									return false;
 								}
 							}
 							else {
-								return (idErro == 0);
+								return (error == null);
 							}
 						}
 						else {							

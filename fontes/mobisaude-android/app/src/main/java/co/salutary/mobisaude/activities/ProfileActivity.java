@@ -312,7 +312,6 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     public class UpdateTask extends AsyncTask<Void, Void, Boolean> {
@@ -356,12 +355,12 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     JSONObject updateResponse = (JSONObject) json.get("userResponse");
-                    int idErro = JsonUtils.getErrorCode(updateResponse);
-                    if (idErro == 0) {
+                    String error = JsonUtils.getError(updateResponse);
+                    if (error == null) {
                         settings.setPreferenceValue(Settings.USER_NAME,name);
                         updated = true;
                     } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(updateResponse));
+                        throw new MobiSaudeAppException(JsonUtils.getError(updateResponse));
                     }
                 }
             } catch (Exception e) {
@@ -427,14 +426,14 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     JSONObject updateResponse = (JSONObject) json.get("userResponse");
-                    int idErro = JsonUtils.getErrorCode(updateResponse);
-                    if (idErro == 0) {
+                    String error = JsonUtils.getError(updateResponse);
+                    if (error == null) {
                         email = updateResponse.get("email").toString();
                         password = updateResponse.get("password").toString();
                         name = updateResponse.get("name").toString();
                         contactable = updateResponse.get("contactable").toString();
                     } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(updateResponse));
+                        throw new MobiSaudeAppException(JsonUtils.getError(updateResponse));
                     }
                 }
             } catch (Exception e) {

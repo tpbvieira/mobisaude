@@ -3,13 +3,11 @@ package co.salutary.mobisaude.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -213,8 +211,8 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     JSONObject response = (JSONObject) json.get("esResponse");
-                    int idErro = JsonUtils.getErrorCode(response);
-                    if (idErro == 0) {
+                    String error = JsonUtils.getError(response);
+                    if (error == null) {
                         JSONObject obj = (JSONObject) response.get("estabelecimentosSaude");
                         EstabelecimentoSaude es = JsonUtils.jsonObjectToES(obj);
                         if(es != null){
@@ -223,7 +221,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                             throw new MobiSaudeAppException(getString(R.string.error_getting_es));
                         }
                     } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(response));
+                        throw new MobiSaudeAppException(JsonUtils.getError(response));
                     }
                 }else{
                     throw new MobiSaudeAppException(getString(R.string.error_getting_es));
@@ -239,8 +237,8 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
-                    int idErro = JsonUtils.getErrorCode(response);
-                    if (idErro == 0) {
+                    String error = JsonUtils.getError(response);
+                    if (error == null) {
                         Avaliacao avMedia = JsonUtils.jsonObjectToAvaliacao(response);
                         if(avMedia != null){
                             clientCache.setAvaliacaoMedia(avMedia);
@@ -248,7 +246,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                             throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
                         }
                     } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(response));
+                        throw new MobiSaudeAppException(JsonUtils.getError(response));
                     }
                 }else{
                     throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
@@ -263,33 +261,39 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdES(request.toString());
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
-                    JSONObject response = (JSONObject) json.get("avaliacaoResponse");
-                    int idErro = JsonUtils.getErrorCode(response);
-                    if (idErro == 0) {
-                        if(response.has("avaliacoes")){
-                            List<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
-                            try{
-                                JSONArray array = response.getJSONArray("avaliacoes");
-                                for (int i = 0; i < array.length(); ++i) {
-                                    JSONObject obj = array.getJSONObject(i);
-                                    Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(obj);
+                    Object objResponse = json.get("avaliacaoResponse");
+                    try{
+                        JSONObject avaliacaoResponse = (JSONObject) objResponse;
+                        if(!JsonUtils.hasError(avaliacaoResponse)){
+                            if(avaliacaoResponse.has("avaliacoes")){
+                                List<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
+                                try{
+                                    JSONArray array = avaliacaoResponse.getJSONArray("avaliacoes");
+                                    for (int i = 0; i < array.length(); ++i) {
+                                        JSONObject obj = array.getJSONObject(i);
+                                        Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(obj);
+                                        if(avaliacao != null){
+                                            avaliacoes.add(avaliacao);
+                                        }
+                                    }
+                                }catch(Exception e){
+                                    Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(avaliacaoResponse);
                                     if(avaliacao != null){
                                         avaliacoes.add(avaliacao);
                                     }
                                 }
-                            }catch(Exception e){
-                                Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(response);
-                                if(avaliacao != null){
-                                    avaliacoes.add(avaliacao);
-                                }
+                                clientCache.setListAvaliacoes(avaliacoes);
+                            }else{
+                                mWarningMsg = getString(R.string.error_no_evaluation);
                             }
-                            clientCache.setListAvaliacoes(avaliacoes);
-                        }else{
-                            mWarningMsg = getString(R.string.error_no_evaluation);
+                        }else {
+                            throw new MobiSaudeAppException(JsonUtils.getError(avaliacaoResponse));
                         }
-                    } else {
-                        throw new MobiSaudeAppException(JsonUtils.getErrorMessage(response));
+                    }catch (ClassCastException e){
+                        mWarningMsg = getString(R.string.error_no_evaluation);
+                        Log.d(TAG,e.getMessage());
                     }
+
                 } else {
                     throw new MobiSaudeAppException(getString(R.string.error_getting_evaluations));
                 }

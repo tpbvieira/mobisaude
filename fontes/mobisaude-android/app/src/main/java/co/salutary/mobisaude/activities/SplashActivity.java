@@ -356,13 +356,13 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                         if (reponder != null && !reponder.startsWith(getString(R.string.erro_starts))) {
                             JSONObject jObject = new JSONObject(reponder);
                             JSONObject jReponder = (JSONObject) jObject.get("geocodeResponse");
-                            int idErro = JsonUtils.getErrorCode(jReponder);
-                            if (idErro == 6) {
+                            String error = JsonUtils.getError(jReponder);
+                            if (error != null && error.contains("Token")) {
                                 // gerar novo token
                                 if (!TokenManager.gerarToken(getApplicationContext())) {
                                     return false;
                                 }
-                            } else if (idErro == 0) {
+                            } else if (error == null) {
                                 int codMunicipioIbge = jReponder.getInt("codMunicipioIbge");
 
                                 db.open(getApplicationContext());
@@ -471,14 +471,13 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
                         // get domain tables
                         JSONObject domains = (JSONObject) new JSONObject(consultaDominiosResponse).get("consultaDominiosResponse");
-                        int idErro = JsonUtils.getErrorCode(domains);
-                        if (idErro == 6) {
+                        String error = JsonUtils.getError(domains);
+                        if (error != null && error.contains("Token")) {
                             // renew the token and try one more time, according to numAttempts
                             if (!TokenManager.gerarToken(getApplicationContext())) {
                                 return false;
                             }
-                        } else if (idErro == 0) {
-
+                        } else if (error == null) {
                             // save domains into settings
                             settings.setPreferenceValues(Settings.REGIAO, domains.getJSONArray("regiao").toString());
                             settings.setPreferenceValues(Settings.TIPOS_SISTEMA_OPERACIONAL, domains.getJSONArray("tiposSistemaOperacional").toString());
