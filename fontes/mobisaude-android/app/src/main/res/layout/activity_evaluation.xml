@@ -63,6 +63,23 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:id="@+id/evaluation_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_date"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:enabled="false"
+                android:visibility="invisible"/>
+
+        </android.support.design.widget.TextInputLayout>
+
         <Button
             style="?android:textAppearanceSmall"
             android:id="@+id/evaluation_button"

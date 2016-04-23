@@ -104,6 +104,7 @@
     <string name="prompt_title">Título</string>
     <string name="prompt_evaluation">Avaliação</string>
     <string name="prompt_suggestion">Sugestão</string>
+    <string name="prompt_date">Data</string>
 
     <string name="permission_rationale">É necessário ter permissão de acesso aos conatos</string>
     <string name="title_activity_settings">Configurações</string>

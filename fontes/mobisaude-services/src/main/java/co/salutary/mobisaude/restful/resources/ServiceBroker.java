@@ -317,6 +317,12 @@ public class ServiceBroker extends AbstractServiceBroker {
 			
 			EstabelecimentoSaudeFacade esFacade = (EstabelecimentoSaudeFacade)Factory.getInstance().get("estabelecimentoSaudeFacade");
 			EstabelecimentoSaude es = esFacade.getByIdES(Integer.valueOf(idES));
+			StringBuilder endereco = new StringBuilder();
+			endereco.append(es.getLogradouro())
+					.append(", ").append(es.getEndereco())
+					.append(", ").append(es.getBairro())
+					.append(", ").append(es.getCep());
+			es.setEndereco(endereco.toString());
 			EsDTO esDTO = new EsDTO();
 			esDTO.setIdES(Integer.toString(es.getIdES()));
 			esDTO.setNomeFantasia(es.getNomeFantasia());

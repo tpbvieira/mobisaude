@@ -23,7 +23,7 @@ import co.salutary.mobisaude.model.EstabelecimentoSaude;
 public class JsonUtils {
 
     private static final String TAG = new Object(){}.getClass().getName();
-    private static final SimpleDateFormat sdfDMY = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat sdfDMY = new SimpleDateFormat("dd/MM/yyyy");
 
     public static JSONObject createRequest(Context context, String requestString){
         Settings settings = new Settings(context);
@@ -148,6 +148,7 @@ public class JsonUtils {
         try {
             Avaliacao av = new Avaliacao();
             av.setIdES(obj.getInt("idES"));
+
             if (obj.has("email")){
                 av.setEmail(obj.getString("email"));
             }
@@ -160,7 +161,7 @@ public class JsonUtils {
             if (obj.has("rating")){
                 av.setRating(Float.parseFloat(obj.getString("rating")));
             }
-            if (obj.has("longitude")){
+            if (obj.has("date")){
                 av.setDate(sdfDMY.parse(obj.getString("date")));
             }
 

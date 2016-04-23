@@ -14,6 +14,7 @@ import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.model.Avaliacao;
+import co.salutary.mobisaude.util.JsonUtils;
 
 public class ListViewAdapter extends ArrayAdapter<Avaliacao> {
 
@@ -45,32 +46,27 @@ public class ListViewAdapter extends ArrayAdapter<Avaliacao> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.ratingBar.setOnRatingBarChangeListener(onRatingChangedListener(holder, position));
-        holder.ratingBar.setTag(position);
+        holder.ratingBar.setEnabled(false);
         holder.ratingBar.setRating(getItem(position).getRating());
         holder.title.setText(getItem(position).getTitulo());
+        holder.text.setText(getItem(position).getAvaliacao());
+        holder.date.setText(JsonUtils.sdfDMY.format(getItem(position).getDate()));
 
         return convertView;
     }
 
-    private RatingBar.OnRatingBarChangeListener onRatingChangedListener(final ViewHolder holder, final int position) {
-        return new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                Avaliacao item = getItem(position);
-                item.setRating(v);
-                Log.i("Adapter", "star: " + v);
-            }
-        };
-    }
-
     private static class ViewHolder {
-        private RatingBar ratingBar;
+
         private TextView title;
+        private RatingBar ratingBar;
+        private TextView date;
+        private TextView text;
 
         public ViewHolder(View view) {
-            ratingBar = (RatingBar) view.findViewById(R.id.item_listview_rate_img);
-            title = (TextView) view.findViewById(R.id.item_listview_text);
+            title = (TextView) view.findViewById(R.id.evaluation_listview_text);
+            ratingBar = (RatingBar) view.findViewById(R.id.evaluation_listview_rating);
+            text = (TextView) view.findViewById(R.id.evaluation_listview_text);
+            date = (TextView) view.findViewById(R.id.evaluation_listview_date);
         }
 
     }

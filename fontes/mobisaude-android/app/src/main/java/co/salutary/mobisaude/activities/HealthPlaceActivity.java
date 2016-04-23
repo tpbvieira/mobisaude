@@ -2,12 +2,15 @@ package co.salutary.mobisaude.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,6 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -109,7 +114,8 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) { }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -163,7 +169,8 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) { }
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -177,7 +184,8 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         String mErrorMsg = null;
         String mWarningMsg = null;
 
-        UpdateUITask() { }
+        UpdateUITask() {
+        }
 
         @Override
         protected void onPreExecute() {
@@ -215,15 +223,15 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                     if (error == null) {
                         JSONObject obj = (JSONObject) response.get("estabelecimentosSaude");
                         EstabelecimentoSaude es = JsonUtils.jsonObjectToES(obj);
-                        if(es != null){
+                        if (es != null) {
                             clientCache.setEstabelecimentoSaude(es);
-                        }else{
+                        } else {
                             throw new MobiSaudeAppException(getString(R.string.error_getting_es));
                         }
                     } else {
                         throw new MobiSaudeAppException(JsonUtils.getError(response));
                     }
-                }else{
+                } else {
                     throw new MobiSaudeAppException(getString(R.string.error_getting_es));
                 }
 
@@ -240,15 +248,15 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                     String error = JsonUtils.getError(response);
                     if (error == null) {
                         Avaliacao avMedia = JsonUtils.jsonObjectToAvaliacao(response);
-                        if(avMedia != null){
+                        if (avMedia != null) {
                             clientCache.setAvaliacaoMedia(avMedia);
-                        }else{
+                        } else {
                             throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
                         }
                     } else {
                         throw new MobiSaudeAppException(JsonUtils.getError(response));
                     }
-                }else{
+                } else {
                     throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
                 }
 
@@ -262,36 +270,36 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     Object objResponse = json.get("avaliacaoResponse");
-                    try{
+                    try {
                         JSONObject avaliacaoResponse = (JSONObject) objResponse;
-                        if(!JsonUtils.hasError(avaliacaoResponse)){
-                            if(avaliacaoResponse.has("avaliacoes")){
+                        if (!JsonUtils.hasError(avaliacaoResponse)) {
+                            if (avaliacaoResponse.has("avaliacoes")) {
                                 List<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
-                                try{
+                                try {
                                     JSONArray array = avaliacaoResponse.getJSONArray("avaliacoes");
                                     for (int i = 0; i < array.length(); ++i) {
                                         JSONObject obj = array.getJSONObject(i);
                                         Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(obj);
-                                        if(avaliacao != null){
+                                        if (avaliacao != null) {
                                             avaliacoes.add(avaliacao);
                                         }
                                     }
-                                }catch(Exception e){
+                                } catch (Exception e) {
                                     Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(avaliacaoResponse);
-                                    if(avaliacao != null){
+                                    if (avaliacao != null) {
                                         avaliacoes.add(avaliacao);
                                     }
                                 }
                                 clientCache.setListAvaliacoes(avaliacoes);
-                            }else{
+                            } else {
                                 mWarningMsg = getString(R.string.error_no_evaluation);
                             }
-                        }else {
+                        } else {
                             throw new MobiSaudeAppException(JsonUtils.getError(avaliacaoResponse));
                         }
-                    }catch (ClassCastException e){
+                    } catch (ClassCastException e) {
                         mWarningMsg = getString(R.string.error_no_evaluation);
-                        Log.d(TAG,e.getMessage());
+                        Log.d(TAG, e.getMessage());
                     }
 
                 } else {
@@ -315,17 +323,17 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
                 // ES
                 EstabelecimentoSaude es = clientCache.getEstabelecimentoSaude();
-                if(es != null){
+                if (es != null) {
                     try {
                         String values = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
                         HashMap map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
                         short id = es.getIdTipoEstabelecimentoSaude();
-                        String name = (String)map.get(Short.toString(id));
+                        String name = (String) map.get(Short.toString(id));
                         mTipoESText.setText(name);
                         values = settings.getPreferenceValues(Settings.TIPO_GESTAO);
                         map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
                         id = es.getIdTipoGestao();
-                        name = (String)map.get(Short.toString(id));
+                        name = (String) map.get(Short.toString(id));
                         mTipoGestãoText.setText(name);
                         mNomeFantasiaText.setText(es.getNomeFantasia());
                         mEnderecoText.setText(es.getEndereco());
@@ -337,21 +345,22 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
                 // AvaliacaoMedia
                 Avaliacao avMedia = clientCache.getAvaliacaoMedia();
-                if(avMedia != null){
+                if (avMedia != null) {
                     mRatingBar.setEnabled(true);
                     mRatingBar.setRating(avMedia.getRating());
 
-                }else{
+                } else {
                     mRatingBar.setEnabled(true);
                 }
 
                 // Avaliacoes
                 List<Avaliacao> avaliacoes = clientCache.getListAvaliacoes();
-                if(avaliacoes != null){
+                if (avaliacoes != null) {
                     mEvaluationsList.setAdapter(new ListViewAdapter(HealthPlaceActivity.this, R.layout.item_listview, avaliacoes));
+                    mEvaluationsList.setOnItemClickListener(onItemClickListener());
                 }
 
-                if(mWarningMsg != null){
+                if (mWarningMsg != null) {
                     Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
                 }
 
@@ -367,6 +376,50 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         protected void onCancelled() {
             showProgress(false);
         }
+
+    }
+
+    private AdapterView.OnItemClickListener onItemClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                final Dialog dialog = new Dialog(HealthPlaceActivity.this);
+                dialog.setContentView(R.layout.activity_evaluation);
+
+                RatingBar mRatingBar = (RatingBar) dialog.findViewById(R.id.evaluation_ratingbar);
+                AutoCompleteTextView mTitleText = (AutoCompleteTextView) dialog.findViewById(R.id.evaluation_title);
+                AutoCompleteTextView mEvaluationText = (AutoCompleteTextView) dialog.findViewById(R.id.evaluation_text_evaluation);
+                AutoCompleteTextView mDate = (AutoCompleteTextView) dialog.findViewById(R.id.evaluation_date);
+                Button mEvaluationButton = (Button) dialog.findViewById(R.id.evaluation_button);
+
+                mRatingBar.setEnabled(false);
+                mTitleText.setEnabled(false);
+                mTitleText.setFocusable(false);
+                mEvaluationText.setEnabled(false);
+                mEvaluationText.setFocusable(false);
+                mDate.setVisibility(View.VISIBLE);
+                mDate.setFocusable(false);
+
+                Avaliacao avaliacao = (Avaliacao) parent.getAdapter().getItem(position);
+                mRatingBar.setRating(avaliacao.getRating());
+                mTitleText.setText(avaliacao.getTitulo());
+                mEvaluationText.setText(avaliacao.getAvaliacao());
+                mDate.setText(JsonUtils.sdfDMY.format(avaliacao.getDate()));
+                mEvaluationButton.setText(getString(R.string.ok));
+                mEvaluationButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.setTitle(clientCache.getEstabelecimentoSaude().getNomeFantasia());
+                dialog.show();
+            }
+
+        };
 
     }
 
