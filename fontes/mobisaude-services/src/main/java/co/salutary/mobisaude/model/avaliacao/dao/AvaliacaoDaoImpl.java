@@ -93,7 +93,8 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao {
 	public List<Avaliacao> listByIdES(Integer idES) {
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("from Avaliacao a");
-		queryStr.append(" where a.idES = :idES ");
+		queryStr.append(" where a.idES = :idES");
+		queryStr.append(" order by a.date desc");
 		
 		Query query = em.createQuery(queryStr.toString());
 		if (idES != null ) {

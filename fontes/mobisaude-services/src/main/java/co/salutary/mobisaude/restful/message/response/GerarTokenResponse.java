@@ -10,6 +10,11 @@ public class GerarTokenResponse implements IMobileResponse {
 	private String token;
 	private String erro;
 
+	public GerarTokenResponse(){
+		token = null;
+		erro = null;
+	}
+	
 	public String getToken() {
 		return token;
 	}

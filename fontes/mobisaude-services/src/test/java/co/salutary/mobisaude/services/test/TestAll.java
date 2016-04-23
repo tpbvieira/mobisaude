@@ -128,11 +128,8 @@ public class TestAll extends TestCase {
 		if (consultaDominiosResponse == null) {
 			fail("Retorno inesperado ao consultar tabelas de domínio.");
 		}
-		if (consultaDominiosResponse.getErro() == null) {
-			fail("error message is null.");
-		}
-		if (!consultaDominiosResponse.getErro().startsWith("0|")) {
-			fail("Retorno inesperado ao consultar tabelas de domínio.");
+		if (consultaDominiosResponse.getErro() != null) {
+			fail("error message is not null.");
 		}
 		if(consultaDominiosResponse.getTiposSistemaOperacional().length != 3){
 			fail("Número inesperado de tipos de sistema operacional.");
@@ -182,10 +179,7 @@ public class TestAll extends TestCase {
 		if (gerarTokenResponse == null) {
 			fail("gerarTokenResonse is null.");
 		}
-		if(gerarTokenResponse.getErro() == null){
-			fail("gerarTokenResonse error message is null.");
-		}
-		if(!gerarTokenResponse.getErro().contains("0|")){
+		if(gerarTokenResponse.getErro() != null){
 			fail("gerarTokenResonse message not successful.");
 		}
 
@@ -199,7 +193,7 @@ public class TestAll extends TestCase {
 		GeocodeRequest geocodeRequest = mapper.readValue(testProperties.getProperty("geocode").replaceAll("<token>", token), GeocodeRequest.class);
 		GeocodeResponse geocodeResponse = broker.geocode(geocodeRequest); 
 
-		if (geocodeResponse == null || !geocodeResponse.getErro().startsWith("0|")) {
+		if (geocodeResponse == null || geocodeResponse.getErro() != null) {
 			fail("Retorno do serviço geocode não OK.");
 		}
 		if (!geocodeResponse.getMunicipio().equals("Brasília")) {
@@ -216,7 +210,7 @@ public class TestAll extends TestCase {
 		ESRequest getESRequest = mapper.readValue(testProperties.getProperty("getESByIdMunicipio").replaceAll("<token>", token), ESRequest.class);
 		ESResponse getESResponse = broker.listES(getESRequest);
 
-		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
+		if (getESResponse == null || getESResponse.getErro() != null) {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioTest.");			
 		}
@@ -236,7 +230,7 @@ public class TestAll extends TestCase {
 
 		ESResponse esResponse = broker.getESByIdES(esRequest);
 
-		if (esResponse == null || !esResponse.getErro().startsWith("0|")) {//Success
+		if (esResponse == null || esResponse.getErro() != null) {
 			logger.error(esResponse);
 			fail("getESByIdESTestError = invalid response");			
 		}
@@ -256,7 +250,7 @@ public class TestAll extends TestCase {
 		ESRequest getESRequest = mapper.readValue(testProperties.getProperty("getESByIdMunicipio").replaceAll("<token>", token).replaceAll("<idMunicipio>",idMunicipio), ESRequest.class);
 		ESResponse getESResponse = broker.getESByIdMunicipio(getESRequest);
 
-		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
+		if (getESResponse == null || getESResponse.getErro() != null) {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioTest.");			
 		}
@@ -280,7 +274,7 @@ public class TestAll extends TestCase {
 				replaceAll("<idTipoES>", idTipoEstabelecimento), ESRequest.class);
 		ESResponse getESResponse = broker.getESByIdMunicipioIdTipoES(getESRequest);
 
-		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
+		if (getESResponse == null || getESResponse.getErro() != null) {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioTest.");			
 		}
@@ -304,7 +298,7 @@ public class TestAll extends TestCase {
 		getESRequest.setIdTiposES(idTiposES);
 		ESResponse getESResponse = broker.getESByIdMunicipioIdTipoES(getESRequest);
 
-		if (getESResponse == null || !getESResponse.getErro().startsWith("0|")) {//Success
+		if (getESResponse == null || getESResponse.getErro() != null) {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioIdTiposESTest.");			
 		}
@@ -321,14 +315,14 @@ public class TestAll extends TestCase {
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail("tpbvieira@gmail.com");
-			userRequest.setPassword("111111");
+			userRequest.setPassword("qqqqq");
 			userRequest.setName("Thiago P B Vieira");
 			userRequest.setPhone("6183133714");
 			userRequest.setContactable(true);
 
 			UserResponse userResponse = broker.signup(userRequest);
 
-			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+			if (userResponse == null || userResponse.getErro() != null) {
 				logger.error(userResponse);
 				fail("SignupError");			
 			}
@@ -344,7 +338,7 @@ public class TestAll extends TestCase {
 	private void updateUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
 
 		try{
-			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",false);
+			User user = new User ("tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());
@@ -354,7 +348,7 @@ public class TestAll extends TestCase {
 			userRequest.setContactable(user.isContactable());
 			UserResponse userResponse = broker.updateUser(userRequest);
 
-			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+			if (userResponse == null || userResponse.getErro() != null) {
 				logger.error(userResponse);
 				fail("UpdateUser");			
 			}
@@ -381,13 +375,13 @@ public class TestAll extends TestCase {
 	private void getUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
 
 		try{
-			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",false);
+			User user = new User ("tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());
 
 			UserResponse userResponse = broker.getUser(userRequest);			
-			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+			if (userResponse == null || userResponse.getErro() != null) {
 				logger.error(userResponse);
 				fail("SignupError");			
 			}			
@@ -424,14 +418,14 @@ public class TestAll extends TestCase {
 	private void signinTest(ObjectMapper mapper, ServiceBroker broker, String token){
 
 		try{
-			User user = new User ("tpbvieira@gmail.com","222222","Thiago","06183133714",false);
+			User user = new User ("tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
 			userRequest.setEmail(user.getEmail());
 			userRequest.setPassword(user.getPassword());
 
 			UserResponse userResponse = broker.signin(userRequest);			
-			if (userResponse == null || !userResponse.getErro().startsWith("0|")) {//Success
+			if (userResponse == null || userResponse.getErro() != null) {
 				logger.error(userResponse);
 				fail("SigninError");
 			}
@@ -454,7 +448,7 @@ public class TestAll extends TestCase {
 
 			SugestaoResponse sugestaoResponse = broker.sugerir(sugestaoRequest);
 
-			if (sugestaoResponse == null || !sugestaoResponse.getErro().startsWith("0|")) {//Success
+			if (sugestaoResponse == null || sugestaoResponse.getErro() != null) {
 				logger.error(sugestaoResponse);
 				fail("sugerirTestError");			
 			}
@@ -477,7 +471,7 @@ public class TestAll extends TestCase {
 			sugestaoRequest.setEmail("tpbvieira@gmail.com");
 
 			SugestaoResponse sugestaoResponse = broker.getSugestao(sugestaoRequest);			
-			if (sugestaoResponse == null || !sugestaoResponse.getErro().startsWith("0|")) {//Success
+			if (sugestaoResponse == null || sugestaoResponse.getErro() != null) {
 				logger.error(sugestaoResponse);
 				fail("getSugestaoTestError");			
 			}			
@@ -519,7 +513,7 @@ public class TestAll extends TestCase {
 
 			AvaliacaoResponse avaliacaoResponse = broker.avaliar(avalicaoRequest);
 
-			if (avaliacaoResponse == null || !avaliacaoResponse.getErro().startsWith("0|")) {//Success
+			if (avaliacaoResponse == null || avaliacaoResponse.getErro() != null) {
 				logger.error(avaliacaoResponse);
 				fail("avaliarTestError");			
 			}
@@ -541,7 +535,7 @@ public class TestAll extends TestCase {
 			avaliacaoRequest.setEmail(email);
 
 			AvaliacaoResponse avaliacaoResponse = broker.getAvaliacaoByIdESEmail(avaliacaoRequest);			
-			if (avaliacaoResponse == null || !avaliacaoResponse.getErro().startsWith("0|")) {//Success
+			if (avaliacaoResponse == null || avaliacaoResponse.getErro() != null) {
 				logger.error(avaliacaoResponse);
 				fail("getAvaliacaoTestError");			
 			}			
@@ -583,7 +577,7 @@ public class TestAll extends TestCase {
 
 			AvaliacaoResponse avaliacaoResponse = broker.listAvaliacaoByIdES(avaliacaoRequest);			
 
-			if (avaliacaoResponse == null || !avaliacaoResponse.getErro().startsWith("0|")) {//Success
+			if (avaliacaoResponse == null || avaliacaoResponse.getErro() != null) {
 				logger.error(avaliacaoResponse);
 				fail("listAvaliacaoTestError");			
 			}else
@@ -614,7 +608,7 @@ public class TestAll extends TestCase {
 
 			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.avaliarMedia(avalicaoMediaRequest);
 
-			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
+			if (avaliacaoMediaMesResponse == null || avaliacaoMediaMesResponse.getErro() != null) {
 				logger.error(avaliacaoMediaMesResponse);
 				fail("avaliarTestError");			
 			}
@@ -635,7 +629,7 @@ public class TestAll extends TestCase {
 			avaliacaoMediaMesRequest.setIdES(idES);
 
 			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdES(avaliacaoMediaMesRequest);			
-			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
+			if (avaliacaoMediaMesResponse == null || avaliacaoMediaMesResponse.getErro() != null) {
 				logger.error(avaliacaoMediaMesResponse);
 				fail("getAvaliacaoTestError");			
 			}			
@@ -667,7 +661,7 @@ public class TestAll extends TestCase {
 			avaliacaoMediaMesRequest.setDate(date);
 
 			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.getAvaliacaoMediaByIdESDate(avaliacaoMediaMesRequest);			
-			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
+			if (avaliacaoMediaMesResponse == null || avaliacaoMediaMesResponse.getErro() != null) {
 				logger.error(avaliacaoMediaMesResponse);
 				fail("getAvaliacaoTestError");			
 			}			
@@ -699,7 +693,7 @@ public class TestAll extends TestCase {
 
 			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvalicaoMediaMesByIdES(avaliacaoMediaMesRequest);			
 
-			if (avaliacaoMediaMesResponse == null || !avaliacaoMediaMesResponse.getErro().startsWith("0|")) {//Success
+			if (avaliacaoMediaMesResponse == null || avaliacaoMediaMesResponse.getErro() != null) {
 				logger.error(avaliacaoMediaMesResponse);
 				fail("listAvaliacaoMediaMesTestError");			
 			}else

@@ -10,7 +10,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -67,12 +66,15 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
     private ClientCache clientCache;
     private Settings settings;
 
+    private UpdateUITask uiTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // contextual information
         clientCache = ClientCache.getInstance();
+
         settings = new Settings(getApplicationContext());
 
         setContentView(R.layout.activity_healthplace);
@@ -110,7 +112,17 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
         mEvaluationsList = (ListView) findViewById(R.id.healthplace_evaluations_list);
 
-        new UpdateUITask().execute();
+        uiTask = new UpdateUITask();
+        uiTask.execute();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        clientCache.setListAvaliacoes(null);
+        if(uiTask != null){
+            uiTask.cancel(true);
+        }
     }
 
     @Override
