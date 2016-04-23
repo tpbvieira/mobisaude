@@ -91,12 +91,12 @@ public class TestAll extends TestCase {
 			getSugestaoTest(mapper, broker, token);
 
 			// avaliacao
-			avaliarTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "Título", "Avaliacao de teste", "5");
-			avaliarTest(mapper, broker, token, "6684181","a@a.com", "Título", "Avaliacao de teste", "2.5");
-			avaliarTest(mapper, broker, token, "6684181","b@b.com", "Título", "Avaliacao de teste", "3");
-			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "Título", "Avaliacao de teste", "5.0");
-			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","a@a.com", "Título", "Avaliacao de teste", "2.5");
-			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","b@b.com", "Título", "Avaliacao de teste", "3.0");
+			avaliarTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "av1", "avaliarTest(mapper, broker, token, 6684181,tpbvieira@gmail.com, Título, Avaliacao de teste, 5);", "5");
+			avaliarTest(mapper, broker, token, "6684181","a@a.com", "Av2", "avaliarTest(mapper, broker, token, 6684181,a@a.com, Título, Avaliacao de teste, 2.5);", "2.5");
+			avaliarTest(mapper, broker, token, "6684181","b@b.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,b@b.com, Título, Avaliacao de teste, 3);", "3");
+			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "av1", "avaliarTest(mapper, broker, token, 6684181,tpbvieira@gmail.com, Título, Avaliacao de teste, 5);", "5.0");
+			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","a@a.com", "Av2", "avaliarTest(mapper, broker, token, 6684181,a@a.com, Título, Avaliacao de teste, 2.5);", "2.5");
+			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","b@b.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,b@b.com, Título, Avaliacao de teste, 3);", "3.0");
 			listAvaliacaoByIdESTest(mapper, broker, token, "6684181", 3);
 
 			// avaliacao media
