@@ -31,10 +31,10 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.adapters.ListAdapterModel;
-import co.salutary.mobisaude.adapters.ListAdapterModel.Item;
-import co.salutary.mobisaude.adapters.ListAdapterModel.Row;
-import co.salutary.mobisaude.adapters.ListAdapterModel.Section;
+import co.salutary.mobisaude.adapters.GenericListAdapter;
+import co.salutary.mobisaude.adapters.GenericListAdapter.Item;
+import co.salutary.mobisaude.adapters.GenericListAdapter.Row;
+import co.salutary.mobisaude.adapters.GenericListAdapter.Section;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.db.CidadeDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
@@ -50,7 +50,7 @@ public class LocalitySelectionListActivity extends ListActivity {
     public static final int LISTA_CIDADE = 2;
     public static final int RESULTADO_ITEM_SELECIONADO = 1;
 
-    private ListAdapterModel adapter = new ListAdapterModel();
+    private GenericListAdapter adapter = new GenericListAdapter();
     private GestureDetector mGestureDetector;
     private List<Object[]> alphabet = new ArrayList<Object[]>();
     private HashMap<String, Integer> sections = new HashMap<String, Integer>();
@@ -276,7 +276,7 @@ public class LocalitySelectionListActivity extends ListActivity {
 
     private void setSearchResult(String str) {
         try {
-            adapter = new ListAdapterModel();
+            adapter = new GenericListAdapter();
             db.open(getApplicationContext());
             if(tipoLista==LISTA_UF){
                 for (UF uf : new UfDAO(db).listarUF()) {

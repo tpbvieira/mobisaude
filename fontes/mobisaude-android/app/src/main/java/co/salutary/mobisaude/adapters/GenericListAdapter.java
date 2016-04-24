@@ -14,7 +14,7 @@ import java.util.List;
 import co.salutary.mobisaude.R;
 
 
-public class ListAdapterModel extends BaseAdapter {
+public class GenericListAdapter extends BaseAdapter {
 
     public static abstract class Row {}
     

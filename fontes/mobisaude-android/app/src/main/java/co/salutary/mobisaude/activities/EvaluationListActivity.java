@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.adapters.ListViewAdapter;
+import co.salutary.mobisaude.adapters.EvaluationListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
@@ -248,7 +248,7 @@ public class EvaluationListActivity extends AppCompatActivity {
                 // Avaliacoes
                 List<Avaliacao> avaliacoes = clientCache.getListAvaliacoes();
                 if (avaliacoes != null && avaliacoes.size() > 0) {
-                    mEvaluationsList.setAdapter(new ListViewAdapter(EvaluationListActivity.this, R.layout.item_listview, avaliacoes));
+                    mEvaluationsList.setAdapter(new EvaluationListAdapter(EvaluationListActivity.this, R.layout.evaluation_list_item_listview, avaliacoes));
                     mEvaluationsList.setOnItemClickListener(onItemClickListener());
                 }else{
                     finish();

@@ -42,10 +42,10 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.adapters.ListAdapterModel;
-import co.salutary.mobisaude.adapters.ListAdapterModel.Item;
-import co.salutary.mobisaude.adapters.ListAdapterModel.Row;
-import co.salutary.mobisaude.adapters.ListAdapterModel.Section;
+import co.salutary.mobisaude.adapters.GenericListAdapter;
+import co.salutary.mobisaude.adapters.GenericListAdapter.Item;
+import co.salutary.mobisaude.adapters.GenericListAdapter.Row;
+import co.salutary.mobisaude.adapters.GenericListAdapter.Section;
 import co.salutary.mobisaude.adapters.StringListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
@@ -62,7 +62,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
     private StringListAdapter stringListAdapter;
 
     private GestureDetector mGestureDetector;
-    private ListAdapterModel mListAdapterModel = new ListAdapterModel();
+    private GenericListAdapter mListAdapterModel = new GenericListAdapter();
 
     private List<Object[]> alphabet = new ArrayList<Object[]>();
     private HashMap<String, Integer> sections = new HashMap<String, Integer>();
@@ -318,7 +318,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
 
     private void setSearchResult(String str) {
         try {
-            mListAdapterModel = new ListAdapterModel();
+            mListAdapterModel = new GenericListAdapter();
 
             List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaude();
             if(mTipoESSpiner.isSelected()){

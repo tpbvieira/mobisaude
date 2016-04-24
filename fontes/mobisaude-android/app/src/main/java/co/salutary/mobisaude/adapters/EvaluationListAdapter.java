@@ -2,7 +2,6 @@ package co.salutary.mobisaude.adapters;
 
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,13 @@ import java.util.List;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.model.Avaliacao;
-import co.salutary.mobisaude.util.JsonUtils;
 
-public class ListViewAdapter extends ArrayAdapter<Avaliacao> {
+public class EvaluationListAdapter extends ArrayAdapter<Avaliacao> {
 
     private AppCompatActivity activity;
     private List<Avaliacao> avaliacaoList;
 
-    public ListViewAdapter(AppCompatActivity context, int resource, List<Avaliacao> avaliacoes) {
+    public EvaluationListAdapter(AppCompatActivity context, int resource, List<Avaliacao> avaliacoes) {
         super(context, resource, avaliacoes);
         this.activity = context;
         this.avaliacaoList = avaliacoes;
@@ -39,7 +37,7 @@ public class ListViewAdapter extends ArrayAdapter<Avaliacao> {
 
         ViewHolder holder;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_listview, parent, false);
+            convertView = inflater.inflate(R.layout.evaluation_list_item_listview, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

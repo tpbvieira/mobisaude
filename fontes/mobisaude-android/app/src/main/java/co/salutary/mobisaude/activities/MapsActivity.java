@@ -82,7 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            startActivity(MainActivity.class);
 //        }
 //
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_nav_drawer);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_menu);
 //        drawer.closeDrawer(GravityCompat.START);
 //        return true
         Log.d(TAG,"????????????");

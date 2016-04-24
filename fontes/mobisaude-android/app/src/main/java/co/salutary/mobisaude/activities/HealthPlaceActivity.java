@@ -15,7 +15,11 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -68,6 +72,10 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         settings = new Settings(getApplicationContext());
 
         setContentView(R.layout.activity_healthplace);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.healthplace_tool_bar);
+        setSupportActionBar(myToolbar);
+
         mProgressView = findViewById(R.id.healthplace_progress_bar);
         mContentView = findViewById(R.id.healthplace_form_view);
         mNomeFantasiaText = (TextView) findViewById(R.id.healthplace_name);
@@ -76,40 +84,44 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         mEnderecoText = (TextView) findViewById(R.id.healthplace_endereco);
         mRatingBar = (RatingBar) findViewById(R.id.healthplace_avaliacao_media_ratingbar);
 
-        Button mEvaluateButton = (Button) findViewById(R.id.healthplace_evaluate_button);
-        mEvaluateButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (DeviceInfo.isLoggedin) {
-                    startActivity(new Intent(HealthPlaceActivity.this, EvaluationActivity.class));
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        Button mEvaluationsButton = (Button) findViewById(R.id.healthplace_evaluations_button);
-        mEvaluationsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(HealthPlaceActivity.this, EvaluationListActivity.class));
-            }
-        });
-
-        Button mSuggestButton = (Button) findViewById(R.id.healthplace_suggest_button);
-        mSuggestButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (DeviceInfo.isLoggedin) {
-                    startActivity(new Intent(HealthPlaceActivity.this, SuggestionActivity.class));
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         uiTask = new UpdateUITask();
         uiTask.execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.healthplace_menu_items, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.healthplace_action_evaluations) {
+            startActivity(new Intent(HealthPlaceActivity.this, EvaluationListActivity.class));
+            return true;
+        }else if (id == R.id.healthplace_action_evaluate) {
+            if (DeviceInfo.isLoggedin) {
+                startActivity(new Intent(HealthPlaceActivity.this, EvaluationActivity.class));
+            } else {
+                Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }else if (id == R.id.healthplace_action_suggest) {
+            if (DeviceInfo.isLoggedin) {
+                startActivity(new Intent(HealthPlaceActivity.this, SuggestionActivity.class));
+            } else {
+                Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
