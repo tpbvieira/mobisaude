@@ -65,8 +65,10 @@
     <string name="estado">Estado</string>
     <string name="uf">UF</string>
     <string name="cidade">Cidade</string>
-    <string name="search">Buscar</string>
-    <string name="select">Selecionar</string>
+
+    <string name="map">Mapa</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_select">Selecionar</string>
 
     <!-- Nav bar and menu values-->
     <string name="menu_bookmarks">Favoritos</string>

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -52,7 +53,7 @@ import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.JsonUtils;
 
-public class HealthPlaceSelectionListActivity extends ListActivity implements AdapterView.OnItemSelectedListener {
+public class HealthPlaceSelectionActivity extends ListActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = new Object() {
     }.getClass().getName();
@@ -75,6 +76,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
     private TextView mTitleText;
     private Spinner mTipoESSpiner;
     private EditText mSearchText;
+    private ImageView mMapButton;
     private ImageView mSearchButton;
     private View mContentView;
     private View mProgressView;
@@ -90,10 +92,12 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
         // Contextual information
         Context context = this.getApplicationContext();
         settings = new Settings(context);
+        settings.setPreferenceValues(Settings.ID_TIPO_ESTABELECIMENTO_SAUDE, null);
         clientCache = ClientCache.getInstance();
 
         // UI
-        setContentView(R.layout.activity_healthplace_selection_list);
+        setContentView(R.layout.activity_healthplace_selection);
+
         mProgressView = findViewById(R.id.hp_select_list_progress_bar);
         mContentView = findViewById(R.id.hp_select_list_content);
         showProgress(true);
@@ -119,10 +123,12 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
         mSearchText = (EditText) findViewById(R.id.hp_select_list_search_text);
         mSearchText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -134,6 +140,16 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
                     mSearchButton.setImageResource(android.R.drawable.ic_menu_search);
                     loadData();
                 }
+            }
+        });
+
+        mMapButton = (ImageView) findViewById(R.id.hp_select_list_map_button);
+        mMapButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int idTipoES = (int)mTipoESSpiner.getSelectedItemId();
+                settings.setPreferenceValues(Settings.ID_TIPO_ESTABELECIMENTO_SAUDE, Integer.toString(idTipoES + 1));
+                startActivity(MapsActivity.class);
             }
         });
 
@@ -406,7 +422,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    startActivity(new Intent(HealthPlaceSelectionListActivity.this, activity));
+                    startActivity(new Intent(HealthPlaceSelectionActivity.this, activity));
                 }
             }, 300);
         }

@@ -72,20 +72,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // plot ES
         try {
             String values = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
+            String idTipoESStr = settings.getPreferenceValues(Settings.ID_TIPO_ESTABELECIMENTO_SAUDE);
             tipoESMap = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
             List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaude();
             if (esList != null && esList.size() > 0) {
                 for (EstabelecimentoSaude es : esList) {
-                    LatLng esLatLong = new LatLng(es.getLatitude(), es.getLongitude());
-                    String tipoESValue = tipoESMap.get(Short.toString(es.getIdTipoEstabelecimentoSaude()));
-                    Marker marker = mMap.addMarker(new MarkerOptions()
-                            .position(esLatLong)
-                            .title(es.getNomeFantasia())
-                            .snippet(tipoESValue)
-                            .icon(BitmapDescriptorFactory.defaultMarker((int) es.getIdTipoEstabelecimentoSaude() * 10)));
-                    markers.put(marker.getId(),Integer.toString(es.getIdCnes()));
+
+                    if(idTipoESStr != null){
+                        int selected = Integer.parseInt(idTipoESStr);
+                        int idTipoES = (int)es.getIdTipoEstabelecimentoSaude();
+                        if(idTipoES == selected){
+                            LatLng esLatLong = new LatLng(es.getLatitude(), es.getLongitude());
+                            String tipoESValue = tipoESMap.get(Short.toString(es.getIdTipoEstabelecimentoSaude()));
+                            Marker marker = mMap.addMarker(new MarkerOptions()
+                                    .position(esLatLong)
+                                    .title(es.getNomeFantasia())
+                                    .snippet(tipoESValue)
+                                    .icon(BitmapDescriptorFactory.defaultMarker((int) es.getIdTipoEstabelecimentoSaude() * 10)));
+                            markers.put(marker.getId(),Integer.toString(es.getIdCnes()));
+                        }
+                    }else{
+                        LatLng esLatLong = new LatLng(es.getLatitude(), es.getLongitude());
+                        String tipoESValue = tipoESMap.get(Short.toString(es.getIdTipoEstabelecimentoSaude()));
+                        Marker marker = mMap.addMarker(new MarkerOptions()
+                                .position(esLatLong)
+                                .title(es.getNomeFantasia())
+                                .snippet(tipoESValue)
+                                .icon(BitmapDescriptorFactory.defaultMarker((int) es.getIdTipoEstabelecimentoSaude() * 10)));
+                        markers.put(marker.getId(),Integer.toString(es.getIdCnes()));
+                    }
+
                 }
+
             }
+
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
             e.printStackTrace();

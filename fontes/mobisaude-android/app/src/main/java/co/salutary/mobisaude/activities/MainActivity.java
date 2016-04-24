@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.menu_bookmarks) {
             startActivity(LocalitySelectionActivity.class);
         } else if (id == R.id.menu_search) {
-            startActivity(HealthPlaceSelectionListActivity.class);
+            startActivity(HealthPlaceSelectionActivity.class);
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
         } else if (id == R.id.menu_dashboard) {

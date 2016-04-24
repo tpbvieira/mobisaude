@@ -81,8 +81,9 @@
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".activities.HealthPlaceSelectionListActivity"
-            android:label="@string/search" />
+            android:name=".activities.HealthPlaceSelectionActivity"
+            android:label="@string/action_search"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.HealthPlaceActivity"
             android:label="@string/estabelecimento_saude"

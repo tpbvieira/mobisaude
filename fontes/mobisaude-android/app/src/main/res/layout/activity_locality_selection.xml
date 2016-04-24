@@ -97,7 +97,7 @@
 	    android:id="@+id/locality_selection_btn_meu_local"
 	    android:layout_width="match_parent"
 	    android:layout_height="45dp"
-	    android:text="@string/select"
+	    android:text="@string/action_select"
 	    android:textColor="#ffffff"
 		android:textSize="16sp"
 	    android:layout_marginRight="20dp"

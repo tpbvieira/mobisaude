@@ -21,7 +21,8 @@ public class Settings {
     public static final String TIPO_GESTAO = "TIPO_GESTAO";
     public static final String TIPOS_SISTEMA_OPERACIONAL = "TIPOS_SISTEMA_OPERACIONAL";
     public static final String TIPOS_ESTABELECIMENTO_SAUDE = "TIPOS_ESTABELECIMENTO_SAUDE";
-    public static final String ID_ESTABELECIMENTO_SAUDE = "ESTABELECIMENTO_SAUDE";
+    public static final String ID_ESTABELECIMENTO_SAUDE = "ID_ESTABELECIMENTO_SAUDE";
+    public static final String ID_TIPO_ESTABELECIMENTO_SAUDE = "ID_TIPO_ESTABELECIMENTO_SAUDE";
 
     public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
     public static final String EMPTY = "";
