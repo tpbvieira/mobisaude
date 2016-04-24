@@ -51,8 +51,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     private boolean isShowDialog = true;
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(new Object() {

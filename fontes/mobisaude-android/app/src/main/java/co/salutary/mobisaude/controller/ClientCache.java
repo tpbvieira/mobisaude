@@ -45,14 +45,6 @@ public class ClientCache {
 
     public void setListAvaliacoes(List<Avaliacao> listAvaliacoes) {this.listAvaliacoes = listAvaliacoes;}
 
-    public List<EstabelecimentoSaude> getListEstabelecimentoSaudes() {
-        return listEstabelecimentoSaudes;
-    }
-
-    public void setListEstabelecimentoSaudes(List<EstabelecimentoSaude> listEstabelecimentoSaudes) {
-        this.listEstabelecimentoSaudes = listEstabelecimentoSaudes;
-    }
-
     public Avaliacao getAvaliacaoMedia() {
         return avaliacaoMedia;
     }
