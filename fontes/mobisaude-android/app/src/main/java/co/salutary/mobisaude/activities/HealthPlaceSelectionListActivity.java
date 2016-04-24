@@ -401,7 +401,7 @@ public class HealthPlaceSelectionListActivity extends ListActivity implements Ad
 
     }
 
-    public void startActivity(final Class<? extends Activity> activity) {
+    private void startActivity(final Class<? extends Activity> activity) {
         if (activity != null) {
             new Handler().postDelayed(new Runnable() {
                 @Override

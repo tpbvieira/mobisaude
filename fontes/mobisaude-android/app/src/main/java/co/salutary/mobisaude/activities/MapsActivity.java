@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.adapters.GenericListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
@@ -42,6 +44,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ClientCache clientCache;
     private Settings settings;
 
+    private HashMap<String, String> tipoESMap;
+    private HashMap<String,String> markers = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,17 +62,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
     }
 
-    public void startActivity(final Class<? extends Activity> activity) {
-        if (activity != null) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(MapsActivity.this, activity));
-                }
-            }, 300);
-        }
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -78,16 +72,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // plot ES
         try {
             String values = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
-            HashMap tipoESMap = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
+            tipoESMap = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
             List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaude();
             if (esList != null && esList.size() > 0) {
                 for (EstabelecimentoSaude es : esList) {
                     LatLng esLatLong = new LatLng(es.getLatitude(), es.getLongitude());
-                    String tipoESValue = (String) tipoESMap.get(Short.toString(es.getIdTipoEstabelecimentoSaude()));
-                    mMap.addMarker(new MarkerOptions()
+                    String tipoESValue = tipoESMap.get(Short.toString(es.getIdTipoEstabelecimentoSaude()));
+                    Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(esLatLong)
                             .title(es.getNomeFantasia())
-                            .snippet(tipoESValue));
+                            .snippet(tipoESValue)
+                            .icon(BitmapDescriptorFactory.defaultMarker((int) es.getIdTipoEstabelecimentoSaude() * 10)));
+                    markers.put(marker.getId(),Integer.toString(es.getIdCnes()));
                 }
             }
         } catch (JSONException e) {
@@ -98,6 +94,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                settings.setPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE, markers.get(marker.getId()));
+                startActivity(HealthPlaceActivity.class);
+            }
+        });
+
     }
 
     @Override
@@ -105,4 +109,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return false;
     }
 
+    private void startActivity(final Class<? extends Activity> activity) {
+        if (activity != null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(MapsActivity.this, activity));
+                }
+            }, 300);
+        }
+    }
 }
