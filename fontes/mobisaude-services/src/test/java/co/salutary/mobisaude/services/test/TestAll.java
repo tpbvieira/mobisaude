@@ -67,24 +67,50 @@ public class TestAll extends TestCase {
 
 			// geocode
 			GeocodeResponse geocodeResponse = getGeocodeResponseTest(mapper, broker, token);
-			String idMunicipio = geocodeResponse.getCodMunicipioIbge();
+			String idMunicipio = geocodeResponse.getCodMunicipioIbge();// Brasilia (530010)
 
 			// estabelecimentos de saúde
 			// listESTest(mapper, broker, token, 274800);
-			getESByIdESTest(mapper, broker, token, "6684181", "AMIGO");// AMIGO (6684181)
-			getESByIdMunicipioTest(mapper, broker, token, idMunicipio);
-			getESByIdMunicipioIdTipoESTest(mapper, broker, token, idMunicipio, "10");// Brasilia (530010) and "CLINICA/CENTRO DE ESPECIALIDADE" (10)
+			getESByIdESTest(mapper, broker, token, "6684181", "AMIGO", "AMIGO");
+			getESByIdMunicipioTest(mapper, broker, token, idMunicipio, 2736);
+			getESByIdMunicipioIdTipoESTest(mapper, broker, token, idMunicipio, "10", 799);//"CLINICA/CENTRO DE ESPECIALIDADE" (10)
 			String[] tiposES = new String[2];
 			tiposES[0] = "10";
 			tiposES[1] = "11";
-			getESByIdMunicipioIdTiposESTest(mapper, broker, token, idMunicipio, tiposES);// Brasilia (530010) and [10,11]
+			getESByIdMunicipioIdTiposESTest(mapper, broker, token, idMunicipio, tiposES, 2547);// Brasilia (530010) and [10,11]
 
 			// user
 			deleteUserTest(mapper, broker, "tpbvieira@gmail.com");
-			signupTest(mapper, broker, token);
-			updateUserTest(mapper, broker, token);
-			signinTest(mapper, broker, token);
-			getUserTest(mapper, broker, token);
+			signupTest(mapper, broker, token, "tpbvieira@gmail.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "a@a.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "b@b.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "c@c.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "d@d.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "e@e.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "f@f.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "g@g.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "h@h.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "I@I.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "j@j.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "k@k.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "l@l.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "m@m.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "n@n.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "o@o.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "p@p.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "q@q.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "r@r.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "s@s.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "t@t.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "u@u.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "v@v.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "w@w.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "x@x.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "y@y.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			signupTest(mapper, broker, token, "z@z.com", "qqqqq", "Thiago P B Vieira", "6183133714", true);
+			updateUserTest(mapper, broker, token, "tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
+			getUserTest(mapper, broker, token, "tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
+			signinTest(mapper, broker, token, "tpbvieira@gmail.com","aaaaa");			
 
 			// sugestao
 			sugerirTest(mapper, broker, token);
@@ -94,15 +120,39 @@ public class TestAll extends TestCase {
 			avaliarTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "av1", "avaliarTest(mapper, broker, token, 6684181,tpbvieira@gmail.com, Título, Avaliacao de teste, 5);", "5");
 			avaliarTest(mapper, broker, token, "6684181","a@a.com", "Av2", "avaliarTest(mapper, broker, token, 6684181,a@a.com, Título, Avaliacao de teste, 2.5);", "2.5");
 			avaliarTest(mapper, broker, token, "6684181","b@b.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,b@b.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","c@c.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,c@c.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","d@d.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,d@d.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","e@e.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,e@e.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","f@f.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,f@f.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","g@g.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,g@g.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","h@h.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,h@h.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","I@I.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,I@I.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","j@j.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,j@j.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","k@k.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,k@k.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","l@l.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,l@l.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","m@m.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,m@m.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","n@n.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,n@n.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","o@o.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,o@o.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","p@p.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,p@p.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","q@q.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,q@q.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","r@r.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,r@r.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","s@s.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,s@s.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","t@t.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,t@t.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","u@u.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,u@u.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","v@v.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,v@v.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","w@w.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,w@w.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","x@x.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,x@x.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","y@y.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,y@y.com, Título, Avaliacao de teste, 3);", "3");
+			avaliarTest(mapper, broker, token, "6684181","z@z.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,z@z.com, Título, Avaliacao de teste, 3);", "3");
 			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "av1", "avaliarTest(mapper, broker, token, 6684181,tpbvieira@gmail.com, Título, Avaliacao de teste, 5);", "5.0");
 			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","a@a.com", "Av2", "avaliarTest(mapper, broker, token, 6684181,a@a.com, Título, Avaliacao de teste, 2.5);", "2.5");
 			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","b@b.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,b@b.com, Título, Avaliacao de teste, 3);", "3.0");
-			listAvaliacaoByIdESTest(mapper, broker, token, "6684181", 3);
+			listAvaliacaoByIdESTest(mapper, broker, token, "6684181", 27);
 
 			// avaliacao media
 			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 1);
-			getAvaliacaoMediaByIdESTest(mapper, broker, token, "6684181", "3.5");
-			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/04/2016", "3.5");
+			getAvaliacaoMediaByIdESTest(mapper, broker, token, "6684181", "3.0555556");
+			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/04/2016", "3.0555556");
 			avaliarMediaTest(mapper, broker, token,"6684181","3.8","11/01/2016");			
 			avaliarMediaTest(mapper, broker, token,"6684181","2.8","01/02/2016");
 			avaliarMediaTest(mapper, broker, token,"6684181","4.8","01/03/2016");
@@ -221,7 +271,7 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void getESByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String nomeFantasia) 
+	private void getESByIdESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idES, String nomeFantasia, String nomeTarget) 
 			throws IOException, JsonParseException, JsonMappingException {
 
 		ESRequest esRequest = new ESRequest();
@@ -234,15 +284,16 @@ public class TestAll extends TestCase {
 			logger.error(esResponse);
 			fail("getESByIdESTestError = invalid response");			
 		}
+		
 		EsDTO[] ess = esResponse.getEstabelecimentosSaude();
-		if (ess == null || !ess[0].getNomeFantasia().equals(nomeFantasia)) {//Brasilia's Number
+		if (ess == null || !ess[0].getNomeFantasia().equals(nomeTarget)) {//Brasilia's Number
 			logger.error(esResponse);
 			fail("getESByIdESTestError = invalid nomeFantasia");			
 		}
 
 	}
 
-	private void getESByIdMunicipioTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio) 
+	private void getESByIdMunicipioTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, int numTarget) 
 			throws IOException, JsonParseException, JsonMappingException {
 
 		idMunicipio = idMunicipio.substring(0, idMunicipio.length()-1);
@@ -254,14 +305,15 @@ public class TestAll extends TestCase {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioTest.");			
 		}
-		if (getESResponse.getEstabelecimentosSaude().length != 2736) {//Brasilia's Number
+		
+		if (getESResponse.getEstabelecimentosSaude().length != numTarget) {
 			logger.error(getESResponse);
 			fail("Quantidade (" + getESResponse.getEstabelecimentosSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
 		}
 
 	}
 
-	private void getESByIdMunicipioIdTipoESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String idTipoEstabelecimento) 
+	private void getESByIdMunicipioIdTipoESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String idTipoEstabelecimento, int numTarget) 
 			throws IOException, JsonParseException, JsonMappingException {
 
 		//parsing to make it compatible to ibge data
@@ -278,14 +330,15 @@ public class TestAll extends TestCase {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioTest.");			
 		}
-		if (getESResponse.getEstabelecimentosSaude().length != 799) {//Brasilia and 10
+		
+		if (getESResponse.getEstabelecimentosSaude().length != numTarget) {
 			logger.error(getESResponse);
 			fail("Quantidade (" + getESResponse.getEstabelecimentosSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
 		}
 
 	}
 
-	private void getESByIdMunicipioIdTiposESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String[] idTiposES) 
+	private void getESByIdMunicipioIdTiposESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, String[] idTiposES, int numTarget) 
 			throws IOException, JsonParseException, JsonMappingException {
 
 		//parsing to make it compatible to ibge data
@@ -302,23 +355,24 @@ public class TestAll extends TestCase {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioIdTiposESTest.");			
 		}
-		if (getESResponse.getEstabelecimentosSaude().length != 2547) {//Brasilia and [10,11]
+		
+		if (getESResponse.getEstabelecimentosSaude().length != numTarget) {//Brasilia and [10,11]
 			logger.error(getESResponse);
 			fail("getESByIdMunicipioIdTiposESTest: Quantidade (" + getESResponse.getEstabelecimentosSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
 		}
 
 	}
 
-	private void signupTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	private void signupTest(ObjectMapper mapper, ServiceBroker broker, String token, String email, String pass, String name, String phone, boolean contactable){
 
 		try{
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
-			userRequest.setEmail("tpbvieira@gmail.com");
-			userRequest.setPassword("qqqqq");
-			userRequest.setName("Thiago P B Vieira");
-			userRequest.setPhone("6183133714");
-			userRequest.setContactable(true);
+			userRequest.setEmail(email);
+			userRequest.setPassword(pass);
+			userRequest.setName(name);
+			userRequest.setPhone(phone);
+			userRequest.setContactable(contactable);
 
 			UserResponse userResponse = broker.signup(userRequest);
 
@@ -335,31 +389,33 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void updateUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	private void updateUserTest(ObjectMapper mapper, ServiceBroker broker, String token, String email, String pass, String name, String phone, boolean contactable){
 
 		try{
-			User user = new User ("tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
-			userRequest.setEmail(user.getEmail());
-			userRequest.setPassword(user.getPassword());
-			userRequest.setName(user.getName());
-			userRequest.setPhone(user.getPhone());
-			userRequest.setContactable(user.isContactable());
+			userRequest.setEmail(email);
+			userRequest.setPassword(pass);
+			userRequest.setName(name);
+			userRequest.setPhone(phone);
+			userRequest.setContactable(contactable);
 			UserResponse userResponse = broker.updateUser(userRequest);
 
 			if (userResponse == null || userResponse.getErro() != null) {
 				logger.error(userResponse);
-				fail("UpdateUser");			
+				fail("UpdateUser");
 			}
 
+			User targetUser = new User (email, pass, name, phone, contactable);
+			
 			User newUser = new User(
 					userResponse.getEmail(),
 					userResponse.getPassword(),
 					userResponse.getName(),
 					userResponse.getPhone(),
 					userResponse.isContactable());
-			if (!newUser.equals(user)) {
+			
+			if (!newUser.equals(targetUser)) {
 				logger.error("Erro ao alterar usuário");
 				fail("Erro ao alterar usuário");			
 			}
@@ -372,26 +428,29 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void getUserTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	private void getUserTest(ObjectMapper mapper, ServiceBroker broker, String token, String email, String pass, String name, String phone, boolean contactable){
 
 		try{
-			User user = new User ("tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
-			userRequest.setEmail(user.getEmail());
+			userRequest.setEmail(email);
 
-			UserResponse userResponse = broker.getUser(userRequest);			
+			UserResponse userResponse = broker.getUser(userRequest);
+
 			if (userResponse == null || userResponse.getErro() != null) {
 				logger.error(userResponse);
 				fail("SignupError");			
 			}			
 
+			User targetUser = new User (email, pass, name, phone, contactable);
+			
 			User newUser = new User(userResponse.getEmail(),
 					userResponse.getPassword(),
 					userResponse.getName(),
 					userResponse.getPhone(),
 					userResponse.isContactable());
-			if (!newUser.equals(user)) {
+
+			if (!newUser.equals(targetUser)) {
 				logger.error("Erro ao recuperar usuário");
 				fail("Erro ao recuperar usuário");			
 			}
@@ -415,14 +474,13 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void signinTest(ObjectMapper mapper, ServiceBroker broker, String token){
+	private void signinTest(ObjectMapper mapper, ServiceBroker broker, String token, String email, String pass){
 
-		try{
-			User user = new User ("tpbvieira@gmail.com","aaaaa","Thiago","06183133714",false);
+		try{			
 			UserRequest userRequest = new UserRequest();
 			userRequest.setToken(token);
-			userRequest.setEmail(user.getEmail());
-			userRequest.setPassword(user.getPassword());
+			userRequest.setEmail(email);
+			userRequest.setPassword(pass);
 
 			UserResponse userResponse = broker.signin(userRequest);			
 			if (userResponse == null || userResponse.getErro() != null) {

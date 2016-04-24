@@ -49,8 +49,8 @@ public class ListViewAdapter extends ArrayAdapter<Avaliacao> {
         holder.ratingBar.setEnabled(false);
         holder.ratingBar.setRating(getItem(position).getRating());
         holder.title.setText(getItem(position).getTitulo());
-        holder.text.setText(getItem(position).getAvaliacao());
-        holder.date.setText(JsonUtils.sdfDMY.format(getItem(position).getDate()));
+//        holder.text.setText(getItem(position).getAvaliacao());
+//        holder.date.setText(JsonUtils.sdfDMY.format(getItem(position).getDate()));
 
         return convertView;
     }
@@ -63,10 +63,10 @@ public class ListViewAdapter extends ArrayAdapter<Avaliacao> {
         private TextView text;
 
         public ViewHolder(View view) {
-            title = (TextView) view.findViewById(R.id.evaluation_listview_text);
-            ratingBar = (RatingBar) view.findViewById(R.id.evaluation_listview_rating);
-            text = (TextView) view.findViewById(R.id.evaluation_listview_text);
-            date = (TextView) view.findViewById(R.id.evaluation_listview_date);
+            title = (TextView) view.findViewById(R.id.text);
+            ratingBar = (RatingBar) view.findViewById(R.id.rate_img);
+//            text = (TextView) view.findViewById(R.id.evaluation_listview_text);
+//            date = (TextView) view.findViewById(R.id.evaluation_listview_date);
         }
 
     }

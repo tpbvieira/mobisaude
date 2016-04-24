@@ -184,14 +184,19 @@ public class EvaluationListActivity extends AppCompatActivity {
                 request.put("avaliacaoRequest", parameters);
                 String responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdES(request.toString());
                 if (responseStr != null) {
+
                     JSONObject json = new JSONObject(responseStr);
                     Object objResponse = json.get("avaliacaoResponse");
                     try {
+
                         JSONObject avaliacaoResponse = (JSONObject) objResponse;
                         if (!JsonUtils.hasError(avaliacaoResponse)) {
+
                             if (avaliacaoResponse.has("avaliacoes")) {
+
                                 List<Avaliacao> avaliacoes = new ArrayList<>();
                                 try {
+
                                     JSONArray array = avaliacaoResponse.getJSONArray("avaliacoes");
                                     for (int i = 0; i < array.length(); ++i) {
                                         JSONObject obj = array.getJSONObject(i);
@@ -200,19 +205,23 @@ public class EvaluationListActivity extends AppCompatActivity {
                                             avaliacoes.add(avaliacao);
                                         }
                                     }
+
                                 } catch (Exception e) {
-                                    Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(avaliacaoResponse);
+                                    Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao((JSONObject) avaliacaoResponse.get("avaliacoes"));
                                     if (avaliacao != null) {
                                         avaliacoes.add(avaliacao);
                                     }
                                 }
                                 clientCache.setListAvaliacoes(avaliacoes);
+
                             } else {
                                 mWarningMsg = getString(R.string.warn_no_evaluation);
                             }
+
                         } else {
                             throw new MobiSaudeAppException(JsonUtils.getError(avaliacaoResponse));
                         }
+
                     } catch (ClassCastException e) {
                         mWarningMsg = getString(R.string.warn_no_evaluation);
                         Log.d(TAG, e.getMessage());
