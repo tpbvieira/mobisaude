@@ -15,7 +15,6 @@
     <RatingBar
         android:id="@+id/evaluation_ratingbar"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -71,7 +70,6 @@
                 android:id="@+id/evaluation_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_date"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -86,7 +84,6 @@
             android:text="@string/action_evaluate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:textStyle="bold"/>
 
     </LinearLayout>

@@ -71,7 +71,6 @@
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"/>
-
         <activity
             android:name=".activities.EvaluationActivity"
             android:label="@string/action_evaluate" />
@@ -87,6 +86,9 @@
         <activity
             android:name=".activities.HealthPlaceActivity"
             android:label="@string/estabelecimento_saude" />
+        <activity
+            android:name=".activities.EvaluationListActivity"
+            android:label="@string/evaluations" />
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />

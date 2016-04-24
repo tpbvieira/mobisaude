@@ -46,10 +46,12 @@
     <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
     <string name="error_token_generation">Erro ao gerar token de comunicação</string>
     <string name="error_duplicated_email">Email já cadastrado</string>
-    <string name="error_no_evaluation">Sem avaliações, seja o primeiro!</string>
+    <string name="warn_no_evaluation">Sem avaliações, seja o primeiro!</string>
     <string name="error_getting_evaluations">Erro ao obter avaliações</string>
     <string name="error_getting_evaluation">Erro ao obter avaliaçao</string>
     <string name="error_getting_es">Erro ao obter estabelecimento</string>
+
+    <string name="evaluations">Avaliações</string>
 
     <string name="warn_many_evaluations">Você já avaliou este estabelecimento ateriormente</string>
 

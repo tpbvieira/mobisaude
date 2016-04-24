@@ -56,29 +56,29 @@
       <file leaf-file-name="activity_healthplace.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_healthplace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.532258">
-              <caret line="147" column="40" selection-start-line="147" selection-start-column="40" selection-end-line="147" selection-end-column="40" />
+            <state vertical-scroll-proportion="-1.9354838">
+              <caret line="139" column="0" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
               <folding>
                 <element signature="e#347#382#0" expanded="true" />
                 <element signature="e#408#443#0" expanded="true" />
-                <element signature="e#1283#1316#0" expanded="true" />
-                <element signature="e#1346#1372#0" expanded="true" />
-                <element signature="e#1810#1843#0" expanded="true" />
-                <element signature="e#1882#1915#0" expanded="true" />
-                <element signature="e#2090#2127#0" expanded="true" />
-                <element signature="e#2769#2802#0" expanded="true" />
-                <element signature="e#2977#2997#0" expanded="true" />
-                <element signature="e#3642#3675#0" expanded="true" />
-                <element signature="e#3850#3872#0" expanded="true" />
-                <element signature="e#4520#4553#0" expanded="true" />
-                <element signature="e#4728#4752#0" expanded="true" />
-                <element signature="e#5438#5471#0" expanded="true" />
-                <element signature="e#5646#5677#0" expanded="true" />
-                <element signature="e#6548#6573#0" expanded="true" />
-                <element signature="e#6999#7032#0" expanded="true" />
-                <element signature="e#7498#7531#0" expanded="true" />
-                <element signature="e#7565#7588#0" expanded="true" />
-                <element signature="e#7816#7840#0" expanded="true" />
+                <element signature="e#1063#1096#0" expanded="true" />
+                <element signature="e#1135#1168#0" expanded="true" />
+                <element signature="e#1343#1380#0" expanded="true" />
+                <element signature="e#2022#2055#0" expanded="true" />
+                <element signature="e#2230#2250#0" expanded="true" />
+                <element signature="e#2895#2928#0" expanded="true" />
+                <element signature="e#3103#3125#0" expanded="true" />
+                <element signature="e#3773#3806#0" expanded="true" />
+                <element signature="e#3981#4005#0" expanded="true" />
+                <element signature="e#4691#4724#0" expanded="true" />
+                <element signature="e#4899#4930#0" expanded="true" />
+                <element signature="e#5801#5826#0" expanded="true" />
+                <element signature="e#6252#6285#0" expanded="true" />
+                <element signature="e#6756#6777#0" expanded="true" />
+                <element signature="e#7255#7288#0" expanded="true" />
+                <element signature="e#7754#7787#0" expanded="true" />
+                <element signature="e#7821#7844#0" expanded="true" />
+                <element signature="e#8072#8096#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -87,15 +87,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HealthPlaceActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="HealthPlaceActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/HealthPlaceActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.87416106">
-              <caret line="283" column="71" selection-start-line="283" selection-start-column="71" selection-end-line="283" selection-end-column="71" />
+            <state vertical-scroll-proportion="-6.064516">
+              <caret line="311" column="47" selection-start-line="311" selection-start-column="36" selection-end-line="311" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3580#3619#0" expanded="true" />
-                <element signature="e#4144#4183#0" expanded="true" />
+                <element signature="e#2936#3366#0" expanded="true" />
+                <element signature="e#3256#3295#0" expanded="true" />
+                <element signature="e#3365#3366#0" expanded="true" />
+                <element signature="e#3512#3725#0" expanded="true" />
+                <element signature="e#3724#3725#0" expanded="true" />
+                <element signature="e#3859#4289#0" expanded="true" />
+                <element signature="e#4179#4218#0" expanded="true" />
+                <element signature="e#4288#4289#0" expanded="true" />
                 <element signature="e#5220#5455#0" expanded="true" />
                 <element signature="e#5454#5455#0" expanded="true" />
                 <element signature="e#5649#5885#0" expanded="true" />
@@ -104,35 +110,33 @@
                 <element signature="e#9528#9564#0" expanded="true" />
                 <element signature="e#10641#10685#0" expanded="true" />
                 <element signature="e#10929#10973#0" expanded="true" />
-                <element signature="e#11940#11951#0" expanded="true" />
-                <element signature="e#13093#13132#0" expanded="true" />
-                <element signature="e#13414#13453#0" expanded="true" />
-                <element signature="e#13607#13652#0" expanded="true" />
-                <element signature="e#16420#16421#0" expanded="true" />
-                <element signature="e#16463#16464#0" expanded="true" />
-                <element signature="e#16556#18607#0" expanded="true" />
-                <element signature="e#18192#18214#0" expanded="true" />
-                <element signature="e#18270#18458#0" expanded="true" />
-                <element signature="e#18457#18458#0" expanded="true" />
-                <element signature="e#18606#18607#0" expanded="true" />
+                <element signature="e#13355#13356#0" expanded="true" />
+                <element signature="e#13398#13399#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_evaluation.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_evaluation.xml">
+      <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.645161">
-              <caret line="73" column="49" selection-start-line="73" selection-start-column="49" selection-end-line="73" selection-end-column="49" />
+            <state vertical-scroll-proportion="-2.9666667">
+              <caret line="48" column="22" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_evaluation_list.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_evaluation_list.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="13" column="49" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="49" />
               <folding>
-                <element signature="e#349#382#0" expanded="true" />
-                <element signature="e#407#442#0" expanded="true" />
-                <element signature="e#468#503#0" expanded="true" />
-                <element signature="e#527#560#0" expanded="true" />
-                <element signature="e#1592#1614#0" expanded="true" />
-                <element signature="e#2074#2101#0" expanded="true" />
-                <element signature="e#3284#3309#0" expanded="true" />
+                <element signature="e#276#309#0" expanded="true" />
+                <element signature="e#334#369#0" expanded="true" />
+                <element signature="e#395#430#0" expanded="true" />
+                <element signature="e#454#487#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -141,16 +145,43 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="item_listview.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="item_listview.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_listview.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.8064516">
-              <caret line="10" column="44" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.76106197">
+              <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
               <folding />
             </state>
           </provider>
           <provider editor-type-id="android-designer">
             <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EvaluationListActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/EvaluationListActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="212" column="29" selection-start-line="212" selection-start-column="29" selection-end-line="212" selection-end-column="29" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2199#4392#0" expanded="true" />
+                <element signature="e#3789#3809#0" expanded="true" />
+                <element signature="e#3972#3994#0" expanded="true" />
+                <element signature="e#4050#4243#0" expanded="true" />
+                <element signature="e#4242#4243#0" expanded="true" />
+                <element signature="e#4391#4392#0" expanded="true" />
+                <element signature="e#4875#5114#0" expanded="true" />
+                <element signature="e#5113#5114#0" expanded="true" />
+                <element signature="e#5308#5544#0" expanded="true" />
+                <element signature="e#5543#5544#0" expanded="true" />
+                <element signature="e#8693#8731#0" expanded="true" />
+                <element signature="e#9013#9051#0" expanded="true" />
+                <element signature="e#9205#9250#0" expanded="true" />
+                <element signature="e#10503#10504#0" expanded="true" />
+                <element signature="e#10546#10547#0" expanded="true" />
+              </folding>
+            </state>
           </provider>
         </entry>
       </file>
@@ -175,6 +206,7 @@
       <list>
         <option value="layoutResourceFile_vertical" />
         <option value="Class" />
+        <option value="valueResourceFile" />
       </list>
     </option>
   </component>
@@ -2031,9 +2063,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_filter_multi_select.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/adapters/ListAdapterSelectMultipleOperator.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/adapters/ProblemAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/adapters/ListAdapterSelectMultiple.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/adapters/TipoESAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/adapters/StringListAdapter.java" />
@@ -2063,7 +2092,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_locality_selection.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/controller/ClientCache.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/controller/ServiceBroker.java" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_suggestion.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/SplashActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/MainActivity.java" />
@@ -2074,14 +2102,18 @@
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/services/ReportProblemService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/controller/TokenManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/SuggestionActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/item_listview.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/util/JsonUtils.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/adapters/ListViewAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/EvaluationActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_evaluation.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/item_listview.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/activity_evaluation_list.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_evaluation_list.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_healthplace.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/HealthPlaceActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/EvaluationListActivity.java" />
       </list>
     </option>
   </component>
@@ -2166,6 +2198,24 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mobisaude-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="layout" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
@@ -2220,6 +2270,28 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mobisaude-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mobisaude" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="activities" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -2232,6 +2304,10 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="manifests" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2273,6 +2349,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/res/anim" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
       <recent name="$PROJECT_DIR$/app/src/main/res/menu" />
     </key>
   </component>
@@ -2464,20 +2541,20 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298744" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290461" sideWeight="0.48716548" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.48716548" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.48716548" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.7023485" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.5652649" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298744" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30010718" sideWeight="0.46531948" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19989078" sideWeight="0.5063898" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39978564" sideWeight="0.5346805" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.43473512" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.5019115" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19989078" sideWeight="0.5063898" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.48061168" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290461" sideWeight="0.48061168" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298744" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290461" sideWeight="0.49808848" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24959038" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2513,41 +2590,17 @@
           <properties />
           <option name="timeStamp" value="96" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/EvaluationActivity.java</url>
-          <line>178</line>
-          <properties />
-          <option name="timeStamp" value="188" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/app/src/main/res/layout/activity_select_list.xml</url>
           <line>64</line>
           <option name="timeStamp" value="182" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="200" />
+      <option name="time" value="202" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/db/CidadeDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33221477">
-          <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_filter_multi_select.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2839,29 +2892,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35234898">
-          <caret line="79" column="53" selection-start-line="79" selection-start-column="53" selection-end-line="79" selection-end-column="53" />
-          <folding>
-            <element signature="e#1999#2017#0" expanded="true" />
-            <element signature="e#2714#2739#0" expanded="true" />
-            <element signature="e#2869#2887#0" expanded="true" />
-            <element signature="e#3343#3372#0" expanded="true" />
-            <element signature="e#3534#3559#0" expanded="true" />
-            <element signature="e#3665#3689#0" expanded="true" />
-            <element signature="e#3789#3818#0" expanded="true" />
-            <element signature="e#3938#3954#0" expanded="true" />
-            <element signature="e#4061#4092#0" expanded="true" />
-            <element signature="e#4193#4223#0" expanded="true" />
-            <element signature="e#4325#4339#0" expanded="true" />
-            <element signature="e#4442#4465#0" expanded="true" />
-            <element signature="e#4569#4602#0" expanded="true" />
-            <element signature="e#6379#6418#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/dev/android/sources/android-23/android/content/res/Resources.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2989,18 +3019,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/EvaluationActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.55369127">
-          <caret line="60" column="8" selection-start-line="60" selection-start-column="8" selection-end-line="65" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2177#2328#0" expanded="true" />
-            <element signature="e#2327#2328#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/adapters/ListViewAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -3013,18 +3031,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_evaluation.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.433333">
-          <caret line="106" column="35" selection-start-line="106" selection-start-column="35" selection-end-line="106" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_listview.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.8064516">
-          <caret line="10" column="44" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
+        <state vertical-scroll-proportion="-8.564516">
+          <caret line="43" column="30" selection-start-line="43" selection-start-column="30" selection-end-line="43" selection-end-column="30" />
           <folding />
         </state>
       </provider>
@@ -3032,18 +3042,49 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_evaluation.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/EvaluationActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.645161">
-          <caret line="73" column="49" selection-start-line="73" selection-start-column="49" selection-end-line="73" selection-end-column="49" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="249" column="1" selection-start-line="249" selection-start-column="1" selection-end-line="249" selection-end-column="1" />
           <folding>
-            <element signature="e#349#382#0" expanded="true" />
-            <element signature="e#407#442#0" expanded="true" />
-            <element signature="e#468#503#0" expanded="true" />
-            <element signature="e#527#560#0" expanded="true" />
-            <element signature="e#1592#1614#0" expanded="true" />
-            <element signature="e#2074#2101#0" expanded="true" />
-            <element signature="e#3284#3309#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.60402685">
+          <caret line="89" column="26" selection-start-line="89" selection-start-column="26" selection-end-line="89" selection-end-column="60" />
+          <folding>
+            <element signature="e#1999#2017#0" expanded="true" />
+            <element signature="e#2714#2739#0" expanded="true" />
+            <element signature="e#2869#2887#0" expanded="true" />
+            <element signature="e#3343#3372#0" expanded="true" />
+            <element signature="e#3533#3558#0" expanded="true" />
+            <element signature="e#3664#3688#0" expanded="true" />
+            <element signature="e#3788#3817#0" expanded="true" />
+            <element signature="e#3937#3953#0" expanded="true" />
+            <element signature="e#4060#4091#0" expanded="true" />
+            <element signature="e#4201#4222#0" expanded="true" />
+            <element signature="e#4323#4353#0" expanded="true" />
+            <element signature="e#4455#4469#0" expanded="true" />
+            <element signature="e#4572#4595#0" expanded="true" />
+            <element signature="e#4699#4732#0" expanded="true" />
+            <element signature="e#6509#6548#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_evaluation_list.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="13" column="49" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="49" />
+          <folding>
+            <element signature="e#276#309#0" expanded="true" />
+            <element signature="e#334#369#0" expanded="true" />
+            <element signature="e#395#430#0" expanded="true" />
+            <element signature="e#454#487#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3053,29 +3094,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_healthplace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.532258">
-          <caret line="147" column="40" selection-start-line="147" selection-start-column="40" selection-end-line="147" selection-end-column="40" />
+        <state vertical-scroll-proportion="-1.9354838">
+          <caret line="139" column="0" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
           <folding>
             <element signature="e#347#382#0" expanded="true" />
             <element signature="e#408#443#0" expanded="true" />
-            <element signature="e#1283#1316#0" expanded="true" />
-            <element signature="e#1346#1372#0" expanded="true" />
-            <element signature="e#1810#1843#0" expanded="true" />
-            <element signature="e#1882#1915#0" expanded="true" />
-            <element signature="e#2090#2127#0" expanded="true" />
-            <element signature="e#2769#2802#0" expanded="true" />
-            <element signature="e#2977#2997#0" expanded="true" />
-            <element signature="e#3642#3675#0" expanded="true" />
-            <element signature="e#3850#3872#0" expanded="true" />
-            <element signature="e#4520#4553#0" expanded="true" />
-            <element signature="e#4728#4752#0" expanded="true" />
-            <element signature="e#5438#5471#0" expanded="true" />
-            <element signature="e#5646#5677#0" expanded="true" />
-            <element signature="e#6548#6573#0" expanded="true" />
-            <element signature="e#6999#7032#0" expanded="true" />
-            <element signature="e#7498#7531#0" expanded="true" />
-            <element signature="e#7565#7588#0" expanded="true" />
-            <element signature="e#7816#7840#0" expanded="true" />
+            <element signature="e#1063#1096#0" expanded="true" />
+            <element signature="e#1135#1168#0" expanded="true" />
+            <element signature="e#1343#1380#0" expanded="true" />
+            <element signature="e#2022#2055#0" expanded="true" />
+            <element signature="e#2230#2250#0" expanded="true" />
+            <element signature="e#2895#2928#0" expanded="true" />
+            <element signature="e#3103#3125#0" expanded="true" />
+            <element signature="e#3773#3806#0" expanded="true" />
+            <element signature="e#3981#4005#0" expanded="true" />
+            <element signature="e#4691#4724#0" expanded="true" />
+            <element signature="e#4899#4930#0" expanded="true" />
+            <element signature="e#5801#5826#0" expanded="true" />
+            <element signature="e#6252#6285#0" expanded="true" />
+            <element signature="e#6756#6777#0" expanded="true" />
+            <element signature="e#7255#7288#0" expanded="true" />
+            <element signature="e#7754#7787#0" expanded="true" />
+            <element signature="e#7821#7844#0" expanded="true" />
+            <element signature="e#8072#8096#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3083,14 +3124,28 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.9666667">
+          <caret line="48" column="22" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/HealthPlaceActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.87416106">
-          <caret line="283" column="71" selection-start-line="283" selection-start-column="71" selection-end-line="283" selection-end-column="71" />
+        <state vertical-scroll-proportion="-6.064516">
+          <caret line="311" column="47" selection-start-line="311" selection-start-column="36" selection-end-line="311" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3580#3619#0" expanded="true" />
-            <element signature="e#4144#4183#0" expanded="true" />
+            <element signature="e#2936#3366#0" expanded="true" />
+            <element signature="e#3256#3295#0" expanded="true" />
+            <element signature="e#3365#3366#0" expanded="true" />
+            <element signature="e#3512#3725#0" expanded="true" />
+            <element signature="e#3724#3725#0" expanded="true" />
+            <element signature="e#3859#4289#0" expanded="true" />
+            <element signature="e#4179#4218#0" expanded="true" />
+            <element signature="e#4288#4289#0" expanded="true" />
             <element signature="e#5220#5455#0" expanded="true" />
             <element signature="e#5454#5455#0" expanded="true" />
             <element signature="e#5649#5885#0" expanded="true" />
@@ -3099,19 +3154,46 @@
             <element signature="e#9528#9564#0" expanded="true" />
             <element signature="e#10641#10685#0" expanded="true" />
             <element signature="e#10929#10973#0" expanded="true" />
-            <element signature="e#11940#11951#0" expanded="true" />
-            <element signature="e#13093#13132#0" expanded="true" />
-            <element signature="e#13414#13453#0" expanded="true" />
-            <element signature="e#13607#13652#0" expanded="true" />
-            <element signature="e#16420#16421#0" expanded="true" />
-            <element signature="e#16463#16464#0" expanded="true" />
-            <element signature="e#16556#18607#0" expanded="true" />
-            <element signature="e#18192#18214#0" expanded="true" />
-            <element signature="e#18270#18458#0" expanded="true" />
-            <element signature="e#18457#18458#0" expanded="true" />
-            <element signature="e#18606#18607#0" expanded="true" />
+            <element signature="e#13355#13356#0" expanded="true" />
+            <element signature="e#13398#13399#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/salutary/mobisaude/activities/EvaluationListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="212" column="29" selection-start-line="212" selection-start-column="29" selection-end-line="212" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2199#4392#0" expanded="true" />
+            <element signature="e#3789#3809#0" expanded="true" />
+            <element signature="e#3972#3994#0" expanded="true" />
+            <element signature="e#4050#4243#0" expanded="true" />
+            <element signature="e#4242#4243#0" expanded="true" />
+            <element signature="e#4391#4392#0" expanded="true" />
+            <element signature="e#4875#5114#0" expanded="true" />
+            <element signature="e#5113#5114#0" expanded="true" />
+            <element signature="e#5308#5544#0" expanded="true" />
+            <element signature="e#5543#5544#0" expanded="true" />
+            <element signature="e#8693#8731#0" expanded="true" />
+            <element signature="e#9013#9051#0" expanded="true" />
+            <element signature="e#9205#9250#0" expanded="true" />
+            <element signature="e#10503#10504#0" expanded="true" />
+            <element signature="e#10546#10547#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_listview.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.76106197">
+          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
   </component>
