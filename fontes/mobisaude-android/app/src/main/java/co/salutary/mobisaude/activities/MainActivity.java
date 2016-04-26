@@ -187,10 +187,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(HealthPlaceSelectionActivity.class);
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
-        } else if (id == R.id.menu_dashboard) {
-            startActivity(LocalitySelectionListActivity.class);
-        } else if (id == R.id.menu_settings) {
-            startActivity(AppCompatPreferenceActivity.class);
+//        } else if (id == R.id.menu_dashboard) {
+//            startActivity(LocalitySelectionListActivity.class);
+//        } else if (id == R.id.menu_settings) {
+//            startActivity(LoginGoogleActivity.class);
         } else if (id == R.id.menu_profile) {
             startActivity(ProfileActivity.class);
         } else if (id == R.id.menu_signup) {

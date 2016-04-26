@@ -80,6 +80,7 @@
     <string name="action_sign_up">Cadastrar</string>
     <string name="action_sign_in">Entrar</string>
     <string name="action_logout">Sair</string>
+    <string name="action_disconnect">Desconectar</string>
     <string name="action_update">Alterar</string>
     <string name="action_evaluate">Avaliar</string>
     <string name="action_suggest">Sugerir Alteração</string>

@@ -12,6 +12,7 @@
         android:id="@+id/menu_maps"
         android:icon="@drawable/ic_location_on"
         android:title="@string/menu_maps" />
+    <!--
     <item
         android:id="@+id/menu_dashboard"
         android:icon="@drawable/ic_dashboard"
@@ -20,6 +21,7 @@
         android:id="@+id/menu_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/menu_settings" />
+        -->
     <item
         android:id="@+id/menu_signup"
         android:icon="@drawable/ic_person_add_24dp"

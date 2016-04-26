@@ -95,6 +95,9 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".activities.LoginGoogleActivity"
+            android:label="@string/action_sign_in" />
+        <activity
             android:name=".activities.SignupActivity"
             android:label="@string/user" />
         <activity
