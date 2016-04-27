@@ -182,13 +182,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.menu_bookmarks) {
-            startActivity(LocalitySelectionActivity.class);
+            startActivity(LoginGoogleActivity.class);
         } else if (id == R.id.menu_search) {
             startActivity(HealthPlaceSelectionActivity.class);
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
-//        } else if (id == R.id.menu_dashboard) {
-//            startActivity(LocalitySelectionListActivity.class);
+        } else if (id == R.id.menu_dashboard) {
+            startActivity(DashboardActivity.class);
 //        } else if (id == R.id.menu_settings) {
 //            startActivity(LoginGoogleActivity.class);
         } else if (id == R.id.menu_profile) {

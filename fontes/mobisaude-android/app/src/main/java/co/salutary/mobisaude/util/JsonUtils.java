@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,14 +44,6 @@ public class JsonUtils {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static String toJsonString(Object jsonObject) {
-        return new Gson().toJson(jsonObject);
-    }
-
-    public static Object fromJsonString(String jsonString, Type type) {
-        return new Gson().fromJson(jsonString, type);
     }
 
     public static String getError(String json, String subObject){

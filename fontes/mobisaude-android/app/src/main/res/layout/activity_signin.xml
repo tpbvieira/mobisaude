@@ -85,16 +85,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/action_logout"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
+                android:text="@string/action_logout"/>
 
             <Button
                 android:id="@+id/disconnect_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/action_disconnect"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
+                android:text="@string/action_disconnect"/>
         </LinearLayout>
 
     </RelativeLayout>

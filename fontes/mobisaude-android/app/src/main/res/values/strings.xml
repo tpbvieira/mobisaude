@@ -101,6 +101,8 @@
 
     <string name="action_settings">Configurações</string>
     <string name="title_activity_login">Entrar</string>
+    <string name="title_activity_login_google">Google</string>
+    <string name="title_activity_login_facebook">Facebook</string>
 
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Senha</string>

@@ -1,9 +1,5 @@
 package co.salutary.mobisaude.model;
 
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
 public class EstabelecimentoSaude {
 
     private static final String TAG = EstabelecimentoSaude.class.getSimpleName();
@@ -164,32 +160,4 @@ public class EstabelecimentoSaude {
         this.longitude = longitude;
     }
 
-    public static EstabelecimentoSaude jsonObjectToEstabelecimentoSaude(JSONObject jsonObject){
-        Gson gson = new Gson();
-        EstabelecimentoSaude estabelecimentoSaude = gson.fromJson(jsonObject.toString(),EstabelecimentoSaude.class);
-        return estabelecimentoSaude;
-//        try {
-//            EstabelecimentoSaude estabelecimentoSaude = new EstabelecimentoSaude();
-//            estabelecimentoSaude.setIdCnes(json.getInt("idCnes"));
-//            estabelecimentoSaude.setIdMunicipio(json.getInt("idMunicipio"));
-//            estabelecimentoSaude.setIdTipoGestao((short) json.getInt("idTipoGestao"));
-//            estabelecimentoSaude.setCnpjMantenedora(json.getString("cnpjMantenedora"));
-//            estabelecimentoSaude.setRazaoSocialMantenedora(json.getString("razaoSocialMantenedora"));
-//            estabelecimentoSaude.setRazaoSocial(json.getString("razaoSocial"));
-//            estabelecimentoSaude.setNomeFantasia(json.getString("nomeFantasia"));
-//            estabelecimentoSaude.setNaturezaOrganizacao(json.getString("naturezaOrganizacao"));
-//            estabelecimentoSaude.setEsferaAdministrativa(json.getString("esferaAdministrativa"));
-//            estabelecimentoSaude.setLogradouro(json.getString("logradouro"));
-//            estabelecimentoSaude.setEndereco(json.getString("endereco"));
-//            estabelecimentoSaude.setBairro(json.getString("bairro"));
-//            estabelecimentoSaude.setCep(json.getString("cep"));
-//            estabelecimentoSaude.setOrigemCoordenada(json.getString("origemCoordenada"));
-//            estabelecimentoSaude.setLatitude(json.getDouble("latitude"));
-//            estabelecimentoSaude.setLongitude(json.getDouble("longitude"));
-//            return estabelecimentoSaude;
-//        } catch (Exception e) {
-//            Log.d(TAG, "UtilError converting from json", e);
-//            return null;
-//        }
-    }
 }
