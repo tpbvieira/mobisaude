@@ -152,7 +152,7 @@ public class TestAll extends TestCase {
 			// avaliacao media
 			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 1);
 			getAvaliacaoMediaByIdESTest(mapper, broker, token, "6684181", "3.0555556");
-			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/08/2016", "3.0555556");
+			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/04/2016", "3.0555556");
 			avaliarMediaTest(mapper, broker, token,"6684181","3.8","11/01/2016");			
 			avaliarMediaTest(mapper, broker, token,"6684181","2.8","01/02/2016");
 			avaliarMediaTest(mapper, broker, token,"6684181","4.8","01/03/2016");
