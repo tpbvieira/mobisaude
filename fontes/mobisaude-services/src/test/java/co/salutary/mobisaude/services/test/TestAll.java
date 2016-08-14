@@ -152,7 +152,7 @@ public class TestAll extends TestCase {
 			// avaliacao media
 			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 1);
 			getAvaliacaoMediaByIdESTest(mapper, broker, token, "6684181", "3.0555556");
-			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/04/2016", "3.0555556");
+			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/08/2016", "3.0555556");
 			avaliarMediaTest(mapper, broker, token,"6684181","3.8","11/01/2016");			
 			avaliarMediaTest(mapper, broker, token,"6684181","2.8","01/02/2016");
 			avaliarMediaTest(mapper, broker, token,"6684181","4.8","01/03/2016");
@@ -284,7 +284,7 @@ public class TestAll extends TestCase {
 			logger.error(esResponse);
 			fail("getESByIdESTestError = invalid response");			
 		}
-		
+
 		EsDTO[] ess = esResponse.getEstabelecimentosSaude();
 		if (ess == null || !ess[0].getNomeFantasia().equals(nomeTarget)) {//Brasilia's Number
 			logger.error(esResponse);
@@ -305,7 +305,7 @@ public class TestAll extends TestCase {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioTest.");			
 		}
-		
+
 		if (getESResponse.getEstabelecimentosSaude().length != numTarget) {
 			logger.error(getESResponse);
 			fail("Quantidade (" + getESResponse.getEstabelecimentosSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
@@ -330,7 +330,7 @@ public class TestAll extends TestCase {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioTest.");			
 		}
-		
+
 		if (getESResponse.getEstabelecimentosSaude().length != numTarget) {
 			logger.error(getESResponse);
 			fail("Quantidade (" + getESResponse.getEstabelecimentosSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
@@ -355,7 +355,7 @@ public class TestAll extends TestCase {
 			logger.error(getESResponse);
 			fail("Error = getESByIdMunicipioIdTiposESTest.");			
 		}
-		
+
 		if (getESResponse.getEstabelecimentosSaude().length != numTarget) {//Brasilia and [10,11]
 			logger.error(getESResponse);
 			fail("getESByIdMunicipioIdTiposESTest: Quantidade (" + getESResponse.getEstabelecimentosSaude().length + ") inválida de estabelecimentos de saúde para a cidade selecionada.");			
@@ -407,14 +407,14 @@ public class TestAll extends TestCase {
 			}
 
 			User targetUser = new User (email, pass, name, phone, contactable);
-			
+
 			User newUser = new User(
 					userResponse.getEmail(),
 					userResponse.getPassword(),
 					userResponse.getName(),
 					userResponse.getPhone(),
 					userResponse.isContactable());
-			
+
 			if (!newUser.equals(targetUser)) {
 				logger.error("Erro ao alterar usuário");
 				fail("Erro ao alterar usuário");			
@@ -443,7 +443,7 @@ public class TestAll extends TestCase {
 			}			
 
 			User targetUser = new User (email, pass, name, phone, contactable);
-			
+
 			User newUser = new User(userResponse.getEmail(),
 					userResponse.getPassword(),
 					userResponse.getName(),
