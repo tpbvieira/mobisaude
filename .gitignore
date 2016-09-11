@@ -25,7 +25,7 @@ proguard/
 
 # Log Files
 *.log
-fontes/mobisaude-services/debug.txt
+mobisaude-services/debug.txt
 
 # eclipse config
 #fontes/mobisaude-services/.classpath
@@ -33,12 +33,14 @@ fontes/mobisaude-services/debug.txt
 #fontes/mobisaude-services/.settings/
 
 # maven temp
-fontes/mobisaude-services/release.properties
-fontes/mobisaude-services/pom.xml.releaseBackup
-fontes/mobisaude-services/target/
+mobisaude-services/release.properties
+mobisaude-services/pom.xml.releaseBackup
+mobisaude-services/target/
 
 # android studio
-fontes/mobisaude-android/app/build/
-fontes/mobisaude-android/build/
-fontes/mobisaude-android/.gradle
+mobisaude-android/app/build/
+mobisaude-android/build/
+mobisaude-android/.gradle
 
+# temp
+*~
