@@ -33,9 +33,9 @@ mobisaude-services/debug.txt
 #fontes/mobisaude-services/.settings/
 
 # maven temp
-mobisaude-services/release.properties
-mobisaude-services/pom.xml.releaseBackup
-mobisaude-services/target/
+mobisaude-ws/release.properties
+mobisaude-ws/pom.xml.releaseBackup
+mobisaude-ws/target/
 
 # android studio
 mobisaude-android/app/build/
