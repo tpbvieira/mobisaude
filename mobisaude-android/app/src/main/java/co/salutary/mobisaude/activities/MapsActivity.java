@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,22 +22,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.adapters.GenericListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
-import co.salutary.mobisaude.controller.ServiceBroker;
-import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
-import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
-import co.salutary.mobisaude.util.MobiSaudeAppException;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener  {
 

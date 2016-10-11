@@ -21,8 +21,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +38,7 @@ import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
-import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 

@@ -30,7 +30,7 @@ import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.ConnectivityUtils;
-import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
 public class SplashActivity extends Activity implements Runnable, LocationListener {

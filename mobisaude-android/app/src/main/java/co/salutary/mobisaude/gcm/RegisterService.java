@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.config.DeviceInfo;
 
 public class RegisterService extends Service{
 

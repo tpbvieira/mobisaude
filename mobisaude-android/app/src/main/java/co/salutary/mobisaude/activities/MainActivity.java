@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +24,14 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,20 +42,21 @@ import java.util.HashMap;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
-import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = new Object() {
     }.getClass().getName();
-    private boolean isInFront;
 
     //context
     private Settings settings;
@@ -107,8 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView regiaoView = (TextView) findViewById(R.id.main_content_regiao);
             regiaoView.setText(getString(R.string.regiao) + "=" + regioes.size());
         } catch (JSONException e) {
-            Log.e(TAG,e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
 
         new UpdateFieldsTask(String.valueOf(clientCache.getCidade().getIdCidade())).execute();
@@ -123,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-
-        isInFront = true;
 
         // Navigation Menu Items
         NavigationView navigationView = (NavigationView) findViewById(R.id.menu_nav_view);
@@ -152,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPause() {
         super.onPause();
-        isInFront = false;
     }
 
     @Override
@@ -238,7 +242,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     public class UpdateFieldsTask extends AsyncTask<Void, Void, Boolean> {
 
         String mNumES, mCity, mErrorMsg;
@@ -301,8 +304,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 } catch (Exception e) {
                     mErrorMsg = e.getMessage();
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage(), e);
                     ok = false;
                 }
 
@@ -360,6 +362,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
 
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.e(TAG, "onConnectionFailed:" + connectionResult);
     }
 
 }

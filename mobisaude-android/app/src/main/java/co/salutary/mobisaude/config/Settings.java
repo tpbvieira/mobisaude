@@ -9,8 +9,7 @@ public class Settings {
 
     private static final String TAG = new Object(){}.getClass().getName();
 
-//    public static final String serverUrl = "http://gatewaysiec.anatel.gov.br/gatewayarcher/mobile";
-    public static final String serverUrl = "http://192.168.1.103:8080/mobisaude-services/mobile";
+    public static final String serverUrl = "http://192.168.1.100:8080/mobisaude-services/mobile";
 
 	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
 	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";

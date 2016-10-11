@@ -50,7 +50,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
     private static final String TAG = SignupActivity.class.getSimpleName();
 
     private static final int REQUEST_READ_CONTACTS = 0;
-    private SignupTask mAuthTask = null;
+    private SignUpTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -200,7 +200,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new SignupTask(email, password, name, phone);
+            mAuthTask = new SignUpTask(email, password, name, phone);
             mAuthTask.execute((Void) null);
         } else {
             // There was an error; don't attempt login and focus the first
@@ -295,17 +295,14 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         int ADDRESS = 0;
     }
 
-    /**
-     * Represents an asynchronous registration task
-     */
-    public class SignupTask extends AsyncTask<Void, Void, Boolean> {
+    public class SignUpTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
         private final String mName;
         private final String mPhone;
 
-        SignupTask(String email, String password, String name, String phone) {
+        SignUpTask(String email, String password, String name, String phone) {
             mEmail = email;
             mPassword = password;
             mName = name;
@@ -347,7 +344,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
                 signedUp = false;
             }
 

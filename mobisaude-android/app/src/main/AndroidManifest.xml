@@ -101,16 +101,10 @@
             android:theme="@style/ThemeActivity" />
 
         <!-- Services -->
-        <service android:name="co.salutary.mobisaude.services.ReportProblemService" />
         <service android:name="co.salutary.mobisaude.gcm.RegisterService" />
         <service android:name="co.salutary.mobisaude.gcm.GcmIntentService" />
 
         <!-- Receivers -->
-        <receiver android:name="co.salutary.mobisaude.receivers.ConnectionReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
         <receiver
             android:name="co.salutary.mobisaude.gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >

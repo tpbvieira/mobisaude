@@ -218,4 +218,5 @@ public class LoginGoogleActivity extends AppCompatActivity implements
                 break;
         }
     }
+
 }

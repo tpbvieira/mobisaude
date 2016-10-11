@@ -15,7 +15,7 @@ import android.util.Log;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.util.DeviceInfo;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 

@@ -1,4 +1,4 @@
-package co.salutary.mobisaude.util;
+package co.salutary.mobisaude.config;
 
 import android.Manifest;
 import android.app.Activity;
@@ -11,29 +11,42 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.NetworkInfo;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.activities.LoginActivity;
 import co.salutary.mobisaude.gcm.RegisterService;
+import co.salutary.mobisaude.util.ConnectivityUtils;
 
 public class DeviceInfo {
 
     private static final String TAG = new Object(){}.getClass().getName();
 
-    private static boolean isLoggedin = false;
+    private static boolean isLoggedIn = false;
     private static LoginType loginType = null;
-    private static String email = null;
     public static enum LoginType {
-        GOOGLE, FACEBOOK, MOBISAUDE
+        GOOGLE, FACEBOOK, EMAIL_PWD
     }
+
+    public static GoogleApiClient mGoogleApiClient;
 
     public static boolean hasToken = false;
 
@@ -43,7 +56,6 @@ public class DeviceInfo {
     public static String statusMesage = "";
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    public static final String EXTRA_MESSAGE = "message";
     public static final String REGISTRATION_GCM_CLIENT = "registration_gcm_client";
     public static final String PROPERTY_REG_ID = "registration_id";
     public static final String PROPERTY_APP_VERSION = "appVersion";
@@ -134,7 +146,7 @@ public class DeviceInfo {
             PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
+            Log.e(TAG, e.getMessage(), e);
             throw new RuntimeException("Could not get package name: " + e);
         }
     }
@@ -258,24 +270,78 @@ public class DeviceInfo {
         return ConnectivityUtils.getInstance(context).hasConnectivity();
     }
 
-    public static void login(Context context, String email, LoginType loginType){
-        DeviceInfo.email = email;
+    public static void login(Context context, String email, LoginType loginType, String name){
         DeviceInfo.loginType = loginType;
-        DeviceInfo.isLoggedin = true;
+        DeviceInfo.isLoggedIn = true;
         Settings settings = new Settings(context);
         settings.setPreferenceValue(Settings.USER_EMAIL, email);
+        settings.setPreferenceValue(Settings.USER_NAME, name);
     }
 
     public static void logout(Context context){
-        DeviceInfo.email = null;
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
+
         DeviceInfo.loginType = null;
-        DeviceInfo.isLoggedin = false;
+        DeviceInfo.isLoggedIn = false;
         Settings settings = new Settings(context);
         settings.setPreferenceValue(Settings.USER_EMAIL, null);
+        settings.setPreferenceValue(Settings.USER_NAME, null);
+    }
+
+    public static LoginType getLoginType(){
+        return loginType;
     }
 
     public static boolean isLoggedin(){
-        return isLoggedin;
+        return isLoggedIn;
     }
 
+    public static GoogleApiClient getGoogleApiClient(Context context,
+                                                     FragmentActivity fragmentActivity,
+                                                     GoogleApiClient.OnConnectionFailedListener unresolvedConnectionFailedListener){
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .enableAutoManage(fragmentActivity, unresolvedConnectionFailedListener)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        return mGoogleApiClient;
+    }
+
+    public static void googleLogin(Context context, String email, String name){
+        DeviceInfo.loginType = LoginType.GOOGLE;
+        DeviceInfo.isLoggedIn = true;
+        Settings settings = new Settings(context);
+        settings.setPreferenceValue(Settings.USER_EMAIL, email);
+        settings.setPreferenceValue(Settings.USER_NAME, name);
+    }
+
+    public static void googleLogout(Context context){
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
+
+        try {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            // ...
+                        }
+                    });
+        } catch(IllegalStateException e){
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        logout(context);
+    }
 }

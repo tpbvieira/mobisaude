@@ -36,10 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.util.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 import co.salutary.mobisaude.util.Validator;
@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UpdateTask mAuthTask = null;
+    private UserUpdateTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -215,7 +215,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UpdateTask(email, password, name, contactable);
+            mAuthTask = new UserUpdateTask(email, password, name, contactable);
             mAuthTask.execute((Void) null);
         } else {
             // There was an error; don't attempt login and focus the first
@@ -314,14 +314,14 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
         int ADDRESS = 0;
     }
 
-    public class UpdateTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserUpdateTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String email;
         private final String password;
         private final String name;
         private final boolean contactable;
 
-        UpdateTask(String email, String password, String name, Boolean contactable) {
+        UserUpdateTask(String email, String password, String name, Boolean contactable) {
             this.email = email;
             this.password = password;
             this.name = name;
@@ -364,7 +364,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
                 updated = false;
             }
 
@@ -437,7 +437,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
                 ok = false;
             }
 
