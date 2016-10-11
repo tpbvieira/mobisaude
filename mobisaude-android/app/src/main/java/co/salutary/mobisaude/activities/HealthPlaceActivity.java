@@ -106,14 +106,14 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
             startActivity(new Intent(HealthPlaceActivity.this, EvaluationListActivity.class));
             return true;
         }else if (id == R.id.healthplace_action_evaluate) {
-            if (DeviceInfo.isLoggedin) {
+            if (DeviceInfo.isLoggedin()) {
                 startActivity(new Intent(HealthPlaceActivity.this, EvaluationActivity.class));
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
             }
             return true;
         }else if (id == R.id.healthplace_action_suggest) {
-            if (DeviceInfo.isLoggedin) {
+            if (DeviceInfo.isLoggedin()) {
                 startActivity(new Intent(HealthPlaceActivity.this, SuggestionActivity.class));
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();

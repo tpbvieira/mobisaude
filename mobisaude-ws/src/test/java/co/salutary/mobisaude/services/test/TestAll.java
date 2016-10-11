@@ -64,8 +64,9 @@ public class TestAll extends TestCase {
 
 			// gerar chave e token
 			String chave = gerarChaveTest();
+			System.out.println("Chave:"+chave);
 			String token = gerarTokenTest(mapper, broker, chave);
-			System.out.println(token);
+			System.out.println("Token:"+token);
 
 			// Consulta Dominios
 			consultaDominioTest(mapper, broker, token);

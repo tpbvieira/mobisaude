@@ -23,6 +23,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         setContentView(R.layout.main_menu);
 
@@ -128,17 +133,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         MenuItem menuLogin = (MenuItem) menuNav.findItem(R.id.menu_signin);
         if (menuLogin != null) {
-            menuLogin.setVisible(!DeviceInfo.isLoggedin);
+            menuLogin.setVisible(!DeviceInfo.isLoggedin());
             this.invalidateOptionsMenu();
         }
         MenuItem menuLogout = (MenuItem) menuNav.findItem(R.id.menu_logout);
         if (menuLogout != null) {
-            menuLogout.setVisible(DeviceInfo.isLoggedin);
+            menuLogout.setVisible(DeviceInfo.isLoggedin());
             this.invalidateOptionsMenu();
         }
         MenuItem menuProfile = (MenuItem) menuNav.findItem(R.id.menu_profile);
         if (menuProfile != null) {
-            menuProfile.setVisible(DeviceInfo.isLoggedin);
+            menuProfile.setVisible(DeviceInfo.isLoggedin());
             this.invalidateOptionsMenu();
         }
 
@@ -179,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if (DeviceInfo.isLoggedin) {
+        if (DeviceInfo.isLoggedin()) {
             TextView textUserName = (TextView) findViewById(R.id.text_userName);
             if (textUserName != null) {
                 String userName = settings.getPreferenceValue(Settings.USER_NAME);
@@ -213,8 +218,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.menu_signin) {
             startActivity(LoginActivity.class);
         } else if (id == R.id.menu_logout) {
-            DeviceInfo.isLoggedin = false;
-            settings.setPreferenceValue(Settings.USER_EMAIL, null);
+            DeviceInfo.logout(getApplicationContext());
             finish();
         }
 
@@ -245,10 +249,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected void onPreExecute() {
-
             super.onPreExecute();
             showProgress(true);
-
         }
 
         @Override

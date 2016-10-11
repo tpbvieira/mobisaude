@@ -21,15 +21,21 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.gcm.RegisterService;
 
 public class DeviceInfo {
 
     private static final String TAG = new Object(){}.getClass().getName();
 
-    public static boolean isLoggedin = false;
+    private static boolean isLoggedin = false;
+    private static LoginType loginType = null;
+    private static String email = null;
+    public static enum LoginType {
+        GOOGLE, FACEBOOK, MOBISAUDE
+    }
+
     public static boolean hasToken = false;
-    public static boolean isDeviceLocated = false;
 
     public static double lastLatitude;
     public static double lastLongitude;
@@ -251,4 +257,25 @@ public class DeviceInfo {
     public static boolean hasConnectivity(Context context){
         return ConnectivityUtils.getInstance(context).hasConnectivity();
     }
+
+    public static void login(Context context, String email, LoginType loginType){
+        DeviceInfo.email = email;
+        DeviceInfo.loginType = loginType;
+        DeviceInfo.isLoggedin = true;
+        Settings settings = new Settings(context);
+        settings.setPreferenceValue(Settings.USER_EMAIL, email);
+    }
+
+    public static void logout(Context context){
+        DeviceInfo.email = null;
+        DeviceInfo.loginType = null;
+        DeviceInfo.isLoggedin = false;
+        Settings settings = new Settings(context);
+        settings.setPreferenceValue(Settings.USER_EMAIL, null);
+    }
+
+    public static boolean isLoggedin(){
+        return isLoggedin;
+    }
+
 }

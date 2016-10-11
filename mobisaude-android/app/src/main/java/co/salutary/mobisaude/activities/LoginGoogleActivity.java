@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -124,6 +125,7 @@ public class LoginGoogleActivity extends AppCompatActivity implements
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             mStatusTextView.setText(getString(R.string.signedin, acct.getDisplayName()));
+            Toast.makeText(getApplicationContext(), acct.getEmail(), Toast.LENGTH_SHORT).show();
             updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.

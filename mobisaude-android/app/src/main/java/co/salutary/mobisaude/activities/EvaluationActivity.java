@@ -75,7 +75,7 @@ public class EvaluationActivity extends AppCompatActivity  {
         }
 
         Settings settings = new Settings(getApplicationContext());
-        if(!DeviceInfo.isLoggedin || settings.getPreferenceValue(Settings.USER_EMAIL) == null){
+        if(!DeviceInfo.isLoggedin()){
             Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -183,7 +183,8 @@ public class EvaluationActivity extends AppCompatActivity  {
                         Object objResponse = response.get("avaliacaoResponse");
                         try{
                             JSONObject avaliacaoResponse = (JSONObject) objResponse;
-                            if(!JsonUtils.hasError(avaliacaoResponse) && avaliacaoResponse.has("email") && avaliacaoResponse.getString("email").equals(settings.getPreferenceValue(Settings.USER_EMAIL)) ){
+                            if(!JsonUtils.hasError(avaliacaoResponse) && avaliacaoResponse.has("email") &&
+                                    avaliacaoResponse.getString("email").equals(settings.getPreferenceValue(Settings.USER_EMAIL))){
                                 success = false;
                                 throw new MobiSaudeAppException(getString(R.string.warn_many_evaluations));
                             }

@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -20,14 +22,24 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+
+import com.facebook.FacebookSdk;
 
 import org.json.JSONObject;
 
@@ -46,9 +58,17 @@ import co.salutary.mobisaude.util.Validator;
 import static android.Manifest.permission.READ_CONTACTS;
 
 
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        LoaderCallbacks<Cursor>,
+        View.OnClickListener  {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final int RC_SIGN_IN = 9001;
+
+    private GoogleApiClient mGoogleApiClient;
+    private TextView mStatusTextView;
+    private ProgressDialog mProgressDialog;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -76,6 +96,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mContentView = findViewById(R.id.login_form_view);
         mProgressView = findViewById(R.id.login_progress_bar);
 
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
         // email field
         mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email);
         populateAutoComplete();
@@ -86,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    mobisaudetLogin();
                     return true;
                 }
                 return false;
@@ -94,14 +127,109 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         // sign in button
-        Button mEmailSignInButton = (Button) findViewById(R.id.login_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        findViewById(R.id.google_sign_in_button).setOnClickListener(this);
+        findViewById(R.id.facebook_sign_in_button).setOnClickListener(this);
+        findViewById(R.id.login_sign_in_button).setOnClickListener(this);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            Log.d(TAG, "Got cached sign-in");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            showProgress(true);
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    showProgress(false);
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.google_sign_in_button:
+                googleLogin();
+                break;
+            case R.id.facebook_sign_in_button:
+                facebookLogin();
+                break;
+            case R.id.login_sign_in_button:
+                mobisaudetLogin();
+                break;
+            default:
+                Log.e(TAG, getString(R.string.error));
+                Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(signInResult);
+        }
+
+    }
+
+    private void handleSignInResult(GoogleSignInResult signInResult) {
+
+        if (signInResult.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = signInResult.getSignInAccount();
+
+            acct.getEmail();
+        } else {
+            // Signed out, show unauthenticated UI.
+            Toast.makeText(getApplicationContext(), getString(R.string.error_login), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void googleLogin() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void facebookLogin() {
+        googleLogin();
+    }
+
+    private void googleSignOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        updateLoginUI(false);
+                    }
+                });
+    }
+
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        updateLoginUI(false);
+                    }
+                });
+    }
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -151,7 +279,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void mobisaudetLogin() {
 
         if (mAuthTask != null) {
             return;
@@ -162,9 +290,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(null);
         boolean isValid = true;
         View focusView = null;
-        DeviceInfo.isLoggedin = false;
+        DeviceInfo.logout(getApplicationContext());
         Settings settings = new Settings(getApplicationContext());
-        settings.setPreferenceValue(Settings.USER_EMAIL, null);
 
         // Update login and password
         String email = mEmailView.getText().toString();
@@ -196,6 +323,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             focusView.requestFocus();
         }
+
+    }
+
+    public void updateLoginUI(boolean loggedIn){
 
     }
 
@@ -330,19 +461,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     JSONObject signinResponse = (JSONObject) json.get("userResponse");
                     String error = JsonUtils.getError(signinResponse);
                     if (error == null) {
-                        settings.setPreferenceValue(Settings.USER_EMAIL, mEmail);
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).getUser(request.toString());
                         json = new JSONObject(responseStr);
                         JSONObject userResponse = (JSONObject) json.get("userResponse");
                         settings.setPreferenceValue(Settings.USER_NAME, userResponse.get("name").toString());
-                        DeviceInfo.isLoggedin = hasAuth = true;
+                        hasAuth = true;
+                        DeviceInfo.login(getApplicationContext(), mEmail,DeviceInfo.LoginType.MOBISAUDE);
                     } else {
                         throw new MobiSaudeAppException(JsonUtils.getError(signinResponse));
                     }
                 }
             } catch (Exception e) {
-                DeviceInfo.isLoggedin = hasAuth = false;
-                settings.setPreferenceValue(Settings.USER_EMAIL, null);
+                DeviceInfo.logout(getApplicationContext());
                 errMsg = e.getMessage();
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
@@ -376,6 +506,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
 
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
 }

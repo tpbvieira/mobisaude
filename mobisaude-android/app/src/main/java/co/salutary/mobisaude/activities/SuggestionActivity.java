@@ -70,7 +70,7 @@ public class SuggestionActivity extends AppCompatActivity  {
         }
 
         Settings settings = new Settings(getApplicationContext());
-        if(!DeviceInfo.isLoggedin || settings.getPreferenceValue(Settings.USER_EMAIL) == null){
+        if(!DeviceInfo.isLoggedin()){
             Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
             return;
         }

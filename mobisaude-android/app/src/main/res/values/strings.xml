@@ -1,4 +1,7 @@
 <resources>
+
+    <string name="facebook_app_id">1829807303921135</string>
+
     <!-- titles -->
     <string name="app_name">MobiSaúde</string>
     <string name="title_activity_main">MobiSaúde</string>
@@ -90,6 +93,7 @@
     <string name="error_invalid_password">Senha inválida (precisa ter mais que 4 caracteres)</string>
     <string name="error_invalid_values">Valores inválidos</string>
     <string name="error_incorrect_password">Login ou senha incorreto</string>
+    <string name="error_login">Erro ao efetuar login</string>
     <string name="error_field_required">Este campo é obrigatório</string>
     <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde</string>
     <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>

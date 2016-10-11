@@ -10,7 +10,7 @@ public class Settings {
     private static final String TAG = new Object(){}.getClass().getName();
 
 //    public static final String serverUrl = "http://gatewaysiec.anatel.gov.br/gatewayarcher/mobile";
-    public static final String serverUrl = "http://192.168.1.102:8080/mobisaude-services/mobile";
+    public static final String serverUrl = "http://192.168.1.103:8080/mobisaude-services/mobile";
 
 	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
 	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";
@@ -31,9 +31,6 @@ public class Settings {
     public static final String TOKEN = "token";
     public static final String USER_EMAIL = "userEmail";
     public static final String USER_NAME = "userName";
-
-    // ??
-    public static final String REPORT_PROBLEMS = "REPORT_PROBLEMS";
 
     private Context context;
     
@@ -89,4 +86,5 @@ public class Settings {
         int value = prefs.getInt(key, 0);
         return value;
     }
+
 }

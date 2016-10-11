@@ -11,13 +11,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(namespace = "mobile", name = "gerarChaveRequest")
 public class GerarChaveRequest implements IMobileRequest {
-	/**
-	 * Validar o objeto
-	 */
+	
 	@Override
 	public boolean validate() {
-		// Validar campos
-			
 		return true;
 	}
+	
 }

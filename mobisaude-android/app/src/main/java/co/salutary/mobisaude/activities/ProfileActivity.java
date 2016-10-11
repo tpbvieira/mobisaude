@@ -73,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(!DeviceInfo.isLoggedin) {
+        if(!DeviceInfo.isLoggedin()) {
             finish();
         }
 

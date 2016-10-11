@@ -75,36 +75,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 
 	@POST
-	@Path("/gerarToken")
-	@Consumes("application/json;charset=utf-8")
-	@Produces("application/json;charset=utf-8")
-	public GerarTokenResponse gerarToken(GerarTokenRequest request) {logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
-		GerarTokenResponse response = new GerarTokenResponse();
-		try {
-			if (!request.validate()) {
-				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
-				return response;
-			}
-
-			String chave = request.getChave();
-			String token = gerarToken(chave);
-
-			if (token != null) {
-				response.setToken(token);
-			} else {
-				response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroGerandoToken"));
-				return response;
-			}
-		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.strings.gerartoken.erroProcessandoServico"), ex);
-			response.setErro(properties.getProperty("co.mobisaude.strings.gerartoken.erroProcessandoServico"));			
-			return response;
-		}
-		return response;
-	}
-
-	@POST
 	@Path("/gerarChave")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
@@ -129,6 +99,36 @@ public class ServiceBroker extends AbstractServiceBroker {
 		} catch (Exception ex) {
 			logger.error(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"), ex);
 			response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"));			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/gerarToken")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public GerarTokenResponse gerarToken(GerarTokenRequest request) {logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		GerarTokenResponse response = new GerarTokenResponse();
+		try {
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String chave = request.getChave();
+			String token = gerarToken(chave);
+
+			if (token != null) {
+				response.setToken(token);
+			} else {
+				response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroGerandoToken"));
+				return response;
+			}
+		} catch (Exception ex) {
+			logger.error(properties.getProperty("co.mobisaude.strings.gerartoken.erroProcessandoServico"), ex);
+			response.setErro(properties.getProperty("co.mobisaude.strings.gerartoken.erroProcessandoServico"));			
 			return response;
 		}
 		return response;
