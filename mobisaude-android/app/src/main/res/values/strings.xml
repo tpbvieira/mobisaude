@@ -1,73 +1,46 @@
 <resources>
 
-    <string name="facebook_app_id">1829807303921135</string>
+    <string name="facebook_app_id">806973966112326</string>
+    <string name="fb_login_protocol_scheme">fb1829807303921135</string>
 
     <!-- titles -->
     <string name="app_name">MobiSaúde</string>
     <string name="title_activity_main">MobiSaúde</string>
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
     <string name="title_activity_login">Entrar</string>
-    <string name="title_activity_login_google">Google</string>
-    <string name="title_activity_login_facebook">Facebook</string>
 
     <!-- domains/fields -->
     <string name="empty"></string>
-    <string name="settings">Configurações</string>
     <string name="estabelecimento_saude_label">Estabelecimento:</string>
     <string name="ok">Ok</string>
     <string name="alert">Alerta</string>
     <string name="tipo_label">Tipo:</string>
     <string name="gestao_label">Gestão:</string>
     <string name="endereco_label">Endereço:</string>
-    <string name="avaliacoes_label">Avaliações:</string>
-    <string name="avaliacao_label">Avaliação:</string>
     <string name="avaliacao_media_label">Avaliação Media:</string>
     <string name="title_label">Título:</string>
     <string name="estabelecimento_saude">Estabelecimento de Saúde</string>
     <string name="estabelecimentos_saude">Estabelecimentos de Saúde</string>
     <string name="evaluations">Avaliações</string>
-    <string name="regiao">Região</string>
-    <string name="regioes">Regiões</string>
-    <string name="tipo_gestao">Tipo de Gestão</string>
-    <string name="tipos_gestao">Tipos de Gestão</string>
-    <string name="tipo_estabelecimento_saude">Tipo de Estabelecimento de Saúde</string>
-    <string name="tipos_estabelecimento_saude">Tipos de Estabelecimento de Saúde</string>
     <string name="user">Usuário</string>
     <string name="user_guest">Usuário Desconhecido</string>
-    <string name="pref_title_system_sync_settings">Sincronização de configurações do sistema</string>
-    <string name="pref_header_notifications">Notificações</string>
-    <string name="pref_title_new_message_notifications">Notificações de novidades</string>
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silencioso</string>
-    <string name="pref_title_vibrate">Vibrar</string>
     <string name="profile_contactable">Receber Emails</string>
     <string name="yes">Sim</string>
-    <string name="no">Nao</string>
     <string name="estado">Estado</string>
-    <string name="uf">UF</string>
     <string name="cidade">Cidade</string>
     <string name="map">Mapa</string>
     <string name="menu_bookmarks">Favoritos</string>
     <string name="menu_dashboards">Gráficos</string>
     <string name="menu_search">Buscar</string>
     <string name="menu_maps">Mapa</string>
-    <string name="menu_settings">Configurações</string>
     <string name="menu_profile">Perfil</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Senha</string>
     <string name="name">Nome</string>
-    <string name="prompt_phone">Telefone</string>
     <string name="prompt_title">Título</string>
     <string name="prompt_evaluation">Avaliação</string>
     <string name="prompt_suggestion">Sugestão</string>
     <string name="prompt_date">Data</string>
-    <string name="pref_header_general">General</string>
-    <string name="pref_title_social_recommendations">Habilitar recomendações sociais</string>
-    <string name="pref_description_social_recommendations">Recomendações baseadas em hitórico</string>
-    <string name="pref_default_display_name">seu nome</string>
-    <string name="pref_title_add_friends_to_messages">Adicione amigos à mensagem</string>
-    <string name="help_escolha_uf">Escolha o estado da cidade desejada</string>
-    <string name="help_pesquise_nunicipio">Pesquise na sua cidade</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -76,11 +49,8 @@
     <string name="check_gps">Verificando GPS...</string>
     <string name="loading_data">Obtendo dados...</string>
     <string name="check_city">Identificando sua cidade...</string>
-    <string name="help_filtre_tecnologias">Filtre por ...</string>
-    <string name="help_visualize_ranking">Veja o... </string>
     <string name="searching">Buscando... </string>
     <string name="obtaining_location_from_gps">Obtendo localização por GPS...</string>
-    <string name="location_ok">Localizado!</string>
     <string name="signedup">Usuário Cadastrado</string>
     <string name="signedin">Usuário Autenticado</string>
     <string name="evaluated">Avaliação enviada</string>
@@ -97,7 +67,6 @@
     <string name="error_field_required">Este campo é obrigatório</string>
     <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde</string>
     <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
-    <string name="error_token_generation">Erro ao gerar token de comunicação</string>
     <string name="error_duplicated_email">Email já cadastrado</string>
     <string name="error_getting_evaluations">Erro ao obter avaliações</string>
     <string name="error_getting_evaluation">Erro ao obter avaliaçao</string>
@@ -109,7 +78,6 @@
     <string name="not_supported">Este aparelho não é suportado para a operação desejada</string>
     <string name="invalid_gps_apk">No valid Google Play Services APK found</string>
     <string name="erro_starts">Erro de inicialização</string>
-    <string name="permission_denied">Permissão negada</string>
     <string name="unknown_location">Localização não identificada</string>
     <string name="permission_rationale">É necessário ter permissão de acesso aos conatos</string>
 
@@ -123,7 +91,6 @@
     <string name="action_suggest">Sugerir Alteração</string>
     <string name="action_search">Buscar</string>
     <string name="action_select">Selecionar</string>
-    <string name="cancel">Cancelar</string>
     <string name="exit">Sair</string>
 
     <!-- prompt -->
@@ -131,37 +98,6 @@
     <string name="error_no_connectivity">Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
     <string name="unidentified_location">Não foi possível identificar sua localização. Deseja selecionar sua cidade a partir de uma lista?</string>
     <string name="gps_not_available">GPS Indisponível. Deseja utilizar os dados salvos?</string>
-    <string name="suggest_label">Alguma informação errada ou incompleta?</string>
 
     <!-- settings -->
-    <string name="date_format">dd/MM/yyyy HH:mm</string>
-    <string name="gif_loader">file:///android_res/drawable/anim_loader.gif</string>
-    <string-array name="pref_example_list_titles">
-        <item>Senore</item>
-        <item>Quando Possível</item>
-        <item>Nunca</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
 </resources>

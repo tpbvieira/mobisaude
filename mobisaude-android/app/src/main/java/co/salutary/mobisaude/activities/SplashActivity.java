@@ -17,6 +17,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
@@ -56,7 +59,11 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
+
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
         setContentView(R.layout.activity_splash);
 
         txtLabel = (TextView) findViewById(R.id.frm_splash_label);

@@ -57,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * Keep track of the login task to ensure we can cancel it if requested.
+     * Keep track of the emailPwdLogin task to ensure we can cancel it if requested.
      */
     private UserUpdateTask mAuthTask = null;
 
@@ -81,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
 
         mProgressView = findViewById(R.id.profile_progress_bar);
 
-        // Set up the login form.
+        // Set up the emailPwdLogin form.
         mContentView = findViewById(R.id.profile_form_view);
 
         // email field
@@ -174,7 +174,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
         boolean isValid = true;
         View focusView = null;
 
-        // Update login and password
+        // Update emailPwdLogin and password
         String name = mNameView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -213,12 +213,12 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
 
         if (isValid) {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // perform the user emailPwdLogin attempt.
             showProgress(true);
             mAuthTask = new UserUpdateTask(email, password, name, contactable);
             mAuthTask.execute((Void) null);
         } else {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt emailPwdLogin and focus the first
             // form field with an error.
             focusView.requestFocus();
         }
@@ -226,7 +226,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI and hides the emailPwdLogin form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {

@@ -64,7 +64,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // Set up the login form.
+        // Set up the emailPwdLogin form.
         mContentView = findViewById(R.id.signup_form_view);
         mProgressView = findViewById(R.id.signup_progress_bar);
 
@@ -142,9 +142,9 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in or register the account specified by the emailPwdLogin form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual emailPwdLogin attempt is made.
      */
     private void attemptSignup() {
 
@@ -159,7 +159,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         View focusView = null;
         boolean isValid = true;
 
-        // Update login and password
+        // Update emailPwdLogin and password
         String name = mNameView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -198,12 +198,12 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
 
         if (isValid) {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // perform the user emailPwdLogin attempt.
             showProgress(true);
             mAuthTask = new SignUpTask(email, password, name, phone);
             mAuthTask.execute((Void) null);
         } else {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt emailPwdLogin and focus the first
             // form field with an error.
             focusView.requestFocus();
         }

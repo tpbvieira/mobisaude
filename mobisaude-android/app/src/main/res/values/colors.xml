@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="deepSkyBlue">#00aced</color>
     <color name="pacificBlue">#00a0c6</color>
     <color name="toryBlue">#303F9F</color>
     <color name="freeSpeechBlue">#3F51B5</color>
-    <color name="marinerBlue">#3b5998</color>
-    <color name="shipCoveBlue">#6d84b4</color>
     <color name="spindleBlue">#afbdd4</color>
     <color name="hawkesBlue">#d8dfea</color>
     <color name="white">#ffffff</color>
     <color name="grey">#bebebe</color>
     <color name="gray">#bebebe</color>
     <color name="lightGray">#d3d3d3</color>
-    <color name="violetRed">#FF4081</color>
 
     <color name="splash_background">#ffffff</color>
     <color name="splash_font">#303F9F</color>
 
-    <color name="mainBar">#3b5998</color>
     <color name="font">#303F9F</color>
     <color name="background">#d8dfea</color>
 

@@ -28,6 +28,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -37,9 +44,11 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
@@ -62,13 +71,17 @@ public class LoginActivity extends AppCompatActivity implements
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 9001;
 
+    private CallbackManager callbackManager;    //declaring callback instance
+    private LoginButton faceSignInButton;       //declaring loginbutton of facebook
+
+
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * Keep track of the login task to ensure we can cancel it if requested.
+     * Keep track of the emailPwdLogin task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
@@ -80,11 +93,31 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
+
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo("co.salutary.mobisaude", PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            Log.e(TAG, e.getMessage(), e);
+//        } catch (NoSuchAlgorithmException e) {
+//            Log.e(TAG, e.getMessage(), e);
+//        }
 
         setContentView(R.layout.activity_login);
 
-        // Set up the login form.
+        callbackManager = CallbackManager.Factory.create();
+
+        // Set up the emailPwdLogin form.
         mContentView = findViewById(R.id.login_form_view);
         mProgressView = findViewById(R.id.login_progress_bar);
 
@@ -107,15 +140,63 @@ public class LoginActivity extends AppCompatActivity implements
             }
         });
 
-        // sign in buttons
+        // User_PWD Login
         findViewById(R.id.login_sign_in_button).setOnClickListener(this);
 
+        // Google
         SignInButton googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
         googleSignInButton.setOnClickListener(this);
 
-        LoginButton faceSignInButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
-        faceSignInButton.setOnClickListener(this);
+        // Facebook
+        faceSignInButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
+        faceSignInButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));
+        faceSignInButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(new Object() {
+                }.getClass().getName(), new Object() {
+                }.getClass().getEnclosingMethod().getName());
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                try {
+                                    String name = object.getString("name");
+                                    String email = object.getString("email");
+
+                                    // Save information and sign up new user, if dont exists
+                                    DeviceInfo.facebookLogin(getApplicationContext(), email, name);
+                                    // Try add signed in user into MobiSaúde DB
+                                    SignUpTask mSignUpTask = new SignUpTask(email, email, name, "");
+                                    mSignUpTask.execute((Void) null);
+
+                                    // Success
+                                    Log.d(TAG, getString(R.string.signedin) + ":" + DeviceInfo.getLoginType().name());
+                                    Toast.makeText(getApplicationContext(), getString(R.string.signedin), Toast.LENGTH_SHORT).show();
+                                    finish();
+
+                                } catch(JSONException e) {
+                                    Log.e(TAG, e.getMessage(), e);
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields","id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+            }
+
+        });
+
     }
 
     @Override
@@ -130,7 +211,7 @@ public class LoginActivity extends AppCompatActivity implements
                 googleLogin();
                 break;
             case R.id.facebook_sign_in_button:
-                facebookLogin();
+                // Look for onCompleted(JSONObject object, GraphResponse response)
                 break;
             case R.id.login_sign_in_button:
                 userLogin();
@@ -142,6 +223,9 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void googleLogin() {
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
 
         // Pending Google Login
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(DeviceInfo.mGoogleApiClient);
@@ -170,23 +254,28 @@ public class LoginActivity extends AppCompatActivity implements
 
     }
 
-    private void facebookLogin() {
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult:" + requestCode);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleGoogleSignInResult(signInResult);
+        }else {// Facebook
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
 
     }
 
     private void handleGoogleSignInResult(GoogleSignInResult signInResult) {
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
 
         if (signInResult.isSuccess()) {
             // Signed in successfully
@@ -198,11 +287,12 @@ public class LoginActivity extends AppCompatActivity implements
             mAuthTask.execute((Void) null);
 
             // Success
+            Log.d(TAG, getString(R.string.signedin) + ":" + DeviceInfo.getLoginType().name());
             Toast.makeText(getApplicationContext(), getString(R.string.signedin), Toast.LENGTH_SHORT).show();
             finish();
         } else {
             // Signed out, show unauthenticated UI.
-            DeviceInfo.googleLogout(getApplicationContext());
+            DeviceInfo.logout(getApplicationContext());
             Toast.makeText(getApplicationContext(), getString(R.string.error_login), Toast.LENGTH_SHORT).show();
         }
 
@@ -249,11 +339,14 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in or register the account specified by the emailPwdLogin form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual emailPwdLogin attempt is made.
      */
     private void userLogin() {
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
 
         if (mAuthTask != null) {
             return;
@@ -265,7 +358,7 @@ public class LoginActivity extends AppCompatActivity implements
         boolean isValid = true;
         View focusView = null;
 
-        // Update login and password
+        // Update emailPwdLogin and password
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -300,7 +393,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI and hides the emailPwdLogin form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -389,7 +482,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
+     * Represents an asynchronous emailPwdLogin/registration task used to authenticate
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
@@ -405,6 +498,9 @@ public class LoginActivity extends AppCompatActivity implements
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            Log.d(new Object() {
+            }.getClass().getName(), new Object() {
+            }.getClass().getEnclosingMethod().getName());
 
             boolean hasAuth = false;
             Settings settings = new Settings(getApplicationContext());
@@ -433,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).getUser(request.toString());
                         json = new JSONObject(responseStr);
                         JSONObject userResponse = (JSONObject) json.get("userResponse");
-                        DeviceInfo.login(getApplicationContext(), mEmail, DeviceInfo.LoginType.EMAIL_PWD, userResponse.get("name").toString());
+                        DeviceInfo.emailPwdLogin(getApplicationContext(), mEmail, DeviceInfo.LoginType.EMAIL_PWD, userResponse.get("name").toString());
                         hasAuth = true;
                     } else {
                         throw new MobiSaudeAppException(JsonUtils.getError(signinResponse));
@@ -454,6 +550,7 @@ public class LoginActivity extends AppCompatActivity implements
             showProgress(false);
 
             if (success) {
+                Log.d(TAG, getString(R.string.signedin) + ":" + DeviceInfo.getLoginType().name());
                 Toast.makeText(getApplicationContext(), getString(R.string.signedin), Toast.LENGTH_SHORT).show();
                 finish();
             } else {
@@ -498,6 +595,10 @@ public class LoginActivity extends AppCompatActivity implements
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            Log.d(new Object() {
+            }.getClass().getName(), new Object() {
+            }.getClass().getEnclosingMethod().getName());
+
             boolean signedUp = false;
 
             Settings settings = new Settings(getApplicationContext());

@@ -3,13 +3,12 @@ package co.salutary.mobisaude.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.HashMap;
-
 public class Settings {
 
     private static final String TAG = new Object(){}.getClass().getName();
 
-    public static final String serverUrl = "http://192.168.1.100:8080/mobisaude-services/mobile";
+//    public static final String serverUrl = "http://192.168.1.100:8080/mobisaude-services/mobile"; // DEV
+    public static final String serverUrl = "http://52.10.117.16/mobisaude-services/mobile"; // PRO
 
 	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
 	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";
@@ -50,26 +49,24 @@ public class Settings {
         final SharedPreferences prefs = getSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
     
 	public String getPreferenceValue(String key) {
         final SharedPreferences prefs = getSharedPreferences(context);
-        String registrationId = prefs.getString(key, "");
-        return registrationId;
+        return prefs.getString(key, "");
     }
 	
 	public void setPreferenceValues(String key, String value) {
         final SharedPreferences prefs = getSharedPreferencesReport(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
     
 	public String getPreferenceValues(String key) {
         final SharedPreferences prefs = getSharedPreferencesReport(context);
-        String registrationId = prefs.getString(key, "");
-        return registrationId;
+        return prefs.getString(key, "");
     }
 
 	
@@ -77,13 +74,12 @@ public class Settings {
         SharedPreferences prefs = getSharedPreferences(ctx);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
     
 	public static int getPreferenceValueInt(Context ctx, String key) {
         final SharedPreferences prefs = getSharedPreferences(ctx);
-        int value = prefs.getInt(key, 0);
-        return value;
+        return prefs.getInt(key, 0);
     }
 
 }

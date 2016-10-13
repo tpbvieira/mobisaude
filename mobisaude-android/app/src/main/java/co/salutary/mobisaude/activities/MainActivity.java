@@ -23,22 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
@@ -63,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements
     private ClientCache clientCache;
 
     //ui
-    private View mContentView;
     private View mProgressView;
 
     @Override
@@ -71,8 +62,6 @@ public class MainActivity extends AppCompatActivity implements
 
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
-
         setContentView(R.layout.main_menu);
 
         // Main top bar
@@ -90,33 +79,7 @@ public class MainActivity extends AppCompatActivity implements
         clientCache = ClientCache.getInstance();
 
         //ui
-        mContentView = findViewById(R.id.main_content_form_view);
         mProgressView = findViewById(R.id.main_content_progress_bar);
-
-        // debugging ui
-        TextView stateView = (TextView) findViewById(R.id.main_content_state);
-        stateView.setText(getString(R.string.estado) + "=" + clientCache.getUf().getNome());
-        TextView citieView = (TextView) findViewById(R.id.main_content_city);
-        citieView.setText(getString(R.string.cidade) + "=" + clientCache.getCidade().getNome());
-
-        try {
-            String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
-            HashMap<String,String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
-            TextView tipoESView = (TextView) findViewById(R.id.main_content_tipo_es);
-            tipoESView.setText(getString(R.string.tipo_estabelecimento_saude) + "=" + tiposES.values().size());
-
-            String tipoGestaoString = settings.getPreferenceValues(Settings.TIPO_GESTAO);
-            HashMap<String,String> tiposGestao = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoGestaoString));
-            TextView tipoGestaoView = (TextView) findViewById(R.id.main_content_tipo_gestao);
-            tipoGestaoView.setText(getString(R.string.tipo_gestao) + "=" + tiposGestao.size());
-
-            String regiaoString = settings.getPreferenceValues(Settings.REGIAO);
-            HashMap<String,String> regioes = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(regiaoString));
-            TextView regiaoView = (TextView) findViewById(R.id.main_content_regiao);
-            regiaoView.setText(getString(R.string.regiao) + "=" + regioes.size());
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
 
         new UpdateFieldsTask(String.valueOf(clientCache.getCidade().getIdCidade())).execute();
 
@@ -318,11 +281,6 @@ public class MainActivity extends AppCompatActivity implements
 
             if (success) {
                 showProgress(false);
-                TextView mESView = (TextView) findViewById(R.id.main_content_es);
-                mESView.setEnabled(false);
-                mESView.setText(getString(R.string.estabelecimento_saude) + "=" + mNumES);
-                mESView.setEnabled(true);
-                mESView.setVisibility(View.VISIBLE);
             } else {
                 Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
             }
@@ -340,15 +298,6 @@ public class MainActivity extends AppCompatActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mContentView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -359,7 +308,6 @@ public class MainActivity extends AppCompatActivity implements
             });
         } else {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
 
     }

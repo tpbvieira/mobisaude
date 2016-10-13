@@ -13,26 +13,25 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.activities.LoginActivity;
 import co.salutary.mobisaude.gcm.RegisterService;
 import co.salutary.mobisaude.util.ConnectivityUtils;
 
@@ -42,7 +41,8 @@ public class DeviceInfo {
 
     private static boolean isLoggedIn = false;
     private static LoginType loginType = null;
-    public static enum LoginType {
+
+    public enum LoginType {
         GOOGLE, FACEBOOK, EMAIL_PWD
     }
 
@@ -53,7 +53,7 @@ public class DeviceInfo {
     public static double lastLatitude;
     public static double lastLongitude;
 
-    public static String statusMesage = "";
+    public static String statusMessage = "";
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String REGISTRATION_GCM_CLIENT = "registration_gcm_client";
@@ -270,26 +270,6 @@ public class DeviceInfo {
         return ConnectivityUtils.getInstance(context).hasConnectivity();
     }
 
-    public static void login(Context context, String email, LoginType loginType, String name){
-        DeviceInfo.loginType = loginType;
-        DeviceInfo.isLoggedIn = true;
-        Settings settings = new Settings(context);
-        settings.setPreferenceValue(Settings.USER_EMAIL, email);
-        settings.setPreferenceValue(Settings.USER_NAME, name);
-    }
-
-    public static void logout(Context context){
-        Log.d(new Object() {
-        }.getClass().getName(), new Object() {
-        }.getClass().getEnclosingMethod().getName());
-
-        DeviceInfo.loginType = null;
-        DeviceInfo.isLoggedIn = false;
-        Settings settings = new Settings(context);
-        settings.setPreferenceValue(Settings.USER_EMAIL, null);
-        settings.setPreferenceValue(Settings.USER_NAME, null);
-    }
-
     public static LoginType getLoginType(){
         return loginType;
     }
@@ -325,10 +305,66 @@ public class DeviceInfo {
         settings.setPreferenceValue(Settings.USER_NAME, name);
     }
 
-    public static void googleLogout(Context context){
+    public static void facebookLogin(Context context, String email, String name){
+        DeviceInfo.loginType = LoginType.FACEBOOK;
+        DeviceInfo.isLoggedIn = true;
+        Settings settings = new Settings(context);
+        settings.setPreferenceValue(Settings.USER_EMAIL, email);
+        settings.setPreferenceValue(Settings.USER_NAME, name);
+    }
+
+    public static void emailPwdLogin(Context context, String email, LoginType loginType, String name){
+        DeviceInfo.loginType = loginType;
+        DeviceInfo.isLoggedIn = true;
+        Settings settings = new Settings(context);
+        settings.setPreferenceValue(Settings.USER_EMAIL, email);
+        settings.setPreferenceValue(Settings.USER_NAME, name);
+    }
+
+    public static void logout(Context context){
+        switch (DeviceInfo.getLoginType()){
+            case GOOGLE:
+                DeviceInfo.googleLogout(context);
+                break;
+            case FACEBOOK:
+                DeviceInfo.facebookLogout(context);
+                break;
+            case EMAIL_PWD:
+                DeviceInfo.emailPwdLogout(context);
+                break;
+            default:
+                DeviceInfo.emailPwdLogout(context);
+                break;
+        }
+    }
+
+    private static void facebookLogout(Context context) {
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
+
+        emailPwdLogout(context);
+
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return;
+        }
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null,
+                HttpMethod.DELETE,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        LoginManager.getInstance().logOut();
+                    }
+                }).executeAsync();
+    }
+
+    private static void googleLogout(Context context){
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
+
+        emailPwdLogout(context);
 
         try {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -342,6 +378,18 @@ public class DeviceInfo {
             Log.e(TAG, e.getMessage(), e);
         }
 
-        logout(context);
     }
+
+    private static void emailPwdLogout(Context context){
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
+
+        DeviceInfo.loginType = null;
+        DeviceInfo.isLoggedIn = false;
+        Settings settings = new Settings(context);
+        settings.setPreferenceValue(Settings.USER_EMAIL, null);
+        settings.setPreferenceValue(Settings.USER_NAME, null);
+    }
+
 }

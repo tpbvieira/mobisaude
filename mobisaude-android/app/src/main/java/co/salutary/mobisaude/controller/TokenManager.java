@@ -57,14 +57,14 @@ public class TokenManager {
 
         } catch (MobiSaudeAppException | JSONException e) {
             Log.e(TAG, e.getMessage());
-            DeviceInfo.statusMesage = e.getMessage();
+            DeviceInfo.statusMessage = e.getMessage();
             DeviceInfo.hasToken = false;
             Settings localPref = new Settings(context);
             localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
             return false;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-            DeviceInfo.statusMesage = e.getMessage();
+            DeviceInfo.statusMessage = e.getMessage();
             DeviceInfo.hasToken = false;
             Settings localPref = new Settings(context);
             localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
