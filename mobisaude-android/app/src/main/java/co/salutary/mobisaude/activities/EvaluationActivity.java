@@ -189,7 +189,7 @@ public class EvaluationActivity extends AppCompatActivity  {
                                 throw new MobiSaudeAppException(getString(R.string.warn_many_evaluations));
                             }
                         }catch (ClassCastException e){
-                            Log.d(TAG,e.getMessage());
+                            Log.e(TAG, e.getMessage(), e);
                         }
                     }
                 }
@@ -207,15 +207,14 @@ public class EvaluationActivity extends AppCompatActivity  {
                                 throw new MobiSaudeAppException(JsonUtils.getError(response));
                             }
                         }catch (ClassCastException e){
-                            Log.d(TAG,e.getMessage());
+                            Log.e(TAG, e.getMessage(), e);
                         }
                     }
                 }
             } catch (Exception e) {
                 success = false;
                 errMsg = e.getMessage();
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
 
             return success;

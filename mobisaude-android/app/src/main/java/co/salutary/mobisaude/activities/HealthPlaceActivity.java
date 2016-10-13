@@ -283,8 +283,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
             } catch (Exception e) {
                 mErrorMsg = e.getMessage();
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
                 ok = false;
             }
 
@@ -313,8 +312,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                         mNomeFantasiaText.setText(es.getNomeFantasia());
                         mEnderecoText.setText(es.getEndereco());
                     } catch (JSONException e) {
-                        Log.e(TAG, e.getMessage());
-                        e.printStackTrace();
+                        Log.e(TAG, e.getMessage(), e);
                     }
                 }
 

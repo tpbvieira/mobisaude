@@ -231,7 +231,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
             try {
                 Thread.sleep(TIME_TEMP);
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
             }
             return null;
         }
@@ -241,7 +241,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
             try {
                 dismissDialog(PROGRESS_BAR_VERIFICAR);
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
             }
             new DeterminarLocal(getApplicationContext()).execute(4);
         }
@@ -267,7 +267,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                 try {
                     Thread.sleep(TIME_TEMP);
                 } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e(TAG, e.getMessage(), e);
                 }
                 for (int i = 0; i < params[0]; i++) {
                     Thread.sleep(TIME_TEMP);
@@ -329,7 +329,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
             }
             return false;
         }
@@ -340,7 +340,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                 Thread.sleep(TIME_TEMP);
                 dismissDialog(PROGRESS_BAR_DETERMINAR);
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
             }
             try {
                 if(result){
@@ -350,7 +350,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                     Toast.makeText(getApplicationContext(), getString(R.string.unknown_location), Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
             }
         }
     }
@@ -394,7 +394,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 }

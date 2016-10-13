@@ -18,11 +18,11 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 
@@ -161,14 +161,13 @@ public class SuggestionActivity extends AppCompatActivity  {
                             }
                         }catch (ClassCastException e){
                             success = true;
-                            Log.d(TAG,e.getMessage());
+                            Log.e(TAG, e.getMessage(), e);
                         }
                     }
                 }
             } catch (Exception e) {
                 errMsg = e.getMessage();
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
 
             return success;

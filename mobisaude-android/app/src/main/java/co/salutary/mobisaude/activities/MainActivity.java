@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -169,15 +168,13 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.menu_bookmarks) {
-            startActivity(LoginGoogleActivity.class);
+            startActivity(BookmarksActivity.class);
         } else if (id == R.id.menu_search) {
             startActivity(HealthPlaceSelectionActivity.class);
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
         } else if (id == R.id.menu_dashboard) {
             startActivity(DashboardActivity.class);
-//        } else if (id == R.id.menu_settings) {
-//            startActivity(LoginGoogleActivity.class);
         } else if (id == R.id.menu_profile) {
             startActivity(ProfileActivity.class);
         } else if (id == R.id.menu_signup) {

@@ -224,7 +224,6 @@ public class BookmarksActivity extends AppCompatActivity {
 
                     } catch (ClassCastException e) {
                         mWarningMsg = getString(R.string.warn_no_evaluation);
-                        Log.d(TAG, e.getMessage());
                     }
 
                 } else {
@@ -233,8 +232,7 @@ public class BookmarksActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 mErrorMsg = e.getMessage();
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
                 ok = false;
             }
 

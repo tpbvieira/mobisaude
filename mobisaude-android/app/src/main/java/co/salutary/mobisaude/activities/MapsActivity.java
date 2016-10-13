@@ -27,10 +27,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
-import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener  {
@@ -45,8 +45,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private HashMap<String, String> tipoESMap;
     private HashMap<String,String> markers = new HashMap<>();
-
-    private View mProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +107,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
         } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {

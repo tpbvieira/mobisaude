@@ -59,6 +59,14 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".activities.BookmarksActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".activities.EvaluationActivity"
             android:label="@string/action_evaluate" />
         <activity
@@ -81,9 +89,6 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".activities.LoginGoogleActivity"
-            android:label="@string/action_sign_in" />
         <activity
             android:name=".activities.SignupActivity"
             android:label="@string/user" />

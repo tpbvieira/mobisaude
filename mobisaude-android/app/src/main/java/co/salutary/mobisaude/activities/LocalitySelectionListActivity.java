@@ -296,7 +296,7 @@ public class LocalitySelectionListActivity extends ListActivity {
             db.close();
             setListAdapter(adapter);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 

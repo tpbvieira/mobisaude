@@ -117,8 +117,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
             mTipoESSpiner.setSelection(9 - 1);//unidade básica de saúde
             mTipoESSpiner.setSelected(true);
         } catch (JSONException e) {
-            Log.e(TAG,e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
 
         mSearchText = (EditText) findViewById(R.id.hp_select_list_search_text);
@@ -356,8 +355,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
 
             setListAdapter(mListAdapterModel);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 

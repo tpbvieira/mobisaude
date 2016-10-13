@@ -96,8 +96,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         try {
             onVerifyConectivity();
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
@@ -165,8 +164,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
                 return isSuccess;
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
             return isSuccess;
         }
@@ -187,8 +185,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
         }
     }
@@ -220,8 +217,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 Thread.sleep(SLEEP_TIME);
                 return DeviceInfo.hasLocationProvider();
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
             return false;
         }
@@ -238,8 +234,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     unavailableGPSAlert();
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
         }
     }
@@ -270,8 +265,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     return true;
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
                 return false;
             }
             return false;
@@ -286,8 +280,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     unsavedLocationAlert();
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
         }
     }
@@ -390,8 +383,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
             return false;
         }
@@ -414,8 +406,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     }
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
         }
     }
@@ -501,8 +492,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
             return true;
         }
@@ -523,8 +513,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                     finish();
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
         }
     }
@@ -557,8 +546,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             });
             alerta.show();
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
