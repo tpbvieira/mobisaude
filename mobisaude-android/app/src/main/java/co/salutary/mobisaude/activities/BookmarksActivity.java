@@ -4,7 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,25 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.Toast;
 
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.adapters.EvaluationListAdapter;
+import co.salutary.mobisaude.adapters.GenericListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.model.Avaliacao;
+import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 
@@ -40,6 +38,7 @@ public class BookmarksActivity extends AppCompatActivity {
     }.getClass().getName();
 
     private ClientCache clientCache;
+    private Settings settings;
 
     //UI
     private View mProgressView;
@@ -47,10 +46,14 @@ public class BookmarksActivity extends AppCompatActivity {
 
     private UpdateUITask uiTask;
 
+    List<EstabelecimentoSaude> bookmark = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation_list);
+
+        settings = new Settings(getApplicationContext());
 
         // UI
         mProgressView = findViewById(R.id.evaluation_list_progress_bar);
@@ -60,9 +63,6 @@ public class BookmarksActivity extends AppCompatActivity {
 
         uiTask = new UpdateUITask();
         uiTask.execute();
-
-        List<String> bestES = ClientCache.getInstance().getBestES(this.getApplicationContext());
-
     }
 
     @Override
@@ -79,44 +79,10 @@ public class BookmarksActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                final Dialog dialog = new Dialog(BookmarksActivity.this);
-                dialog.setContentView(R.layout.activity_evaluation);
-
-                RatingBar mRatingBar = (RatingBar) dialog.findViewById(R.id.evaluation_ratingbar);
-                AutoCompleteTextView mTitleText = (AutoCompleteTextView) dialog.findViewById(R.id.evaluation_title);
-                AutoCompleteTextView mEvaluationText = (AutoCompleteTextView) dialog.findViewById(R.id.evaluation_text_evaluation);
-                AutoCompleteTextView mDate = (AutoCompleteTextView) dialog.findViewById(R.id.evaluation_date);
-                Button mEvaluationButton = (Button) dialog.findViewById(R.id.evaluation_button);
-
-                mRatingBar.setEnabled(false);
-                mTitleText.setEnabled(false);
-                mTitleText.setFocusable(false);
-                mEvaluationText.setEnabled(false);
-                mEvaluationText.setFocusable(false);
-                mDate.setVisibility(View.VISIBLE);
-                mDate.setFocusable(false);
-
-                Avaliacao avaliacao = (Avaliacao) parent.getAdapter().getItem(position);
-                mRatingBar.setRating(avaliacao.getRating());
-                mTitleText.setText(avaliacao.getTitulo());
-                mEvaluationText.setText(avaliacao.getAvaliacao());
-                mDate.setEnabled(true);
-                mDate.setHint(R.string.prompt_date);
-                mDate.setText(JsonUtils.sdfDMY.format(avaliacao.getDate()));
-                mDate.setEnabled(false);
-                mEvaluationButton.setText(getString(R.string.ok));
-                mEvaluationButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.setTitle(clientCache.getEstabelecimentoSaude().getNomeFantasia());
-                dialog.show();
+                settings.setPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE, Integer.toString(bookmark.get(position).getIdCnes()));
+                Intent intent = new Intent(getApplicationContext(), HealthPlaceActivity.class);
+                startActivity(intent);
             }
-
         };
 
     }
@@ -177,60 +143,13 @@ public class BookmarksActivity extends AppCompatActivity {
             }
 
             try {
-                // Evaluations
-                JSONObject parameters = new JSONObject();
-                parameters.put("token", token);
-                parameters.put("idES", settings.getPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE));
-                JSONObject request = new JSONObject();
-                request.put("avaliacaoRequest", parameters);
-                String responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdES(request.toString());
-                if (responseStr != null) {
-
-                    JSONObject json = new JSONObject(responseStr);
-                    Object objResponse = json.get("avaliacaoResponse");
-                    try {
-
-                        JSONObject avaliacaoResponse = (JSONObject) objResponse;
-                        if (!JsonUtils.hasError(avaliacaoResponse)) {
-
-                            if (avaliacaoResponse.has("avaliacoes")) {
-
-                                List<Avaliacao> avaliacoes = new ArrayList<>();
-                                try {
-
-                                    JSONArray array = avaliacaoResponse.getJSONArray("avaliacoes");
-                                    for (int i = 0; i < array.length(); ++i) {
-                                        JSONObject obj = array.getJSONObject(i);
-                                        Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao(obj);
-                                        if (avaliacao != null) {
-                                            avaliacoes.add(avaliacao);
-                                        }
-                                    }
-
-                                } catch (Exception e) {
-                                    Avaliacao avaliacao = JsonUtils.jsonObjectToAvaliacao((JSONObject) avaliacaoResponse.get("avaliacoes"));
-                                    if (avaliacao != null) {
-                                        avaliacoes.add(avaliacao);
-                                    }
-                                }
-                                clientCache.setListAvaliacoes(avaliacoes);
-
-                            } else {
-                                mWarningMsg = getString(R.string.warn_no_evaluation);
-                            }
-
-                        } else {
-                            throw new MobiSaudeAppException(JsonUtils.getError(avaliacaoResponse));
-                        }
-
-                    } catch (ClassCastException e) {
-                        mWarningMsg = getString(R.string.warn_no_evaluation);
+                List<String> bookmarkIds = ClientCache.getInstance().getBookmark(getApplicationContext());
+                for(String idEs: bookmarkIds){
+                    EstabelecimentoSaude es = getES(getApplicationContext(), token, idEs);
+                    if(es != null) {
+                        bookmark.add(es);
                     }
-
-                } else {
-                    throw new MobiSaudeAppException(getString(R.string.error_getting_evaluations));
                 }
-
             } catch (Exception e) {
                 mErrorMsg = e.getMessage();
                 Log.e(TAG, e.getMessage(), e);
@@ -244,22 +163,22 @@ public class BookmarksActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
 
             if (success) {
-                // Avaliacoes
-                List<Avaliacao> avaliacoes = clientCache.getListAvaliacoes();
-                if (avaliacoes != null && avaliacoes.size() > 0) {
-                    mEvaluationsList.setAdapter(new EvaluationListAdapter(BookmarksActivity.this, R.layout.evaluation_list_item_listview, avaliacoes));
-                    mEvaluationsList.setOnItemClickListener(onItemClickListener());
-                }else{
-                    finish();
+                GenericListAdapter mListAdapter = null;
+                if (bookmark != null && bookmark.size() > 0) {
+                    mListAdapter = new GenericListAdapter();
+                    for (EstabelecimentoSaude es : bookmark) {
+                        mListAdapter.addItem(new GenericListAdapter.Item(es.getNomeFantasia(), es.getIdCnes()));
+                    }
                 }
 
-                if (mWarningMsg != null) {
-                    Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
-                }
+                mEvaluationsList.setAdapter(mListAdapter);
+                mEvaluationsList.setOnItemClickListener(onItemClickListener());
+            }else{
+                Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+            }
 
-            } else {
-                Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
-                finish();
+            if (mWarningMsg != null) {
+                Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
             }
 
             showProgress(false);
@@ -269,6 +188,36 @@ public class BookmarksActivity extends AppCompatActivity {
         protected void onCancelled() {
             showProgress(false);
         }
+
+    }
+
+    public static EstabelecimentoSaude getES(Context context, String token, String idES) throws MobiSaudeAppException {
+        EstabelecimentoSaude es = null;
+        try {
+            JSONObject params = new JSONObject();
+            params.put("token", token);
+            params.put("idES", idES);
+            JSONObject request = new JSONObject();
+            request.put("esRequest", params);
+            String responseStr = ServiceBroker.getInstance(context).getESByIdES(request.toString());
+            if (responseStr != null) {
+                JSONObject json = new JSONObject(responseStr);
+                JSONObject response = (JSONObject) json.get("esResponse");
+                String error = JsonUtils.getError(response);
+                if (error == null) {
+                    JSONObject obj = (JSONObject) response.get("estabelecimentosSaude");
+                    es = JsonUtils.jsonObjectToES(obj);
+                } else {
+                    throw new MobiSaudeAppException(JsonUtils.getError(response));
+                }
+            } else {
+                throw new MobiSaudeAppException(context.getString(R.string.error_getting_es));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return es;
 
     }
 

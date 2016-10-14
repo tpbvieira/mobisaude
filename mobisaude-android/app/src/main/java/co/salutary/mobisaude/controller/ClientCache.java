@@ -25,6 +25,7 @@ public class ClientCache {
     private EstabelecimentoSaude estabelecimentoSaude;
     private List<EstabelecimentoSaude> listEstabelecimentosSaudeCidade;
     private List<EstabelecimentoSaude> listEstabelecimentosSaudeTipoES;
+    private List<EstabelecimentoSaude> bookmark;
     private Avaliacao avaliacaoMedia;
     private List<Avaliacao> listAvaliacoes;
 
@@ -89,7 +90,7 @@ public class ClientCache {
 
     }
 
-    public List<String> getBestES(Context context){
+    public List<String> getBookmark(Context context){
 
         Map<String, String> bestES = null;
 
@@ -111,7 +112,9 @@ public class ClientCache {
         for(int i = 0; i<10 && i<counts.length; i++){
             codsES.add(((Map.Entry<String, String>) counts[i]).getKey());
         }
+
         return codsES;
+
     }
 
 }
