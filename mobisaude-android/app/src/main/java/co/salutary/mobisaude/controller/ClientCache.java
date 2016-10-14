@@ -1,13 +1,24 @@
 package co.salutary.mobisaude.controller;
 
-import java.util.List;
+import android.content.Context;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.model.UF;
+import co.salutary.mobisaude.util.JsonUtils;
 
 public class ClientCache {
+
+    private static final String TAG = new Object(){}.getClass().getName();
 
     private UF uf;
     private Cidade cidade;
@@ -56,6 +67,51 @@ public class ClientCache {
 
     public void setAvaliacaoMedia(Avaliacao avaliacaoMedia) {
         this.avaliacaoMedia = avaliacaoMedia;
+    }
+
+    public void countES(Context context, Integer codES){
+
+        Map<String, String> bestES = new HashMap<>();
+        Integer count = 1;
+
+        Settings settings = new Settings(context);
+        String strBookmark = settings.getPreferenceValue(Settings.BOOKMARK);
+        if(strBookmark != null && strBookmark.length() > 2){
+            bestES = JsonUtils.fromStrToMap(strBookmark);
+            if(bestES.containsKey(codES.toString())){
+                count = Integer.valueOf(bestES.get(codES.toString())) + count;
+            }
+        }
+
+        bestES.put(codES.toString(), count.toString());
+        String json = JsonUtils.fromMapToString(bestES);
+        settings.setPreferenceValue(Settings.BOOKMARK, json);
+
+    }
+
+    public List<String> getBestES(Context context){
+
+        Map<String, String> bestES = null;
+
+        Settings settings = new Settings(context);
+        String strBookmark = settings.getPreferenceValue(Settings.BOOKMARK);
+        if(strBookmark != null){
+            bestES = JsonUtils.fromStrToMap(strBookmark);
+        }
+
+        Object[] counts = bestES.entrySet().toArray();
+        List<String> codsES = new ArrayList<>();
+
+        Arrays.sort(counts, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, String>) o2).getValue().compareTo(((Map.Entry<String, String>) o1).getValue());
+            }
+        });
+
+        for(int i = 0; i<10 && i<counts.length; i++){
+            codsES.add(((Map.Entry<String, String>) counts[i]).getKey());
+        }
+        return codsES;
     }
 
 }

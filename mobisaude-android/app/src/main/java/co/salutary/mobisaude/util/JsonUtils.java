@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +14,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Map;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
@@ -161,6 +165,17 @@ public class JsonUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Map<String, String> fromStrToMap(String str){
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(str, type);
+    }
+
+    public static String fromMapToString(Map<String, String> map){
+        Gson gson = new Gson();
+        return gson.toJson(map);
     }
 
 }

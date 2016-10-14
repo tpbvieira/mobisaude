@@ -50,8 +50,9 @@ public class BookmarksActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_evaluation_list);
+
+        // UI
         mProgressView = findViewById(R.id.evaluation_list_progress_bar);
         mEvaluationsList = (ListView)findViewById(R.id.evaluation_list_listview);
 
@@ -59,8 +60,10 @@ public class BookmarksActivity extends AppCompatActivity {
 
         uiTask = new UpdateUITask();
         uiTask.execute();
-    }
 
+        List<String> bestES = ClientCache.getInstance().getBestES(this.getApplicationContext());
+
+    }
 
     @Override
     protected void onDestroy(){
@@ -157,10 +160,8 @@ public class BookmarksActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
             super.onPreExecute();
             showProgress(true);
-
         }
 
         @Override

@@ -299,6 +299,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 EstabelecimentoSaude es = clientCache.getEstabelecimentoSaude();
                 if (es != null) {
                     try {
+                        ClientCache.getInstance().countES(getApplicationContext(),es.getIdCnes());
                         String values = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
                         HashMap map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
                         short id = es.getIdTipoEstabelecimentoSaude();
