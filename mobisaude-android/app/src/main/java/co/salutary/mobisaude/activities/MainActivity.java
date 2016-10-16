@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements
     //ui
     private View mProgressView;
 
+    private InitCacheTask mInitCacheTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -80,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements
         //ui
         mProgressView = findViewById(R.id.main_content_progress_bar);
 
-        new UpdateFieldsTask(String.valueOf(clientCache.getCidade().getIdCidade())).execute();
+        mInitCacheTask = new InitCacheTask(String.valueOf(clientCache.getCidade().getIdCidade()));
+        mInitCacheTask.execute();
 
     }
 
@@ -98,17 +101,19 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
         Menu menuNav = navigationView.getMenu();
 
-        MenuItem menuLogin = (MenuItem) menuNav.findItem(R.id.menu_signin);
+        MenuItem menuLogin = menuNav.findItem(R.id.menu_signin);
         if (menuLogin != null) {
             menuLogin.setVisible(!DeviceInfo.isLoggedin());
             this.invalidateOptionsMenu();
         }
-        MenuItem menuLogout = (MenuItem) menuNav.findItem(R.id.menu_logout);
+
+        MenuItem menuLogout = menuNav.findItem(R.id.menu_logout);
         if (menuLogout != null) {
             menuLogout.setVisible(DeviceInfo.isLoggedin());
             this.invalidateOptionsMenu();
         }
-        MenuItem menuProfile = (MenuItem) menuNav.findItem(R.id.menu_profile);
+
+        MenuItem menuProfile = menuNav.findItem(R.id.menu_profile);
         if (menuProfile != null) {
             menuProfile.setVisible(DeviceInfo.isLoggedin());
             this.invalidateOptionsMenu();
@@ -132,8 +137,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy(){
         super.onDestroy();
+
+        if(mInitCacheTask != null){
+            mInitCacheTask.cancel(true);
+        }
+
     }
 
     @Override
@@ -174,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements
         } else if (id == R.id.menu_maps) {
             startActivity(MapsActivity.class);
         } else if (id == R.id.menu_dashboard) {
-            startActivity(DashboardActivity.class);
+//            startActivity(Pie.class);
         } else if (id == R.id.menu_profile) {
             startActivity(ProfileActivity.class);
         } else if (id == R.id.menu_signup) {
@@ -202,11 +212,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    public class UpdateFieldsTask extends AsyncTask<Void, Void, Boolean> {
+    public class InitCacheTask extends AsyncTask<Void, Void, Boolean> {
 
         String mNumES, mCity, mErrorMsg;
 
-        UpdateFieldsTask(String city) {
+        InitCacheTask(String city) {
             mCity = city;
         }
 

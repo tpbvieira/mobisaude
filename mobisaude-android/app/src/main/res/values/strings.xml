@@ -8,6 +8,7 @@
     <string name="title_activity_main">MobiSaúde</string>
     <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
     <string name="title_activity_login">Entrar</string>
+    <string name="title_activity_dashboard">Dashboards</string>
 
     <!-- domains/fields -->
     <string name="empty"></string>
@@ -17,8 +18,9 @@
     <string name="tipo_label">Tipo:</string>
     <string name="gestao_label">Gestão:</string>
     <string name="endereco_label">Endereço:</string>
-    <string name="avaliacao_media_label">Avaliação Media:</string>
-    <string name="title_label">Título:</string>
+    <string name="avaliacao_media_label">Avaliação Média:</string>
+    <string name="avaliacao_media">Avaliação Média</string>
+    <string name="avaliacoes_media_mes">Avaliaões Média por Mês</string>
     <string name="estabelecimento_saude">Estabelecimento de Saúde</string>
     <string name="estabelecimentos_saude">Estabelecimentos de Saúde</string>
     <string name="evaluations">Avaliações</string>
@@ -85,7 +87,6 @@
     <string name="action_sign_up">Cadastrar</string>
     <string name="action_sign_in">Entrar</string>
     <string name="action_logout">Sair</string>
-    <string name="action_disconnect">Desconectar</string>
     <string name="action_update">Alterar</string>
     <string name="action_evaluate">Avaliar</string>
     <string name="action_suggest">Sugerir Alteração</string>

@@ -17,5 +17,10 @@
         android:orderInCategory="100"
         android:title="@string/action_suggest"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/healthplace_action_dashboard"
+        android:orderInCategory="100"
+        android:title="@string/menu_dashboards"
+        app:showAsAction="never" />
 
 </menu>

@@ -13,7 +13,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import co.salutary.mobisaude.R;
@@ -44,8 +46,7 @@ public class JsonUtils {
             request.put(requestString, tokenJson);
             return request;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(),e);
             return null;
         }
     }
@@ -57,8 +58,7 @@ public class JsonUtils {
             JSONObject target = (JSONObject) object.get(subObject);
             return getError(target);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(),e);
         }
         return error;
     }
@@ -74,8 +74,7 @@ public class JsonUtils {
                 error = json.getString("erro");
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(),e);
         }
         return error;
     }
@@ -85,8 +84,7 @@ public class JsonUtils {
         try{
             jsonErrorMessage.put("erro", errorMessage);
         } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(),e);
         }
         return jsonErrorMessage.toString();
     }
@@ -100,8 +98,7 @@ public class JsonUtils {
                 pairs.put(jsonObject.getString("id"), jsonObject.getString("nome"));
             }
         } catch (JSONException e) {
-            Log.d(TAG, Resources.getSystem().getString(R.string.error), e);
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(),e);
         }
 
         return pairs;
@@ -132,8 +129,7 @@ public class JsonUtils {
 
             return es;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(),e);
             return null;
         }
     }
@@ -161,10 +157,38 @@ public class JsonUtils {
 
             return av;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(),e);
             return null;
         }
+    }
+
+    public static List<Avaliacao> jsonObjectToListAvaliacao(JSONObject obj){
+
+        List<Avaliacao> avaliacoes = new ArrayList<>();
+
+        try {
+
+            if (obj.has("avaliacoesMediaMes")){
+                JSONArray jsonAvaliacoes = obj.getJSONArray("avaliacoesMediaMes");
+                for (int i = 0; i < jsonAvaliacoes.length(); i++) {
+                    JSONObject jsonAvaliacao = jsonAvaliacoes.optJSONObject(i);
+                    Avaliacao av = new Avaliacao();
+                    if (jsonAvaliacao.has("rating")){
+                        av.setRating(Float.parseFloat(jsonAvaliacao.getString("rating")));
+                    }
+                    if (jsonAvaliacao.has("date")){
+                        av.setDate(sdfDMY.parse(jsonAvaliacao.getString("date")));
+                    }
+                    avaliacoes.add(av);
+                }
+
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(),e);
+        }
+
+        return avaliacoes;
     }
 
     public static Map<String, String> fromStrToMap(String str){

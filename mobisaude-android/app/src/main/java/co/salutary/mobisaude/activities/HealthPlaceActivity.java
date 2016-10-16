@@ -3,6 +3,9 @@ package co.salutary.mobisaude.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -13,7 +16,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,18 +31,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
+import co.salutary.mobisaude.fragments.LineChartDialogFragment;
 import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
-import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
+
+import static android.R.attr.keySet;
 
 public class HealthPlaceActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -60,6 +71,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
     private Settings settings;
 
     private UpdateUITask uiTask;
+    private ShowAvaliacoesMediaTask showAMTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,23 +112,28 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
         int id = item.getItemId();
 
-        if (id == R.id.healthplace_action_evaluations) {
-            startActivity(new Intent(HealthPlaceActivity.this, EvaluationListActivity.class));
-            return true;
-        }else if (id == R.id.healthplace_action_evaluate) {
-            if (DeviceInfo.isLoggedin()) {
-                startActivity(new Intent(HealthPlaceActivity.this, EvaluationActivity.class));
-            } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }else if (id == R.id.healthplace_action_suggest) {
-            if (DeviceInfo.isLoggedin()) {
-                startActivity(new Intent(HealthPlaceActivity.this, SuggestionActivity.class));
-            } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
-            }
-            return true;
+        switch (id){
+            case R.id.healthplace_action_evaluations:
+                startActivity(new Intent(HealthPlaceActivity.this, EvaluationListActivity.class));
+                return true;
+            case R.id.healthplace_action_evaluate:
+                if (DeviceInfo.isLoggedin()) {
+                    startActivity(new Intent(HealthPlaceActivity.this, EvaluationActivity.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.healthplace_action_suggest:
+                if (DeviceInfo.isLoggedin()) {
+                    startActivity(new Intent(HealthPlaceActivity.this, SuggestionActivity.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.warn_login_required), Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.healthplace_action_dashboard:
+                showAMTask = new ShowAvaliacoesMediaTask();
+                showAMTask.execute();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -132,10 +149,11 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         if(uiTask != null){
             uiTask.cancel(true);
         }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(showAMTask != null){
+            showAMTask.cancel(true);
+        }
+
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -165,6 +183,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mContentView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+
     }
 
     @Override
@@ -312,6 +331,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                         mTipoGestãoText.setText(name);
                         mNomeFantasiaText.setText(es.getNomeFantasia());
                         mEnderecoText.setText(es.getEndereco());
+
                     } catch (JSONException e) {
                         Log.e(TAG, e.getMessage(), e);
                     }
@@ -325,6 +345,110 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 } else {
                     mRatingBar.setEnabled(true);
                 }
+
+                if (mWarningMsg != null) {
+                    Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+                Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            showProgress(false);
+        }
+
+        @Override
+        protected void onCancelled() {
+            showProgress(false);
+        }
+
+    }
+
+    public class ShowAvaliacoesMediaTask extends AsyncTask<Void, Void, Boolean> {
+
+        String mErrorMsg = null;
+        String mWarningMsg = null;
+        List<Avaliacao> avsMedia = null;
+
+        ShowAvaliacoesMediaTask() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... param) {
+            boolean ok = true;
+
+            Settings settings = new Settings(getApplicationContext());
+
+            String token = settings.getPreferenceValue(Settings.TOKEN);
+            if (token == null || token.isEmpty()) {
+                TokenManager.gerarToken(getApplicationContext());//renew token and saves into preferences
+                token = settings.getPreferenceValue(Settings.TOKEN);
+            }
+
+            try {
+                JSONObject params = new JSONObject();
+                params.put("token", token);
+                params.put("idES", settings.getPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE));
+                JSONObject request = new JSONObject();
+
+                request.put("avaliacaoMediaRequest", params);
+                String responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvalicaoMediaMesByIdES(request.toString());
+                if (responseStr != null) {
+                    JSONObject json = new JSONObject(responseStr);
+                    JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
+                    String error = JsonUtils.getError(response);
+                    if (error == null) {
+                        avsMedia = JsonUtils.jsonObjectToListAvaliacao(response);
+                        if (avsMedia == null) {
+                            throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                        }
+                    } else {
+                        throw new MobiSaudeAppException(JsonUtils.getError(response));
+                    }
+                } else {
+                    throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                }
+
+            } catch (Exception e) {
+                mErrorMsg = e.getMessage();
+                Log.e(TAG, e.getMessage(), e);
+                ok = false;
+            }
+
+            return ok;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+            if (success) {
+
+                // DialogFragment.show() will take care of adding the fragment
+                // in a transaction.  We also want to remove any currently showing
+                // dialog, so make our own transaction and take care of that here.
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                Map<String, String> values = new HashMap<>();
+                for (Avaliacao av: avsMedia) {
+                    values.put(String.valueOf(av.getDate().getMonth()), String.valueOf(av.getRating()));
+                }
+
+                // Create and show the dialog.
+                DialogFragment newFragment = LineChartDialogFragment.newInstance(values, mNomeFantasiaText.getText().toString());
+                newFragment.show(ft, "dialog");
 
                 if (mWarningMsg != null) {
                     Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
