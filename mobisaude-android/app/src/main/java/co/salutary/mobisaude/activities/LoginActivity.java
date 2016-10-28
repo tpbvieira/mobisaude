@@ -72,8 +72,6 @@ public class LoginActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
 
     private CallbackManager callbackManager;    //declaring callback instance
-    private LoginButton faceSignInButton;       //declaring loginbutton of facebook
-
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -121,8 +119,6 @@ public class LoginActivity extends AppCompatActivity implements
         mContentView = findViewById(R.id.login_form_view);
         mProgressView = findViewById(R.id.login_progress_bar);
 
-        DeviceInfo.mGoogleApiClient = DeviceInfo.getGoogleApiClient(this,this,this);
-
         // email field
         mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email);
         populateAutoComplete();
@@ -149,8 +145,8 @@ public class LoginActivity extends AppCompatActivity implements
         googleSignInButton.setOnClickListener(this);
 
         // Facebook
-        faceSignInButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
-        faceSignInButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));
+        LoginButton faceSignInButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
+        faceSignInButton.setReadPermissions(Arrays.asList("public_profile, email"));
         faceSignInButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -228,7 +224,8 @@ public class LoginActivity extends AppCompatActivity implements
         }.getClass().getEnclosingMethod().getName());
 
         // Pending Google Login
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(DeviceInfo.mGoogleApiClient);
+        GoogleApiClient googleApiClient = DeviceInfo.getGoogleApiClient(this,this,this);
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
@@ -248,7 +245,7 @@ public class LoginActivity extends AppCompatActivity implements
             //    }
             //});
 
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(DeviceInfo.mGoogleApiClient);
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
 
@@ -293,7 +290,7 @@ public class LoginActivity extends AppCompatActivity implements
         } else {
             // Signed out, show unauthenticated UI.
             DeviceInfo.logout(getApplicationContext());
-            Toast.makeText(getApplicationContext(), getString(R.string.error_login), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.error_google_login), Toast.LENGTH_SHORT).show();
         }
 
     }

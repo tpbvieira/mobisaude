@@ -37,32 +37,20 @@ public class DeviceInfo {
     public enum LoginType {
         GOOGLE, FACEBOOK, EMAIL_PWD
     }
+    private static GoogleApiClient mGoogleApiClient;
 
     // location variables
     public static double lastLatitude;
     public static double lastLongitude;
     public static final int REQUEST_ACCESS_FINE_LOCATION = 0;
-    public static GoogleApiClient mGoogleApiClient;
 
     // authorization variables
     public static boolean hasToken = false;
 
     // general variables
     public static String statusMessage = "";
-    public static final String REGISTRATION_GCM_CLIENT = "registration_gcm_client";
-    public static final String PROPERTY_REG_ID = "registration_id";
-    public static final String PROPERTY_APP_VERSION = "appVersion";
     public static final int NUM_GPS_ATTEMPTS = 15;
     public static final long SLEEP_TIME = 1000;
-
-    /**
-     * @return Application's {@code SharedPreferences}.
-     */
-    public static SharedPreferences getGcmPreferences(Context context) {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
-        return context.getSharedPreferences("GCM", Context.MODE_PRIVATE);
-    }
 
     public static Location updateLocation(Context context, Activity activity, LocationListener locationListener) {
         Location location = null;
@@ -180,20 +168,22 @@ public class DeviceInfo {
     public static GoogleApiClient getGoogleApiClient(Context context,
                                                      FragmentActivity fragmentActivity,
                                                      GoogleApiClient.OnConnectionFailedListener unresolvedConnectionFailedListener){
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
 
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        new GoogleApiClient.Builder(context)
-                .enableAutoManage(fragmentActivity, unresolvedConnectionFailedListener)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+            // Configure sign-in to request the user's ID, email address, and basic
+            // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
 
-        return mGoogleApiClient;
+            // Build a GoogleApiClient with access to the Google Sign-In API and the
+            // options specified by gso.
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
+                    .enableAutoManage(fragmentActivity, unresolvedConnectionFailedListener)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+
+            return mGoogleApiClient;
+
     }
 
     public static void doGoogleLogin(Context context, String email, String name){
@@ -212,13 +202,16 @@ public class DeviceInfo {
         doEmailPwdLogout(context);
 
         try {
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status status) {
-                            // ...
-                        }
-                    });
+            if(mGoogleApiClient.isConnected()){
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                // ...
+                            }
+                        });
+            }
+            mGoogleApiClient = null;
         } catch(IllegalStateException e){
             Log.e(TAG, e.getMessage(), e);
         }
@@ -275,18 +268,23 @@ public class DeviceInfo {
     }
 
     public static void logout(Context context){
-        switch (DeviceInfo.getLoginType()){
+        LoginType loginType = getLoginType();
+        if(loginType == null){
+            return;
+        }
+
+        switch (loginType){
             case GOOGLE:
-                DeviceInfo.doGoogleLogout(context);
+                doGoogleLogout(context);
                 break;
             case FACEBOOK:
-                DeviceInfo.doFacebookLogout(context);
+                doFacebookLogout(context);
                 break;
             case EMAIL_PWD:
-                DeviceInfo.doEmailPwdLogout(context);
+                doEmailPwdLogout(context);
                 break;
             default:
-                DeviceInfo.doEmailPwdLogout(context);
+                doEmailPwdLogout(context);
                 break;
         }
     }

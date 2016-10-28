@@ -66,6 +66,7 @@
     <string name="error_invalid_values">Valores inválidos</string>
     <string name="error_incorrect_password">Login ou senha incorreto</string>
     <string name="error_login">Erro ao efetuar login</string>
+    <string name="error_google_login">Erro ao efetuar Google login</string>
     <string name="error_field_required">Este campo é obrigatório</string>
     <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde.</string>
     <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde.</string>

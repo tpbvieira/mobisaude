@@ -215,7 +215,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             }.getClass().getName(), new Object() {
             }.getClass().getEnclosingMethod().getName());
             try {
-                Thread.sleep(SLEEP_TIME);
+                Thread.sleep(DeviceInfo.SLEEP_TIME);
                 return DeviceInfo.hasLocationProvider(activity);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
