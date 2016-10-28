@@ -68,7 +68,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
 
         clientCache = ClientCache.getInstance();
         db = LocalDataBase.getInstance();
-        location = DeviceInfo.updateLocation(getApplicationContext(),this);
+        location = DeviceInfo.updateLocation(getApplicationContext(), this, this);
 
         LinearLayout btnUF = (LinearLayout) findViewById(R.id.locality_selection_btn_uf);
         LinearLayout btnCidade = (LinearLayout) findViewById(R.id.locality_selection_btn_cidade);
@@ -162,7 +162,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
     }
 
     public void onMinhaLocalidade() {
-        new ShowDialog().execute();
+        new ShowDialog(this).execute();
     }
 
     public void onShowListaSelect(int tipoLista) {
@@ -221,6 +221,12 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
 
     private class ShowDialog extends AsyncTask<Integer, Integer, Boolean> {
 
+        private Activity activity;
+
+        public ShowDialog(Activity activity){
+            this.activity = activity;
+        }
+
         @Override
         protected void onPreExecute() {
             showDialog(PROGRESS_BAR_VERIFICAR);
@@ -243,16 +249,18 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
             }
-            new DeterminarLocal(getApplicationContext()).execute(4);
+            new DeterminarLocal(getApplicationContext(), activity).execute(4);
         }
     }
 
     private class DeterminarLocal extends AsyncTask<Integer, Integer, Boolean> {
 
         private Context context;
+        private Activity activity;
 
-        public  DeterminarLocal(Context ctx){
+        public  DeterminarLocal(Context ctx, Activity activity){
             this.context = ctx;
+            this.activity = activity;
         }
 
         @Override
@@ -273,7 +281,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
                     Thread.sleep(TIME_TEMP);
                     Location local = location;
                     if(local == null){
-                        local = DeviceInfo.getLastKnownLocation(context);
+                        local = DeviceInfo.getLastKnownLocation(context, activity);
                     }
 
                     // verificar

@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements
                                     String email = object.getString("email");
 
                                     // Save information and sign up new user, if dont exists
-                                    DeviceInfo.facebookLogin(getApplicationContext(), email, name);
+                                    DeviceInfo.doFacebookLogin(getApplicationContext(), email, name);
                                     // Try add signed in user into MobiSaúde DB
                                     SignUpTask mSignUpTask = new SignUpTask(email, email, name, "");
                                     mSignUpTask.execute((Void) null);
@@ -282,7 +282,7 @@ public class LoginActivity extends AppCompatActivity implements
             GoogleSignInAccount acct = signInResult.getSignInAccount();
 
             // Save information and sign up new user, if dont exists
-            DeviceInfo.googleLogin(getApplicationContext(), acct.getEmail(), acct.getDisplayName());
+            DeviceInfo.doGoogleLogin(getApplicationContext(), acct.getEmail(), acct.getDisplayName());
             SignUpTask mAuthTask = new SignUpTask(acct.getEmail(), acct.getEmail(), acct.getDisplayName(), "");
             mAuthTask.execute((Void) null);
 
@@ -529,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).getUser(request.toString());
                         json = new JSONObject(responseStr);
                         JSONObject userResponse = (JSONObject) json.get("userResponse");
-                        DeviceInfo.emailPwdLogin(getApplicationContext(), mEmail, DeviceInfo.LoginType.EMAIL_PWD, userResponse.get("name").toString());
+                        DeviceInfo.doEmailPwdLogin(getApplicationContext(), mEmail, DeviceInfo.LoginType.EMAIL_PWD, userResponse.get("name").toString());
                         hasAuth = true;
                     } else {
                         throw new MobiSaudeAppException(JsonUtils.getError(signinResponse));

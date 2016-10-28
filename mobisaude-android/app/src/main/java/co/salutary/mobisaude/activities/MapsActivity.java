@@ -9,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,12 +37,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final String TAG = new Object() {
     }.getClass().getName();
 
-    private GoogleMap mMap;
-
     private ClientCache clientCache;
     private Settings settings;
 
-    private HashMap<String, String> tipoESMap;
     private HashMap<String,String> markers = new HashMap<>();
 
     @Override
@@ -63,10 +59,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        HashMap<String, String> tipoESMap;
 
-        Location currLocation = DeviceInfo.getLastKnownLocation(getApplicationContext());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currLocation.getLatitude(), currLocation.getLongitude()), 12));
+        Location currLocation = DeviceInfo.getLastKnownLocation(getApplicationContext(), this);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currLocation.getLatitude(), currLocation.getLongitude()), 12));
 
         // plot ES
         try {
@@ -86,7 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if(idTipoES == selected){
                         LatLng esLatLong = new LatLng(es.getLatitude(), es.getLongitude());
                         String tipoESValue = tipoESMap.get(Short.toString(es.getIdTipoEstabelecimentoSaude()));
-                        Marker marker = mMap.addMarker(new MarkerOptions()
+                        Marker marker = googleMap.addMarker(new MarkerOptions()
                                 .position(esLatLong)
                                 .title(es.getNomeFantasia())
                                 .snippet(tipoESValue)
@@ -96,7 +92,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }else{
                     LatLng esLatLong = new LatLng(es.getLatitude(), es.getLongitude());
                     String tipoESValue = tipoESMap.get(Short.toString(es.getIdTipoEstabelecimentoSaude()));
-                    Marker marker = mMap.addMarker(new MarkerOptions()
+                    Marker marker = googleMap.addMarker(new MarkerOptions()
                             .position(esLatLong)
                             .title(es.getNomeFantasia())
                             .snippet(tipoESValue)
@@ -108,11 +104,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage(), e);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
         }
 
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 settings.setPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE, markers.get(marker.getId()));

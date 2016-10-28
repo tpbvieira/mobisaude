@@ -194,8 +194,7 @@ public class TestAll extends TestCase {
 			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 4);
 
 		} catch (Exception e){
-			logger.error(e);	
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			fail("Exceção: " + e.getMessage());
 		}
 	}

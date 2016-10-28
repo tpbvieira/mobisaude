@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
@@ -23,17 +24,17 @@ import com.facebook.appevents.AppEventsLogger;
 import org.json.JSONObject;
 
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
-import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.ClientCache;
+import co.salutary.mobisaude.controller.ServiceBroker;
+import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.db.CidadeDAO;
 import co.salutary.mobisaude.db.LocalDataBase;
 import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.ConnectivityUtils;
-import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
 public class SplashActivity extends Activity implements Runnable, LocationListener {
@@ -42,17 +43,12 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
     }.getClass().getName();
 
     private static final int ACTIVITY_DENIFIR_LOCALIDADE = 1;
-    private static final int NUM_GPS_ATTEMPTS = 15;
-    private static final long SLEEP_TIME = 1000;
-    private final int PROGRESS_BAR = 1;
 
     private TextView txtLabel;
 
     private LocalDataBase db;
     private ClientCache clientCache;
     private Location location;
-
-    private boolean isShowDialog = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,17 +64,17 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
         txtLabel = (TextView) findViewById(R.id.frm_splash_label);
 
-        DeviceInfo.setUpGCM(this);
         db = LocalDataBase.getInstance();
         clientCache = ClientCache.getInstance();
-        location = DeviceInfo.updateLocation(getApplicationContext(), this);
+
+        location = DeviceInfo.updateLocation(getApplicationContext(), this, this);
 
         Settings.setPreferenceValue(this, Settings.VIEWPAGER_POS_PORTRAIT, 0);
         Settings.setPreferenceValue(this, Settings.VIEWPAGER_POS_LANDSCAPE, 0);
 
         Handler timerTela = new Handler();
 
-        timerTela.postDelayed(this, SLEEP_TIME);
+        timerTela.postDelayed(this, DeviceInfo.SLEEP_TIME);
     }
 
     @Override
@@ -109,7 +105,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
         if (requestCode == ACTIVITY_DENIFIR_LOCALIDADE) {
             if (resultCode == LocalitySelectionActivity.RESULTADO_LOCAL_SELECIONADO) {
-                isShowDialog = true;
                 new QueryAvailableViewsTask().execute(0);
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_obtaining_locality), Toast.LENGTH_LONG).show();
@@ -123,7 +118,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
-        DeviceInfo.removeUpdates(getApplicationContext(), this);
+        DeviceInfo.removeUpdates(getApplicationContext(), this, this);
         super.onDestroy();
     }
 
@@ -195,10 +190,16 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
         setTextLabelInfor(getString(R.string.check_gps));
-        new VerifyGPS().execute(0);
+        new VerifyGPS(this).execute(0);
     }
 
     private class VerifyGPS extends AsyncTask<Integer, Integer, Boolean> {
+
+        private Activity activity;
+
+        VerifyGPS(Activity activity){
+            this.activity = activity;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -215,7 +216,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             }.getClass().getEnclosingMethod().getName());
             try {
                 Thread.sleep(SLEEP_TIME);
-                return DeviceInfo.hasLocationProvider();
+                return DeviceInfo.hasLocationProvider(activity);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
             }
@@ -299,15 +300,17 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         }.getClass().getEnclosingMethod().getName());
 
         setTextLabelInfor(getString(R.string.obtaining_location_from_gps));
-        new DefineLocalFromGPS(getApplicationContext()).execute(NUM_GPS_ATTEMPTS);
+        new DefineLocalFromGPS(getApplicationContext(), this).execute(DeviceInfo.NUM_GPS_ATTEMPTS);
     }
 
     private class DefineLocalFromGPS extends AsyncTask<Integer, Integer, Boolean> {
 
         private Context context;
+        private Activity activity;
 
-        public DefineLocalFromGPS(Context ctx) {
+        DefineLocalFromGPS(Context ctx, Activity activity) {
             this.context = ctx;
+            this.activity = activity;
         }
 
         @Override
@@ -324,12 +327,10 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             int numAttempts = params[0];
             try {
                 for (int i = 0; i < numAttempts; i++) {
-                    Thread.sleep(SLEEP_TIME);
+                    Thread.sleep(DeviceInfo.SLEEP_TIME);
 
                     // Location by Rede
-                    if (location == null) {
-                        location = DeviceInfo.getLastKnownLocation(context);
-                    }
+                    location = DeviceInfo.getLastKnownLocation(context, activity);
 
                     // verificar
                     if (location != null) {
@@ -427,6 +428,8 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     @Override
     protected Dialog onCreateDialog(int id) {
+        final int PROGRESS_BAR = 1;
+
         Log.d(new Object() {
         }.getClass().getName(), new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -566,7 +569,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
         alerta.setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_conectivity_required), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connecting_server_required), Toast.LENGTH_LONG).show();
                 finish();
             }
         });
@@ -631,6 +634,20 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     private void setTextLabelInfor(String texto) {
         txtLabel.setText(texto);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case DeviceInfo.REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // If request is cancelled, the result arrays are empty.
+
+                } else {
+                    // permission denied, Disable the functionality that depends on this permission.
+                }
+            }
+        }
     }
 
 }

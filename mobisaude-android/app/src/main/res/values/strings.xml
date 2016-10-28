@@ -67,8 +67,8 @@
     <string name="error_incorrect_password">Login ou senha incorreto</string>
     <string name="error_login">Erro ao efetuar login</string>
     <string name="error_field_required">Este campo é obrigatório</string>
-    <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde</string>
-    <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde</string>
+    <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde.</string>
+    <string name="error_conectivity_required">Acesso à Internet é necessário para o funcionamento do MobiSaúde.</string>
     <string name="error_duplicated_email">Email já cadastrado</string>
     <string name="error_getting_evaluations">Erro ao obter avaliações</string>
     <string name="error_getting_evaluation">Erro ao obter avaliaçao</string>
@@ -96,6 +96,9 @@
 
     <!-- prompt -->
     <string name="error_connecting_server">Erro ao conectar servidor de dados, deseja utilizar os dados salvos?</string>
+    <string name="error_connecting_server_required">Acesso ao servidor é necessário para o funcionamento do MobiSaúde.</string>
+
+
     <string name="error_no_connectivity">Conexão de dados indisponível, deseja utilizar os dados salvos?</string>
     <string name="unidentified_location">Não foi possível identificar sua localização. Deseja selecionar sua cidade a partir de uma lista?</string>
     <string name="gps_not_available">GPS Indisponível. Deseja utilizar os dados salvos?</string>

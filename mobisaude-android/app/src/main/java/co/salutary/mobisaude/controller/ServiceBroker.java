@@ -1,5 +1,8 @@
 package co.salutary.mobisaude.controller;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,41 +13,41 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import android.content.Context;
-import android.util.Log;
-
 import co.salutary.mobisaude.R;
+import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.util.ConnectivityUtils;
-import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.util.JsonUtils;
 
 public class ServiceBroker {
 
     private static final String TAG = new Object(){}.getClass().getName();
 
-	private static ServiceBroker instance = null;
+    private static ServiceBroker instance = null;
 
-	private ConnectivityUtils connectivityUtils;
+    private ConnectivityUtils connectivityUtils;
 
-	public static ServiceBroker getInstance(Context context) {
-		if (instance == null) {
-			instance = new ServiceBroker(context);
-		}
-		return instance;
-	}
+    private Context context;
 
-	private ServiceBroker(Context ctx) {
-		connectivityUtils = ConnectivityUtils.getInstance(ctx);
-	}
+    public static ServiceBroker getInstance(Context context) {
+        if (instance == null) {
+            instance = new ServiceBroker(context);
+        }
+        return instance;
+    }
 
-	public String gerarToken(String json) {
-		return requestJson("/gerarToken", json);
-	}
+    private ServiceBroker(Context ctx) {
+        connectivityUtils = ConnectivityUtils.getInstance(ctx);
+        context = ctx;
+    }
 
-	public String geocode(String json) {
-		return requestJson("/geocode", json);
-	}
+    public String gerarToken(String json) {
+        return requestJson("/gerarToken", json);
+    }
+
+    public String geocode(String json) {
+        return requestJson("/geocode", json);
+    }
 
     public String signup(String json) {
         return requestJson("/signup", json);
@@ -63,16 +66,16 @@ public class ServiceBroker {
     }
 
     public String consultaDominios(String json) {
-		return requestJson("/consultaDominios", json);
-	}
+        return requestJson("/consultaDominios", json);
+    }
 
     public String getESByIdES(String json) {
         return requestJson("/getESByIdES", json);
     }
 
-	public String getESByIdMunicipio(String json) {
-		return requestJson("/getESByIdMunicipio", json);
-	}
+    public String getESByIdMunicipio(String json) {
+        return requestJson("/getESByIdMunicipio", json);
+    }
 
     public String getESByIdMunicipioIdTipoES(String json) {
         return requestJson("/getESByIdMunicipioIdTipoES", json);
@@ -133,10 +136,10 @@ public class ServiceBroker {
             }
         } catch (ConnectException e) {
             Log.e(TAG, e.getMessage());
-            dados = JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error_connecting_server));
+            dados = JsonUtils.createErrorMessage(context.getString(R.string.error_connecting_server));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-            dados = JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error));
+            dados = JsonUtils.createErrorMessage(context.getString(R.string.error));
         }
 
         return dados;
@@ -154,9 +157,9 @@ public class ServiceBroker {
             return stringBuilder.toString();
         } catch (Exception e) {
             Log.e(TAG,e.getMessage());
-            JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error));
+            JsonUtils.createErrorMessage(context.getString(R.string.error));
         }
-        return JsonUtils.createErrorMessage(DeviceInfo.context.getString(R.string.error));
+        return JsonUtils.createErrorMessage(context.getString(R.string.error));
     }
 
 }
