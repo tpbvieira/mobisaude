@@ -210,7 +210,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
         List<Row> rows = new ArrayList<Row>();
         Pattern numberPattern = Pattern.compile("[0-9]");
 
-        List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaudeCidade();
+        List<EstabelecimentoSaude> esList = clientCache.getListESByCidade();
         if(mTipoESSpiner.isSelected()){
             List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
             for(EstabelecimentoSaude es : esList ){
@@ -335,7 +335,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
         try {
             mListAdapterModel = new GenericListAdapter();
 
-            List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaudeCidade();
+            List<EstabelecimentoSaude> esList = clientCache.getListESByCidade();
             if(mTipoESSpiner.isSelected()){
                 List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
                 for(EstabelecimentoSaude es : esList ){

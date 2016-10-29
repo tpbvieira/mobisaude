@@ -7,14 +7,14 @@
 
     <RatingBar
         android:id="@+id/rate_img"
-        style="@style/ratingBarStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:maxWidth="20dp"
         android:minWidth="20dp"
         android:numStars="5"
-        android:stepSize="1" />
+        android:stepSize="1"
+        style="@style/ratingBarStyle"/>
 
     <TextView
         android:id="@+id/text"

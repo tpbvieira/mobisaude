@@ -38,6 +38,7 @@ import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
+import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
@@ -82,8 +83,11 @@ public class MainActivity extends AppCompatActivity implements
         //ui
         mProgressView = findViewById(R.id.main_content_progress_bar);
 
-        mInitCacheTask = new InitCacheTask(String.valueOf(clientCache.getCidade().getIdCidade()));
-        mInitCacheTask.execute();
+        Cidade cidade = clientCache.getCidade();
+        if(cidade != null){
+            mInitCacheTask = new InitCacheTask(String.valueOf(cidade.getIdCidade()));
+            mInitCacheTask.execute();
+        }
 
     }
 
@@ -230,14 +234,11 @@ public class MainActivity extends AppCompatActivity implements
         protected Boolean doInBackground(Void... params) {
             boolean ok = true;
 
-            List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaudeTipoES();
-            if(esList == null || esList.size() == 0){
-                esList = clientCache.getListEstabelecimentosSaudeCidade();
-            }
+            List<EstabelecimentoSaude> esList = clientCache.getListESByCidade();
 
             if(esList == null || esList.size() == 0){
 
-                clientCache.setListEstabelecimentosSaudeCidade(new ArrayList<EstabelecimentoSaude>());
+                clientCache.setListESByCidade(new ArrayList<EstabelecimentoSaude>());
 
                 String token = settings.getPreferenceValue(Settings.TOKEN);
                 if (token == null || token.isEmpty()) {
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements
                                 JSONObject rec = ess.getJSONObject(i);
                                 EstabelecimentoSaude es = JsonUtils.jsonObjectToES(rec);
                                 if(es != null){
-                                    clientCache.getListEstabelecimentosSaudeCidade().add(es);
+                                    clientCache.getListESByCidade().add(es);
                                 }
                             }
                         } else {

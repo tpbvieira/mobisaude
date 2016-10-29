@@ -6,9 +6,13 @@
     <!-- titles -->
     <string name="app_name">MobiSaúde</string>
     <string name="title_activity_main">MobiSaúde</string>
-    <string name="title_activity_maps">Mapa dos Orgãos de Saúde</string>
+    <string name="title_activity_maps">Estabelecimentos de Saúde</string>
     <string name="title_activity_login">Entrar</string>
-    <string name="title_activity_dashboard">Dashboards</string>
+    <string name="title_activity_dashboard">Gráficos</string>
+    <string name="title_activity_bookmarks">Favoritos</string>
+    <string name="title_activity_healthplace_selection">Estabelecimentos de Saúde</string>
+    <string name="title_activity_signup">Cadastrar Usuário</string>
+    <string name="title_activity_profile">Perfil de Usuário</string>
 
     <!-- domains/fields -->
     <string name="empty"></string>

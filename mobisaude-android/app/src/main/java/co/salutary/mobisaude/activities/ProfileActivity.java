@@ -78,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderCallback
         }
 
         setContentView(R.layout.activity_profile);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mProgressView = findViewById(R.id.profile_progress_bar);
 
         // Set up the emailPwdLogin form.

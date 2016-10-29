@@ -69,9 +69,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             String tiposES = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
             String idTipoESStr = settings.getPreferenceValues(Settings.ID_TIPO_ESTABELECIMENTO_SAUDE);
             tipoESMap = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tiposES));
-            List<EstabelecimentoSaude> esList = clientCache.getListEstabelecimentosSaudeTipoES();
+            List<EstabelecimentoSaude> esList = clientCache.getListESByTipoES();
             if(esList == null || esList.size() == 0){
-                esList = clientCache.getListEstabelecimentosSaudeCidade();
+                esList = clientCache.getListESByCidade();
             }
 
             for (EstabelecimentoSaude es : esList) {

@@ -210,7 +210,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
         Cidade cidade = ClientCache.getInstance().getCidade();
         if(cidade != null){
             edtCidade.setText(cidade.getNome());
-            clientCache.setListEstabelecimentosSaudeCidade(null);
+            clientCache.setListESByCidade(null);
         }
     }
 
@@ -321,7 +321,7 @@ public class LocalitySelectionActivity extends Activity implements Runnable, Loc
 
                                     // reset
                                     db.close();
-                                    clientCache.setListEstabelecimentosSaudeCidade(null);
+                                    clientCache.setListESByCidade(null);
                                     return true;
                                 }
                                 else {

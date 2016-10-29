@@ -52,6 +52,7 @@ public class EvaluationListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_evaluation_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mProgressView = findViewById(R.id.evaluation_list_progress_bar);
         mEvaluationsList = (ListView)findViewById(R.id.evaluation_list_listview);
 

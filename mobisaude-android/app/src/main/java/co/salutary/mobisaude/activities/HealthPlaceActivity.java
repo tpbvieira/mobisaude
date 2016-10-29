@@ -85,6 +85,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.healthplace_tool_bar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressView = findViewById(R.id.healthplace_progress_bar);
         mContentView = findViewById(R.id.healthplace_form_view);
@@ -113,6 +114,9 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         int id = item.getItemId();
 
         switch (id){
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.healthplace_action_evaluations:
                 startActivity(new Intent(HealthPlaceActivity.this, EvaluationListActivity.class));
                 return true;

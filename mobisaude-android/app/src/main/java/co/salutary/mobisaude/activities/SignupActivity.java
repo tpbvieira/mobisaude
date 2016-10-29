@@ -64,6 +64,8 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Set up the emailPwdLogin form.
         mContentView = findViewById(R.id.signup_form_view);
         mProgressView = findViewById(R.id.signup_progress_bar);

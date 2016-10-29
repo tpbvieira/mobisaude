@@ -51,6 +51,7 @@ public class EvaluationActivity extends AppCompatActivity  {
 
         // ui
         setContentView(R.layout.activity_evaluation);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContentView = findViewById(R.id.evaluation_form);
         mProgressView = findViewById(R.id.evaluation_progress_bar);
         mRatingBar = (RatingBar) findViewById(R.id.evaluation_ratingbar);

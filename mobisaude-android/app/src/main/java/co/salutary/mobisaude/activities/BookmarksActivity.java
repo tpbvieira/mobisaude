@@ -37,7 +37,7 @@ public class BookmarksActivity extends AppCompatActivity {
 
     //UI
     private View mProgressView;
-    private ListView mEvaluationsList;
+    private ListView mBookmarks;
 
     private UpdateUITask uiTask;
 
@@ -51,8 +51,9 @@ public class BookmarksActivity extends AppCompatActivity {
         settings = new Settings(getApplicationContext());
 
         // UI
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mProgressView = findViewById(R.id.evaluation_list_progress_bar);
-        mEvaluationsList = (ListView)findViewById(R.id.evaluation_list_listview);
+        mBookmarks = (ListView)findViewById(R.id.evaluation_list_listview);
 
         clientCache = ClientCache.getInstance();
 
@@ -63,7 +64,6 @@ public class BookmarksActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        clientCache.setListAvaliacoes(null);
         if(uiTask != null){
             uiTask.cancel(true);
         }
@@ -88,12 +88,12 @@ public class BookmarksActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mEvaluationsList.setVisibility(show ? View.GONE : View.VISIBLE);
-            mEvaluationsList.animate().setDuration(shortAnimTime).alpha(
+            mBookmarks.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBookmarks.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mEvaluationsList.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mBookmarks.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -107,7 +107,7 @@ public class BookmarksActivity extends AppCompatActivity {
             });
         } else {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mEvaluationsList.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBookmarks.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -138,7 +138,7 @@ public class BookmarksActivity extends AppCompatActivity {
             }
 
             try {
-                List<String> bookmarkIds = ClientCache.getInstance().getBookmark(getApplicationContext());
+                List<String> bookmarkIds = clientCache.getPersistentBookmark(getApplicationContext());
                 if(bookmarkIds == null){
                     throw new MobiSaudeAppException(getString(R.string.error_no_bookmarks));
                 }
@@ -169,8 +169,8 @@ public class BookmarksActivity extends AppCompatActivity {
                     }
                 }
 
-                mEvaluationsList.setAdapter(mListAdapter);
-                mEvaluationsList.setOnItemClickListener(onItemClickListener());
+                mBookmarks.setAdapter(mListAdapter);
+                mBookmarks.setOnItemClickListener(onItemClickListener());
             }else{
                 Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
                 finish();

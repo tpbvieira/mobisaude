@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements
 //        }
 
         setContentView(R.layout.activity_login);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         callbackManager = CallbackManager.Factory.create();
 
         // Set up the emailPwdLogin form.

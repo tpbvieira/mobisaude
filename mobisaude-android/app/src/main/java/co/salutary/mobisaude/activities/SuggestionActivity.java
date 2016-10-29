@@ -48,6 +48,7 @@ public class SuggestionActivity extends AppCompatActivity  {
 
         // ui
         setContentView(R.layout.activity_suggestion);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContentView = findViewById(R.id.suggestion_form_view);
         mProgressView = findViewById(R.id.suggestion_progress_bar);
         mSuggestionText = (AutoCompleteTextView) findViewById(R.id.suggestion_text);

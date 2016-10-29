@@ -1,6 +1,7 @@
 package co.salutary.mobisaude.controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,11 +24,14 @@ public class ClientCache {
     private UF uf;
     private Cidade cidade;
     private EstabelecimentoSaude estabelecimentoSaude;
-    private List<EstabelecimentoSaude> listEstabelecimentosSaudeCidade;
-    private List<EstabelecimentoSaude> listEstabelecimentosSaudeTipoES;
-    private List<EstabelecimentoSaude> bookmark;
-    private Avaliacao avaliacaoMedia;
+    private List<EstabelecimentoSaude> listESByCidade;
+    private List<EstabelecimentoSaude> listESByTipoES;
     private List<Avaliacao> listAvaliacoes;
+    private Avaliacao avaliacaoMedia;
+
+    private ClientCache(){
+
+    }
 
     private static ClientCache instance = null;
 
@@ -38,21 +42,21 @@ public class ClientCache {
         return instance;
     }
 
-    public Cidade getCidade() {return cidade;}
-
-    public void setCidade(Cidade cidade) {this.cidade = cidade;}
-
     public UF getUf() {return uf;}
 
     public void setUf(UF uf) {this.uf = uf;	}
 
-    public List<EstabelecimentoSaude> getListEstabelecimentosSaudeCidade() {return listEstabelecimentosSaudeCidade;}
+    public Cidade getCidade() {return cidade;}
 
-    public void setListEstabelecimentosSaudeCidade(List<EstabelecimentoSaude> listEstabelecimentosSaudeCidade) {this.listEstabelecimentosSaudeCidade = listEstabelecimentosSaudeCidade;}
+    public void setCidade(Cidade cidade) {this.cidade = cidade;}
 
-    public List<EstabelecimentoSaude> getListEstabelecimentosSaudeTipoES() {return listEstabelecimentosSaudeTipoES;}
+    public List<EstabelecimentoSaude> getListESByTipoES() {return listESByTipoES;}
 
-    public void setListEstabelecimentosSaudeTipoES(List<EstabelecimentoSaude> listEstabelecimentosSaudeTipoES) {this.listEstabelecimentosSaudeTipoES = listEstabelecimentosSaudeTipoES;}
+    public void setListESByTipoES(List<EstabelecimentoSaude> listESByTipoES) {this.listESByTipoES = listESByTipoES;}
+
+    public List<EstabelecimentoSaude> getListESByCidade() {return listESByCidade;}
+
+    public void setListESByCidade(List<EstabelecimentoSaude> listESByCidade) {this.listESByCidade = listESByCidade;}
 
     public EstabelecimentoSaude getEstabelecimentoSaude(){return estabelecimentoSaude;}
 
@@ -90,30 +94,35 @@ public class ClientCache {
 
     }
 
-    public List<String> getBookmark(Context context){
+    public List<String> getPersistentBookmark(Context context){
+        List<String> codsES = null;
 
-        Map<String, String> bestES = null;
+        try {
+            Map<String, String> bestES = null;
+            Settings settings = new Settings(context);
+            String strBookmark = settings.getPreferenceValue(Settings.BOOKMARK);
 
-        Settings settings = new Settings(context);
-        String strBookmark = settings.getPreferenceValue(Settings.BOOKMARK);
-        if(strBookmark != null){
-            bestES = JsonUtils.fromStrToMap(strBookmark);
-        }
-
-        if(bestES == null){
-            return null;
-        }
-
-        Object[] counts = bestES.entrySet().toArray();
-        Arrays.sort(counts, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((Map.Entry<String, String>) o2).getValue().compareTo(((Map.Entry<String, String>) o1).getValue());
+            if(strBookmark != null){
+                bestES = JsonUtils.fromStrToMap(strBookmark);
             }
-        });
 
-        List<String> codsES = new ArrayList<>();
-        for(int i = 0; i<10 && i<counts.length; i++){
-            codsES.add(((Map.Entry<String, String>) counts[i]).getKey());
+            if(bestES == null){
+                return null;
+            }
+
+            Object[] counts = bestES.entrySet().toArray();
+            Arrays.sort(counts, new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    return ((Map.Entry<String, String>) o2).getValue().compareTo(((Map.Entry<String, String>) o1).getValue());
+                }
+            });
+
+            codsES = new ArrayList<>();
+            for(int i = 0; i<10 && i<counts.length; i++){
+                codsES.add(((Map.Entry<String, String>) counts[i]).getKey());
+            }
+        } catch (Exception e){
+            Log.e(TAG, e.getMessage(), e);
         }
 
         return codsES;

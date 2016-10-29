@@ -56,7 +56,21 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.BookmarksActivity"
-            android:label="@string/title_activity_login"/>
+            android:label="@string/title_activity_bookmarks"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.HealthPlaceSelectionActivity"
+            android:label="@string/title_activity_healthplace_selection"
+            android:theme="@android:style/Theme.DeviceDefault.Light"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.MainActivity" />
+        </activity>
         <activity
             android:name=".activities.DashboardsActivity"
             android:label="@string/title_activity_dashboard"
@@ -66,32 +80,66 @@
                 android:value="co.salutary.mobisaude.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.EvaluationActivity"
-            android:label="@string/action_evaluate" />
-        <activity
-            android:name=".activities.SuggestionActivity"
-            android:label="@string/action_suggest" />
-        <activity
-            android:name=".activities.MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".activities.HealthPlaceSelectionActivity"
-            android:label="@string/action_search"/>
-        <activity
-            android:name=".activities.HealthPlaceActivity"
-            android:label="@string/estabelecimento_saude"/>
-        <activity
-            android:name=".activities.EvaluationListActivity"
-            android:label="@string/evaluations" />
-        <activity
-            android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity
             android:name=".activities.SignupActivity"
-            android:label="@string/user" />
+            android:label="@string/title_activity_signup"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.MainActivity" />
+        </activity>
         <activity
             android:name=".activities.ProfileActivity"
-            android:label="@string/action_update" />
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".activities.HealthPlaceSelectionActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.HealthPlaceSelectionActivity" />
+        </activity>
+        <activity
+            android:name=".activities.HealthPlaceActivity"
+            android:label="@string/estabelecimento_saude"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.EvaluationListActivity"
+            android:label="@string/evaluations"
+            android:parentActivityName=".activities.HealthPlaceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.HealthPlaceActivity" />
+        </activity>
+        <activity
+            android:name=".activities.EvaluationActivity"
+            android:label="@string/action_evaluate"
+            android:parentActivityName=".activities.HealthPlaceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.HealthPlaceActivity" />
+        </activity>
+        <activity
+            android:name=".activities.SuggestionActivity"
+            android:label="@string/action_suggest"
+            android:parentActivityName=".activities.HealthPlaceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.salutary.mobisaude.activities.HealthPlaceActivity" />
+        </activity>
+
         <activity
             android:name=".activities.LocalitySelectionActivity"
             android:label="TelaLocalidade"
@@ -102,6 +150,7 @@
             android:label="TelaLocalidadeSelecionar"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/ThemeActivity" />
+        <!-- Facebook -->
         <activity
             tools:replace="android:theme"
             android:name="com.facebook.FacebookActivity"
@@ -124,23 +173,19 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
-
     </application>
 
 </manifest>
