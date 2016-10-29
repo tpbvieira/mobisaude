@@ -62,7 +62,6 @@ import co.salutary.mobisaude.util.Validator;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         LoaderCallbacks<Cursor>,

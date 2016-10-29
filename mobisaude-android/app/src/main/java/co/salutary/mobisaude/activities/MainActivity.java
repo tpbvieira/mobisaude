@@ -181,10 +181,10 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(BookmarksActivity.class);
         } else if (id == R.id.menu_search) {
             startActivity(HealthPlaceSelectionActivity.class);
-        } else if (id == R.id.menu_maps) {
-            startActivity(MapsActivity.class);
+//        } else if (id == R.id.menu_maps) {
+//            startActivity(MapsActivity.class);
         } else if (id == R.id.menu_dashboard) {
-//            startActivity(Pie.class);
+            startActivity(DashboardsActivity.class);
         } else if (id == R.id.menu_profile) {
             startActivity(ProfileActivity.class);
         } else if (id == R.id.menu_signup) {

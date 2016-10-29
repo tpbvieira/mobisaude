@@ -100,15 +100,18 @@ public class ClientCache {
             bestES = JsonUtils.fromStrToMap(strBookmark);
         }
 
-        Object[] counts = bestES.entrySet().toArray();
-        List<String> codsES = new ArrayList<>();
+        if(bestES == null){
+            return null;
+        }
 
+        Object[] counts = bestES.entrySet().toArray();
         Arrays.sort(counts, new Comparator() {
             public int compare(Object o1, Object o2) {
                 return ((Map.Entry<String, String>) o2).getValue().compareTo(((Map.Entry<String, String>) o1).getValue());
             }
         });
 
+        List<String> codsES = new ArrayList<>();
         for(int i = 0; i<10 && i<counts.length; i++){
             codsES.add(((Map.Entry<String, String>) counts[i]).getKey());
         }

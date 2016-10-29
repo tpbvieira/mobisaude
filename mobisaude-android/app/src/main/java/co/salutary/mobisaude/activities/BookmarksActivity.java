@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,9 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +25,6 @@ import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
-import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 
 public class BookmarksActivity extends AppCompatActivity {
@@ -144,8 +139,11 @@ public class BookmarksActivity extends AppCompatActivity {
 
             try {
                 List<String> bookmarkIds = ClientCache.getInstance().getBookmark(getApplicationContext());
+                if(bookmarkIds == null){
+                    throw new MobiSaudeAppException(getString(R.string.error_no_bookmarks));
+                }
                 for(String idEs: bookmarkIds){
-                    EstabelecimentoSaude es = getES(getApplicationContext(), token, idEs);
+                    EstabelecimentoSaude es = ServiceBroker.getInstance(getApplicationContext()).getES(token, idEs);
                     if(es != null) {
                         bookmark.add(es);
                     }
@@ -174,7 +172,8 @@ public class BookmarksActivity extends AppCompatActivity {
                 mEvaluationsList.setAdapter(mListAdapter);
                 mEvaluationsList.setOnItemClickListener(onItemClickListener());
             }else{
-                Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             if (mWarningMsg != null) {
@@ -188,36 +187,6 @@ public class BookmarksActivity extends AppCompatActivity {
         protected void onCancelled() {
             showProgress(false);
         }
-
-    }
-
-    public static EstabelecimentoSaude getES(Context context, String token, String idES) throws MobiSaudeAppException {
-        EstabelecimentoSaude es = null;
-        try {
-            JSONObject params = new JSONObject();
-            params.put("token", token);
-            params.put("idES", idES);
-            JSONObject request = new JSONObject();
-            request.put("esRequest", params);
-            String responseStr = ServiceBroker.getInstance(context).getESByIdES(request.toString());
-            if (responseStr != null) {
-                JSONObject json = new JSONObject(responseStr);
-                JSONObject response = (JSONObject) json.get("esResponse");
-                String error = JsonUtils.getError(response);
-                if (error == null) {
-                    JSONObject obj = (JSONObject) response.get("estabelecimentosSaude");
-                    es = JsonUtils.jsonObjectToES(obj);
-                } else {
-                    throw new MobiSaudeAppException(JsonUtils.getError(response));
-                }
-            } else {
-                throw new MobiSaudeAppException(context.getString(R.string.error_getting_es));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return es;
 
     }
 

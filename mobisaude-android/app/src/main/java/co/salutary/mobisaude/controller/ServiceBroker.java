@@ -3,6 +3,9 @@ package co.salutary.mobisaude.controller;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,10 +17,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.config.DeviceInfo;
 import co.salutary.mobisaude.config.Settings;
+import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.ConnectivityUtils;
 import co.salutary.mobisaude.util.JsonUtils;
+import co.salutary.mobisaude.util.MobiSaudeAppException;
 
 public class ServiceBroker {
 
@@ -79,6 +83,36 @@ public class ServiceBroker {
 
     public String getESByIdMunicipioIdTipoES(String json) {
         return requestJson("/getESByIdMunicipioIdTipoES", json);
+    }
+
+    public EstabelecimentoSaude getES(String token, String idES) throws MobiSaudeAppException {
+        EstabelecimentoSaude es = null;
+        try {
+            JSONObject params = new JSONObject();
+            params.put("token", token);
+            params.put("idES", idES);
+            JSONObject request = new JSONObject();
+            request.put("esRequest", params);
+            String responseStr = ServiceBroker.getInstance(context).getESByIdES(request.toString());
+            if (responseStr != null) {
+                JSONObject json = new JSONObject(responseStr);
+                JSONObject response = (JSONObject) json.get("esResponse");
+                String error = JsonUtils.getError(response);
+                if (error == null) {
+                    JSONObject obj = (JSONObject) response.get("estabelecimentosSaude");
+                    es = JsonUtils.jsonObjectToES(obj);
+                } else {
+                    throw new MobiSaudeAppException(JsonUtils.getError(response));
+                }
+            } else {
+                throw new MobiSaudeAppException(context.getString(R.string.error_getting_es));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return es;
+
     }
 
     public String sugerir(String json) {
