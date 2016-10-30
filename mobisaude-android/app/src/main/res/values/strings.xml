@@ -26,9 +26,7 @@
     <string name="avaliacao_media">Avaliação Média</string>
     <string name="avaliacoes_media_mes">Avaliaões Média por Mês</string>
     <string name="estabelecimento_saude">Estabelecimento de Saúde</string>
-    <string name="estabelecimentos_saude">Estabelecimentos de Saúde</string>
     <string name="evaluations">Avaliações</string>
-    <string name="user">Usuário</string>
     <string name="user_guest">Usuário Desconhecido</string>
     <string name="profile_contactable">Receber Emails</string>
     <string name="yes">Sim</string>
@@ -38,7 +36,6 @@
     <string name="menu_bookmarks">Favoritos</string>
     <string name="menu_dashboards">Gráficos</string>
     <string name="menu_search">Buscar</string>
-    <string name="menu_maps">Mapa</string>
     <string name="menu_profile">Perfil</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Senha</string>
@@ -69,7 +66,6 @@
     <string name="error_invalid_password">Senha inválida (precisa ter mais que 4 caracteres)</string>
     <string name="error_invalid_values">Valores inválidos</string>
     <string name="error_incorrect_password">Login ou senha incorreto</string>
-    <string name="error_login">Erro ao efetuar login</string>
     <string name="error_google_login">Erro ao efetuar Google login</string>
     <string name="error_field_required">Este campo é obrigatório</string>
     <string name="error_location_required">A localização é necessária para o funcionamento do MobiSaúde.</string>
@@ -83,8 +79,6 @@
     <string name="warn_working">Processando...</string>
     <string name="warn_login_required">É necessário efetuar o login</string>
     <string name="warn_many_evaluations">Você já avaliou este estabelecimento ateriormente</string>
-    <string name="not_supported">Este aparelho não é suportado para a operação desejada</string>
-    <string name="invalid_gps_apk">No valid Google Play Services APK found</string>
     <string name="erro_starts">Erro de inicialização</string>
     <string name="unknown_location">Localização não identificada</string>
     <string name="permission_rationale">É necessário ter permissão de acesso aos conatos</string>

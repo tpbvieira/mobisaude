@@ -1,36 +1,39 @@
 <resources>
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/freeSpeechBlue</item>
-        <item name="colorPrimaryDark">@color/toryBlue</item>
+    <style name="Theme.Mobisaude.AppCompat.Light.DarkActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/brightGrey</item>
+        <item name="colorPrimaryDark">@color/raven</item>
         <item name="colorAccent">@color/spindleBlue</item>
     </style>
-
-    <style name="AppTheme.NoActionBar">
+    <style name="Theme.Mobisaude.AppCompat.Light.DarkActionBar.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <!-- <style name="AppTheme" parent="android:Theme.Light.NoTitleBar" /> -->
     <style name="Theme.MobiSaude.Light.NoTitleBar.Fullscreen" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-
     <style name="ThemeActivity" parent="android:Theme.Light.NoTitleBar">
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <!-- Styles -->
     <style name="ratingBarStyle" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar_drawable</item>
         <item name="android:minHeight">48dip</item>
         <item name="android:maxHeight">48dip</item>
+    </style>
+    <style name="spinner_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@drawable/gradient_spinner</item>
+        <item name="android:popupBackground">@color/grey</item>
     </style>
 
 </resources>

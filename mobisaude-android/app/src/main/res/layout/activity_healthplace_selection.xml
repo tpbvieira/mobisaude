@@ -6,59 +6,42 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activities.HealthPlaceSelectionActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_gravity="center"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
         android:orientation="horizontal"
-        android:background="@color/background"
-        android:weightSum="1">
+        android:background="@color/grey">
 
-        <TextView
-            android:id="@+id/hp_select_list_title"
-            android:layout_width="287dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@color/font"
-            android:textSize="18sp"
-            android:text="@string/empty"
-            android:layout_weight="1.04"/>
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.90">
+            <Spinner
+                android:id="@+id/hp_type_spinner"
+                style="@style/spinner_style"/>
+        </RelativeLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:background="@color/background">
-
-        <Spinner
-            android:id="@+id/hp_type_spinner"
-            android:layout_width="315dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:dropDownSelector="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown"
-            android:layout_weight="0.86"/>
-
-        <ImageView
-            android:id="@+id/hp_select_list_map_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:contentDescription="@string/map"
-            android:src="@android:drawable/ic_dialog_map" />
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.10">
+            <ImageView
+                android:id="@+id/hp_select_list_map_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:paddingLeft="5dp"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:contentDescription="@string/map"
+                android:src="@android:drawable/ic_dialog_map"
+                android:background="@color/grey"/>
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -85,8 +68,7 @@
                 android:background="@drawable/noborder"
                 android:hint="@string/action_search"
                 android:padding="8dp"
-                android:textSize="16sp"
-                android:singleLine="true" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:id="@+id/hp_select_list_search_button"
@@ -117,7 +99,7 @@
             android:id="@+id/hp_select_list_index"
             android:layout_width="30dip"
             android:layout_height="fill_parent"
-            android:background="@color/background"
+            android:background="@color/grey"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
         </LinearLayout>

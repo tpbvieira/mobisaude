@@ -72,7 +72,6 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
     private int indexListSize;
 
     //ui
-    private TextView mTitleText;
     private Spinner mTipoESSpiner;
     private EditText mSearchText;
     private ImageView mMapButton;
@@ -100,8 +99,6 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
         mProgressView = findViewById(R.id.hp_select_list_progress_bar);
         mContentView = findViewById(R.id.hp_select_list_content);
         showProgress(true);
-        mTitleText = (TextView) findViewById(R.id.hp_select_list_title);
-        mTitleText.setText(R.string.estabelecimentos_saude);
 
         try {
             String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
