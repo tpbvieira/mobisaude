@@ -42,9 +42,9 @@ import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.Cidade;
 import co.salutary.mobisaude.model.UF;
 
-public class LocalitySelectionListActivity extends ListActivity {
+public class DoubleSelectionListActivity extends ListActivity {
 
-    private static final String TAG = LocalitySelectionListActivity.class.getSimpleName();
+    private static final String TAG = DoubleSelectionListActivity.class.getSimpleName();
 
     public static final int LISTA_UF = 1;
     public static final int LISTA_CIDADE = 2;

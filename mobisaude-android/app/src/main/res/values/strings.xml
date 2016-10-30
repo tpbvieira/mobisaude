@@ -61,6 +61,7 @@
     <string name="updated">Alterado</string>
     <string name="error">Erro Inesperado</string>
     <string name="error_obtaining_locality">Erro ao obter localização</string>
+    <string name="error_obtaining_dashboard_type">Erro ao obter o tipo de gráfico</string>
     <string name="error_invalid_email">Email inválido (precisa ter \"@\" e \".\")</string>
     <string name="error_invalid_name">O nome precisa ser um pouco maior...</string>
     <string name="error_invalid_password">Senha inválida (precisa ter mais que 4 caracteres)</string>
@@ -108,6 +109,6 @@
     <!-- arrays -->
 
     <string name="dashboard_select">Selecione o Tipo...</string>
-    <string name="tipo_es">Tipo de Estabelecimento</string>
+    <string name="tipo_es">Tipo de Estabelecimento de Saúde</string>
 
 </resources>

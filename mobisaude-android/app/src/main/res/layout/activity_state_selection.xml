@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+    android:layout_marginTop="30dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginBottom="30dp"
+	android:orientation="vertical" >
+
+	<LinearLayout
+		android:id="@+id/state_selection_btn_uf"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/roundborder"
+		android:gravity="center"
+		android:clickable="true"
+		android:orientation="horizontal" >
+
+		<EditText
+			android:id="@+id/state_selection_edt_uf"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/noborder"
+			android:hint="@string/estado"
+			android:padding="8dp"
+			android:focusable="false"
+			android:inputType="none" />
+
+		<ImageView
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:padding="3dp"
+			android:layout_marginEnd="3dp"
+			android:contentDescription="@string/estado"
+			android:src="@drawable/btn_seta" />
+	</LinearLayout>
+
+</LinearLayout>

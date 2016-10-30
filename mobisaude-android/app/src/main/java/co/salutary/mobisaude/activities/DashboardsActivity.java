@@ -3,6 +3,7 @@ package co.salutary.mobisaude.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,7 +14,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,6 +26,9 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,14 +38,11 @@ import java.util.Map;
 import java.util.Set;
 
 import co.salutary.mobisaude.R;
-import co.salutary.mobisaude.adapters.GenericListAdapter;
 import co.salutary.mobisaude.adapters.StringListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
-import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.model.EstabelecimentoSaude;
-import co.salutary.mobisaude.util.MobiSaudeAppException;
+import co.salutary.mobisaude.util.JsonUtils;
 
 import static android.graphics.Color.rgb;
 
@@ -54,10 +54,10 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
     public static final int[] BLUE_GRADIENT_COLORS = {
             rgb(173,216,230), rgb(135,206,250), rgb(0,191,255), rgb(30,144,255), rgb(65,105,225), rgb(0,0,225)
     };
-    private static final int NONE = 0;
-    private static final int STATE = 1;
-    private static final int CITY = 2;
-    private static final int TYPE = 3;
+    public static final int NONE = 0;
+    public static final int STATE = 1;
+    public static final int CITY = 2;
+    public static final int TYPE_ES = 3;
 
     private View mProgressView;
     private PieChart mChart;
@@ -92,7 +92,6 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         mChart.setUsePercentValues(true);
         mChart.setExtraOffsets(5, 10, 5, 5);
         mChart.setDragDecelerationFrictionCoef(0.95f);
-        mChart.setDescription(getString(R.string.dashboard_evaluation_desc));
         mChart.setDrawCenterText(false);
         mChart.setDrawHoleEnabled(true);
         mChart.setHoleColor(Color.WHITE);
@@ -104,6 +103,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         mChart.setRotationEnabled(true);
         mChart.setHighlightPerTapEnabled(true);
         mChart.setEntryLabelColor(Color.WHITE);
+        mChart.setEntryLabelTextSize(12f);
         mChart.setEntryLabelTextSize(12f);
         mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
         Legend legend = mChart.getLegend();
@@ -159,24 +159,78 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
+        Intent intent;
+        int type = pos;
 
-        if(pos == NONE){
-            mChart.setEnabled(false);
-            mChart.setVisibility(View.INVISIBLE);
-        }else{
+        switch (type){
+            case STATE:
+                intent = new Intent(this, StateSelectionActivity.class);
+                startActivityForResult(intent, STATE);
+                break;
+            case CITY:
+                intent = new Intent(this, CitySelectionActivity.class);
+                startActivityForResult(intent, CITY);
+                break;
+            case TYPE_ES:
+                intent = new Intent(this, TipoESSelectionActivity.class);
+                startActivityForResult(intent, TYPE_ES);
+                break;
+            case NONE:
+            default:
+                mChart.setEnabled(false);
+                mChart.setVisibility(View.INVISIBLE);
+                return;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(new Object() {
+        }.getClass().getName(), new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String label = null;
+
+        switch (requestCode){
+            case STATE:
+                label = ClientCache.getInstance().getUf().getNome();
+                break;
+            case CITY:
+                label = ClientCache.getInstance().getCidade().getNome();
 //            mUpdateChartTask = new UpdateChartTask(pos);
 //            mUpdateChartTask.execute();
-            mChart.setEnabled(true);
-            mChart.setVisibility(View.VISIBLE);
-            Map<Integer, Integer> values = new HashMap<>();
-            values.put(0, 10);
-            values.put(1, 20);
-            values.put(2, 30);
-            values.put(3, 40);
-            values.put(4, 50);
-            values.put(5, 60);
-            setData(values);
+                break;
+            case TYPE_ES:
+                try{
+                    Settings settings = new Settings(getApplicationContext());
+                    String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
+                    HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
+                    ArrayList<String> tipoESList = new ArrayList<>(tiposES.values());
+                    Collections.sort(tipoESList);
+                    label = String.valueOf(tipoESList.get(resultCode));
+                } catch (JSONException e){
+                    Log.e(TAG, e.getMessage(),e);
+                }
+
+                break;
+            default:
+                Toast.makeText(getApplicationContext(), getString(R.string.error_obtaining_dashboard_type), Toast.LENGTH_LONG).show();
+                return;
+
         }
+
+        mChart.setEnabled(true);
+        mChart.setVisibility(View.VISIBLE);
+        Map<Integer, Integer> values = new HashMap<>();
+        values.put(0, 10);
+        values.put(1, 20);
+        values.put(2, 30);
+        values.put(3, 40);
+        values.put(4, 50);
+        values.put(5, 60);
+        setData(label,values);
 
     }
 
@@ -185,7 +239,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         // do nothing
     }
 
-    private void setData(Map<Integer, Integer> values) {
+    private void setData(String target, Map<Integer, Integer> values) {
 
         // Entries
         Set<Integer> starsSet = values.keySet();
@@ -210,9 +264,11 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
 
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());
-        data.setValueTextSize(11f);
+        data.setValueTextSize(12f);
         data.setValueTextColor(Color.WHITE);
 
+        mChart.setDescriptionTextSize(12f);
+        mChart.setDescription("Percentual das Avaliações para " + target);
         mChart.setData(data);
         mChart.highlightValues(null);
         mChart.invalidate();
@@ -223,11 +279,15 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
 
         private String mErrorMsg = null;
         private String mWarningMsg = null;
+        private String mId = null;
+        private String mLabel = null;
         private int mChartType;
         private Map<Integer, Integer> mValues = new HashMap<>();
 
-        UpdateChartTask(int chartType) {
+        UpdateChartTask(int chartType, String id, String label) {
             mChartType = chartType;
+            mId = id;
+            mLabel = label;
         }
 
         @Override
@@ -260,7 +320,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         protected void onPostExecute(final Boolean success) {
 
             if (success && mValues != null) {
-                setData(mValues);
+                setData(mLabel, mValues);
             }else{
                 Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
                 finish();

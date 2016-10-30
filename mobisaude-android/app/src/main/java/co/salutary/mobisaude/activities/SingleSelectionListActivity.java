@@ -21,10 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,20 +37,11 @@ import co.salutary.mobisaude.adapters.GenericListAdapter;
 import co.salutary.mobisaude.adapters.GenericListAdapter.Item;
 import co.salutary.mobisaude.adapters.GenericListAdapter.Row;
 import co.salutary.mobisaude.adapters.GenericListAdapter.Section;
-import co.salutary.mobisaude.controller.ClientCache;
-import co.salutary.mobisaude.db.CidadeDAO;
-import co.salutary.mobisaude.db.LocalDataBase;
-import co.salutary.mobisaude.db.UfDAO;
-import co.salutary.mobisaude.model.Cidade;
-import co.salutary.mobisaude.model.UF;
+import co.salutary.mobisaude.util.JsonUtils;
 
-public class LocalitySelectionListActivity extends ListActivity {
+public class SingleSelectionListActivity extends ListActivity {
 
-    private static final String TAG = LocalitySelectionListActivity.class.getSimpleName();
-
-    public static final int LISTA_UF = 1;
-    public static final int LISTA_CIDADE = 2;
-    public static final int RESULTADO_ITEM_SELECIONADO = 1;
+    private static final String TAG = SingleSelectionListActivity.class.getSimpleName();
 
     private GenericListAdapter adapter = new GenericListAdapter();
     private GestureDetector mGestureDetector;
@@ -61,29 +54,28 @@ public class LocalitySelectionListActivity extends ListActivity {
 
     private EditText mSearchText;
     private ImageView mSearchButton;
-
-    private LocalDataBase db;
-    private ClientCache clientCache;
-
-    private int tipoLista;
+    private ArrayList<String> mStringList = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_select_list);
-        TextView title = (TextView) findViewById(R.id.select_list_title);
-        mSearchText = (EditText) findViewById(R.id.select_list_search_text);
-        mSearchButton = (ImageView) findViewById(R.id.select_list_search_button);
-
-        db = LocalDataBase.getInstance();
-        clientCache = ClientCache.getInstance();
+        setContentView(R.layout.activity_generic_select_list);
+        mSearchText = (EditText) findViewById(R.id.generic_select_list_search_text);
+        mSearchButton = (ImageView) findViewById(R.id.generic_select_list_search_button);
 
         Intent intent = getIntent();
         if(intent != null){
             Bundle extras = intent.getExtras();
             if(extras != null){
-                tipoLista = extras.getInt("tipoLista");
+                String tipoESString = extras.getString("values");
+                try{
+                    HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
+                    mStringList = new ArrayList<>(tiposES.values());
+                    Collections.sort(mStringList);
+                } catch (JSONException e){
+                    Log.e(TAG, e.getMessage(),e);
+                }
             }
         }
 
@@ -119,7 +111,6 @@ public class LocalitySelectionListActivity extends ListActivity {
         });
 
         mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
-        title.setText(tipoLista == LISTA_UF ? R.string.estado : R.string.cidade);
 
         carregarLista();
     }
@@ -135,22 +126,9 @@ public class LocalitySelectionListActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
 
         if (adapter.getRows().get(position) instanceof Item) {
-            db.open(getApplicationContext());
-            if(tipoLista==LISTA_UF){
-                Item item = (Item) adapter.getRows().get(position);
-                UF uf = new UfDAO(db).getUfById(item.id);
-                clientCache.setUf(uf);
-                clientCache.setCidade(null);
-                setResult(RESULTADO_ITEM_SELECIONADO);
-                finish();
-            } else {
-                Item item = (Item) adapter.getRows().get(position);
-                Cidade cidade = new CidadeDAO(db).getCidadeById(item.id);
-                clientCache.setCidade(cidade);
-                setResult(RESULTADO_ITEM_SELECIONADO);
-                finish();
-            }
-            db.close();
+            Item item = (Item) adapter.getRows().get(position);
+            setResult(item.id);
+            finish();
         }
     }
 
@@ -177,88 +155,34 @@ public class LocalitySelectionListActivity extends ListActivity {
         Object[] tmpIndexItem;
         Pattern numberPattern = Pattern.compile("[0-9]");
 
-        if(tipoLista == LISTA_UF){
-            db.open(getApplicationContext());
-            List<UF> listUf = new UfDAO(db).listarUF();
-            db.close();
-            Collections.sort(listUf, new Comparator<UF>() {
-                @Override
-                public int compare(UF t1, UF t2) {
-                    return t1.getNome().compareToIgnoreCase(t2.getNome());
-                }
-            });
+        for (String str : mStringList) {
 
-            for (UF uf : listUf) {
-                String country = uf.getNome();
-                String firstLetter = country.substring(0, 1);
-                firstLetter = Normalizer.normalize(firstLetter, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-                if (numberPattern.matcher(firstLetter).matches()) {
-                    firstLetter = "#";
-                }
-
-                if (previousLetter != null && !firstLetter.equals(previousLetter)) {
-                    end = rows.size() - 1;
-                    tmpIndexItem = new Object[3];
-                    tmpIndexItem[0] = previousLetter.toUpperCase(Locale.UK);
-                    tmpIndexItem[1] = start;
-                    tmpIndexItem[2] = end;
-                    alphabet.add(tmpIndexItem);
-
-                    start = end + 1;
-                }
-
-                if (!firstLetter.equals(previousLetter)) {
-                    rows.add(new Section(firstLetter));
-                    sections.put(firstLetter, start);
-                }
-
-                rows.add(new Item(country, uf.getIdUf()));
-                previousLetter = firstLetter;
+            String firstLetter = str.substring(0, 1);
+            firstLetter = Normalizer.normalize(firstLetter, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+            if (numberPattern.matcher(firstLetter).matches()) {
+                firstLetter = "#";
             }
-        }
-        else if (tipoLista == LISTA_CIDADE){
-            UF uf = ClientCache.getInstance().getUf();
-            db.open(getApplicationContext());
-            List<Cidade> listCidade = new CidadeDAO(db).listarCidadesByUF(uf.getIdUf());
-            db.close();
-            Collections.sort(listCidade, new Comparator<Cidade>() {
-                @Override
-                public int compare(Cidade t1, Cidade t2) {
-                    String nome1 = Normalizer.normalize(t1.getNome(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-                    String nome2 = Normalizer.normalize(t2.getNome(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-                    return nome1.compareToIgnoreCase(nome2);
-                }
-            });
 
-            for (Cidade cidade : listCidade) {
-                String country = cidade.getNome();
-                String firstLetterOrin = country.substring(0, 1);
-                String firstLetter = Normalizer.normalize(firstLetterOrin, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+            if (previousLetter != null && !firstLetter.equals(previousLetter)) {
+                end = rows.size() - 1;
+                tmpIndexItem = new Object[3];
+                tmpIndexItem[0] = previousLetter.toUpperCase(Locale.UK);
+                tmpIndexItem[1] = start;
+                tmpIndexItem[2] = end;
+                alphabet.add(tmpIndexItem);
 
-                if (numberPattern.matcher(firstLetter).matches()) {
-                    firstLetter = "#";
-                }
-
-                if (previousLetter != null && !firstLetter.equals(previousLetter)) {
-                    end = rows.size() - 1;
-                    tmpIndexItem = new Object[3];
-                    tmpIndexItem[0] = previousLetter.toUpperCase(Locale.UK);
-                    tmpIndexItem[1] = start;
-                    tmpIndexItem[2] = end;
-                    alphabet.add(tmpIndexItem);
-
-                    start = end + 1;
-                }
-
-                if (!firstLetter.equals(previousLetter)) {
-                    rows.add(new Section(firstLetter));
-                    sections.put(firstLetter, start);
-                }
-
-                rows.add(new Item(country, cidade.getIdCidade()));
-                previousLetter = firstLetter;
+                start = end + 1;
             }
+
+            if (!firstLetter.equals(previousLetter)) {
+                rows.add(new Section(firstLetter));
+                sections.put(firstLetter, start);
+            }
+
+            rows.add(new Item(str, mStringList.indexOf(str)));
+            previousLetter = firstLetter;
         }
+
 
         if (previousLetter != null) {
             tmpIndexItem = new Object[3];
@@ -274,26 +198,16 @@ public class LocalitySelectionListActivity extends ListActivity {
         updateList();
     }
 
-    private void setSearchResult(String str) {
+    private void setSearchResult(String strTarget) {
         try {
             adapter = new GenericListAdapter();
-            db.open(getApplicationContext());
-            if(tipoLista==LISTA_UF){
-                for (UF uf : new UfDAO(db).listarUF()) {
-                    if (uf.getNome().toLowerCase(Locale.getDefault()).contains(str.toLowerCase())) {
-                        adapter.addItem(new Item(uf.getNome(), uf.getIdUf()));
-                    }
+
+            for (String str : mStringList) {
+                if (str.toLowerCase(Locale.getDefault()).contains(strTarget.toLowerCase())) {
+                    adapter.addItem(new Item(str, mStringList.indexOf(str)));
                 }
             }
-            else {
-                UF uf = ClientCache.getInstance().getUf();
-                for (Cidade cidade : new CidadeDAO(db).listarCidadesByUF(uf.getIdUf())) {
-                    if (cidade.getNome().toLowerCase(Locale.getDefault()).contains(str.toLowerCase())) {
-                        adapter.addItem(new Item(cidade.getNome(), cidade.getIdCidade()));
-                    }
-                }
-            }
-            db.close();
+
             setListAdapter(adapter);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -301,7 +215,7 @@ public class LocalitySelectionListActivity extends ListActivity {
     }
 
     private void updateList() {
-        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.select_list_index);
+        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.generic_select_list_index);
         sideIndex.removeAllViews();
         indexListSize = alphabet.size();
 
@@ -358,7 +272,7 @@ public class LocalitySelectionListActivity extends ListActivity {
     }
 
     private void displayListItem() {
-        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.select_list_index);
+        LinearLayout sideIndex = (LinearLayout) findViewById(R.id.generic_select_list_index);
         sideIndexHeight = sideIndex.getHeight();
         double pixelPerIndexItem = (double) sideIndexHeight / indexListSize;
 
