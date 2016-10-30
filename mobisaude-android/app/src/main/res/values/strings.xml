@@ -94,6 +94,8 @@
     <string name="action_select">Selecionar</string>
     <string name="exit">Sair</string>
 
+    <string name="dashboard_evaluation_desc">Percentual das Avaliações</string>
+
     <!-- prompt -->
     <string name="error_connecting_server">Erro ao conectar servidor de dados, deseja utilizar os dados salvos?</string>
     <string name="error_connecting_server_required">Acesso ao servidor é necessário para o funcionamento do MobiSaúde.</string>
@@ -104,11 +106,8 @@
     <!-- settings -->
 
     <!-- arrays -->
-    <string-array name="dashboard_options">
-        <item>Selecione o Tipo...</item>
-        <item>Estado</item>
-        <item>Cidade</item>
-        <item>Tipo de Estabelecimento</item>
-    </string-array>
+
+    <string name="dashboard_select">Selecione o Tipo...</string>
+    <string name="tipo_es">Tipo de Estabelecimento</string>
 
 </resources>
