@@ -28,12 +28,18 @@
         <item name="android:minHeight">48dip</item>
         <item name="android:maxHeight">48dip</item>
     </style>
-    <style name="spinner_style">
+    <style name="spinnerGrayStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">left</item>
-        <item name="android:background">@drawable/gradient_spinner</item>
-        <item name="android:popupBackground">@color/grey</item>
+        <item name="android:background">@drawable/gradient_gray_spinner</item>
+        <item name="android:popupBackground">@color/gray</item>
     </style>
-
+    <style name="spinnerWhiteStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@drawable/gradient_white_spinner</item>
+        <item name="android:popupBackground">@color/gray</item>
+    </style>
 </resources>

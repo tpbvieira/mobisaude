@@ -4,12 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -52,32 +52,29 @@ import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.JsonUtils;
 
-public class HealthPlaceSelectionActivity extends ListActivity implements AdapterView.OnItemSelectedListener {
+public class HealthPlaceSelectionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = new Object() {
     }.getClass().getName();
 
+    //ui
+    private View mContentView;
+    private View mProgressView;
+    private Spinner mTipoESSpiner;
+    private EditText mSearchText;
+    private ImageView mSearchButton;
+    private ListView mESListView;
+
+    // ListView
     public static final int SELECTED = 1;
-
-    private StringListAdapter stringListAdapter;
-
     private GestureDetector mGestureDetector;
     private GenericListAdapter mListAdapterModel = new GenericListAdapter();
-
-    private List<Object[]> alphabet = new ArrayList<Object[]>();
-    private HashMap<String, Integer> sections = new HashMap<String, Integer>();
+    private List<Object[]> alphabet = new ArrayList<>();
+    private HashMap<String, Integer> sections = new HashMap<>();
     private static float sideIndexX;
     private static float sideIndexY;
     private int sideIndexHeight;
     private int indexListSize;
-
-    //ui
-    private Spinner mTipoESSpiner;
-    private EditText mSearchText;
-    private ImageView mMapButton;
-    private ImageView mSearchButton;
-    private View mContentView;
-    private View mProgressView;
 
     //context
     private ClientCache clientCache;
@@ -93,19 +90,19 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
         settings.setPreferenceValues(Settings.ID_TIPO_ESTABELECIMENTO_SAUDE, null);
         clientCache = ClientCache.getInstance();
 
-        // UI
+        // UI: General
         setContentView(R.layout.activity_healthplace_selection);
-
         mProgressView = findViewById(R.id.hp_select_list_progress_bar);
         mContentView = findViewById(R.id.hp_select_list_content);
         showProgress(true);
 
+        // Fill spinner with tipoES
         try {
             String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
             HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
-            ArrayList<String> tipoESList = new ArrayList<String>(tiposES.values());
+            ArrayList<String> tipoESList = new ArrayList<>(tiposES.values());
             Collections.sort(tipoESList);
-            stringListAdapter = new StringListAdapter(context, android.R.layout.simple_spinner_dropdown_item, tipoESList);
+            StringListAdapter stringListAdapter = new StringListAdapter(context, android.R.layout.simple_spinner_dropdown_item, tipoESList);
             stringListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mTipoESSpiner = (Spinner) findViewById(R.id.hp_type_spinner);
             mTipoESSpiner.setAdapter(stringListAdapter);
@@ -116,6 +113,18 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
             Log.e(TAG, e.getMessage(), e);
         }
 
+        // UI: map button
+        ImageView mMapButton = (ImageView) findViewById(R.id.hp_select_list_map_button);
+        mMapButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int idTipoES = (int)mTipoESSpiner.getSelectedItemId();
+                settings.setPreferenceValues(Settings.ID_TIPO_ESTABELECIMENTO_SAUDE, Integer.toString(idTipoES + 1));
+                startActivity(MapsActivity.class);
+            }
+        });
+
+        // UI: search imput text
         mSearchText = (EditText) findViewById(R.id.hp_select_list_search_text);
         mSearchText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -139,24 +148,42 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
             }
         });
 
-        mMapButton = (ImageView) findViewById(R.id.hp_select_list_map_button);
-        mMapButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int idTipoES = (int)mTipoESSpiner.getSelectedItemId();
-                settings.setPreferenceValues(Settings.ID_TIPO_ESTABELECIMENTO_SAUDE, Integer.toString(idTipoES + 1));
-                startActivity(MapsActivity.class);
-            }
-        });
-
+        // UI: search button
         mSearchButton = (ImageView) findViewById(R.id.hp_select_list_search_button);
         mSearchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickSearch();
+                if (mSearchText.getText().length() != 0) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
+                    mSearchText.setText(getString(R.string.empty));
+                    mSearchButton.setImageResource(android.R.drawable.ic_menu_search);
+                    loadData();
+                } else {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    mSearchText.setFocusable(true);
+                    mSearchButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+                }
             }
         });
         mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
+
+        // UI: list
+        mESListView = (ListView)findViewById(R.id.hp_select_list);
+        mESListView.setAdapter(mListAdapterModel);
+        mESListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> a, View v,int position, long id){
+
+                if (mListAdapterModel.getRows().get(position) instanceof Item) {
+                    Item item = (Item) mListAdapterModel.getRows().get(position);
+                    settings.setPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE, Integer.toString(item.id));
+                    setResult(SELECTED);
+                    startActivity(HealthPlaceActivity.class);
+                }
+            }
+        });
     }
 
     @Override
@@ -172,44 +199,18 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
         return mGestureDetector.onTouchEvent(event);
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        if (mListAdapterModel.getRows().get(position) instanceof Item) {
-            Item item = (Item) mListAdapterModel.getRows().get(position);
-            settings.setPreferenceValue(Settings.ID_ESTABELECIMENTO_SAUDE, Integer.toString(item.id));
-            setResult(SELECTED);
-            startActivity(HealthPlaceActivity.class);
-        }
-    }
-
-    private void onClickSearch() {
-        if (mSearchText.getText().length() != 0) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
-            mSearchText.setText(getString(R.string.empty));
-            mSearchButton.setImageResource(android.R.drawable.ic_menu_search);
-            loadData();
-        } else {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            mSearchText.setFocusable(true);
-            mSearchButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-        }
-    }
-
     private void loadData() {
 
-        int start = 0, end = 0;
+        int start= 0;
+        int end;
         String previousLetter = null;
         Object[] tmpIndexItem;
-        List<Row> rows = new ArrayList<Row>();
+        List<Row> rows = new ArrayList<>();
         Pattern numberPattern = Pattern.compile("[0-9]");
 
         List<EstabelecimentoSaude> esList = clientCache.getListESByCidade();
         if(mTipoESSpiner.isSelected()){
-            List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
+            List<EstabelecimentoSaude> esByTypeList = new ArrayList<>();
             for(EstabelecimentoSaude es : esList ){
                 if(es.getIdTipoEstabelecimentoSaude() == (mTipoESSpiner.getSelectedItemId() + 1)){
                     esByTypeList.add(es);
@@ -265,7 +266,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
         }
 
         mListAdapterModel.setRows(rows);
-        setListAdapter(mListAdapterModel);
+        mESListView.setAdapter(mListAdapterModel);
 
         updateList();
         showProgress(false);
@@ -334,7 +335,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
 
             List<EstabelecimentoSaude> esList = clientCache.getListESByCidade();
             if(mTipoESSpiner.isSelected()){
-                List<EstabelecimentoSaude> esByTypeList = new ArrayList<EstabelecimentoSaude>();
+                List<EstabelecimentoSaude> esByTypeList = new ArrayList<>();
                 for(EstabelecimentoSaude es : esList ){
                     if(es.getIdTipoEstabelecimentoSaude() == (mTipoESSpiner.getSelectedItemId() + 1)){
                         esByTypeList.add(es);
@@ -349,7 +350,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
                 }
             }
 
-            setListAdapter(mListAdapterModel);
+            mESListView.setAdapter(mListAdapterModel);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -365,7 +366,7 @@ public class HealthPlaceSelectionActivity extends ListActivity implements Adapte
         if (itemPosition < alphabet.size()) {
             Object[] indexItem = alphabet.get(itemPosition);
             int subitemPosition = sections.get(indexItem[0]);
-            getListView().setSelection(subitemPosition);
+            mESListView.setSelection(subitemPosition);
         }
     }
 

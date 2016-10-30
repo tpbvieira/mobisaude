@@ -16,7 +16,7 @@
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
         android:orientation="horizontal"
-        android:background="@color/grey">
+        android:background="@color/gray">
 
         <RelativeLayout
             android:layout_width="0dip"
@@ -24,7 +24,7 @@
             android:layout_weight="0.90">
             <Spinner
                 android:id="@+id/hp_type_spinner"
-                style="@style/spinner_style"/>
+                style="@style/spinnerWhiteStyle"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -40,7 +40,7 @@
                 android:gravity="right"
                 android:contentDescription="@string/map"
                 android:src="@android:drawable/ic_dialog_map"
-                android:background="@color/grey"/>
+                android:background="@color/gray"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -49,7 +49,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/grey" >
+        android:background="@color/gray" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -89,7 +89,7 @@
         android:orientation="horizontal" >
 
         <ListView
-            android:id="@android:id/list"
+            android:id="@+id/hp_select_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -99,7 +99,7 @@
             android:id="@+id/hp_select_list_index"
             android:layout_width="30dip"
             android:layout_height="fill_parent"
-            android:background="@color/grey"
+            android:background="@color/gray"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
         </LinearLayout>

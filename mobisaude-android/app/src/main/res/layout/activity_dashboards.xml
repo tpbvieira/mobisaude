@@ -18,10 +18,8 @@
         android:orientation="vertical">
         <Spinner
             android:id="@+id/dashboard_options_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="50dip"
-            android:background="@color/lightGray"
-            android:popupBackground="@color/lightGray"/>
+            style="@style/spinnerGrayStyle"
+            android:layout_height="40dp"/>
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart1"

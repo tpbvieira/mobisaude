@@ -65,7 +65,6 @@
         <activity
             android:name=".activities.HealthPlaceSelectionActivity"
             android:label="@string/title_activity_healthplace_selection"
-            android:theme="@android:style/Theme.DeviceDefault.Light"
             android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
