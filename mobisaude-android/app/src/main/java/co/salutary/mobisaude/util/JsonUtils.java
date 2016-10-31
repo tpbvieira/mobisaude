@@ -173,6 +173,9 @@ public class JsonUtils {
                 for (int i = 0; i < jsonAvaliacoes.length(); i++) {
                     JSONObject jsonAvaliacao = jsonAvaliacoes.optJSONObject(i);
                     Avaliacao av = new Avaliacao();
+                    if (jsonAvaliacao.has("idES")){
+                        av.setIdES(Integer.parseInt(jsonAvaliacao.getString("idES")));
+                    }
                     if (jsonAvaliacao.has("rating")){
                         av.setRating(Float.parseFloat(jsonAvaliacao.getString("rating")));
                     }

@@ -3,6 +3,9 @@ package co.salutary.mobisaude.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -28,6 +31,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,8 +45,12 @@ import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.adapters.StringListAdapter;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
+import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
+import co.salutary.mobisaude.fragments.LineChartDialogFragment;
+import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.util.JsonUtils;
+import co.salutary.mobisaude.util.MobiSaudeAppException;
 
 import static android.graphics.Color.rgb;
 
@@ -192,15 +200,17 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         super.onActivityResult(requestCode, resultCode, data);
 
         String label = null;
+        String idStr = null;
+        int type = requestCode;
 
-        switch (requestCode){
+        switch (type){
             case STATE:
                 label = ClientCache.getInstance().getUf().getNome();
+                idStr = String.valueOf(ClientCache.getInstance().getUf().getIdUf());
                 break;
             case CITY:
                 label = ClientCache.getInstance().getCidade().getNome();
-//            mUpdateChartTask = new UpdateChartTask(pos);
-//            mUpdateChartTask.execute();
+                idStr = String.valueOf(ClientCache.getInstance().getCidade().getIdCidade());
                 break;
             case TYPE_ES:
                 try{
@@ -209,7 +219,14 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                     HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
                     ArrayList<String> tipoESList = new ArrayList<>(tiposES.values());
                     Collections.sort(tipoESList);
+
                     label = String.valueOf(tipoESList.get(resultCode));
+                    for(String key: tiposES.keySet()){
+                        if(tiposES.get(key).equals(label)){
+                            idStr = String.valueOf(ClientCache.getInstance().getUf().getIdUf());
+                        }
+                    }
+
                 } catch (JSONException e){
                     Log.e(TAG, e.getMessage(),e);
                 }
@@ -221,16 +238,10 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
 
         }
 
-        mChart.setEnabled(true);
-        mChart.setVisibility(View.VISIBLE);
-        Map<Integer, Integer> values = new HashMap<>();
-        values.put(0, 10);
-        values.put(1, 20);
-        values.put(2, 30);
-        values.put(3, 40);
-        values.put(4, 50);
-        values.put(5, 60);
-        setData(label,values);
+        if(label != null && idStr != null){
+            mUpdateChartTask = new UpdateChartTask(type, idStr, label);
+            mUpdateChartTask.execute();
+        }
 
     }
 
@@ -282,7 +293,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         private String mId = null;
         private String mLabel = null;
         private int mChartType;
-        private Map<Integer, Integer> mValues = new HashMap<>();
+        List<Avaliacao> mAvaliacoes = null;
 
         UpdateChartTask(int chartType, String id, String label) {
             mChartType = chartType;
@@ -297,7 +308,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... param) {
             boolean ok = true;
 
             Settings settings = new Settings(getApplicationContext());
@@ -308,10 +319,47 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                 token = settings.getPreferenceValue(Settings.TOKEN);
             }
 
-//            EstabelecimentoSaude es = ServiceBroker.getInstance(getApplicationContext()).getES(token, idEs);
-//            if(es != null) {
-//                bookmark.add(es);
-//            }
+            try {
+                JSONObject params = new JSONObject();
+                params.put("token", token);
+                params.put("idES", mId);
+                JSONObject request = new JSONObject();
+
+                request.put("avaliacaoMediaRequest", params);
+                String responseStr = null;
+                switch (mChartType){
+                    case STATE:
+                        responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdEstado(request.toString());
+                        break;
+                    case CITY:
+                        responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdCidade(request.toString());
+                        break;
+                    case TYPE_ES:
+                        responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdTipoES(request.toString());
+                        break;
+                }
+
+                if (responseStr != null) {
+                    JSONObject json = new JSONObject(responseStr);
+                    JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
+                    String error = JsonUtils.getError(response);
+                    if (error == null) {
+                        mAvaliacoes = JsonUtils.jsonObjectToListAvaliacao(response);
+                        if (mAvaliacoes == null) {
+                            throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                        }
+                    } else {
+                        throw new MobiSaudeAppException(JsonUtils.getError(response));
+                    }
+                } else {
+                    throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                }
+
+            } catch (Exception e) {
+                mErrorMsg = e.getMessage();
+                Log.e(TAG, e.getMessage(), e);
+                ok = false;
+            }
 
             return ok;
         }
@@ -319,7 +367,15 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         @Override
         protected void onPostExecute(final Boolean success) {
 
-            if (success && mValues != null) {
+            if (success && mAvaliacoes != null) {
+
+                Map<Integer, Integer> mValues = new HashMap<>();
+                for(Avaliacao avaliacao: mAvaliacoes){
+                    mValues.put(avaliacao.getIdES(), (int)avaliacao.getRating());
+                }
+
+                mChart.setEnabled(true);
+                mChart.setVisibility(View.VISIBLE);
                 setData(mLabel, mValues);
             }else{
                 Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();

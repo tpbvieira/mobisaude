@@ -404,7 +404,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 JSONObject request = new JSONObject();
 
                 request.put("avaliacaoMediaRequest", params);
-                String responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvalicaoMediaMesByIdES(request.toString());
+                String responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoMediaMesByIdES(request.toString());
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
                     JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");

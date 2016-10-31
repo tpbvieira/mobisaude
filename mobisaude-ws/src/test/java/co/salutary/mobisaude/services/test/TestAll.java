@@ -818,7 +818,7 @@ public class TestAll extends TestCase {
 			avaliacaoMediaMesRequest.setToken(token);
 			avaliacaoMediaMesRequest.setIdES(idES);
 
-			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvalicaoMediaMesByIdES(avaliacaoMediaMesRequest);			
+			AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoMediaMesByIdES(avaliacaoMediaMesRequest);			
 
 			if (avaliacaoMediaMesResponse == null || avaliacaoMediaMesResponse.getErro() != null) {
 				logger.error(avaliacaoMediaMesResponse);

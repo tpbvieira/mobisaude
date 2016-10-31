@@ -880,55 +880,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 		}
 		return response;
 	}
-
-	@POST
-	@Path("/listAvaliacaoByIdES")
-	@Consumes("application/json;charset=utf-8")
-	@Produces("application/json;charset=utf-8")
-	public AvaliacaoResponse listAvaliacaoByIdES(AvaliacaoRequest request) {
-		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
-		AvaliacaoResponse response = new AvaliacaoResponse();
-		try {
-
-			String token = request.getToken();
-			if (!validarToken(token)) {
-				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
-				return response;
-			}
-
-			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
-			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(request.getIdES()));
-			if (avaliacoes != null) {
-				List<AvaliacaoDTO> avaliscoesList = new ArrayList<AvaliacaoDTO>();
-				for (Avaliacao avaliacao:avaliacoes) {
-					AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
-					avaliacaoDTO.setIdES(avaliacao.getIdES().toString());
-					avaliacaoDTO.setEmail(avaliacao.getEmail());
-					avaliacaoDTO.setTitulo(avaliacao.getTitulo());
-					avaliacaoDTO.setAvaliacao(avaliacao.getAvaliacao());
-					avaliacaoDTO.setRating(Float.toString(avaliacao.getRating()));
-					avaliacaoDTO.setDate(sdf.format(avaliacao.getDate()));										
-					avaliscoesList.add(avaliacaoDTO);
-				}
-				response.setAvaliacoes(avaliscoesList);				
-			} else {
-				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
-				return response;
-			}
-
-		} catch (DataIntegrityViolationException e) {
-			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
-			response.setErro(e.getMessage());			
-			return response;
-		} catch (Exception e) {
-			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
-			response.setErro(e.getMessage());			
-			return response;
-		}
-		return response;
-	}
 	
 	@POST
 	@Path("/avaliarMedia")
@@ -1063,10 +1014,59 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 
 	@POST
-	@Path("/listAvalicaoMediaMesByIdES")
+	@Path("/listAvaliacaoByIdES")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
-	public AvaliacaoMediaResponse listAvalicaoMediaMesByIdES(AvaliacaoMediaRequest request) {
+	public AvaliacaoResponse listAvaliacaoByIdES(AvaliacaoRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoResponse response = new AvaliacaoResponse();
+		try {
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			AvaliacaoFacade avaliacaoFacade = (AvaliacaoFacade)Factory.getInstance().get("avaliacaoFacade");
+			List<Avaliacao> avaliacoes = avaliacaoFacade.listByIdES(Integer.valueOf(request.getIdES()));
+			if (avaliacoes != null) {
+				List<AvaliacaoDTO> avaliscoesList = new ArrayList<AvaliacaoDTO>();
+				for (Avaliacao avaliacao:avaliacoes) {
+					AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
+					avaliacaoDTO.setIdES(avaliacao.getIdES().toString());
+					avaliacaoDTO.setEmail(avaliacao.getEmail());
+					avaliacaoDTO.setTitulo(avaliacao.getTitulo());
+					avaliacaoDTO.setAvaliacao(avaliacao.getAvaliacao());
+					avaliacaoDTO.setRating(Float.toString(avaliacao.getRating()));
+					avaliacaoDTO.setDate(sdf.format(avaliacao.getDate()));										
+					avaliscoesList.add(avaliacaoDTO);
+				}
+				response.setAvaliacoes(avaliscoesList);				
+			} else {
+				logger.warn(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.consultadominios.erroBuscandoDominioRegiao"));				
+				return response;
+			}
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/listAvaliacaoMediaMesByIdES")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoMediaResponse listAvaliacaoMediaMesByIdES(AvaliacaoMediaRequest request) {
 		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
 		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
 		try {
@@ -1114,7 +1114,139 @@ public class ServiceBroker extends AbstractServiceBroker {
 		}
 		return response;
 	}
+	
+	@POST
+	@Path("/listAvaliacaoByIdEstado")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoMediaResponse listAvaliacaoByIdEstado(AvaliacaoMediaRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
+		try {
 
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			List<AvaliacaoMediaMesDTO> lstRetorno = new ArrayList<AvaliacaoMediaMesDTO>();
+			for (int i=0; i < 6;i++){
+				AvaliacaoMediaMesDTO amDTO = new AvaliacaoMediaMesDTO();
+				amDTO.setIdES(String.valueOf(i));
+				amDTO.setRating(String.valueOf(i));
+				amDTO.setDate(sdf.format(new Date()));										
+				lstRetorno.add(amDTO);
+			}
+			response.setAvaliacoesMediaMes(lstRetorno);			
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/listAvaliacaoByIdCidade")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoMediaResponse listAvaliacaoByIdCidade(AvaliacaoMediaRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			List<AvaliacaoMediaMesDTO> lstRetorno = new ArrayList<AvaliacaoMediaMesDTO>();
+			for (int i=0; i < 6;i++){
+				AvaliacaoMediaMesDTO amDTO = new AvaliacaoMediaMesDTO();
+				amDTO.setIdES(String.valueOf(i));
+				amDTO.setRating(String.valueOf(20 - (i + 10)));
+				amDTO.setDate(sdf.format(new Date()));										
+				lstRetorno.add(amDTO);
+			}
+			response.setAvaliacoesMediaMes(lstRetorno);			
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());
+			return response;
+		}
+		return response;
+	}
+	
+	@POST
+	@Path("/listAvaliacaoByIdTipoES")
+	@Consumes("application/json;charset=utf-8")
+	@Produces("application/json;charset=utf-8")
+	public AvaliacaoMediaResponse listAvaliacaoByIdTipoES(AvaliacaoMediaRequest request) {
+		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
+		try {
+
+			if (!request.validate()) {
+				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
+				return response;
+			}
+
+			String token = request.getToken();
+			if (!validarToken(token)) {
+				logger.error(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				response.setErro(properties.getProperty("co.mobisaude.strings.geocode.tokenInvalido"));
+				return response;
+			}
+
+			List<AvaliacaoMediaMesDTO> lstRetorno = new ArrayList<AvaliacaoMediaMesDTO>();
+			for (int i=0; i < 6;i++){
+				AvaliacaoMediaMesDTO amDTO = new AvaliacaoMediaMesDTO();
+				amDTO.setIdES(String.valueOf(i));
+				amDTO.setRating(String.valueOf(300 - (i + 30) * 7));
+				amDTO.setDate(sdf.format(new Date()));										
+				lstRetorno.add(amDTO);
+			}
+			response.setAvaliacoesMediaMes(lstRetorno);			
+
+		} catch (DataIntegrityViolationException e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
+			response.setErro(e.getMessage());			
+			return response;
+		} catch (Exception e) {
+			logger.error(properties.getProperty("mobisaude.strings.erroProcessandoServico"), e);
+			response.setErro(e.getMessage());
+			return response;
+		}
+		return response;
+	}
+	
 	@POST
 	@Path("/postMessage")
 	@Consumes("application/json;charset=utf-8")

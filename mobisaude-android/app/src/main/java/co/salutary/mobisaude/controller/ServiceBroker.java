@@ -127,10 +127,6 @@ public class ServiceBroker {
         return requestJson("/getAvaliacaoByIdESEmail", json);
     }
 
-    public String listAvaliacaoByIdES(String json) {
-        return requestJson("/listAvaliacaoByIdES", json);
-    }
-
     public String getAvaliacaoMediaByIdES(String json) {
         return requestJson("/getAvaliacaoMediaByIdES", json);
     }
@@ -139,8 +135,24 @@ public class ServiceBroker {
         return requestJson("/getAvaliacaoMediaByIdESDate", json);
     }
 
-    public String listAvalicaoMediaMesByIdES(String json) {
-        return requestJson("/listAvalicaoMediaMesByIdES", json);
+    public String listAvaliacaoByIdES(String json) {
+        return requestJson("/listAvaliacaoByIdES", json);
+    }
+
+    public String listAvaliacaoMediaMesByIdES(String json) {
+        return requestJson("/listAvaliacaoMediaMesByIdES", json);
+    }
+
+    public String listAvaliacaoByIdEstado(String json) {
+        return requestJson("/listAvaliacaoByIdEstado", json);
+    }
+
+    public String listAvaliacaoByIdCidade(String json) {
+        return requestJson("/listAvaliacaoByIdCidade", json);
+    }
+
+    public String listAvaliacaoByIdTipoES(String json) {
+        return requestJson("/listAvaliacaoByIdTipoES", json);
     }
 
     private String requestJson(String service, String json) {
