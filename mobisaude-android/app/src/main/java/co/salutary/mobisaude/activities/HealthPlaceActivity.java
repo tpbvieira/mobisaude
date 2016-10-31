@@ -31,13 +31,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.DeviceInfo;
@@ -50,8 +46,6 @@ import co.salutary.mobisaude.model.Avaliacao;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
-
-import static android.R.attr.keySet;
 
 public class HealthPlaceActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -422,7 +416,7 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 }
 
             } catch (Exception e) {
-                mErrorMsg = e.getMessage();
+                mErrorMsg = getString(R.string.warn_no_evaluation);
                 Log.e(TAG, e.getMessage(), e);
                 ok = false;
             }

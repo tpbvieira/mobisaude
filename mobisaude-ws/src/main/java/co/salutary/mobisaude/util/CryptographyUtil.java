@@ -174,7 +174,7 @@ public final class CryptographyUtil {
      * @param args
      */
     public static void main(String[] args) {
-    	int[] arrPermutacao = {7,5,3,1,4,6,0,2};
+    	int[] arrPermutacao = {7,5,3,1,4,7,0,2};
     	SimpleDateFormat sdf  = new SimpleDateFormat("ddMMyyyy");
     	
     	String dataStr = sdf.format(new Date()); 

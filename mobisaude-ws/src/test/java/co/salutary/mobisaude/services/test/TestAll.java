@@ -48,7 +48,7 @@ public class TestAll extends TestCase {
 	private static final Log logger = LogFactory.getLog(TestAll.class);
 	private Properties testProperties = new Properties();
 	private SimpleDateFormat sdfToken = new SimpleDateFormat("ddMMyyyy");
-	private static int[] arrPermutacao = {7,5,3,1,4,6,0,2};
+	private static int[] arrPermutacao = {7,5,3,1,4,7,0,2};
 
 	@Before
 	public void setUp() throws Exception {

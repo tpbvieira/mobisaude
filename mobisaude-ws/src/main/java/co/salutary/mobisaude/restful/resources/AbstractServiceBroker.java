@@ -28,7 +28,7 @@ import co.salutary.mobisaude.util.CryptographyUtil;
 public abstract class AbstractServiceBroker implements MobiSaudeResource {
 
 	private static final Log logger = LogFactory.getLog(AbstractServiceBroker.class);
-	private static int[] arrPermutacao = {7,5,3,1,4,6,0,2};
+	private static int[] arrPermutacao = {7,5,3,1,4,7,0,2};
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");	
 	protected Properties properties;
 	private static Random random = null;

@@ -7,8 +7,8 @@ public class Settings {
 
     private static final String TAG = new Object(){}.getClass().getName();
 
-    public static final String serverUrl = "http://192.168.1.100:8080/mobisaude-services/mobile"; // DEV
-//    public static final String serverUrl = "http://52.10.117.16/mobisaude-services/mobile"; // PRO
+//    public static final String serverUrl = "http://192.168.1.100:8080/mobisaude-services/mobile"; // DEV
+    public static final String serverUrl = "http://35.161.117.245/mobisaude-services/mobile"; // PRO
 
 	public static final String VIEWPAGER_POS_PORTRAIT  = "VIEWPAGER_POS_PORTRAIT";
 	public static final String VIEWPAGER_POS_LANDSCAPE = "VIEWPAGER_POS_LANDSCAPE";
