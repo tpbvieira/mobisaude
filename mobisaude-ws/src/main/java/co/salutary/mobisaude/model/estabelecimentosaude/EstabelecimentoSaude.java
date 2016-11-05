@@ -30,6 +30,7 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 	private String origemCoordenada;
 	private Double latitude;
 	private Double longitude;
+	private String uf;
 
 	public EstabelecimentoSaude() {
 	}
@@ -188,5 +189,14 @@ public class EstabelecimentoSaude implements java.io.Serializable {
 
 	public void setOrigemCoordenada(String origemCoordenada) {
 		this.origemCoordenada = origemCoordenada;
+	}
+	
+	@Column(name = "\"tx_uf\"")
+	public String getUf() {
+		return this.uf;
+	}
+
+	public void setUf(String uf) {
+		this.uf = uf;
 	}
 }

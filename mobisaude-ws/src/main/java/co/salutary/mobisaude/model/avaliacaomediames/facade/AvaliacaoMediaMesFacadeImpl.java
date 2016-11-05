@@ -37,4 +37,17 @@ public class AvaliacaoMediaMesFacadeImpl implements AvaliacaoMediaMesFacade {
 	public List<AvaliacaoMediaMes> listByIdESDate(Integer idES, Date date) {
     	return avaliacaoMediaDao.listByIdESDate(idES, date);
     }
+	
+	public List<AvaliacaoMediaMes> listAvaliacaoBySiglaUF(String siglaUF){
+		return avaliacaoMediaDao.listAvaliacaoBySiglaUF(siglaUF);
+	}
+	
+    public List<AvaliacaoMediaMes> listAvaliacaoByIdMunicipio(String idMunicipio){
+    	return avaliacaoMediaDao.listAvaliacaoByIdMunicipio(idMunicipio);
+    }
+    
+    public List<AvaliacaoMediaMes> listAvaliacaoByIdTipoES(String idTipoEstabelecimento){
+    	return avaliacaoMediaDao.listAvaliacaoByIdTipoES(idTipoEstabelecimento);
+    }
+	
 }

@@ -11,6 +11,9 @@ public interface AvaliacaoMediaMesFacade {
 	public void removeByIdESDate(Integer idES, Date date);
 	public AvaliacaoMediaMes getByIdESDate(Integer idES, Date date);
 	public List<AvaliacaoMediaMes> listByIdES(Integer idES);
-	public List<AvaliacaoMediaMes> listByIdESDate(Integer idES, Date date);
-	
+	public List<AvaliacaoMediaMes> listByIdESDate(Integer idES, Date date);	
+    public List<AvaliacaoMediaMes> listAvaliacaoBySiglaUF(String siglaUF);
+    public List<AvaliacaoMediaMes> listAvaliacaoByIdMunicipio(String idMunicipio);
+    public List<AvaliacaoMediaMes> listAvaliacaoByIdTipoES(String idTipoEstabelecimento);
+    
 }

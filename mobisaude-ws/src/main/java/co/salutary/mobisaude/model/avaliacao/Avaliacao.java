@@ -22,7 +22,7 @@ public class Avaliacao implements java.io.Serializable {
 	private String email;
 	private String avaliacao;
 	private String titulo;
-	private float rating; 
+	private float rating;
 	private Date date;
 
 	public Avaliacao() {

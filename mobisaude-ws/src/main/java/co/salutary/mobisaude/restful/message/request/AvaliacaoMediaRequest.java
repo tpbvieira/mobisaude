@@ -11,7 +11,10 @@ public class AvaliacaoMediaRequest implements IMobileRequest {
 	private String idES;
 	private String rating;
 	private String date;
-	
+	private String siglaUF;
+	private String idMunicipio;
+	private String idTipoES;
+		
 	public String getToken() {
 		return token;
 	}
@@ -48,5 +51,29 @@ public class AvaliacaoMediaRequest implements IMobileRequest {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
+
+	public String getSiglaUF() {
+		return siglaUF;
+	}
+
+	public void setSiglaUF(String siglaUF) {
+		this.siglaUF = siglaUF;
+	}
+
+	public String getIdMunicipio() {
+		return idMunicipio;
+	}
+
+	public void setIdMunicipio(String idMunicipio) {
+		this.idMunicipio = idMunicipio;
+	}
+
+	public String getIdTipoES() {
+		return idTipoES;
+	}
+
+	public void setIdTipoES(String idTipoES) {
+		this.idTipoES = idTipoES;
+	}
+		
 }

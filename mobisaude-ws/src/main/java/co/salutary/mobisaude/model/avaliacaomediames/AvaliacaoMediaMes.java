@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @IdClass(AvaliacaoMediaMesId.class)
@@ -17,36 +18,39 @@ import javax.persistence.TemporalType;
 public class AvaliacaoMediaMes implements java.io.Serializable {
 
 	private static final long serialVersionUID = 5949891975169349167L;
-	private int idES;
-	private float rating; 
+	private Integer idES;
+	private Float rating; 
 	private Date date;
+	private Integer count;
 
 	public AvaliacaoMediaMes() {
 	}
 
-	public AvaliacaoMediaMes(int idES, float rating) {		
+	public AvaliacaoMediaMes(Integer idES, Float rating) {		
 		this.idES = idES;
 		this.rating = rating;
 		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
+		Integer year = calendar.get(Calendar.YEAR);
+		Integer month = calendar.get(Calendar.MONTH);
 		calendar.clear();
 		calendar.set(Calendar.MONTH, month);
 		calendar.set(Calendar.YEAR, year);
 		this.date = calendar.getTime();
+		count = 0;
 	}
 	
-	public AvaliacaoMediaMes(int idES, float rating, Date date) {		
+	public AvaliacaoMediaMes(Integer idES, Float rating, Date date) {		
 		this.idES = idES;
 		this.rating = rating;
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
+		Integer year = calendar.get(Calendar.YEAR);
+		Integer month = calendar.get(Calendar.MONTH);
 		calendar.clear();
 		calendar.set(Calendar.MONTH, month);
 		calendar.set(Calendar.YEAR, year);
 		this.date = calendar.getTime();
+		count = 0;
 	}
 
 	@Id
@@ -60,11 +64,11 @@ public class AvaliacaoMediaMes implements java.io.Serializable {
 	}
 
 	@Column(name = "\"nu_rating\"")
-	public float getRating() {
+	public Float getRating() {
 		return this.rating;
 	}
 
-	public void setRating(float rating) {
+	public void setRating(Float rating) {
 		this.rating = rating;
 	}
 
@@ -79,4 +83,14 @@ public class AvaliacaoMediaMes implements java.io.Serializable {
 		this.date = date;
 	}
 
+	@Transient
+	public Integer getCount() {
+		return count;
+	}
+
+	@Transient
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+	
 }

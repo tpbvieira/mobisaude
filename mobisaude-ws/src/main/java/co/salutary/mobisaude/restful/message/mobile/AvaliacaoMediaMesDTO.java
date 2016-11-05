@@ -11,6 +11,7 @@ public class AvaliacaoMediaMesDTO implements Cloneable {
 	private String idES;
 	private String rating; 
 	private String date;
+	private String count;
 	
 	public String getIdAvaliacaoMediaMes() {
 		return idAvaliacaoMediaMes;
@@ -42,6 +43,14 @@ public class AvaliacaoMediaMesDTO implements Cloneable {
 	
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
 	}
 
 }

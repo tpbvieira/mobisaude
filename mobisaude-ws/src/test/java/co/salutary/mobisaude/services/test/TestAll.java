@@ -22,6 +22,7 @@ import co.salutary.mobisaude.model.sugestao.Sugestao;
 import co.salutary.mobisaude.model.sugestao.facade.SugestaoFacade;
 import co.salutary.mobisaude.model.user.User;
 import co.salutary.mobisaude.model.user.facade.UserFacade;
+import co.salutary.mobisaude.restful.message.mobile.AvaliacaoMediaMesDTO;
 import co.salutary.mobisaude.restful.message.mobile.EsDTO;
 import co.salutary.mobisaude.restful.message.request.AvaliacaoMediaRequest;
 import co.salutary.mobisaude.restful.message.request.AvaliacaoRequest;
@@ -48,7 +49,7 @@ public class TestAll extends TestCase {
 	private static final Log logger = LogFactory.getLog(TestAll.class);
 	private Properties testProperties = new Properties();
 	private SimpleDateFormat sdfToken = new SimpleDateFormat("ddMMyyyy");
-	private static int[] arrPermutacao = {7,5,3,1,4,7,0,2};
+	private static int[] arrPermutacao = {7,5,3,1,4,6,0,2};
 
 	@Before
 	public void setUp() throws Exception {
@@ -153,8 +154,7 @@ public class TestAll extends TestCase {
 			getSugestaoTest(mapper, broker, token);
 
 			// avaliacao
-			avaliarTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "av1", "avaliarTest(mapper, broker, token, 6684181,tpbvieira@gmail.com, Título, Avaliacao de teste, 5);", "5");
-			avaliarTest(mapper, broker, token, "6684181","a@a.com", "Av2", "avaliarTest(mapper, broker, token, 6684181,a@a.com, Título, Avaliacao de teste, 2.5);", "2.5");
+			avaliarTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "av1", "avaliarTest(mapper, broker, token, 6684181,tpbvieira@gmail.com, Título, Avaliacao de teste, 5);", "5");			
 			avaliarTest(mapper, broker, token, "6684181","b@b.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,b@b.com, Título, Avaliacao de teste, 3);", "3");
 			avaliarTest(mapper, broker, token, "6684181","c@c.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,c@c.com, Título, Avaliacao de teste, 3);", "3");
 			avaliarTest(mapper, broker, token, "6684181","d@d.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,d@d.com, Título, Avaliacao de teste, 3);", "3");
@@ -181,17 +181,25 @@ public class TestAll extends TestCase {
 			avaliarTest(mapper, broker, token, "6684181","y@y.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,y@y.com, Título, Avaliacao de teste, 3);", "3");
 			avaliarTest(mapper, broker, token, "6684181","z@z.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,z@z.com, Título, Avaliacao de teste, 3);", "3");
 			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","tpbvieira@gmail.com", "av1", "avaliarTest(mapper, broker, token, 6684181,tpbvieira@gmail.com, Título, Avaliacao de teste, 5);", "5.0");
-			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","a@a.com", "Av2", "avaliarTest(mapper, broker, token, 6684181,a@a.com, Título, Avaliacao de teste, 2.5);", "2.5");
 			getAvaliacaoByIdESEmailTest(mapper, broker, token, "6684181","b@b.com", "Av3", "avaliarTest(mapper, broker, token, 6684181,b@b.com, Título, Avaliacao de teste, 3);", "3.0");
-			listAvaliacaoByIdESTest(mapper, broker, token, "6684181", 27);
+			listAvaliacaoByIdESTest(mapper, broker, token, "6684181", 26);
 
 			// avaliacao media			
-			getAvaliacaoMediaByIdESTest(mapper, broker, token, "6684181", "3.0555556");
+			getAvaliacaoMediaByIdESTest(mapper, broker, token, "6684181", "3.0769231");
 			getAvaliacaoMediaByIdESDateTest(mapper, broker, token, "6684181", "01/10/2016", "3.0555556");
 			avaliarMediaTest(mapper, broker, token,"6684181","3.8","11/01/2016");			
 			avaliarMediaTest(mapper, broker, token,"6684181","2.8","01/02/2016");
 			avaliarMediaTest(mapper, broker, token,"6684181","4.8","01/03/2016");
-			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 4);
+			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 5);
+			
+			// avaliacoes por estado
+			listAvaliacaoByIdEstadoTest(mapper, broker, token, "DF", 0, 0, 0, 25, 0, 1);
+						
+			// avaliacoes por cidade
+//			listAvaliacaoByIdMunicipioTest(mapper, broker, token, "DF", 0, 5, 0, 25, 0, 0);
+			
+			// avaliacoes por tipo de estabelecimento de saúde
+//			listAvaliacaoByIdTipoESTest(mapper, broker, token, "DF", 0, 5, 0, 25, 0, 0);
 
 		} catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -841,4 +849,52 @@ public class TestAll extends TestCase {
 
 	}
 
+	private void listAvaliacaoByIdEstadoTest(ObjectMapper mapper, ServiceBroker broker, String token, String siglaUF, 
+			Integer target0, Integer target1, Integer target2, Integer target3, Integer target4, Integer target5) 
+			throws IOException, JsonParseException, JsonMappingException {
+		
+		AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
+		avaliacaoMediaMesRequest.setToken(token);
+		avaliacaoMediaMesRequest.setSiglaUF(siglaUF);
+		
+		AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoBySiglaUF(avaliacaoMediaMesRequest);
+		if (avaliacaoMediaMesResponse.getErro() != null) {
+			logger.error(avaliacaoMediaMesResponse.getErro());
+			fail(avaliacaoMediaMesResponse.getErro());			
+		}
+		
+		List<AvaliacaoMediaMesDTO> avaliacaoBySiglaUFDTOList = avaliacaoMediaMesResponse.getAvaliacoesMediaMes();
+		if(avaliacaoBySiglaUFDTOList.size() != 6){
+			logger.error("Quantidade inválida de avaliações");
+			fail("Quantidade inválida de avaliações");
+		}
+
+		for(AvaliacaoMediaMesDTO av: avaliacaoBySiglaUFDTOList){
+			String rate = av.getRating();
+			
+			switch(rate){
+				case "0.0":
+					assertEquals(target0.toString(), av.getCount());
+					break;
+				case "1.0":
+					assertEquals(target1.toString(), av.getCount());
+					break;
+				case "2.0":
+					assertEquals(target2.toString(), av.getCount());
+					break;
+				case "3.0":
+					assertEquals(target3.toString(), av.getCount());
+					break;
+				case "4.0":
+					assertEquals(target4.toString(), av.getCount());
+					break;
+				case "5.0":
+					assertEquals(target5.toString(), av.getCount());
+					break;
+			}
+			
+		}
+		
+	}
+	
 }
