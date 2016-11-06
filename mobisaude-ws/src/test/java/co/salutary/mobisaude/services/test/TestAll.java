@@ -192,14 +192,14 @@ public class TestAll extends TestCase {
 			avaliarMediaTest(mapper, broker, token,"6684181","4.8","01/03/2016");
 			listAvalicaoMediaMesByIdESTest(mapper, broker, token, "6684181", 5);
 			
-			// avaliacoes por estado
-			listAvaliacaoByIdEstadoTest(mapper, broker, token, "DF", 0, 0, 0, 25, 0, 1);
+			// avaliacoes por UF
+			listAvaliacaoByIdUFTest(mapper, broker, token, "DF", 0, 0, 0, 25, 0, 1);
 						
 			// avaliacoes por cidade
-//			listAvaliacaoByIdMunicipioTest(mapper, broker, token, "DF", 0, 5, 0, 25, 0, 0);
+			listAvaliacaoByIdMunicipioTest(mapper, broker, token, idMunicipio, 0, 0, 0, 25, 0, 1);
 			
 			// avaliacoes por tipo de estabelecimento de saúde
-//			listAvaliacaoByIdTipoESTest(mapper, broker, token, "DF", 0, 5, 0, 25, 0, 0);
+			listAvaliacaoByIdTipoESTest(mapper, broker, token, "9", 0, 0, 0, 25, 0, 1); //(9) = "CENTRO DE SAUDE/UNIDADE BASICA" 
 
 		} catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -849,13 +849,13 @@ public class TestAll extends TestCase {
 
 	}
 
-	private void listAvaliacaoByIdEstadoTest(ObjectMapper mapper, ServiceBroker broker, String token, String siglaUF, 
+	private void listAvaliacaoByIdUFTest(ObjectMapper mapper, ServiceBroker broker, String token, String siglaUF, 
 			Integer target0, Integer target1, Integer target2, Integer target3, Integer target4, Integer target5) 
 			throws IOException, JsonParseException, JsonMappingException {
 		
 		AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
 		avaliacaoMediaMesRequest.setToken(token);
-		avaliacaoMediaMesRequest.setSiglaUF(siglaUF);
+		avaliacaoMediaMesRequest.setIdES(siglaUF);
 		
 		AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoBySiglaUF(avaliacaoMediaMesRequest);
 		if (avaliacaoMediaMesResponse.getErro() != null) {
@@ -870,6 +870,104 @@ public class TestAll extends TestCase {
 		}
 
 		for(AvaliacaoMediaMesDTO av: avaliacaoBySiglaUFDTOList){
+			String rate = av.getRating();
+			
+			switch(rate){
+				case "0.0":
+					assertEquals(target0.toString(), av.getCount());
+					break;
+				case "1.0":
+					assertEquals(target1.toString(), av.getCount());
+					break;
+				case "2.0":
+					assertEquals(target2.toString(), av.getCount());
+					break;
+				case "3.0":
+					assertEquals(target3.toString(), av.getCount());
+					break;
+				case "4.0":
+					assertEquals(target4.toString(), av.getCount());
+					break;
+				case "5.0":
+					assertEquals(target5.toString(), av.getCount());
+					break;
+			}
+			
+		}
+		
+	}
+		
+	private void listAvaliacaoByIdMunicipioTest(ObjectMapper mapper, ServiceBroker broker, String token, String idMunicipio, 
+			Integer target0, Integer target1, Integer target2, Integer target3, Integer target4, Integer target5) 
+			throws IOException, JsonParseException, JsonMappingException {
+		
+		idMunicipio = idMunicipio.substring(0, idMunicipio.length()-1);
+		
+		AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
+		avaliacaoMediaMesRequest.setToken(token);
+		avaliacaoMediaMesRequest.setIdES(idMunicipio);
+		
+		AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoByIdMunicipio(avaliacaoMediaMesRequest);
+		if (avaliacaoMediaMesResponse.getErro() != null) {
+			logger.error(avaliacaoMediaMesResponse.getErro());
+			fail(avaliacaoMediaMesResponse.getErro());			
+		}
+		
+		List<AvaliacaoMediaMesDTO> avaliacaoByIdMunicipioDTOList = avaliacaoMediaMesResponse.getAvaliacoesMediaMes();
+		if(avaliacaoByIdMunicipioDTOList.size() != 6){
+			logger.error("Quantidade inválida de avaliações");
+			fail("Quantidade inválida de avaliações");
+		}
+
+		for(AvaliacaoMediaMesDTO av: avaliacaoByIdMunicipioDTOList){
+			String rate = av.getRating();
+			
+			switch(rate){
+				case "0.0":
+					assertEquals(target0.toString(), av.getCount());
+					break;
+				case "1.0":
+					assertEquals(target1.toString(), av.getCount());
+					break;
+				case "2.0":
+					assertEquals(target2.toString(), av.getCount());
+					break;
+				case "3.0":
+					assertEquals(target3.toString(), av.getCount());
+					break;
+				case "4.0":
+					assertEquals(target4.toString(), av.getCount());
+					break;
+				case "5.0":
+					assertEquals(target5.toString(), av.getCount());
+					break;
+			}
+			
+		}
+		
+	}
+	
+	private void listAvaliacaoByIdTipoESTest(ObjectMapper mapper, ServiceBroker broker, String token, String idTipoES, 
+			Integer target0, Integer target1, Integer target2, Integer target3, Integer target4, Integer target5) 
+			throws IOException, JsonParseException, JsonMappingException {
+		
+		AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
+		avaliacaoMediaMesRequest.setToken(token);
+		avaliacaoMediaMesRequest.setIdES(idTipoES);
+		
+		AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoByIdTipoES(avaliacaoMediaMesRequest);
+		if (avaliacaoMediaMesResponse.getErro() != null) {
+			logger.error(avaliacaoMediaMesResponse.getErro());
+			fail(avaliacaoMediaMesResponse.getErro());			
+		}
+		
+		List<AvaliacaoMediaMesDTO> avaliacaoByIdTipoESDTOList = avaliacaoMediaMesResponse.getAvaliacoesMediaMes();
+		if(avaliacaoByIdTipoESDTOList.size() != 6){
+			logger.error("Quantidade inválida de avaliações");
+			fail("Quantidade inválida de avaliações");
+		}
+
+		for(AvaliacaoMediaMesDTO av: avaliacaoByIdTipoESDTOList){
 			String rate = av.getRating();
 			
 			switch(rate){

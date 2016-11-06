@@ -33,126 +33,9 @@ public class ServiceBroker {
 
     private Context context;
 
-    public static ServiceBroker getInstance(Context context) {
-        if (instance == null) {
-            instance = new ServiceBroker(context);
-        }
-        return instance;
-    }
-
     private ServiceBroker(Context ctx) {
         connectivityUtils = ConnectivityUtils.getInstance(ctx);
         context = ctx;
-    }
-
-    public String gerarToken(String json) {
-        return requestJson("/gerarToken", json);
-    }
-
-    public String geocode(String json) {
-        return requestJson("/geocode", json);
-    }
-
-    public String signup(String json) {
-        return requestJson("/signup", json);
-    }
-
-    public String signin(String json) {
-        return requestJson("/signin", json);
-    }
-
-    public String getUser(String json) {
-        return requestJson("/getUser", json);
-    }
-
-    public String updateUser(String json) {
-        return requestJson("/updateUser", json);
-    }
-
-    public String consultaDominios(String json) {
-        return requestJson("/consultaDominios", json);
-    }
-
-    public String getESByIdES(String json) {
-        return requestJson("/getESByIdES", json);
-    }
-
-    public String getESByIdMunicipio(String json) {
-        return requestJson("/getESByIdMunicipio", json);
-    }
-
-    public String getESByIdMunicipioIdTipoES(String json) {
-        return requestJson("/getESByIdMunicipioIdTipoES", json);
-    }
-
-    public EstabelecimentoSaude getES(String token, String idES) throws MobiSaudeAppException {
-        EstabelecimentoSaude es = null;
-        try {
-            JSONObject params = new JSONObject();
-            params.put("token", token);
-            params.put("idES", idES);
-            JSONObject request = new JSONObject();
-            request.put("esRequest", params);
-            String responseStr = ServiceBroker.getInstance(context).getESByIdES(request.toString());
-            if (responseStr != null) {
-                JSONObject json = new JSONObject(responseStr);
-                JSONObject response = (JSONObject) json.get("esResponse");
-                String error = JsonUtils.getError(response);
-                if (error == null) {
-                    JSONObject obj = (JSONObject) response.get("estabelecimentosSaude");
-                    es = JsonUtils.jsonObjectToES(obj);
-                } else {
-                    throw new MobiSaudeAppException(JsonUtils.getError(response));
-                }
-            } else {
-                throw new MobiSaudeAppException(context.getString(R.string.error_getting_es));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return es;
-
-    }
-
-    public String sugerir(String json) {
-        return requestJson("/sugerir", json);
-    }
-
-    public String avaliar(String json) {
-        return requestJson("/avaliar", json);
-    }
-
-    public String getAvaliacaoByIdESEmail(String json) {
-        return requestJson("/getAvaliacaoByIdESEmail", json);
-    }
-
-    public String getAvaliacaoMediaByIdES(String json) {
-        return requestJson("/getAvaliacaoMediaByIdES", json);
-    }
-
-    public String getAvaliacaoMediaByIdESDate(String json) {
-        return requestJson("/getAvaliacaoMediaByIdESDate", json);
-    }
-
-    public String listAvaliacaoByIdES(String json) {
-        return requestJson("/listAvaliacaoByIdES", json);
-    }
-
-    public String listAvaliacaoMediaMesByIdES(String json) {
-        return requestJson("/listAvaliacaoMediaMesByIdES", json);
-    }
-
-    public String listAvaliacaoByIdEstado(String json) {
-        return requestJson("/listAvaliacaoByIdEstado", json);
-    }
-
-    public String listAvaliacaoByIdCidade(String json) {
-        return requestJson("/listAvaliacaoByIdCidade", json);
-    }
-
-    public String listAvaliacaoByIdTipoES(String json) {
-        return requestJson("/listAvaliacaoByIdTipoES", json);
     }
 
     private String requestJson(String service, String json) {
@@ -206,6 +89,115 @@ public class ServiceBroker {
             JsonUtils.createErrorMessage(context.getString(R.string.error));
         }
         return JsonUtils.createErrorMessage(context.getString(R.string.error));
+    }
+
+    public static ServiceBroker getInstance(Context context) {
+        if (instance == null) {
+            instance = new ServiceBroker(context);
+        }
+        return instance;
+    }
+
+    public String gerarToken(String json) {
+        return requestJson("/gerarToken", json);
+    }
+
+    public String geocode(String json) {
+        return requestJson("/geocode", json);
+    }
+
+    public String signup(String json) {
+        return requestJson("/signup", json);
+    }
+
+    public String signin(String json) {
+        return requestJson("/signin", json);
+    }
+
+    public String getUser(String json) {
+        return requestJson("/getUser", json);
+    }
+
+    public String updateUser(String json) {
+        return requestJson("/updateUser", json);
+    }
+
+    public String consultaDominios(String json) {
+        return requestJson("/consultaDominios", json);
+    }
+
+    public String getESByIdES(String json) {
+        return requestJson("/getESByIdES", json);
+    }
+
+    public String getESByIdMunicipio(String json) {
+        return requestJson("/getESByIdMunicipio", json);
+    }
+
+    public EstabelecimentoSaude getES(String token, String idES) throws MobiSaudeAppException {
+        EstabelecimentoSaude es = null;
+        try {
+            JSONObject params = new JSONObject();
+            params.put("token", token);
+            params.put("idES", idES);
+            JSONObject request = new JSONObject();
+            request.put("esRequest", params);
+            String responseStr = ServiceBroker.getInstance(context).getESByIdES(request.toString());
+            if (responseStr != null) {
+                JSONObject json = new JSONObject(responseStr);
+                JSONObject response = (JSONObject) json.get("esResponse");
+                String error = JsonUtils.getError(response);
+                if (error == null) {
+                    JSONObject obj = (JSONObject) response.get("estabelecimentosSaude");
+                    es = JsonUtils.jsonObjectToES(obj);
+                } else {
+                    throw new MobiSaudeAppException(JsonUtils.getError(response));
+                }
+            } else {
+                throw new MobiSaudeAppException(context.getString(R.string.error_getting_es));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return es;
+
+    }
+
+    public String sugerir(String json) {
+        return requestJson("/sugerir", json);
+    }
+
+    public String avaliar(String json) {
+        return requestJson("/avaliar", json);
+    }
+
+    public String getAvaliacaoByIdESEmail(String json) {
+        return requestJson("/getAvaliacaoByIdESEmail", json);
+    }
+
+    public String getAvaliacaoMediaByIdES(String json) {
+        return requestJson("/getAvaliacaoMediaByIdES", json);
+    }
+
+    public String listAvaliacaoByIdES(String json) {
+        return requestJson("/listAvaliacaoByIdES", json);
+    }
+
+    public String listAvaliacaoMediaMesByIdES(String json) {
+        return requestJson("/listAvaliacaoMediaMesByIdES", json);
+    }
+
+    public String listAvaliacaoBySiglaUF(String json) {
+        return requestJson("/listAvaliacaoBySiglaUF", json);
+    }
+
+    public String listAvaliacaoByIdMunicipio(String json) {
+        return requestJson("/listAvaliacaoByIdMunicipio", json);
+    }
+
+    public String listAvaliacaoByIdTipoES(String json) {
+        return requestJson("/listAvaliacaoByIdTipoES", json);
     }
 
 }

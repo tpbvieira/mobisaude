@@ -106,7 +106,7 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 		queryStr.append(" from Avaliacao av, EstabelecimentoSaude es");
 		queryStr.append(" where av.idES = es.idES");
 		queryStr.append(" and es.uf = :siglaUF");
-		queryStr.append(" group by av.rating");	
+		queryStr.append(" group by av.rating");
 
 		Query query = em.createQuery(queryStr.toString());
 		if (siglaUF != null ) {
@@ -117,8 +117,7 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 		List<AvaliacaoMediaMes> avaliacoes = new ArrayList<>();
 		for(int i = 0; i < 6; i++){
 			AvaliacaoMediaMes avTmp = new AvaliacaoMediaMes();
-			avTmp.setIdES(0);
-			avTmp.setRating(0f);
+			avTmp.setRating(new Float(i));
 			avTmp.setCount(0);
 			avaliacoes.add(avTmp);
 		}
@@ -127,10 +126,10 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 		int i = 0;
 		for(Object[] row: result){
 			if(row.length > 1){
-				
+
 				Float rate = (Float)row[0];
 				Integer count = ((Long)row[1]).intValue();
-				
+
 				AvaliacaoMediaMes avaliacao = avaliacoes.get(i);
 				avaliacao.setRating(rate);
 				avaliacao.setCount(count);
@@ -147,28 +146,38 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 
 		StringBuffer queryStr = new StringBuffer();
 		queryStr.append("select av.rating, count(av.rating)");
-		queryStr.append(" from Avaliacao av");
-		queryStr.append(" join EstabelecimentoSaude es on av.idES = es.idES");
-		queryStr.append(" where es.idMunicipio = :idMunicipio");
+		queryStr.append(" from Avaliacao av, EstabelecimentoSaude es");
+		queryStr.append(" where av.idES = es.idES");
+		queryStr.append(" and es.idMunicipio = :idMunicipio");
 		queryStr.append(" group by av.rating");	
 
 		Query query = em.createQuery(queryStr.toString());
 		if (idMunicipio != null ) {
-			query.setParameter("idMunicipio", idMunicipio);
+			query.setParameter("idMunicipio", new Integer(idMunicipio));
 		}
 
 		// initiate all rates with 0
 		List<AvaliacaoMediaMes> avaliacoes = new ArrayList<>();
-		for(int i = 0; i < 8; i++){
-//			avaliacoes.add(new AvaliacaoMediaMes(i,0));
+		for(int i = 0; i < 6; i++){
+			AvaliacaoMediaMes avTmp = new AvaliacaoMediaMes();			
+			avTmp.setRating(new Float(i));
+			avTmp.setCount(0);
+			avaliacoes.add(avTmp);
 		}
 
 		List <Object[]> result = query.getResultList();
+		int i = 0;
 		for(Object[] row: result){
 			if(row.length > 1){
-				AvaliacaoMediaMes av = avaliacoes.get((Integer)row[0]);
-				av.setRating(Float.valueOf((Integer)row[1]));
+
+				Float rate = (Float)row[0];
+				Integer count = ((Long)row[1]).intValue();
+
+				AvaliacaoMediaMes avaliacao = avaliacoes.get(i);
+				avaliacao.setRating(rate);
+				avaliacao.setCount(count);
 			}
+			i++;
 		}
 
 		return avaliacoes;
@@ -176,35 +185,47 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<AvaliacaoMediaMes> listAvaliacaoByIdTipoES(String idTipoEstabelecimento) {
+	public List<AvaliacaoMediaMes> listAvaliacaoByIdTipoES(String idTipoES) {
 
-		StringBuffer queryStr = new StringBuffer();
-		queryStr.append("select av.rating, count(av.rating)");
-		queryStr.append(" from Avaliacao av");
-		queryStr.append(" join EstabelecimentoSaude es on av.idES = es.idES");
-		queryStr.append(" where es.uf = :siglaUF");
-		queryStr.append(" group by av.rating");	
-
-		//		Query query = em.createQuery(queryStr.toString());
-		//		if (siglaUF != null ) {
-		//			query.setParameter("siglaUF", siglaUF);
-		//		}
-
-		// initiate all rates with 0
 		List<AvaliacaoMediaMes> avaliacoes = new ArrayList<>();
-		for(int i = 0; i < 8; i++){
-//			avaliacoes.add(new AvaliacaoMediaMes(i,0));
+
+		if (idTipoES != null ) {
+			StringBuffer queryStr = new StringBuffer();
+			queryStr.append("select av.rating, count(av.rating)");
+			queryStr.append(" from Avaliacao av, EstabelecimentoSaude es");
+			queryStr.append(" where av.idES = es.idES");
+			queryStr.append(" and es.idTipoES = :idTipoES");		
+			queryStr.append(" group by av.rating");	
+
+			Query query = em.createQuery(queryStr.toString());
+			query.setParameter("idTipoES", new Short(idTipoES));
+			
+			// initiate all rates with 0
+			for(int i = 0; i < 6; i++){
+				AvaliacaoMediaMes avTmp = new AvaliacaoMediaMes();				
+				avTmp.setRating(new Float(i));
+				avTmp.setCount(0);
+				avaliacoes.add(avTmp);
+			}
+
+			List <Object[]> result = query.getResultList();
+			int i = 0;
+			for(Object[] row: result){
+				if(row.length > 1){
+
+					Float rate = (Float)row[0];
+					Integer count = ((Long)row[1]).intValue();
+
+					AvaliacaoMediaMes avaliacao = avaliacoes.get(i);
+					avaliacao.setRating(rate);
+					avaliacao.setCount(count);
+				}
+				i++;
+			}
 		}
-		//		
-		//		List <Object[]> result = query.getResultList();
-		//		for(Object[] row: result){
-		//			if(row.length > 1){
-		//				AvaliacaoMediaMes av = avaliacoes.get((Integer)row[0]);
-		//				av.setRating(Float.valueOf((Integer)row[1]));
-		//			}
-		//		}
 
 		return avaliacoes;
+		
 	}
 
 }

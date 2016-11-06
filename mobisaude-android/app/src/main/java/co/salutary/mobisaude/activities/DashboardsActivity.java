@@ -45,6 +45,7 @@ import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.model.Avaliacao;
+import co.salutary.mobisaude.model.AvaliacaoMedia;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 
@@ -202,11 +203,12 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         switch (type){
             case STATE:
                 label = ClientCache.getInstance().getUf().getNome();
-                idStr = String.valueOf(ClientCache.getInstance().getUf().getIdUf());
+                idStr = String.valueOf(ClientCache.getInstance().getUf().getSigla());
                 break;
             case CITY:
                 label = ClientCache.getInstance().getCidade().getNome();
                 idStr = String.valueOf(ClientCache.getInstance().getCidade().getIdCidade());
+                idStr = idStr.substring(0, idStr.length()-1);
                 break;
             case TYPE_ES:
                 try{
@@ -219,7 +221,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                     label = String.valueOf(tipoESList.get(resultCode));
                     for(String key: tiposES.keySet()){
                         if(tiposES.get(key).equals(label)){
-                            idStr = String.valueOf(ClientCache.getInstance().getUf().getIdUf());
+                            idStr = key;
                         }
                     }
 
@@ -289,7 +291,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         private String mId = null;
         private String mLabel = null;
         private int mChartType;
-        List<Avaliacao> mAvaliacoes = null;
+        List<AvaliacaoMedia> mAvaliacoes = null;
 
         UpdateChartTask(int chartType, String id, String label) {
             mChartType = chartType;
@@ -318,19 +320,23 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
             try {
                 JSONObject params = new JSONObject();
                 params.put("token", token);
-                params.put("idES", mId);
-                JSONObject request = new JSONObject();
 
-                request.put("avaliacaoMediaRequest", params);
                 String responseStr = null;
+                JSONObject request = new JSONObject();
                 switch (mChartType){
                     case STATE:
-                        responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdEstado(request.toString());
+                        params.put("siglaUF", mId);
+                        request.put("avaliacaoMediaRequest", params);
+                        responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoBySiglaUF(request.toString());
                         break;
                     case CITY:
-                        responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdCidade(request.toString());
+                        params.put("idMunicipio", mId);
+                        request.put("avaliacaoMediaRequest", params);
+                        responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdMunicipio(request.toString());
                         break;
                     case TYPE_ES:
+                        params.put("tipoES", mId);
+                        request.put("avaliacaoMediaRequest", params);
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdTipoES(request.toString());
                         break;
                 }
@@ -340,7 +346,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                     JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
                     String error = JsonUtils.getError(response);
                     if (error == null) {
-                        mAvaliacoes = JsonUtils.jsonObjectToListAvaliacao(response);
+                        mAvaliacoes = JsonUtils.jsonObjectToListAvaliacaoMedia(response);
                         if (mAvaliacoes == null) {
                             throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
                         }
@@ -366,8 +372,8 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
             if (success && mAvaliacoes != null) {
 
                 Map<Integer, Integer> mValues = new HashMap<>();
-                for(Avaliacao avaliacao: mAvaliacoes){
-                    mValues.put(avaliacao.getIdES(), (int)avaliacao.getRating());
+                for(AvaliacaoMedia avaliacao: mAvaliacoes){
+                    mValues.put(avaliacao.getRating().intValue(), avaliacao.getCount());
                 }
 
                 mChart.setEnabled(true);

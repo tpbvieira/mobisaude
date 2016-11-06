@@ -1,7 +1,6 @@
 package co.salutary.mobisaude.util;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -18,10 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import co.salutary.mobisaude.R;
 import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.TokenManager;
 import co.salutary.mobisaude.model.Avaliacao;
+import co.salutary.mobisaude.model.AvaliacaoMedia;
 import co.salutary.mobisaude.model.EstabelecimentoSaude;
 
 public class JsonUtils {
@@ -56,7 +55,7 @@ public class JsonUtils {
         try{
             JSONObject object = new JSONObject(json);
             JSONObject target = (JSONObject) object.get(subObject);
-            return getError(target);
+            error = getError(target);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(),e);
         }
@@ -90,7 +89,7 @@ public class JsonUtils {
     }
 
     public static HashMap<String, String> fromJsonArraytoDomainHashMap(JSONArray jsonArray){
-        HashMap<String, String> pairs = new HashMap<String, String>();
+        HashMap<String, String> pairs = new HashMap<>();
 
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -183,6 +182,41 @@ public class JsonUtils {
                         av.setDate(sdfDMY.parse(jsonAvaliacao.getString("date")));
                     }
                     avaliacoes.add(av);
+                }
+
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(),e);
+        }
+
+        return avaliacoes;
+    }
+
+    public static List<AvaliacaoMedia> jsonObjectToListAvaliacaoMedia(JSONObject obj){
+
+        List<AvaliacaoMedia> avaliacoes = new ArrayList<>();
+
+        try {
+
+            if (obj.has("avaliacoesMediaMes")){
+                JSONArray jsonAvaliacoes = obj.getJSONArray("avaliacoesMediaMes");
+                for (int i = 0; i < jsonAvaliacoes.length(); i++) {
+                    JSONObject jsonAvaliacao = jsonAvaliacoes.optJSONObject(i);
+                    AvaliacaoMedia avaliacaoTmp = new AvaliacaoMedia();
+                    if (jsonAvaliacao.has("idES")){
+                        avaliacaoTmp.setIdES(Integer.parseInt(jsonAvaliacao.getString("idES")));
+                    }
+                    if (jsonAvaliacao.has("rating")){
+                        avaliacaoTmp.setRating(Float.parseFloat(jsonAvaliacao.getString("rating")));
+                    }
+                    if (jsonAvaliacao.has("date")){
+                        avaliacaoTmp.setDate(sdfDMY.parse(jsonAvaliacao.getString("date")));
+                    }
+                    if (jsonAvaliacao.has("count")){
+                        avaliacaoTmp.setCount(Integer.parseInt(jsonAvaliacao.getString("count")));
+                    }
+                    avaliacoes.add(avaliacaoTmp);
                 }
 
             }

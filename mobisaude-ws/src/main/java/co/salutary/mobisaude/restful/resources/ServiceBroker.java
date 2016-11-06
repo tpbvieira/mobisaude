@@ -80,8 +80,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 	@Produces("application/json;charset=utf-8")
 	public GerarChaveResponse gerarChave(GerarChaveRequest request) {logger.info(new Object() {}.getClass().getEnclosingMethod().getName());
 		GerarChaveResponse response = new GerarChaveResponse();
-		try {
-			
+		try {			
 			if (!request.validate()) {
 				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
 				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
@@ -89,18 +88,19 @@ public class ServiceBroker extends AbstractServiceBroker {
 			}
 
 			String chave = gerarChave();
-
-			if (chave != null) {
-				response.setChave(chave);
-			} else {
-				response.setErro(properties.getProperty("co.mobisaude.gerarchave.msg.erroGerandoChave"));
+			if (chave == null) {
+				response.setErro(properties.getProperty("co.mobisaude.strings.gerarchave.erroGerandoChave"));
 				return response;
 			}
+			
+			response.setChave(chave);
+			
 		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"), ex);
-			response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroProcessandoServico"));			
+			logger.error(properties.getProperty("co.mobisaude.strings.gerarchave.erroGerandoChave"), ex);
+			response.setErro(properties.getProperty("co.mobisaude.strings.gerarchave.erroGerandoChave"));			
 			return response;
 		}
+		
 		return response;
 	}
 	
@@ -120,17 +120,19 @@ public class ServiceBroker extends AbstractServiceBroker {
 			String chave = request.getChave();
 			String token = gerarToken(chave);
 
-			if (token != null) {
-				response.setToken(token);
-			} else {
-				response.setErro(properties.getProperty("co.mobisaude.gerartoken.msg.erroGerandoToken"));
-				return response;
+			if (token == null) {
+				response.setErro(properties.getProperty("co.mobisaude.strings.token.erroGerandoToken"));
+				return response;				
 			}
-		} catch (Exception ex) {
-			logger.error(properties.getProperty("co.mobisaude.strings.token.erroProcessandoServico"), ex);
-			response.setErro(properties.getProperty("co.mobisaude.strings.token.erroProcessandoServico"));			
+
+			response.setToken(token);
+			
+		} catch (Exception e) {
+			logger.error(properties.getProperty("co.mobisaude.strings.token.erroGerandoToken"), e);
+			response.setErro(properties.getProperty("co.mobisaude.strings.token.erroGerandoToken"));			
 			return response;
 		}
+		
 		return response;
 	}
 
@@ -1153,7 +1155,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 				avaliacaoBySiglaUFDTOList.add(avaliacaoBySiglaUFDTO);	
 			}			
 			
-			response.setAvaliacoesMediaMes(avaliacaoBySiglaUFDTOList);			
+			response.setAvaliacoesMediaMes(avaliacaoBySiglaUFDTOList);
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -1168,14 +1170,15 @@ public class ServiceBroker extends AbstractServiceBroker {
 	}
 	
 	@POST
-	@Path("/listAvaliacaoByIdCidade")
+	@Path("/listAvaliacaoByIdMunicipio")
 	@Consumes("application/json;charset=utf-8")
 	@Produces("application/json;charset=utf-8")
 	public AvaliacaoMediaResponse listAvaliacaoByIdMunicipio(AvaliacaoMediaRequest request) {
 		logger.info(new Object() {}.getClass().getEnclosingMethod().getName());	
+		
 		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
+		
 		try {
-
 			String token = request.getToken();
 			if (!validarToken(token)) {
 				logger.error(properties.getProperty("co.mobisaude.strings.token.tokenInvalido"));
@@ -1183,25 +1186,21 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 			
-			String idMunicipio = request.getIdMunicipio();
-			if (idMunicipio == null || idMunicipio.length() < 2) {
-				logger.error(properties.getProperty("co.mobisaude.strings.token.tokenInvalido"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.token.tokenInvalido"));
-				return response;
-			}
-
 			AvaliacaoMediaMesFacade avaliacaoMediaMesFacade = (AvaliacaoMediaMesFacade)Factory.getInstance().get("avaliacaoMediaMesFacade");
-			List<AvaliacaoMediaMes> avaliacoes = avaliacaoMediaMesFacade.listAvaliacaoByIdMunicipio(idMunicipio);
+			List<AvaliacaoMediaMes> avaliacaoByIdMunicipioList = avaliacaoMediaMesFacade.listAvaliacaoByIdMunicipio(request.getIdMunicipio());
 			
-			List<AvaliacaoMediaMesDTO> lstRetorno = new ArrayList<AvaliacaoMediaMesDTO>();
-			for(AvaliacaoMediaMes av: avaliacoes){
-				AvaliacaoMediaMesDTO amDTO = new AvaliacaoMediaMesDTO();
-				amDTO.setIdES(String.valueOf(av.getIdES()));
-				amDTO.setRating(String.valueOf(av.getRating()));														
-				lstRetorno.add(amDTO);	
+			List<AvaliacaoMediaMesDTO> avaliacaoByIdMunicipioDTOList = new ArrayList<AvaliacaoMediaMesDTO>();			
+			for(AvaliacaoMediaMes avaliacaoByIdMunicipio: avaliacaoByIdMunicipioList){
+				
+				AvaliacaoMediaMesDTO avaliacaoByIdMunicipioDTO = new AvaliacaoMediaMesDTO();
+				
+				avaliacaoByIdMunicipioDTO.setIdES(avaliacaoByIdMunicipio.getIdES().toString());
+				avaliacaoByIdMunicipioDTO.setRating(avaliacaoByIdMunicipio.getRating().toString());
+				avaliacaoByIdMunicipioDTO.setCount(avaliacaoByIdMunicipio.getCount().toString());
+				avaliacaoByIdMunicipioDTOList.add(avaliacaoByIdMunicipioDTO);	
 			}			
 			
-			response.setAvaliacoesMediaMes(lstRetorno);			
+			response.setAvaliacoesMediaMes(avaliacaoByIdMunicipioDTOList);
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);
@@ -1212,6 +1211,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			response.setErro(e.getMessage());
 			return response;
 		}
+		
 		return response;
 	}
 	
@@ -1224,12 +1224,6 @@ public class ServiceBroker extends AbstractServiceBroker {
 		AvaliacaoMediaResponse response = new AvaliacaoMediaResponse();
 		try {
 
-			if (!request.validate()) {
-				logger.error(properties.getProperty("co.mobisaude.strings.requestInvalido"));
-				response.setErro(properties.getProperty("co.mobisaude.strings.requestInvalido"));				
-				return response;
-			}
-
 			String token = request.getToken();
 			if (!validarToken(token)) {
 				logger.error(properties.getProperty("co.mobisaude.strings.token.tokenInvalido"));
@@ -1237,14 +1231,21 @@ public class ServiceBroker extends AbstractServiceBroker {
 				return response;
 			}
 
-			List<AvaliacaoMediaMesDTO> lstRetorno = new ArrayList<AvaliacaoMediaMesDTO>();
-			for (int i=0; i < 6;i++){
-				AvaliacaoMediaMesDTO amDTO = new AvaliacaoMediaMesDTO();
-				amDTO.setIdES(String.valueOf(i));
-				amDTO.setRating(String.valueOf(300 - (i + 30) * 7));										
-				lstRetorno.add(amDTO);
-			}
-			response.setAvaliacoesMediaMes(lstRetorno);			
+			AvaliacaoMediaMesFacade avaliacaoMediaMesFacade = (AvaliacaoMediaMesFacade)Factory.getInstance().get("avaliacaoMediaMesFacade");
+			List<AvaliacaoMediaMes> avaliacaoByIdTipoESList = avaliacaoMediaMesFacade.listAvaliacaoByIdTipoES(request.getIdTipoES());
+			
+			List<AvaliacaoMediaMesDTO> avaliacaoByIdTipoESDTOList = new ArrayList<AvaliacaoMediaMesDTO>();			
+			for(AvaliacaoMediaMes avaliacaoByIdTipoES: avaliacaoByIdTipoESList){
+				
+				AvaliacaoMediaMesDTO avaliacaoDTO = new AvaliacaoMediaMesDTO();
+				
+				avaliacaoDTO.setIdES(avaliacaoByIdTipoES.getIdES().toString());
+				avaliacaoDTO.setRating(avaliacaoByIdTipoES.getRating().toString());
+				avaliacaoDTO.setCount(avaliacaoByIdTipoES.getCount().toString());
+				avaliacaoByIdTipoESDTOList.add(avaliacaoDTO);	
+			}			
+			
+			response.setAvaliacoesMediaMes(avaliacaoByIdTipoESDTOList);			
 
 		} catch (DataIntegrityViolationException e) {
 			logger.error(properties.getProperty("co.mobisaude.strings.user.notunique"), e);

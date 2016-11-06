@@ -284,20 +284,6 @@ SET default_with_oids = false;
 
 
 --
--- TOC entry 183 (class 1259 OID 121198)
--- Name: tb_historico; Type: TABLE; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
---
-DROP TABLE IF EXISTS public.tb_historico;
-CREATE TABLE public.tb_historico (
-    nu_id integer NOT NULL,
-    nu_id_log integer,
-    no_prestadora character varying,
-    qt_registros integer
-);
-ALTER TABLE public.tb_historico OWNER TO mobisaude_pg_user;
-
-
---
 -- TOC entry 184 (class 1259 OID 121204)
 -- Name: tb_log; Type: TABLE; Schema: public; Owner: mobisaude_pg_user; Tablespace: 
 --

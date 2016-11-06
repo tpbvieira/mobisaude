@@ -218,10 +218,10 @@ public class MainActivity extends AppCompatActivity implements
 
     public class InitCacheTask extends AsyncTask<Void, Void, Boolean> {
 
-        String mNumES, mCity, mErrorMsg;
+        String mNumES, mIdMunicipio, mErrorMsg;
 
-        InitCacheTask(String city) {
-            mCity = city;
+        InitCacheTask(String idMunicipio) {
+            mIdMunicipio = idMunicipio;
         }
 
         @Override
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements
                 try {
                     JSONObject data = new JSONObject();
                     data.put("token", token);
-                    data.put("idMunicipio", mCity.substring(0, mCity.length()-1));
+                    data.put("idMunicipio", mIdMunicipio.substring(0, mIdMunicipio.length()-1));
 
                     JSONObject request = new JSONObject();
                     request.put("esRequest", data);
