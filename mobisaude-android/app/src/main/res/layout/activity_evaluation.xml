@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activities.">
+    tools:context=".activities.HealthPlaceActivity">
 
     <RatingBar
         android:id="@+id/evaluation_ratingbar"
@@ -40,8 +40,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_title"
                 android:inputType="text"
-                android:maxLines="1"
-                android:singleLine="true"/>
+                android:maxLines="1" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -54,7 +53,7 @@
                 android:hint="@string/prompt_evaluation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="top|left"
+                android:gravity="top|start"
                 android:inputType="textMultiLine"
                 android:maxLength="300"
                 android:maxLines="5"
@@ -72,7 +71,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:enabled="false"
                 android:visibility="invisible"/>
 
@@ -81,10 +79,10 @@
         <Button
             style="?android:textAppearanceSmall"
             android:id="@+id/evaluation_button"
-            android:text="@string/action_evaluate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:text="@string/action_evaluate" />
 
     </LinearLayout>
 

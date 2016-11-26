@@ -21,14 +21,10 @@ import co.salutary.mobisaude.util.Constantes;
 import co.salutary.mobisaude.util.CryptographyUtil;
 
 
-/**
- *	Classe abstrata de resources dos servicos acessados pelo mobisaude
- *
- */
 public abstract class AbstractServiceBroker implements MobiSaudeResource {
 
 	private static final Log logger = LogFactory.getLog(AbstractServiceBroker.class);
-	private static int[] arrPermutacao = {7,5,3,1,4,6,0,2};
+	private static int[] arrPermutacao = {7,5,3,1,4,7,0,2};
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");	
 	protected Properties properties;
 	private static Random random = null;
@@ -37,7 +33,6 @@ public abstract class AbstractServiceBroker implements MobiSaudeResource {
 		long semente = new Date().getTime();
 		random = new Random(semente);
 	}
-
 
 	public AbstractServiceBroker() {
 		InputStream stream = null;
@@ -58,12 +53,7 @@ public abstract class AbstractServiceBroker implements MobiSaudeResource {
 			}
 		}
 	}
-	
-	/**
-	 * Metodo que gera um token de sessao
-	 * @param chave
-	 * @return token gerado
-	 */
+
 	protected String gerarToken(String chave) {
 		StringBuffer sbChaveGerada = new StringBuffer("");
 		String dataStr = dateFormat.format(new Date());
@@ -115,11 +105,6 @@ public abstract class AbstractServiceBroker implements MobiSaudeResource {
 		return token;
 	}
 	
-	/**
-	 * Metodo que valida um token de sessao
-	 * @param token
-	 * @return valido ou nao
-	 */
 	protected final boolean validarToken(String token) {
 		TokenSessaoFacade tokenFacade = (TokenSessaoFacade)Factory.getInstance().get("tokenSessaoFacade");
 		TokenSessao tokenSessao = tokenFacade.getToken(token);
@@ -135,10 +120,6 @@ public abstract class AbstractServiceBroker implements MobiSaudeResource {
 		}
 	}
 	
-	/**
-	 * Metodo que gera uma chave para geracao de token de sessao
-	 * @return chave gerada
-	 */
 	protected String gerarChave() {
 		StringBuffer sbChaveGerada = new StringBuffer("");
 		String dataStr = dateFormat.format(new Date());
@@ -160,4 +141,5 @@ public abstract class AbstractServiceBroker implements MobiSaudeResource {
 
 		return sbChaveGerada.toString();
 	}
+	
 }

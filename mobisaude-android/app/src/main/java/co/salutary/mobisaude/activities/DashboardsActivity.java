@@ -343,22 +343,26 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
 
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
-                    JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
-                    String error = JsonUtils.getError(response);
-                    if (error == null) {
-                        mAvaliacoes = JsonUtils.jsonObjectToListAvaliacaoMedia(response);
-                        if (mAvaliacoes == null) {
-                            throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                    if(json.has("avaliacaoMediaResponse")){
+                        JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
+                        String error = JsonUtils.getError(response);
+                        if (error == null) {
+                            mAvaliacoes = JsonUtils.jsonObjectToListAvaliacaoMedia(response);
+                            if (mAvaliacoes == null || mAvaliacoes.size() == 0) {
+                                throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                            }
+                        } else {
+                            throw new MobiSaudeAppException(JsonUtils.getError(response));
                         }
                     } else {
-                        throw new MobiSaudeAppException(JsonUtils.getError(response));
+                        throw new MobiSaudeAppException(getString(R.string.warn_no_evaluation));
                     }
                 } else {
                     throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
                 }
 
             } catch (Exception e) {
-                mErrorMsg = e.getMessage();
+                mErrorMsg = getString(R.string.warn_no_evaluation);
                 Log.e(TAG, e.getMessage(), e);
                 ok = false;
             }
@@ -369,7 +373,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         @Override
         protected void onPostExecute(final Boolean success) {
 
-            if (success && mAvaliacoes != null) {
+            if (success && mAvaliacoes != null && mAvaliacoes.size() > 0) {
 
                 Map<Integer, Integer> mValues = new HashMap<>();
                 for(AvaliacaoMedia avaliacao: mAvaliacoes){
@@ -379,13 +383,13 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                 mChart.setEnabled(true);
                 mChart.setVisibility(View.VISIBLE);
                 setData(mLabel, mValues);
+
+                if (mWarningMsg != null) {
+                    Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
+                }
+
             }else{
                 Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
-            if (mWarningMsg != null) {
-                Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
             }
 
             showProgress(false);

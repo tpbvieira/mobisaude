@@ -70,10 +70,11 @@ public class TokenManager {
             localPref.setPreferenceValue(Settings.TOKEN, Settings.EMPTY);
             return false;
         }
+
 	}
 
 	private static String gerarChave() {
-		int[] arrPermutacao = {7,5,3,1,4,6,0,2};
+		int[] arrPermutacao = {7,5,3,1,4,7,0,2};
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy", Locale.getDefault());
 		String dataStr = dateFormat.format(new Date());
 		StringBuilder chave = new StringBuilder("");

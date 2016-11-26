@@ -168,31 +168,5 @@ public final class CryptographyUtil {
 	public static String convertToStringBase64(byte[] bytes) {
 		return new String(org.apache.commons.codec.binary.Base64.encodeBase64(bytes));
 	}
-		
-    /**
-     * Teste
-     * @param args
-     */
-    public static void main(String[] args) {
-    	int[] arrPermutacao = {7,5,3,1,4,6,0,2};
-    	SimpleDateFormat sdf  = new SimpleDateFormat("ddMMyyyy");
-    	
-    	String dataStr = sdf.format(new Date()); 
-    	StringBuffer sbChaveGerada = new StringBuffer("");
-    			
-		// Permutar os digitos da data atual DDMMAAAA
-		for (int i=0;i<dataStr.length();i++) {
-			sbChaveGerada.append(dataStr.charAt(arrPermutacao[i]));
-		}
-		
-		// Fatorar o numero resultado da permutacao
-		Integer intChaveGerada = Integer.parseInt(sbChaveGerada.toString());
-		List<Integer> fatoresChaveGerada = CryptographyUtil.primeFactors(intChaveGerada);
-		
-		// Concatenar os fatores em ordem crescente numa string
-		sbChaveGerada.setLength(0);
-		for (Integer fator:fatoresChaveGerada) {
-			sbChaveGerada.append(fator.toString());
-		}
-	}
+	
 }

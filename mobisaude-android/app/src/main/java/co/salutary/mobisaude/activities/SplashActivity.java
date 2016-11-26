@@ -132,6 +132,8 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
 
     private class VerifyConectivity extends AsyncTask<Integer, Integer, Boolean> {
 
+        private String errMsg = null;
+
         @Override
         protected void onPreExecute() {
             Log.d(new Object() {
@@ -155,12 +157,16 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 // gera token e salva no preferences
                 if (isSuccess) {
                     isSuccess = TokenManager.gerarToken(getApplicationContext());
+                } else {
+                    errMsg = getString(R.string.error_conectivity_required);
                 }
 
                 return isSuccess;
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
+                errMsg = e.getMessage();
             }
+
             return isSuccess;
         }
 
@@ -173,6 +179,7 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
                 if (result) {
                     onVerifyGPS();
                 } else {
+                    Toast.makeText(getApplicationContext(), errMsg, Toast.LENGTH_SHORT).show();
                     if (DeviceInfo.hasConnectivity(getApplicationContext())) {
                         serverConnectionError();
                     }else {
@@ -642,7 +649,6 @@ public class SplashActivity extends Activity implements Runnable, LocationListen
             case DeviceInfo.REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // If request is cancelled, the result arrays are empty.
-
                 } else {
                     // permission denied, Disable the functionality that depends on this permission.
                 }

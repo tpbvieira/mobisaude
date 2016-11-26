@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activities.">
+    tools:context=".activities.HealthPlaceActivity">
 
     <ScrollView
         android:id="@+id/suggestion_form_view"
@@ -31,7 +31,7 @@
                     android:hint="@string/prompt_suggestion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="top|left"
+                    android:gravity="top|start"
                     android:inputType="textMultiLine"
                     android:maxLength="300"
                     android:maxLines="7"
@@ -42,11 +42,11 @@
             <Button
                 style="?android:textAppearanceSmall"
                 android:id="@+id/suggestion_button"
-                android:text="@string/action_suggest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textStyle="bold"/>
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:text="@string/action_suggest" />
 
         </LinearLayout>
 

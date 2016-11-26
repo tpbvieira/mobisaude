@@ -401,16 +401,21 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                 String responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoMediaMesByIdES(request.toString());
                 if (responseStr != null) {
                     JSONObject json = new JSONObject(responseStr);
-                    JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
-                    String error = JsonUtils.getError(response);
-                    if (error == null) {
-                        avsMedia = JsonUtils.jsonObjectToListAvaliacao(response);
-                        if (avsMedia == null) {
-                            throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                    if(json.has("avaliacaoMediaResponse")){
+                        JSONObject response = (JSONObject) json.get("avaliacaoMediaResponse");
+                        String error = JsonUtils.getError(response);
+                        if (error == null) {
+                            avsMedia = JsonUtils.jsonObjectToListAvaliacao(response);
+                            if (avsMedia == null || avsMedia.size() == 0) {
+                                throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                            }
+                        } else {
+                            throw new MobiSaudeAppException(JsonUtils.getError(response));
                         }
-                    } else {
-                        throw new MobiSaudeAppException(JsonUtils.getError(response));
+                    }else{
+
                     }
+
                 } else {
                     throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
                 }
@@ -428,10 +433,6 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
         protected void onPostExecute(final Boolean success) {
 
             if (success) {
-
-                // DialogFragment.show() will take care of adding the fragment
-                // in a transaction.  We also want to remove any currently showing
-                // dialog, so make our own transaction and take care of that here.
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");
                 if (prev != null) {
