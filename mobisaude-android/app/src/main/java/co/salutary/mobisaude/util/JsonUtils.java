@@ -88,7 +88,7 @@ public class JsonUtils {
         return jsonErrorMessage.toString();
     }
 
-    public static HashMap<String, String> fromJsonArraytoDomainHashMap(JSONArray jsonArray){
+    public static HashMap<String, String> jsonArraytoDomainHashMap(JSONArray jsonArray){
         HashMap<String, String> pairs = new HashMap<>();
 
         try {
@@ -101,6 +101,27 @@ public class JsonUtils {
         }
 
         return pairs;
+    }
+
+    public static String jsonArrayDomainToJsonString(String jsonArrayString){
+        HashMap<String, String> map = new HashMap<>();
+
+        try {
+            JSONArray jsonArray = new JSONArray(jsonArrayString);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.optJSONObject(i);
+                map.put(jsonObject.getString("id"), jsonObject.getString("nome"));
+            }
+
+            JSONObject jsonObject = new JSONObject(map);
+            return jsonObject.toString();
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(),e);
+        }
+
+        return null;
     }
 
     public static EstabelecimentoSaude jsonObjectToES(JSONObject rec){
@@ -228,15 +249,26 @@ public class JsonUtils {
         return avaliacoes;
     }
 
-    public static Map<String, String> fromStrToMap(String str){
+    public static Map<String, String> jsonStringToMap(String jsonString){
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(jsonString, type);
+    }
+
+    public static Map<String, String> stringToMap(String str){
         Type type = new TypeToken<Map<String, String>>(){}.getType();
         Gson gson = new Gson();
         return gson.fromJson(str, type);
     }
 
-    public static String fromMapToString(Map<String, String> map){
+    public static String mapToString(Map<String, String> map){
         Gson gson = new Gson();
         return gson.toJson(map);
+    }
+
+    public static String mapToJsonString(Map<String, String> map){
+        JSONObject jsonObject = new JSONObject(map);
+        return jsonObject.toString();
     }
 
 }

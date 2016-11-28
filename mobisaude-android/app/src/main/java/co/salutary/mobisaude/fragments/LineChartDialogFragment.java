@@ -44,7 +44,7 @@ public class LineChartDialogFragment extends DialogFragment {
         // Supply num input as an argument.
         Bundle args = new Bundle();
 
-        String strValues = JsonUtils.fromMapToString(values);
+        String strValues = JsonUtils.mapToString(values);
         args.putString("values", strValues);
 
         dialogFragment.setArguments(args);
@@ -63,7 +63,7 @@ public class LineChartDialogFragment extends DialogFragment {
 
         Map<String, String> values;
         try{
-            values = JsonUtils.fromStrToMap(getArguments().getString("values"));
+            values = JsonUtils.stringToMap(getArguments().getString("values"));
         } catch (Exception e){
             Log.e(TAG, e.getMessage(),e);
             return dialogFragment;

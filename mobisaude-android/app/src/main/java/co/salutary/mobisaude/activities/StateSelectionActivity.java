@@ -83,7 +83,6 @@ public class StateSelectionActivity extends Activity {
                 setResult(DashboardsActivity.CITY);
                 finish();
             }
-
         }
 
     }
@@ -101,7 +100,6 @@ public class StateSelectionActivity extends Activity {
         if(uf != null){
             edtUF.setText(uf.getNome());
         }
-
     }
 
 }

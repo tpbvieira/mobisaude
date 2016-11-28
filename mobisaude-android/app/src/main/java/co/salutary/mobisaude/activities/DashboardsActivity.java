@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -44,8 +45,10 @@ import co.salutary.mobisaude.config.Settings;
 import co.salutary.mobisaude.controller.ClientCache;
 import co.salutary.mobisaude.controller.ServiceBroker;
 import co.salutary.mobisaude.controller.TokenManager;
-import co.salutary.mobisaude.model.Avaliacao;
+import co.salutary.mobisaude.db.LocalDataBase;
+import co.salutary.mobisaude.db.UfDAO;
 import co.salutary.mobisaude.model.AvaliacaoMedia;
+import co.salutary.mobisaude.model.UF;
 import co.salutary.mobisaude.util.JsonUtils;
 import co.salutary.mobisaude.util.MobiSaudeAppException;
 
@@ -65,7 +68,11 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
     public static final int TYPE_ES = 3;
 
     private View mProgressView;
+    private Spinner mTipoDashboard;
     private PieChart mChart;
+
+    private String tipoESJsonArrayString;
+    private String ufJsonString;
 
     private UpdateChartTask mUpdateChartTask;
 
@@ -77,7 +84,10 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_dashboards);
         mProgressView = findViewById(R.id.dashboards_progress_bar);
         showProgress(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // UI: spinner
         List<String> tiposDashboardList = new ArrayList<>();
@@ -88,9 +98,10 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         StringListAdapter stringListAdapter = new StringListAdapter(getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item, tiposDashboardList);
         stringListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner mTipoDashboard = (Spinner) findViewById(R.id.dashboard_options_spinner);
+        mTipoDashboard = (Spinner) findViewById(R.id.dashboard_options_spinner);
         mTipoDashboard.setAdapter(stringListAdapter);
         mTipoDashboard.setOnItemSelectedListener(this);
+        mTipoDashboard.setSelected(false);
 
         //UI: pie chart
         mChart = (PieChart) findViewById(R.id.generic_pie_chart);
@@ -119,6 +130,8 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         legend.setXEntrySpace(7f);
         legend.setYEntrySpace(0f);
         legend.setYOffset(0f);
+        mChart.setEnabled(false);
+        mChart.setVisibility(View.INVISIBLE);
 
         showProgress(false);
     }
@@ -162,14 +175,24 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Intent intent;
-        int type = pos;
 
-        switch (type){
+        switch (pos){
             case STATE:
-                intent = new Intent(this, StateSelectionActivity.class);
+                LocalDataBase db = LocalDataBase.getInstance();
+                db.open(getApplicationContext());
+                List<UF> ufList = new UfDAO(db).listarUF();
+                Map<String, String> ufMap = new HashMap<>();
+                for(UF uf: ufList){
+                    ufMap.put(Integer.toString(uf.getIdUf()), uf.getNome());
+                }
+                db.close();
+
+                intent = new Intent(this, SingleSelectionListActivity.class);
+                ufJsonString = JsonUtils.mapToJsonString(ufMap);
+                intent.putExtra("values", ufJsonString);
+                intent.putExtra("title", getString(R.string.estado));
                 startActivityForResult(intent, STATE);
                 break;
             case CITY:
@@ -177,14 +200,16 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                 startActivityForResult(intent, CITY);
                 break;
             case TYPE_ES:
-                intent = new Intent(this, TipoESSelectionActivity.class);
+                Settings settings = new Settings(getApplicationContext());
+                tipoESJsonArrayString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
+                String jsonString = JsonUtils.jsonArrayDomainToJsonString(tipoESJsonArrayString);
+
+                intent = new Intent(this, SingleSelectionListActivity.class);
+                intent.putExtra("values", jsonString);
+                intent.putExtra("title", getString(R.string.tipo_es));
                 startActivityForResult(intent, TYPE_ES);
                 break;
             case NONE:
-            default:
-                mChart.setEnabled(false);
-                mChart.setVisibility(View.INVISIBLE);
-                return;
         }
 
     }
@@ -198,12 +223,34 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
 
         String label = null;
         String idStr = null;
-        int type = requestCode;
 
-        switch (type){
+        switch (requestCode){
             case STATE:
-                label = ClientCache.getInstance().getUf().getNome();
-                idStr = String.valueOf(ClientCache.getInstance().getUf().getSigla());
+                try{
+                    Map<String, String> ufMap = JsonUtils.jsonStringToMap(ufJsonString);
+                    ArrayList<String> ufValueList = new ArrayList<>(ufMap.values());
+                    Collections.sort(ufValueList);
+                    label = ufValueList.get(resultCode);
+
+                    for(String key: ufMap.keySet()){
+                        if(ufMap.get(key).equals(label)){
+                            idStr = key;
+                            break;
+                        }
+                    }
+
+                    if (idStr == null){
+                        throw new MobiSaudeAppException(getString(R.string.error_obtaining_dashboard_type));
+                    } else {
+                        LocalDataBase db = LocalDataBase.getInstance();
+                        db.open(getApplicationContext());
+                        idStr = new UfDAO(db).getUfById(Long.valueOf(idStr)).getSigla();
+                        db.close();
+                    }
+
+                } catch (MobiSaudeAppException e){
+                    Log.e(TAG, e.getMessage(),e);
+                }
                 break;
             case CITY:
                 label = ClientCache.getInstance().getCidade().getNome();
@@ -212,20 +259,23 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                 break;
             case TYPE_ES:
                 try{
-                    Settings settings = new Settings(getApplicationContext());
-                    String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
-                    HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
-                    ArrayList<String> tipoESList = new ArrayList<>(tiposES.values());
+                    HashMap<String, String> tiposESMap = JsonUtils.jsonArraytoDomainHashMap(new JSONArray(tipoESJsonArrayString));
+                    ArrayList<String> tipoESList = new ArrayList<>(tiposESMap.values());
                     Collections.sort(tipoESList);
+                    label = tipoESList.get(resultCode);
 
-                    label = String.valueOf(tipoESList.get(resultCode));
-                    for(String key: tiposES.keySet()){
-                        if(tiposES.get(key).equals(label)){
+                    for(String key: tiposESMap.keySet()){
+                        if(tiposESMap.get(key).equals(label)){
                             idStr = key;
+                            break;
                         }
                     }
 
-                } catch (JSONException e){
+                    if (idStr == null){
+                        throw new MobiSaudeAppException(getString(R.string.error_obtaining_dashboard_type));
+                    }
+
+                } catch (JSONException|MobiSaudeAppException e){
                     Log.e(TAG, e.getMessage(),e);
                 }
 
@@ -237,7 +287,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         }
 
         if(label != null && idStr != null){
-            mUpdateChartTask = new UpdateChartTask(type, idStr, label);
+            mUpdateChartTask = new UpdateChartTask(requestCode, idStr, label);
             mUpdateChartTask.execute();
         }
 
@@ -248,7 +298,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         // do nothing
     }
 
-    private void setData(String target, Map<Integer, Integer> values) {
+    private void setChartData(String target, Map<Integer, Integer> values) {
 
         // Entries
         Set<Integer> starsSet = values.keySet();
@@ -277,10 +327,12 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
         data.setValueTextColor(Color.WHITE);
 
         mChart.setDescriptionTextSize(12f);
-        mChart.setDescription("Percentual das Avaliações para " + target);
+        mChart.setDescription(target);
         mChart.setData(data);
         mChart.highlightValues(null);
         mChart.invalidate();
+
+        mTipoDashboard.setSelection(0);
 
     }
 
@@ -335,7 +387,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdMunicipio(request.toString());
                         break;
                     case TYPE_ES:
-                        params.put("tipoES", mId);
+                        params.put("idTipoES", mId);
                         request.put("avaliacaoMediaRequest", params);
                         responseStr = ServiceBroker.getInstance(getApplicationContext()).listAvaliacaoByIdTipoES(request.toString());
                         break;
@@ -350,6 +402,14 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                             mAvaliacoes = JsonUtils.jsonObjectToListAvaliacaoMedia(response);
                             if (mAvaliacoes == null || mAvaliacoes.size() == 0) {
                                 throw new MobiSaudeAppException(getString(R.string.error_getting_evaluation));
+                            } else{
+                                int i = 0;
+                                for(AvaliacaoMedia avaliacao: mAvaliacoes){
+                                    i = i + avaliacao.getCount();
+                                }
+                                if(i == 0){
+                                    throw new MobiSaudeAppException(getString(R.string.warn_no_evaluation));
+                                }
                             }
                         } else {
                             throw new MobiSaudeAppException(JsonUtils.getError(response));
@@ -382,7 +442,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
 
                 mChart.setEnabled(true);
                 mChart.setVisibility(View.VISIBLE);
-                setData(mLabel, mValues);
+                setChartData(mLabel, mValues);
 
                 if (mWarningMsg != null) {
                     Toast.makeText(getApplicationContext(), mWarningMsg, Toast.LENGTH_SHORT).show();
@@ -392,6 +452,7 @@ public class DashboardsActivity extends AppCompatActivity implements AdapterView
                 Toast.makeText(getApplicationContext(), mErrorMsg, Toast.LENGTH_SHORT).show();
             }
 
+            mTipoDashboard.setSelection(0);
             showProgress(false);
         }
 

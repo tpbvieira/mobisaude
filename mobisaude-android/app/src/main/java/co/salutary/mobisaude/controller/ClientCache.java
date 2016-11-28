@@ -82,14 +82,14 @@ public class ClientCache {
         Settings settings = new Settings(context);
         String strBookmark = settings.getPreferenceValue(Settings.BOOKMARK);
         if(strBookmark != null && strBookmark.length() > 2){
-            bestES = JsonUtils.fromStrToMap(strBookmark);
+            bestES = JsonUtils.stringToMap(strBookmark);
             if(bestES.containsKey(codES.toString())){
                 count = Integer.valueOf(bestES.get(codES.toString())) + count;
             }
         }
 
         bestES.put(codES.toString(), count.toString());
-        String json = JsonUtils.fromMapToString(bestES);
+        String json = JsonUtils.mapToString(bestES);
         settings.setPreferenceValue(Settings.BOOKMARK, json);
 
     }
@@ -103,7 +103,7 @@ public class ClientCache {
             String strBookmark = settings.getPreferenceValue(Settings.BOOKMARK);
 
             if(strBookmark != null){
-                bestES = JsonUtils.fromStrToMap(strBookmark);
+                bestES = JsonUtils.stringToMap(strBookmark);
             }
 
             if(bestES == null){

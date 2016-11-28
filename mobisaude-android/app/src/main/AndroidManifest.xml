@@ -152,9 +152,6 @@
         <activity
             android:name=".activities.StateSelectionActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity
-            android:name=".activities.TipoESSelectionActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
         <activity
             android:name=".activities.SingleSelectionListActivity"

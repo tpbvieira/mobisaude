@@ -112,32 +112,9 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 		if (siglaUF != null ) {
 			query.setParameter("siglaUF", siglaUF);
 		}
-
-		// initiate all rates with 0
-		List<AvaliacaoMediaMes> avaliacoes = new ArrayList<>();
-		for(int i = 0; i < 6; i++){
-			AvaliacaoMediaMes avTmp = new AvaliacaoMediaMes();
-			avTmp.setRating(new Float(i));
-			avTmp.setCount(0);
-			avaliacoes.add(avTmp);
-		}
-
 		List <Object[]> result = query.getResultList();
-		int i = 0;
-		for(Object[] row: result){
-			if(row.length > 1){
 
-				Float rate = (Float)row[0];
-				Integer count = ((Long)row[1]).intValue();
-
-				AvaliacaoMediaMes avaliacao = avaliacoes.get(i);
-				avaliacao.setRating(rate);
-				avaliacao.setCount(count);
-			}
-			i++;
-		}
-
-		return avaliacoes;
+		return queryToAvaliacoes(result);
 	}
 
 	@Override
@@ -155,39 +132,14 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 		if (idMunicipio != null ) {
 			query.setParameter("idMunicipio", new Integer(idMunicipio));
 		}
-
-		// initiate all rates with 0
-		List<AvaliacaoMediaMes> avaliacoes = new ArrayList<>();
-		for(int i = 0; i < 6; i++){
-			AvaliacaoMediaMes avTmp = new AvaliacaoMediaMes();			
-			avTmp.setRating(new Float(i));
-			avTmp.setCount(0);
-			avaliacoes.add(avTmp);
-		}
-
 		List <Object[]> result = query.getResultList();
-		int i = 0;
-		for(Object[] row: result){
-			if(row.length > 1){
 
-				Float rate = (Float)row[0];
-				Integer count = ((Long)row[1]).intValue();
-
-				AvaliacaoMediaMes avaliacao = avaliacoes.get(i);
-				avaliacao.setRating(rate);
-				avaliacao.setCount(count);
-			}
-			i++;
-		}
-
-		return avaliacoes;
+		return queryToAvaliacoes(result);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<AvaliacaoMediaMes> listAvaliacaoByIdTipoES(String idTipoES) {
-
-		List<AvaliacaoMediaMes> avaliacoes = new ArrayList<>();
 
 		if (idTipoES != null ) {
 			StringBuffer queryStr = new StringBuffer();
@@ -199,33 +151,43 @@ public class AvaliacaoMediaMesDaoImpl implements AvaliacaoMediaMesDao {
 
 			Query query = em.createQuery(queryStr.toString());
 			query.setParameter("idTipoES", new Short(idTipoES));
-			
-			// initiate all rates with 0
-			for(int i = 0; i < 6; i++){
-				AvaliacaoMediaMes avTmp = new AvaliacaoMediaMes();				
-				avTmp.setRating(new Float(i));
-				avTmp.setCount(0);
-				avaliacoes.add(avTmp);
-			}
-
 			List <Object[]> result = query.getResultList();
-			int i = 0;
-			for(Object[] row: result){
-				if(row.length > 1){
-
-					Float rate = (Float)row[0];
-					Integer count = ((Long)row[1]).intValue();
-
-					AvaliacaoMediaMes avaliacao = avaliacoes.get(i);
-					avaliacao.setRating(rate);
-					avaliacao.setCount(count);
-				}
-				i++;
-			}
+			
+			return queryToAvaliacoes(result);
 		}
 
-		return avaliacoes;
+		return null;		
+	}
+
+	private List<AvaliacaoMediaMes> queryToAvaliacoes(List<Object[]> result) {
 		
+		List<AvaliacaoMediaMes> avaliacoes = new ArrayList<>();
+		
+		// initiate all rates with 0
+		for(int i = 0; i < 6; i++){
+			AvaliacaoMediaMes avTmp = new AvaliacaoMediaMes();				
+			avTmp.setRating(new Float(i));
+			avTmp.setCount(0);
+			avaliacoes.add(avTmp);
+		}
+		
+		for(Object[] row: result){
+			if(row.length > 1){
+
+				Float rate = (Float)row[0];
+				Integer count = ((Long)row[1]).intValue();
+
+				for(AvaliacaoMediaMes avaliacao: avaliacoes){
+					if(avaliacao.getRating().equals(rate)){
+						avaliacao.setCount(count);
+						break;
+					}
+				}
+				
+			}
+		}
+		
+		return avaliacoes;
 	}
 
 }

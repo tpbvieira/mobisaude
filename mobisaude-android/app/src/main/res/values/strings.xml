@@ -76,7 +76,7 @@
     <string name="error_getting_evaluation">Erro ao obter avaliaçao</string>
     <string name="error_getting_es">Erro ao obter estabelecimento</string>
     <string name="error_no_bookmarks">Ainda não há locais favoritos</string>
-    <string name="warn_no_evaluation">Sem avaliações necessárias, contribua!</string>
+    <string name="warn_no_evaluation">Aguardando avaliações...</string>
     <string name="warn_working">Processando...</string>
     <string name="warn_login_required">É necessário efetuar o login</string>
     <string name="warn_many_evaluations">Você já avaliou este estabelecimento ateriormente</string>

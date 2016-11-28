@@ -99,7 +99,7 @@ public class HealthPlaceSelectionActivity extends AppCompatActivity implements A
         // Fill spinner with tipoES
         try {
             String tipoESString = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
-            HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
+            HashMap<String, String> tiposES = JsonUtils.jsonArraytoDomainHashMap(new JSONArray(tipoESString));
             ArrayList<String> tipoESList = new ArrayList<>(tiposES.values());
             Collections.sort(tipoESList);
             StringListAdapter stringListAdapter = new StringListAdapter(context, android.R.layout.simple_spinner_dropdown_item, tipoESList);
@@ -211,12 +211,17 @@ public class HealthPlaceSelectionActivity extends AppCompatActivity implements A
         List<EstabelecimentoSaude> esList = clientCache.getListESByCidade();
         if(mTipoESSpiner.isSelected()){
             List<EstabelecimentoSaude> esByTypeList = new ArrayList<>();
-            for(EstabelecimentoSaude es : esList ){
-                if(es.getIdTipoEstabelecimentoSaude() == (mTipoESSpiner.getSelectedItemId() + 1)){
-                    esByTypeList.add(es);
+            if(esList != null){
+                for(EstabelecimentoSaude es : esList ){
+                    if(es.getIdTipoEstabelecimentoSaude() == (mTipoESSpiner.getSelectedItemId() + 1)){
+                        esByTypeList.add(es);
+                    }
                 }
+                esList = esByTypeList;
+            } else {
+                esList = new ArrayList<>();
             }
-            esList = esByTypeList;
+
         }
 
         Collections.sort(esList, new Comparator<EstabelecimentoSaude>() {

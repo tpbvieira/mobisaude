@@ -318,12 +318,12 @@ public class HealthPlaceActivity extends AppCompatActivity implements LoaderCall
                     try {
                         ClientCache.getInstance().countES(getApplicationContext(),es.getIdCnes());
                         String values = settings.getPreferenceValues(Settings.TIPOS_ESTABELECIMENTO_SAUDE);
-                        HashMap map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
+                        HashMap map = JsonUtils.jsonArraytoDomainHashMap(new JSONArray(values));
                         short id = es.getIdTipoEstabelecimentoSaude();
                         String name = (String) map.get(Short.toString(id));
                         mTipoESText.setText(name);
                         values = settings.getPreferenceValues(Settings.TIPO_GESTAO);
-                        map = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(values));
+                        map = JsonUtils.jsonArraytoDomainHashMap(new JSONArray(values));
                         id = es.getIdTipoGestao();
                         name = (String) map.get(Short.toString(id));
                         mTipoGestãoText.setText(name);

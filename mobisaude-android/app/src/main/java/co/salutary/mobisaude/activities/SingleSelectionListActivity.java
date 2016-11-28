@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import co.salutary.mobisaude.R;
@@ -54,7 +55,7 @@ public class SingleSelectionListActivity extends ListActivity {
 
     private EditText mSearchText;
     private ImageView mSearchButton;
-    private ArrayList<String> mStringList = null;
+    private ArrayList<String> mValuesList = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,14 +69,10 @@ public class SingleSelectionListActivity extends ListActivity {
         if(intent != null){
             Bundle extras = intent.getExtras();
             if(extras != null){
-                String tipoESString = extras.getString("values");
-                try{
-                    HashMap<String, String> tiposES = JsonUtils.fromJsonArraytoDomainHashMap(new JSONArray(tipoESString));
-                    mStringList = new ArrayList<>(tiposES.values());
-                    Collections.sort(mStringList);
-                } catch (JSONException e){
-                    Log.e(TAG, e.getMessage(),e);
-                }
+                String jsonArrayString = extras.getString("values");
+                Map<String, String> keyValueString = JsonUtils.stringToMap(jsonArrayString);
+                mValuesList = new ArrayList<>(keyValueString.values());
+                Collections.sort(mValuesList);
             }
         }
 
@@ -155,9 +152,9 @@ public class SingleSelectionListActivity extends ListActivity {
         Object[] tmpIndexItem;
         Pattern numberPattern = Pattern.compile("[0-9]");
 
-        for (String str : mStringList) {
+        for (String value : mValuesList) {
 
-            String firstLetter = str.substring(0, 1);
+            String firstLetter = value.substring(0, 1);
             firstLetter = Normalizer.normalize(firstLetter, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
             if (numberPattern.matcher(firstLetter).matches()) {
                 firstLetter = "#";
@@ -179,7 +176,7 @@ public class SingleSelectionListActivity extends ListActivity {
                 sections.put(firstLetter, start);
             }
 
-            rows.add(new Item(str, mStringList.indexOf(str)));
+            rows.add(new Item(value, mValuesList.indexOf(value)));
             previousLetter = firstLetter;
         }
 
@@ -202,9 +199,9 @@ public class SingleSelectionListActivity extends ListActivity {
         try {
             adapter = new GenericListAdapter();
 
-            for (String str : mStringList) {
-                if (str.toLowerCase(Locale.getDefault()).contains(strTarget.toLowerCase())) {
-                    adapter.addItem(new Item(str, mStringList.indexOf(str)));
+            for (String value : mValuesList) {
+                if (value.toLowerCase(Locale.getDefault()).contains(strTarget.toLowerCase())) {
+                    adapter.addItem(new Item(value, mValuesList.indexOf(value)));
                 }
             }
 

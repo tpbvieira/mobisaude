@@ -1147,9 +1147,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			List<AvaliacaoMediaMesDTO> avaliacaoBySiglaUFDTOList = new ArrayList<AvaliacaoMediaMesDTO>();			
 			for(AvaliacaoMediaMes avaliacaoBySiglaUF: avaliacaoBySiglaUFList){
 				
-				AvaliacaoMediaMesDTO avaliacaoBySiglaUFDTO = new AvaliacaoMediaMesDTO();
-				
-				avaliacaoBySiglaUFDTO.setIdES(avaliacaoBySiglaUF.getIdES().toString());
+				AvaliacaoMediaMesDTO avaliacaoBySiglaUFDTO = new AvaliacaoMediaMesDTO();				
 				avaliacaoBySiglaUFDTO.setRating(avaliacaoBySiglaUF.getRating().toString());
 				avaliacaoBySiglaUFDTO.setCount(avaliacaoBySiglaUF.getCount().toString());
 				avaliacaoBySiglaUFDTOList.add(avaliacaoBySiglaUFDTO);	
@@ -1192,9 +1190,7 @@ public class ServiceBroker extends AbstractServiceBroker {
 			List<AvaliacaoMediaMesDTO> avaliacaoByIdMunicipioDTOList = new ArrayList<AvaliacaoMediaMesDTO>();			
 			for(AvaliacaoMediaMes avaliacaoByIdMunicipio: avaliacaoByIdMunicipioList){
 				
-				AvaliacaoMediaMesDTO avaliacaoByIdMunicipioDTO = new AvaliacaoMediaMesDTO();
-				
-				avaliacaoByIdMunicipioDTO.setIdES(avaliacaoByIdMunicipio.getIdES().toString());
+				AvaliacaoMediaMesDTO avaliacaoByIdMunicipioDTO = new AvaliacaoMediaMesDTO();				
 				avaliacaoByIdMunicipioDTO.setRating(avaliacaoByIdMunicipio.getRating().toString());
 				avaliacaoByIdMunicipioDTO.setCount(avaliacaoByIdMunicipio.getCount().toString());
 				avaliacaoByIdMunicipioDTOList.add(avaliacaoByIdMunicipioDTO);	
@@ -1235,14 +1231,11 @@ public class ServiceBroker extends AbstractServiceBroker {
 			List<AvaliacaoMediaMes> avaliacaoByIdTipoESList = avaliacaoMediaMesFacade.listAvaliacaoByIdTipoES(request.getIdTipoES());
 			
 			List<AvaliacaoMediaMesDTO> avaliacaoByIdTipoESDTOList = new ArrayList<AvaliacaoMediaMesDTO>();			
-			for(AvaliacaoMediaMes avaliacaoByIdTipoES: avaliacaoByIdTipoESList){
-				
-				AvaliacaoMediaMesDTO avaliacaoDTO = new AvaliacaoMediaMesDTO();
-				
-				avaliacaoDTO.setIdES(avaliacaoByIdTipoES.getIdES().toString());
-				avaliacaoDTO.setRating(avaliacaoByIdTipoES.getRating().toString());
-				avaliacaoDTO.setCount(avaliacaoByIdTipoES.getCount().toString());
-				avaliacaoByIdTipoESDTOList.add(avaliacaoDTO);	
+			for(AvaliacaoMediaMes avaliacaoByIdTipoES: avaliacaoByIdTipoESList){				
+				AvaliacaoMediaMesDTO avaliacaoByIdTipoESDTO = new AvaliacaoMediaMesDTO();
+				avaliacaoByIdTipoESDTO.setRating(avaliacaoByIdTipoES.getRating().toString());
+				avaliacaoByIdTipoESDTO.setCount(avaliacaoByIdTipoES.getCount().toString());
+				avaliacaoByIdTipoESDTOList.add(avaliacaoByIdTipoESDTO);	
 			}			
 			
 			response.setAvaliacoesMediaMes(avaliacaoByIdTipoESDTOList);			
