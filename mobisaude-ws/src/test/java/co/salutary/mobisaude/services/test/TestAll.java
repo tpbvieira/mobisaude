@@ -49,7 +49,7 @@ public class TestAll extends TestCase {
 	private static final Log logger = LogFactory.getLog(TestAll.class);
 	private Properties testProperties = new Properties();
 	private SimpleDateFormat sdfToken = new SimpleDateFormat("ddMMyyyy");
-	private static int[] arrPermutacao = {7,2,3,1,4,6,0,5};
+	private static int[] arrPermutacao = {7,5,3,1,4,7,0,2};
 
 	@Before
 	public void setUp() throws Exception {
@@ -855,7 +855,7 @@ public class TestAll extends TestCase {
 		
 		AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
 		avaliacaoMediaMesRequest.setToken(token);
-		avaliacaoMediaMesRequest.setIdES(siglaUF);
+		avaliacaoMediaMesRequest.setSiglaUF(siglaUF);
 		
 		AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoBySiglaUF(avaliacaoMediaMesRequest);
 		if (avaliacaoMediaMesResponse.getErro() != null) {
@@ -905,7 +905,7 @@ public class TestAll extends TestCase {
 		
 		AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
 		avaliacaoMediaMesRequest.setToken(token);
-		avaliacaoMediaMesRequest.setIdES(idMunicipio);
+		avaliacaoMediaMesRequest.setIdMunicipio(idMunicipio);
 		
 		AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoByIdMunicipio(avaliacaoMediaMesRequest);
 		if (avaliacaoMediaMesResponse.getErro() != null) {
@@ -953,7 +953,7 @@ public class TestAll extends TestCase {
 		
 		AvaliacaoMediaRequest avaliacaoMediaMesRequest = new AvaliacaoMediaRequest();
 		avaliacaoMediaMesRequest.setToken(token);
-		avaliacaoMediaMesRequest.setIdES(idTipoES);
+		avaliacaoMediaMesRequest.setIdTipoES(idTipoES);
 		
 		AvaliacaoMediaResponse avaliacaoMediaMesResponse = broker.listAvaliacaoByIdTipoES(avaliacaoMediaMesRequest);
 		if (avaliacaoMediaMesResponse.getErro() != null) {
